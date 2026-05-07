@@ -44,7 +44,7 @@ public class MasterScene extends BorderPane {
     private final Button playButton = new Button("Play");
 
     private volatile boolean playing = false;
-    private boolean pauseAfterLoop = false;
+    private boolean pauseAfterLoop;
     private final Thread player = new Thread() {
         @Override @SuppressWarnings("BusyWait")
         public void run() {
@@ -71,7 +71,7 @@ public class MasterScene extends BorderPane {
         FieldManager.setup(medium);
         drawer = new MediumDrawer(medium);
         //Procedure.DEBUG = true;
-        pauseAfterLoop = false;
+        pauseAfterLoop = true;
         procedure = Voronoi.rand(5).growCells();
         //procedure = RotateV.rand().ccw();
         //procedure = GrowV.rand(medium).growDebug();

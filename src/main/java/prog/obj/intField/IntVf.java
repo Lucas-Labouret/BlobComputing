@@ -8,8 +8,6 @@ import language.fieldRef.BoolVfRef;
 import medium.Medium;
 import medium.locusT.Vf;
 import prog.ref.intField.IntVfRef;
-import prog.ref.intField.IntVfRef;
-import prog.ref.intField.IntVfRef;
 
 import java.util.HashMap;
 
@@ -123,16 +121,7 @@ class RShiftVf implements BasicInstruction {
 }
 
 class IntNotVf extends Procedure {
-    private final IntVfRef a;
-    private final IntVfRef res;
-
     public IntNotVf(IntVfRef a, IntVfRef res) {
-        this.a = a;
-        this.res = res;
-    }
-
-    @Override
-    public void setInstructions() {
         BoolVfRef[] bitsA = new BoolVfRef[a.get().n + 1];
         BoolVfRef[] bitsRes = new BoolVfRef[a.get().n + 1];
         for (int i = 0; i <= a.get().n; i++) {
@@ -140,28 +129,14 @@ class IntNotVf extends Procedure {
             bitsRes[i] = new BoolVfRef();
         }
 
-        add(IntField.split(a, bitsA));
-
-        for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.not(bitsA[i], bitsRes[i]));
-
-        add(IntField.join(bitsRes, res));
+        split(a, bitsA);
+        for (int i = 0; i <= a.get().n; i++) not(bitsA[i], bitsRes[i]);
+        join(bitsRes, res);
     }
 }
 
 class IntAndVf extends Procedure {
-    private final IntVfRef a;
-    private final IntVfRef b;
-    private final IntVfRef res;
-
     public IntAndVf(IntVfRef a, IntVfRef b, IntVfRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    public void setInstructions() {
         BoolVfRef[] bitsA = new BoolVfRef[a.get().n + 1];
         BoolVfRef[] bitsB = new BoolVfRef[a.get().n + 1];
         BoolVfRef[] bitsRes = new BoolVfRef[a.get().n + 1];
@@ -171,29 +146,15 @@ class IntAndVf extends Procedure {
             bitsRes[i] = new BoolVfRef();
         }
 
-        add(IntField.split(a, bitsA));
-        add(IntField.split(b, bitsB));
-
-        for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.and(bitsA[i], bitsB[i], bitsRes[i]));
-
-        add(IntField.join(bitsRes, res));
+        split(a, bitsA);
+        split(b, bitsB);
+        for (int i = 0; i <= a.get().n; i++) and(bitsA[i], bitsB[i], bitsRes[i]);
+        join(bitsRes, res);
     }
 }
 
 class IntOrVf extends Procedure {
-    private final IntVfRef a;
-    private final IntVfRef b;
-    private final IntVfRef res;
-
     public IntOrVf(IntVfRef a, IntVfRef b, IntVfRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    public void setInstructions() {
         BoolVfRef[] bitsA = new BoolVfRef[a.get().n + 1];
         BoolVfRef[] bitsB = new BoolVfRef[a.get().n + 1];
         BoolVfRef[] bitsRes = new BoolVfRef[a.get().n + 1];
@@ -203,29 +164,15 @@ class IntOrVf extends Procedure {
             bitsRes[i] = new BoolVfRef();
         }
 
-        add(IntField.split(a, bitsA));
-        add(IntField.split(b, bitsB));
-
-        for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.or(bitsA[i], bitsB[i], bitsRes[i]));
-
-        add(IntField.join(bitsRes, res));
+        split(a, bitsA);
+        split(b, bitsB);
+        for (int i = 0; i <= a.get().n; i++) or(bitsA[i], bitsB[i], bitsRes[i]);
+        join(bitsRes, res);
     }
 }
 
 class IntXorVf extends Procedure {
-    private final IntVfRef a;
-    private final IntVfRef b;
-    private final IntVfRef res;
-
     public IntXorVf(IntVfRef a, IntVfRef b, IntVfRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    public void setInstructions() {
         BoolVfRef[] bitsA = new BoolVfRef[a.get().n + 1];
         BoolVfRef[] bitsB = new BoolVfRef[a.get().n + 1];
         BoolVfRef[] bitsRes = new BoolVfRef[a.get().n + 1];
@@ -235,13 +182,10 @@ class IntXorVf extends Procedure {
             bitsRes[i] = new BoolVfRef();
         }
 
-        add(IntField.split(a, bitsA));
-        add(IntField.split(b, bitsB));
-
-        for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.xor(bitsA[i], bitsB[i], bitsRes[i]));
-
-        add(IntField.join(bitsRes, res));
+        split(a, bitsA);
+        split(b, bitsB);
+        for (int i = 0; i <= a.get().n; i++) xor(bitsA[i], bitsB[i], bitsRes[i]);
+        join(bitsRes, res);
     }
 }
 
@@ -262,91 +206,46 @@ class boolToIntVf implements BasicInstruction {
 }
 
 class IntAddVf extends Procedure {
-    private final IntVfRef a;
-    private final IntVfRef b;
-    private final IntVfRef res;
-    private final int n;
-
-    private final IntVfRef carry = new IntVfRef();
-    private final IntVfRef tmp = new IntVfRef();
-
     public IntAddVf(IntVfRef a, IntVfRef b, IntVfRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-        this.n = a.get().n;
-    }
+        IntVfRef carry = new IntVfRef();
+        IntVfRef tmp = new IntVfRef();
 
-    @Override
-    public void setInstructions() {
-        add(new SetRef<>(a, res));
-        add(new SetRef<>(b, tmp));
-        for (int i = 0; i <= n; i++){
-            add(IntField.and(res, tmp, carry));
-            add(IntField.xor(res, tmp, res));
-            add(IntField.lShift(carry, tmp, 1));
+        set(a, res);
+        set(b, tmp);
+        for (int i = 0; i <= a.get().n; i++){
+            and(res, tmp, carry);
+            xor(res, tmp, res);
+            lShift(carry, tmp, 1);
         }
     }
 }
 
 class IntNegVf extends Procedure {
-    private final IntVfRef a;
-    private final IntVfRef res;
-
     public IntNegVf(IntVfRef a, IntVfRef res) {
-        this.a = a;
-        this.res = res;
-    }
-
-    @Override
-    protected void setInstructions() {
-        add(IntField.not(a, res));
-        add(IntField.add(res, IntVfRef.of(IntVf.of(1, res.get().n)), res));
+        not(a, res);
+        add(res, IntVfRef.of(IntVf.of(1, res.get().n)), res);
     }
 }
 
 class IntSubVf extends Procedure {
-    private final IntVfRef a;
-    private final IntVfRef b;
-    private final IntVfRef res;
-
-    private final IntVfRef negB = new IntVfRef();
-
     public IntSubVf(IntVfRef a, IntVfRef b, IntVfRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    protected void setInstructions() {
-        add(IntField.neg(b, negB));
-        add(IntField.add(a, negB, res));
+        IntVfRef negB = IntVfRef.of(new IntVf(b.get().n));
+        neg(b, negB);
+        add(a, negB, res);
     }
 }
 
 class GTVf extends Procedure {
-    private final IntVfRef a;
-    private final IntVfRef b;
-    private final BoolVfRef res;
-
     public GTVf(IntVfRef a, IntVfRef b, BoolVfRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    protected void setInstructions() {
         IntVfRef diff = new IntVfRef();
-        add(IntField.sub(a, b, diff));
+        sub(a, b, diff);
 
         BoolVfRef[] bits = new BoolVfRef[diff.get().n + 1];
         for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolVfRef();
-        add(IntField.split(diff, bits));
+        split(diff, bits);
 
-        add(new SetRef<>(bits[0], res));
-        add(BitOp.not(res, res));
+        set(bits[0], res);
+        not(res, res);
     }
 }
 
@@ -361,8 +260,7 @@ class SplitVf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= a.get().n; i++)
-            res[i].set(a.get().getBits()[i].copy().get());
+        for (int i = 0; i <= a.get().n; i++) res[i].set(a.get().getBits()[i].copy().get());
         return true;
     }
 }
@@ -378,7 +276,9 @@ class JoinVf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i < a.length; i++) res.get().bits[i] = a[i].copy();
+        IntVf tmp = new IntVf(res.get().n);
+        for (int i = 0; i <= res.get().n; i++) tmp.bits[i] = a[i].copy();
+        res.set(tmp);
         return true;
     }
 }
