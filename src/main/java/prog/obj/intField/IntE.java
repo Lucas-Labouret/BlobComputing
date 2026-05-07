@@ -13,6 +13,7 @@ import medium.Medium;
 import medium.locusS.Edge;
 import prog.ref.intField.IntERef;
 import prog.ref.intField.IntERef;
+import prog.ref.intField.IntVRef;
 
 import java.util.HashMap;
 
@@ -136,8 +137,19 @@ class IntNotE extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolERef[] bitsA = new BoolERef[a.get().n + 1];
+        BoolERef[] bitsRes = new BoolERef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolERef();
+            bitsRes[i] = new BoolERef();
+        }
+
+        add(IntField.split(a, bitsA));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.not(a.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.not(bitsA[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -154,8 +166,22 @@ class IntAndE extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolERef[] bitsA = new BoolERef[a.get().n + 1];
+        BoolERef[] bitsB = new BoolERef[a.get().n + 1];
+        BoolERef[] bitsRes = new BoolERef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolERef();
+            bitsB[i] = new BoolERef();
+            bitsRes[i] = new BoolERef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.and(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.and(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -172,8 +198,22 @@ class IntOrE extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolERef[] bitsA = new BoolERef[a.get().n + 1];
+        BoolERef[] bitsB = new BoolERef[a.get().n + 1];
+        BoolERef[] bitsRes = new BoolERef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolERef();
+            bitsB[i] = new BoolERef();
+            bitsRes[i] = new BoolERef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.or(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.or(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -190,8 +230,22 @@ class IntXorE extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolERef[] bitsA = new BoolERef[a.get().n + 1];
+        BoolERef[] bitsB = new BoolERef[a.get().n + 1];
+        BoolERef[] bitsRes = new BoolERef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolERef();
+            bitsB[i] = new BoolERef();
+            bitsRes[i] = new BoolERef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.xor(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.xor(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -228,8 +282,8 @@ class IntRedAddEv extends Procedure {
         for (int i = 0; i < breadth; i++) stack[i] = new BoolERef();
         add(CommOp.redStack0(orig, stack));
 
-        res.set(IntE.of(0, res.get().n));
-        IntERef current = new IntERef();
+        add(new SetRef<>(IntERef.of(IntE.of(0, res.get().n)), res));
+        IntERef current = IntERef.of(new IntE(res.get().n));
         for (int i = 0; i < breadth; i++) {
             add(IntField.fromBool(stack[i], current));
             add(IntField.add(res, current, res));
@@ -254,8 +308,8 @@ class IntRedAddEf extends Procedure {
         for (int i = 0; i < breadth; i++) stack[i] = new BoolERef();
         add(CommOp.redStack0(orig, stack));
 
-        res.set(IntE.of(0, res.get().n));
-        IntERef current = new IntERef();
+        add(new SetRef<>(IntERef.of(IntE.of(0, res.get().n)), res));
+        IntERef current = IntERef.of(new IntE(res.get().n));
         for (int i = 0; i < breadth; i++) {
             add(IntField.fromBool(stack[i], current));
             add(IntField.add(res, current, res));
@@ -344,16 +398,46 @@ class GTE extends Procedure {
         IntERef diff = new IntERef();
         add(IntField.sub(a, b, diff));
 
-        BoolERef sign = new BoolERef();
-        add(new SetRef<>(diff.get().getBits()[0], sign));
+        BoolERef[] bits = new BoolERef[diff.get().n + 1];
+        for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolERef();
+        add(IntField.split(diff, bits));
 
-        BoolERef anyLower = new BoolERef();
-        add(new SetRef<>(diff.get().getBits()[1], anyLower));
-        for (int i = 2; i <= a.get().n; i++) add(BitOp.or(anyLower, diff.get().getBits()[i], anyLower));
-
-        BoolERef notSign = new BoolERef();
-        add(BitOp.not(sign, notSign));
-        add(BitOp.and(notSign, anyLower, res));
+        add(new SetRef<>(bits[0], res));
+        add(BitOp.not(res, res));
     }
 }
+
+class SplitE implements BasicInstruction {
+    private final IntERef a;
+    private final BoolERef[] res;
+
+    public SplitE(IntERef a, BoolERef[] res) {
+        this.a = a;
+        this.res = res;
+    }
+
+    @Override
+    public boolean exec() {
+        for (int i = 0; i <= a.get().n; i++)
+            res[i].set(a.get().getBits()[i].copy().get());
+        return true;
+    }
+}
+
+class JoinE implements BasicInstruction {
+    private final BoolERef[] a;
+    private final IntERef res;
+
+    public JoinE(BoolERef[] a, IntERef res) {
+        this.a = a;
+        this.res = res;
+    }
+
+    @Override
+    public boolean exec() {
+        for (int i = 0; i < a.length; i++) res.get().bits[i] = a[i].copy();
+        return true;
+    }
+}
+
 

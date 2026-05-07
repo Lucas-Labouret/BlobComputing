@@ -59,37 +59,48 @@ public class Voronoi extends Obj {
 
         @Override
         protected void setInstructions() {
-            BoolVRef frontierV = new BoolVRef();
+            BoolVfRef vf = new BoolVfRef();
+            BoolFvRef fv = new BoolFvRef();
+            BoolFRef f = new BoolFRef();
+            BoolFeRef fe = new BoolFeRef();
+            BoolEfRef ef = new BoolEfRef();
+
             BoolVRef notCells = new BoolVRef();
-
+            BoolVRef frontierV = new BoolVRef();
             add(BitOp.not(cells, notCells));
-            add(BitOp.and(notCells, grow, frontierV));
+            add(BitOp.and(grow, notCells, frontierV));
 
-            BoolERef frontierEGrow = new BoolERef();
-            BoolERef frontierEGrowInv = new BoolERef();
+            BoolERef frontierInteriorE = new BoolERef();
+            BoolERef frontierInteriorEInv = new BoolERef();
+
+            add(CommOp.broadcast(cells, vf));
+            add(CommOp.transfer(vf, fv));
+            add(CommOp.redOr(fv, f));
+            add(CommOp.broadcast(f, fe));
+            add(CommOp.transfer(fe, ef));
+            add(CommOp.redOr(ef, frontierInteriorE));
+            add(BitOp.not(frontierInteriorE, frontierInteriorEInv));
+
+            BoolERef meetE = new BoolERef();
             BoolVeRef ve = new BoolVeRef();
             BoolEvRef ev = new BoolEvRef();
 
             add(CommOp.broadcast(frontierV, ve));
             add(CommOp.transfer(ve, ev));
-            add(CommOp.redAnd(ev, frontierEGrow));
-            add(BitOp.not(frontierEGrow, frontierEGrowInv));
-
-            BoolERef meetE = new BoolERef();
-
-            add(CommOp.broadcast(frontierV, ve));
-            add(CommOp.transfer(ve, ev));
             add(CommOp.redAnd(ev, meetE));
-            add(BitOp.and(meetE, frontierEGrowInv, meetE));
+
+            add(BitOp.and(meetE, frontierInteriorEInv, meetE));
 
             add(CommOp.broadcast(meetE, ev));
             add(CommOp.transfer(ev, ve));
 
-            // Contains mergeV, i.e. the vertices that would cause cells to merge should they grow there simultaneously
             add(CommOp.redOr(ve, meet));
 
-            add(CommOp.broadcast(cells, ve));
-            add(CommOp.transfer(ve, ev));
+            BoolVRef meet2 = new BoolVRef();
+            add(new SetRef<>(meet, meet2));
+            add(new Show("meet d=2", meet2));
+
+            //---------------------------------------------------------------------------------------------
 
             BoolERef frontierE = new BoolERef();
 
@@ -97,27 +108,28 @@ public class Voronoi extends Obj {
             add(CommOp.broadcast(frontierE, ev));
             add(CommOp.transfer(ev, ve));
 
-            BoolVfRef vf = new BoolVfRef();
-            BoolVeRef cw = new BoolVeRef();
-            BoolVeRef ccw = new BoolVeRef();
+            BoolVfRef cw = new BoolVfRef();
+            BoolVfRef ccw = new BoolVfRef();
 
-            add(CommOp.rotCW(ve, vf));
-            add(CommOp.rotCW(vf, cw));
-            add(CommOp.rotCCW(ve, vf));
-            add(CommOp.rotCCW(vf, ccw));
-            add(BitOp.xor(cw, ccw, ve));
+            add(CommOp.rotCW(ve, cw));
+            add(CommOp.rotCCW(ve, ccw));
+            add(BitOp.xor(cw, ccw, vf));
+
+            add(new Show("frontier", vf));
 
             IntVRef connectedComponents = IntVRef.of(new IntV(4));
+
             BoolVRef meetV = new BoolVRef();
 
-            add(IntField.redAdd(ve, connectedComponents));
-            add(new Show("ve", ve));
-            add(new Show("connectedComponents", connectedComponents));
+            add(IntField.redAdd(vf, connectedComponents));
 
-            // Contains meetV, i.e. the vertices that would cause cells to overlap should they grow there
+            add(new Show("connected components", connectedComponents));
+
             add(IntField.gt(connectedComponents, IntVRef.of(IntV.of(3, 4)), meetV));
 
-            add(new Show("meetV", meetV));
+            add(BitOp.and(meetV, notCells, meetV));
+
+            add(new Show("meet d=1", meetV));
 
             add(BitOp.or(meet, meetV, meet));
         }
@@ -138,15 +150,16 @@ public class Voronoi extends Obj {
             add(new GrowV(cells).grow(grow));
             add(new Meet(cells, grow, meet));
             add(BitOp.not(meet, meet));
-            add(BitOp.and(grow, meet, grow));
-            add(BitOp.or(cells, grow, cells));
+            add(BitOp.and(grow, meet, cells));
         }
     }
 
     public Procedure growCells() {
         return new Procedure() {
             @Override protected void setInstructions() {
-                add(new Show("cells", cells));
+                BoolVRef startCells = new BoolVRef();
+                add(new SetRef<>(cells, startCells));
+                add(new Show("cells", startCells));
                 add(new GrowCells(cells));
                 add(new Print("loop done"));
             }

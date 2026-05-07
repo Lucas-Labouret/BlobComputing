@@ -152,7 +152,26 @@ public abstract class IntField<F extends BoolField> extends Obj {
     public static BasicInstruction fromBool(BoolFeRef boolFe, IntFeRef intFe) { return IntFe.of(boolFe, intFe); }
 
     // SPLIT operations
-    public static Procedure split(IntVRef  intV,  BoolVRef[]  boolV) { return new SplitV (intV,  boolV); }
+    public static BasicInstruction split(IntVRef  intV,  BoolVRef[]  boolV ) { return new SplitV (intV,  boolV ); }
+    public static BasicInstruction split(IntVeRef intVe, BoolVeRef[] boolVe) { return new SplitVe(intVe, boolVe); }
+    public static BasicInstruction split(IntVfRef intVf, BoolVfRef[] boolVf) { return new SplitVf(intVf, boolVf); }
+    public static BasicInstruction split(IntERef  intE,  BoolERef[]  boolE ) { return new SplitE (intE,  boolE ); }
+    public static BasicInstruction split(IntEvRef intEv, BoolEvRef[] boolEv) { return new SplitEv(intEv, boolEv); }
+    public static BasicInstruction split(IntEfRef intEf, BoolEfRef[] boolEf) { return new SplitEf(intEf, boolEf); }
+    public static BasicInstruction split(IntFRef  intF,  BoolFRef[]  boolF ) { return new SplitF (intF,  boolF ); }
+    public static BasicInstruction split(IntFvRef intFv, BoolFvRef[] boolFv) { return new SplitFv(intFv, boolFv); }
+    public static BasicInstruction split(IntFeRef intFe, BoolFeRef[] boolFe) { return new SplitFe(intFe, boolFe); }
+
+    // JOIN operations
+    public static BasicInstruction join(BoolVRef[]  boolV,  IntVRef  intV ) { return new JoinV (boolV,  intV ); }
+    public static BasicInstruction join(BoolVeRef[] boolVe, IntVeRef intVe) { return new JoinVe(boolVe, intVe); }
+    public static BasicInstruction join(BoolVfRef[] boolVf, IntVfRef intVf) { return new JoinVf(boolVf, intVf); }
+    public static BasicInstruction join(BoolERef[]  boolE,  IntERef  intE ) { return new JoinE (boolE,  intE ); }
+    public static BasicInstruction join(BoolEvRef[] boolEv, IntEvRef intEv) { return new JoinEv(boolEv, intEv); }
+    public static BasicInstruction join(BoolEfRef[] boolEf, IntEfRef intEf) { return new JoinEf(boolEf, intEf); }
+    public static BasicInstruction join(BoolFRef[]  boolF,  IntFRef  intF ) { return new JoinF (boolF,  intF ); }
+    public static BasicInstruction join(BoolFvRef[] boolFv, IntFvRef intFv) { return new JoinFv(boolFv, intFv); }
+    public static BasicInstruction join(BoolFeRef[] boolFe, IntFeRef intFe) { return new JoinFe(boolFe, intFe); }
 
     @Override
     public abstract IntField<F> copy();

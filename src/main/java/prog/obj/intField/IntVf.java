@@ -133,8 +133,19 @@ class IntNotVf extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolVfRef[] bitsA = new BoolVfRef[a.get().n + 1];
+        BoolVfRef[] bitsRes = new BoolVfRef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolVfRef();
+            bitsRes[i] = new BoolVfRef();
+        }
+
+        add(IntField.split(a, bitsA));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.not(a.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.not(bitsA[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -151,8 +162,22 @@ class IntAndVf extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolVfRef[] bitsA = new BoolVfRef[a.get().n + 1];
+        BoolVfRef[] bitsB = new BoolVfRef[a.get().n + 1];
+        BoolVfRef[] bitsRes = new BoolVfRef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolVfRef();
+            bitsB[i] = new BoolVfRef();
+            bitsRes[i] = new BoolVfRef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.and(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.and(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -169,8 +194,22 @@ class IntOrVf extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolVfRef[] bitsA = new BoolVfRef[a.get().n + 1];
+        BoolVfRef[] bitsB = new BoolVfRef[a.get().n + 1];
+        BoolVfRef[] bitsRes = new BoolVfRef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolVfRef();
+            bitsB[i] = new BoolVfRef();
+            bitsRes[i] = new BoolVfRef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.or(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.or(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -187,8 +226,22 @@ class IntXorVf extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolVfRef[] bitsA = new BoolVfRef[a.get().n + 1];
+        BoolVfRef[] bitsB = new BoolVfRef[a.get().n + 1];
+        BoolVfRef[] bitsRes = new BoolVfRef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolVfRef();
+            bitsB[i] = new BoolVfRef();
+            bitsRes[i] = new BoolVfRef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.xor(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.xor(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -288,16 +341,46 @@ class GTVf extends Procedure {
         IntVfRef diff = new IntVfRef();
         add(IntField.sub(a, b, diff));
 
-        BoolVfRef sign = new BoolVfRef();
-        add(new SetRef<>(diff.get().getBits()[0], sign));
+        BoolVfRef[] bits = new BoolVfRef[diff.get().n + 1];
+        for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolVfRef();
+        add(IntField.split(diff, bits));
 
-        BoolVfRef anyLower = new BoolVfRef();
-        add(new SetRef<>(diff.get().getBits()[1], anyLower));
-        for (int i = 2; i <= a.get().n; i++) add(BitOp.or(anyLower, diff.get().getBits()[i], anyLower));
-
-        BoolVfRef notSign = new BoolVfRef();
-        add(BitOp.not(sign, notSign));
-        add(BitOp.and(notSign, anyLower, res));
+        add(new SetRef<>(bits[0], res));
+        add(BitOp.not(res, res));
     }
 }
+
+class SplitVf implements BasicInstruction {
+    private final IntVfRef a;
+    private final BoolVfRef[] res;
+
+    public SplitVf(IntVfRef a, BoolVfRef[] res) {
+        this.a = a;
+        this.res = res;
+    }
+
+    @Override
+    public boolean exec() {
+        for (int i = 0; i <= a.get().n; i++)
+            res[i].set(a.get().getBits()[i].copy().get());
+        return true;
+    }
+}
+
+class JoinVf implements BasicInstruction {
+    private final BoolVfRef[] a;
+    private final IntVfRef res;
+
+    public JoinVf(BoolVfRef[] a, IntVfRef res) {
+        this.a = a;
+        this.res = res;
+    }
+
+    @Override
+    public boolean exec() {
+        for (int i = 0; i < a.length; i++) res.get().bits[i] = a[i].copy();
+        return true;
+    }
+}
+
 

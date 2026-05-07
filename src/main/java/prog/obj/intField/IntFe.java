@@ -133,8 +133,22 @@ class IntAndFe extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolFeRef[] bitsA = new BoolFeRef[a.get().n + 1];
+        BoolFeRef[] bitsB = new BoolFeRef[a.get().n + 1];
+        BoolFeRef[] bitsRes = new BoolFeRef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolFeRef();
+            bitsB[i] = new BoolFeRef();
+            bitsRes[i] = new BoolFeRef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.and(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.and(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -149,8 +163,19 @@ class IntNotFe extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolFeRef[] bitsA = new BoolFeRef[a.get().n + 1];
+        BoolFeRef[] bitsRes = new BoolFeRef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolFeRef();
+            bitsRes[i] = new BoolFeRef();
+        }
+
+        add(IntField.split(a, bitsA));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.not(a.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.not(bitsA[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -167,8 +192,22 @@ class IntOrFe extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolFeRef[] bitsA = new BoolFeRef[a.get().n + 1];
+        BoolFeRef[] bitsB = new BoolFeRef[a.get().n + 1];
+        BoolFeRef[] bitsRes = new BoolFeRef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolFeRef();
+            bitsB[i] = new BoolFeRef();
+            bitsRes[i] = new BoolFeRef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.or(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.or(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -185,8 +224,22 @@ class IntXorFe extends Procedure {
 
     @Override
     public void setInstructions() {
+        BoolFeRef[] bitsA = new BoolFeRef[a.get().n + 1];
+        BoolFeRef[] bitsB = new BoolFeRef[a.get().n + 1];
+        BoolFeRef[] bitsRes = new BoolFeRef[a.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            bitsA[i] = new BoolFeRef();
+            bitsB[i] = new BoolFeRef();
+            bitsRes[i] = new BoolFeRef();
+        }
+
+        add(IntField.split(a, bitsA));
+        add(IntField.split(b, bitsB));
+
         for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.xor(a.get().getBits()[i], b.get().getBits()[i], res.get().getBits()[i]));
+            add(BitOp.xor(bitsA[i], bitsB[i], bitsRes[i]));
+
+        add(IntField.join(bitsRes, res));
     }
 }
 
@@ -287,16 +340,44 @@ class GTFe extends Procedure {
         IntFeRef diff = new IntFeRef();
         add(IntField.sub(a, b, diff));
 
-        BoolFeRef sign = new BoolFeRef();
-        add(new SetRef<>(diff.get().getBits()[0], sign));
+        BoolFeRef[] bits = new BoolFeRef[diff.get().n + 1];
+        for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolFeRef();
+        add(IntField.split(diff, bits));
 
-        BoolFeRef anyLower = new BoolFeRef();
-        add(new SetRef<>(diff.get().getBits()[1], anyLower));
-        for (int i = 2; i <= a.get().n; i++) add(BitOp.or(anyLower, diff.get().getBits()[i], anyLower));
-
-        BoolFeRef notSign = new BoolFeRef();
-        add(BitOp.not(sign, notSign));
-        add(BitOp.and(notSign, anyLower, res));
+        add(new SetRef<>(bits[0], res));
+        add(BitOp.not(res, res));
     }
 }
 
+class SplitFe implements BasicInstruction {
+    private final IntFeRef a;
+    private final BoolFeRef[] res;
+
+    public SplitFe(IntFeRef a, BoolFeRef[] res) {
+        this.a = a;
+        this.res = res;
+    }
+
+    @Override
+    public boolean exec() {
+        for (int i = 0; i <= a.get().n; i++)
+            res[i].set(a.get().getBits()[i].copy().get());
+        return true;
+    }
+}
+
+class JoinFe implements BasicInstruction {
+    private final BoolFeRef[] a;
+    private final IntFeRef res;
+
+    public JoinFe(BoolFeRef[] a, IntFeRef res) {
+        this.a = a;
+        this.res = res;
+    }
+
+    @Override
+    public boolean exec() {
+        for (int i = 0; i < a.length; i++) res.get().bits[i] = a[i].copy();
+        return true;
+    }
+}
