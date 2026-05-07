@@ -29,47 +29,29 @@ public class RotateV extends Obj {
     }
 
     private static class CW extends Procedure {
-        private final BoolVeRef in;
-        private final BoolVeRef out;
-
         public CW(BoolVeRef in, BoolVeRef out) {
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        protected void setInstructions() {
             BoolVfRef temp = BoolVfRef.zeroes();
 
-            add(new Show("Ve", in));
-            add(CommOp.rotCW(in, temp));
+            show("Ve", in);
+            rotCW(in, temp);
 
-            add(new Show("Vf", temp));
-            add(CommOp.rotCW(temp, out));
+            show("Vf", temp);
+            rotCW(temp, out);
         }
     }
 
     private static class CCW extends Procedure {
-        private final BoolVeRef in;
-        private final BoolVeRef out;
-
         public CCW(BoolVeRef in, BoolVeRef out) {
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        protected void setInstructions() {
             BoolVfRef temp = BoolVfRef.zeroes();
 
-            add(new Show("Ve", in));
-            add(CommOp.rotCCW(in, temp));
+            show("Ve", in);
+            rotCCW(in, temp);
 
-            add(new Show("Vf", temp));
-            add(CommOp.rotCCW(temp, out));
+            show("Vf", temp);
+            rotCCW(temp, out);
         }
     }
 
     @Override
-    public RotateV copy() { return null; }
+    public RotateV copy() { return new RotateV(state.copy()); }
 }

@@ -8,7 +8,6 @@ import language.fieldRef.BoolFvRef;
 import medium.Medium;
 import medium.locusT.Fv;
 import prog.ref.intField.IntFvRef;
-import prog.ref.intField.IntFvRef;
 
 import java.util.HashMap;
 
@@ -122,16 +121,7 @@ class RShiftFv implements BasicInstruction {
 }
 
 class IntNotFv extends Procedure {
-    private final IntFvRef a;
-    private final IntFvRef res;
-
     public IntNotFv(IntFvRef a, IntFvRef res) {
-        this.a = a;
-        this.res = res;
-    }
-
-    @Override
-    public void setInstructions() {
         BoolFvRef[] bitsA = new BoolFvRef[a.get().n + 1];
         BoolFvRef[] bitsRes = new BoolFvRef[a.get().n + 1];
         for (int i = 0; i <= a.get().n; i++) {
@@ -139,28 +129,14 @@ class IntNotFv extends Procedure {
             bitsRes[i] = new BoolFvRef();
         }
 
-        add(IntField.split(a, bitsA));
-
-        for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.not(bitsA[i], bitsRes[i]));
-
-        add(IntField.join(bitsRes, res));
+        split(a, bitsA);
+        for (int i = 0; i <= a.get().n; i++) not(bitsA[i], bitsRes[i]);
+        join(bitsRes, res);
     }
 }
 
 class IntAndFv extends Procedure {
-    private final IntFvRef a;
-    private final IntFvRef b;
-    private final IntFvRef res;
-
     public IntAndFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    public void setInstructions() {
         BoolFvRef[] bitsA = new BoolFvRef[a.get().n + 1];
         BoolFvRef[] bitsB = new BoolFvRef[a.get().n + 1];
         BoolFvRef[] bitsRes = new BoolFvRef[a.get().n + 1];
@@ -170,29 +146,15 @@ class IntAndFv extends Procedure {
             bitsRes[i] = new BoolFvRef();
         }
 
-        add(IntField.split(a, bitsA));
-        add(IntField.split(b, bitsB));
-
-        for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.and(bitsA[i], bitsB[i], bitsRes[i]));
-
-        add(IntField.join(bitsRes, res));
+        split(a, bitsA);
+        split(b, bitsB);
+        for (int i = 0; i <= a.get().n; i++) and(bitsA[i], bitsB[i], bitsRes[i]);
+        join(bitsRes, res);
     }
 }
 
 class IntOrFv extends Procedure {
-    private final IntFvRef a;
-    private final IntFvRef b;
-    private final IntFvRef res;
-
     public IntOrFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    public void setInstructions() {
         BoolFvRef[] bitsA = new BoolFvRef[a.get().n + 1];
         BoolFvRef[] bitsB = new BoolFvRef[a.get().n + 1];
         BoolFvRef[] bitsRes = new BoolFvRef[a.get().n + 1];
@@ -202,29 +164,15 @@ class IntOrFv extends Procedure {
             bitsRes[i] = new BoolFvRef();
         }
 
-        add(IntField.split(a, bitsA));
-        add(IntField.split(b, bitsB));
-
-        for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.or(bitsA[i], bitsB[i], bitsRes[i]));
-
-        add(IntField.join(bitsRes, res));
+        split(a, bitsA);
+        split(b, bitsB);
+        for (int i = 0; i <= a.get().n; i++) or(bitsA[i], bitsB[i], bitsRes[i]);
+        join(bitsRes, res);
     }
 }
 
 class IntXorFv extends Procedure {
-    private final IntFvRef a;
-    private final IntFvRef b;
-    private final IntFvRef res;
-
     public IntXorFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    public void setInstructions() {
         BoolFvRef[] bitsA = new BoolFvRef[a.get().n + 1];
         BoolFvRef[] bitsB = new BoolFvRef[a.get().n + 1];
         BoolFvRef[] bitsRes = new BoolFvRef[a.get().n + 1];
@@ -234,13 +182,10 @@ class IntXorFv extends Procedure {
             bitsRes[i] = new BoolFvRef();
         }
 
-        add(IntField.split(a, bitsA));
-        add(IntField.split(b, bitsB));
-
-        for (int i = 0; i <= a.get().n; i++)
-            add(BitOp.xor(bitsA[i], bitsB[i], bitsRes[i]));
-
-        add(IntField.join(bitsRes, res));
+        split(a, bitsA);
+        split(b, bitsB);
+        for (int i = 0; i <= a.get().n; i++) xor(bitsA[i], bitsB[i], bitsRes[i]);
+        join(bitsRes, res);
     }
 }
 
@@ -261,92 +206,46 @@ class boolToIntFv implements BasicInstruction {
 }
 
 class IntAddFv extends Procedure {
-    private final IntFvRef a;
-    private final IntFvRef b;
-    private final IntFvRef res;
-    private final int n;
-
-    private final IntFvRef carry = new IntFvRef();
-    private final IntFvRef tmp = new IntFvRef();
-
     public IntAddFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-        this.n = a.get().n;
-    }
+        IntFvRef carry = IntFvRef.of(new IntFv(a.get().n));
+        IntFvRef tmp = IntFvRef.of(new IntFv(a.get().n));
+        set(a, res);
+        set(b, tmp);
 
-    @Override
-    public void setInstructions() {
-        add(new SetRef<>(a, res));
-        add(new SetRef<>(b, tmp));
-
-        for (int i = 0; i <= n; i++){
-            add(IntField.and(res, tmp, carry));
-            add(IntField.xor(res, tmp, res));
-            add(IntField.lShift(carry, tmp, 1));
+        for (int i = 0; i <= a.get().n; i++){
+            and(res, tmp, carry);
+            xor(res, tmp, res);
+            lShift(carry, tmp, 1);
         }
     }
 }
 
 class IntNegFv extends Procedure {
-    private final IntFvRef a;
-    private final IntFvRef res;
-
     public IntNegFv(IntFvRef a, IntFvRef res) {
-        this.a = a;
-        this.res = res;
-    }
-
-    @Override
-    protected void setInstructions() {
-        add(IntField.not(a, res));
-        add(IntField.add(res, IntFvRef.of(IntFv.of(1, res.get().n)), res));
+        not(a, res);
+        add(res, IntFvRef.of(IntFv.of(1, res.get().n)), res);
     }
 }
 
 class IntSubFv extends Procedure {
-    private final IntFvRef a;
-    private final IntFvRef b;
-    private final IntFvRef res;
-
-    private final IntFvRef negB = new IntFvRef();
-
     public IntSubFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    protected void setInstructions() {
-        add(IntField.neg(b, negB));
-        add(IntField.add(a, negB, res));
+        IntFvRef negB = new IntFvRef();
+        neg(b, negB);
+        add(a, negB, res);
     }
 }
 
 class GTFv extends Procedure {
-    private final IntFvRef a;
-    private final IntFvRef b;
-    private final BoolFvRef res;
-
     public GTFv(IntFvRef a, IntFvRef b, BoolFvRef res) {
-        this.a = a;
-        this.b = b;
-        this.res = res;
-    }
-
-    @Override
-    protected void setInstructions() {
         IntFvRef diff = new IntFvRef();
-        add(IntField.sub(a, b, diff));
+        sub(a, b, diff);
 
         BoolFvRef[] bits = new BoolFvRef[diff.get().n + 1];
         for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolFvRef();
-        add(IntField.split(diff, bits));
+        split(diff, bits);
 
-        add(new SetRef<>(bits[0], res));
-        add(BitOp.not(res, res));
+        set(bits[0], res);
+        not(res, res);
     }
 }
 
@@ -361,8 +260,7 @@ class SplitFv implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= a.get().n; i++)
-            res[i].set(a.get().getBits()[i].copy().get());
+        for (int i = 0; i <= a.get().n; i++) res[i].set(a.get().getBits()[i].copy().get());
         return true;
     }
 }
@@ -378,7 +276,7 @@ class JoinFv implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i < a.length; i++) res.get().bits[i] = a[i].copy();
+        for (int i = 0; i < res.get().n; i++) res.get().bits[i] = a[i].copy();
         return true;
     }
 }

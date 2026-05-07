@@ -4,7 +4,6 @@ import field.boolField.fieldS.BoolV;
 import language.Obj;
 import language.Procedure;
 import language.basicInstruction.*;
-import language.basicInstruction.commOp.CommOp;
 import language.fieldRef.BoolERef;
 import language.fieldRef.BoolEvRef;
 import language.fieldRef.BoolVRef;
@@ -43,89 +42,43 @@ public class GrowV extends Obj {
     }
 
     private static class ShowGrow extends Procedure {
-        private final BoolVRef in;
-        private final BoolVRef out;
-
         public ShowGrow(BoolVRef in, BoolVRef out) {
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        protected void setInstructions() {
-            add(new Show("grow", in));
-            add(new GrowThroughE(in, out));
+            show("grow", in);
+            addInstr(new GrowThroughE(in, out));
         }
     }
 
     private static class GrowThroughE extends Procedure {
-        private final BoolVRef in;
-        private final BoolVRef out;
-
         public GrowThroughE(BoolVRef in, BoolVRef out) {
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        protected void setInstructions() {
             BoolERef middle = BoolERef.zeroes();
-            add(new GrowVtoE(in, middle));
-            add(new GrowEtoV(middle, out));
+            addInstr(new GrowVtoE(in, middle));
+            addInstr(new GrowEtoV(middle, out));
         }
     }
 
     private static class GrowVtoE extends Procedure {
-        private final BoolVRef in;
-        private final BoolERef out;
-
         public GrowVtoE(BoolVRef in, BoolERef out) {
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        protected void setInstructions(){
             BoolVeRef ve = BoolVeRef.zeroes();
             BoolEvRef ev = BoolEvRef.zeroes();
-            add(CommOp.broadcast(in, ve));
-            add(CommOp.transfer(ve, ev));
-            add(CommOp.redOr(ev, out));
+            broadcast(in, ve);
+            transfer(ve, ev);
+            redOr(ev, out);
         }
-
     }
 
     private static class GrowEtoV extends Procedure {
-        private final BoolERef in;
-        private final BoolVRef out;
-
         public GrowEtoV(BoolERef in, BoolVRef out) {
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        protected void setInstructions() {
             BoolEvRef ev = BoolEvRef.zeroes();
             BoolVeRef ve = BoolVeRef.zeroes();
-            add(CommOp.broadcast(in, ev));
-            add(CommOp.transfer(ev, ve));
-            add(CommOp.redOr(ve, out));
+            broadcast(in, ev);
+            transfer(ev, ve);
+            redOr(ve, out);
         }
     }
 
     private static class GrowDebug extends Procedure {
-        private final BoolVRef in;
-        private final BoolVRef out;
-
         public GrowDebug(BoolVRef in, BoolVRef out) {
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        protected void setInstructions() {
-            add(new Show("GrowV", in));
+            show("GrowV", in);
 
             BoolVeRef veIn = new BoolVeRef();
             BoolEvRef evIn = new BoolEvRef();
@@ -133,24 +86,24 @@ public class GrowV extends Obj {
             BoolEvRef evOut = new BoolEvRef();
             BoolVeRef veOut = new BoolVeRef();
 
-            add(CommOp.broadcast(in, veIn));
-            add(new Show("veIn", veIn));
+            broadcast(in, veIn);
+            show("veIn", veIn);
 
-            add(CommOp.transfer(veIn, evIn));
-            add(new Show("evIn", evIn));
+            transfer(veIn, evIn);
+            show("evIn", evIn);
 
-            add(CommOp.redOr(evIn, middle));
-            add(new Show("middle", middle));
+            redOr(evIn, middle);
+            show("middle", middle);
 
-            add(CommOp.broadcast(middle, evOut));
-            add(new Show("evOut", evOut));
+            broadcast(middle, evOut);
+            show("evOut", evOut);
 
-            add(CommOp.transfer(evOut, veOut));
-            add(new Show("veOut", veOut));
+            transfer(evOut, veOut);
+            show("veOut", veOut);
 
-            add(CommOp.redOr(veOut, out));
+            redOr(veOut, out);
         }
-    };
+    }
 
     @Override
     public GrowV copy() {
