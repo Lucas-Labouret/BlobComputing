@@ -5,7 +5,6 @@ import language.Obj;
 import language.Procedure;
 import language.Ref;
 import language.basicInstruction.*;
-import language.basicInstruction.bitOp.BitOp;
 import language.fieldRef.*;
 import prog.ref.intField.*;
 

@@ -9,7 +9,6 @@ import language.basicInstruction.commOp.CommOp;
 import language.fieldRef.*;
 import prog.obj.intField.IntField;
 import prog.ref.intField.*;
-import ui.display.Binder;
 
 import java.util.ArrayList;
 

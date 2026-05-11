@@ -2,8 +2,6 @@ package field.boolField.fieldS;
 
 import field.boolField.fieldT.BoolEf;
 import field.boolField.fieldT.BoolEv;
-import field.boolField.fieldT.BoolVe;
-import field.boolField.fieldT.BoolVf;
 import medium.locusS.Edge;
 
 import java.util.HashMap;
@@ -115,7 +113,7 @@ public class BoolE extends BoolFieldS {
         return res;
     }
 
-    /** @return a up-shifted BoolE. */
+    /** @return an up-shifted BoolE. */
     public static BoolE uShift(BoolE orig, int n){
         BoolE res = new BoolE();
         uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);

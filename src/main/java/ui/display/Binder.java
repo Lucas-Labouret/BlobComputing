@@ -6,7 +6,7 @@ import language.basicInstruction.Show;
 import language.fieldRef.*;
 import prog.ref.intField.IntVRef;
 import ui.DisplayController;
-import ui.display.displayable.IntFIeldDisplay.*;
+import ui.display.displayable.intFIeldDisplay.*;
 import ui.display.displayable.boolFieldDisplay.*;
 
 import java.util.HashSet;

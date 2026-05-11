@@ -1,6 +1,5 @@
 package language.basicInstruction.bitOp;
 
-import language.Ref;
 import language.basicInstruction.BasicInstruction;
 import language.fieldRef.*;
 import field.boolField.fieldS.*;

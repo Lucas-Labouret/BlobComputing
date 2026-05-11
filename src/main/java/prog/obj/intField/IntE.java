@@ -4,8 +4,6 @@ import field.FieldManager;
 import field.boolField.fieldS.BoolE;
 import language.Procedure;
 import language.basicInstruction.*;
-import language.basicInstruction.bitOp.BitOp;
-import language.basicInstruction.commOp.CommOp;
 import language.fieldRef.BoolERef;
 import language.fieldRef.BoolEfRef;
 import language.fieldRef.BoolEvRef;

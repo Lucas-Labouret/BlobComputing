@@ -1,8 +1,6 @@
 module com.github.lucaslabouret.blobcomputing {
     requires javafx.controls;
-    requires javafx.fxml;
-    requires org.controlsfx.controls;
-    requires java.desktop;
+    requires javafx.base;
 
     opens ui to javafx.fxml;
     opens ui.display to javafx.fxml;
@@ -14,6 +12,7 @@ module com.github.lucaslabouret.blobcomputing {
     exports ui.utils;
 
     exports prog;
+    exports prog.obj.intField;
     exports prog.ref.intField;
 
     exports language;

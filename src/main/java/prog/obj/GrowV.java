@@ -3,7 +3,6 @@ package prog.obj;
 import field.boolField.fieldS.BoolV;
 import language.Obj;
 import language.Procedure;
-import language.basicInstruction.*;
 import language.fieldRef.BoolERef;
 import language.fieldRef.BoolEvRef;
 import language.fieldRef.BoolVRef;

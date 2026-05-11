@@ -3,8 +3,6 @@ package prog.obj;
 import field.boolField.fieldT.BoolVe;
 import language.Obj;
 import language.Procedure;
-import language.basicInstruction.Show;
-import language.basicInstruction.commOp.CommOp;
 import language.fieldRef.BoolVeRef;
 import language.fieldRef.BoolVfRef;
 

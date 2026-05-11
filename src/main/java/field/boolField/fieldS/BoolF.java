@@ -2,8 +2,6 @@ package field.boolField.fieldS;
 
 import field.boolField.fieldT.BoolFe;
 import field.boolField.fieldT.BoolFv;
-import field.boolField.fieldT.BoolVe;
-import field.boolField.fieldT.BoolVf;
 import medium.locusS.Face;
 
 import java.util.HashMap;

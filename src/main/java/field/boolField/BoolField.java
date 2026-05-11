@@ -1,10 +1,5 @@
 package field.boolField;
 
-import medium.Locus;
-
-import java.util.HashMap;
-import java.util.HashSet;
-
 /** Represents the abstract base type for boolean fields backed by a BoolFieldLine array. */
 public abstract class BoolField {
     public final BoolFieldLine[] lines;

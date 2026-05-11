@@ -13,7 +13,7 @@ import java.util.HashMap;
 /** Stores the global field-dimension configuration shared by field types. */
 public final class FieldManager {
     // Block instantiation
-    private FieldManager(){};
+    private FieldManager(){}
 
     // Medium
     private static Medium medium;

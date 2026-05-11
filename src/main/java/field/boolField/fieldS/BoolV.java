@@ -109,7 +109,7 @@ public class BoolV extends BoolFieldS {
         return res;
     }
 
-    /** @return a up-shifted BoolV. */
+    /** @return an up-shifted BoolV. */
     public static BoolV uShift(BoolV orig, int n){
         BoolV res = new BoolV();
         uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);

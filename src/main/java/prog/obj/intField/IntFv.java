@@ -3,7 +3,6 @@ package prog.obj.intField;
 import field.boolField.fieldT.BoolFv;
 import language.Procedure;
 import language.basicInstruction.*;
-import language.basicInstruction.bitOp.BitOp;
 import language.fieldRef.BoolFvRef;
 import medium.Medium;
 import medium.locusT.Fv;

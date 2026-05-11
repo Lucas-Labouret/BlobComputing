@@ -173,7 +173,7 @@ public class MediumDrawer extends Canvas {
 }
 
 /**
- *  The {@code ClosestPair} data type computes a closest pair of points
+ *  The {@code ClosestPair} data type computes the closest pair of points
  *  in a set of <em>n</em> points in the plane and provides accessor methods
  *  for getting the closest pair of points and the distance between them.
  *  The distance between two points is their Euclidean distance.
@@ -236,7 +236,7 @@ class ClosestPair {
         bestDistance = Math.sqrt(bestDistance);
     }
 
-    // find closest pair of points in pointsByX[lo..hi]
+    // find the closest pair of points in pointsByX[lo..hi]
     // precondition:  pointsByX[lo..hi] and pointsByY[lo..hi] are the same sequence of points
     // precondition:  pointsByX[lo..hi] sorted by x-coordinate
     // postcondition: pointsByY[lo..hi] sorted by y-coordinate
@@ -246,7 +246,7 @@ class ClosestPair {
         int mid = lo + (hi - lo) / 2;
         Locus median = pointsByX.get(mid);
 
-        // compute closest pair with both endpoints in left subarray or both in right subarray
+        // compute the closest pair with both endpoints in left subarray or both in right subarray
         double delta1 = closest(pointsByX, pointsByY, aux, lo, mid);
         double delta2 = closest(pointsByX, pointsByY, aux, mid+1, hi);
         double delta = Math.min(delta1, delta2);

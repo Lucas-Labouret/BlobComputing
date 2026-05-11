@@ -1,4 +1,4 @@
-package ui.display.displayable.IntFIeldDisplay;
+package ui.display.displayable.intFIeldDisplay;
 
 import javafx.scene.paint.Color;
 import medium.Medium;

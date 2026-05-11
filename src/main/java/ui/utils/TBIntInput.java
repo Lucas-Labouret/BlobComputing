@@ -43,9 +43,9 @@ public class TBIntInput extends VBox {
     }
 
     public void setOnChange(Consumer<Integer> onChange) {
-        inputField.textProperty().addListener((_, _, _) -> {
-            onChange.accept(getValue());
-        });
+        inputField.textProperty().addListener((_, _, _) ->
+                onChange.accept(getValue())
+        );
     }
 
 }

@@ -3,10 +3,7 @@ package ui;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import ui.MasterScene;
 
 /**
  * Main class for the Blob application.

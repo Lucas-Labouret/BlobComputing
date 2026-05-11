@@ -1,34 +1,19 @@
 package ui;
 
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.paint.Color;
-import javafx.animation.AnimationTimer;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 
 import language.Instruction;
-import language.basicInstruction.BasicInstruction;
 import medium.Medium;
-import medium.locusS.*;
-import medium.locusT.*;
 import field.FieldManager;
-
-import language.Procedure;
-import prog.obj.GrowV;
-import prog.obj.RotateV;
 
 import prog.obj.Voronoi;
 import ui.display.Binder;
-import ui.display.MediumDrawer;
-import ui.display.displayable.Displayable;
-import ui.utils.DisplayBox;
 import ui.utils.OrderableDisplayPanel;
 import ui.utils.TBIntInput;
 import ui.utils.ZoomableScrollPane;
-
-import java.util.HashMap;
 
 public class MasterScene extends BorderPane {
     private ToolBar toolBar;
