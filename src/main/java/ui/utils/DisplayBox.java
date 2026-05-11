@@ -25,7 +25,7 @@ public class DisplayBox extends HBox {
         nameLabel.setText(name);
         showCheckBox.setSelected(true);
         showCheckBox.setAllowIndeterminate(false);
-        showCheckBox.setOnAction(_ -> displayController.updateDisplayOrder());
+        showCheckBox.setOnAction(_ -> displayController.updateDisplay());
 
         getChildren().addAll(showCheckBox, nameLabel);
     }

@@ -4,11 +4,11 @@ import language.Instruction;
 import language.Procedure;
 import language.basicInstruction.BasicInstruction;
 import language.basicInstruction.Show;
-import ui.display.Binder;
+import language.basicInstruction.Snapshot;
 
 public class InstructionPlayer {
     private final Instruction instruction;
-    private final Binder binder;
+    private final DisplayController displayController;
 
     private volatile boolean playing = false;
     private boolean pauseAfterLoop = false;
@@ -17,9 +17,9 @@ public class InstructionPlayer {
 
     private Thread playerThread;
 
-    public InstructionPlayer(Instruction instruction, Binder binder) {
+    public InstructionPlayer(Instruction instruction, DisplayController displayController) {
         this.instruction = instruction;
-        this.binder = binder;
+        this.displayController = displayController;
         createPlayerThread();
 
         System.out.println(instruction.leafCount() + " leaves");
@@ -48,8 +48,10 @@ public class InstructionPlayer {
 
     private void tryDisplayUpdate() {
         switch (instruction) {
-            case Show show -> binder.bind(show);
-            case Procedure p when p.currentBasicInstruction() instanceof Show show -> binder.bind(show);
+            case Show show -> displayController.bind(show);
+            case Procedure p when p.currentBasicInstruction() instanceof Show show -> displayController.bind(show);
+            case Snapshot _ -> displayController.snapshot();
+            case Procedure p when p.currentBasicInstruction() instanceof Snapshot -> displayController.snapshot();
             default -> {}
         }
     }

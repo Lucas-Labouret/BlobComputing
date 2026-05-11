@@ -10,7 +10,6 @@ import medium.Medium;
 import field.FieldManager;
 
 import prog.obj.Voronoi;
-import ui.display.Binder;
 import ui.utils.OrderableDisplayPanel;
 import ui.utils.TBIntInput;
 import ui.utils.ZoomableScrollPane;
@@ -41,7 +40,7 @@ public class MasterScene extends BorderPane {
         //Instruction instruction = RotateV.rand().ccw();
         //Instruction instruction = GrowV.rand(medium).growDebug();
 
-        player = new InstructionPlayer(instruction, new Binder(displayController));
+        player = new InstructionPlayer(instruction, displayController);
 
         addHandlers();
     }

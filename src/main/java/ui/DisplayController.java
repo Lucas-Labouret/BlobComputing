@@ -1,18 +1,33 @@
 package ui;
 
+import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import language.Ref;
+import language.basicInstruction.Show;
+import language.fieldRef.*;
 import medium.Medium;
 import medium.locusS.Edge;
 import medium.locusS.Face;
 import medium.locusS.Vertex;
 import medium.locusT.*;
+import prog.ref.intField.IntVRef;
 import ui.display.MediumDrawer;
 import ui.display.displayable.Displayable;
+import ui.display.displayable.boolFieldDisplay.*;
+import ui.display.displayable.intFIeldDisplay.IntVDisplay;
 import ui.utils.DisplayBox;
 import ui.utils.OrderableDisplayPanel;
 
+import javax.imageio.ImageIO;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class DisplayController {
     private final Medium medium;
@@ -31,6 +46,55 @@ public class DisplayController {
         return drawer;
     }
 
+    public void bind(Show show) {
+        Platform.runLater(() -> _bind(show));
+    }
+
+    private final HashSet<Show> bound = new HashSet<>();
+    private void _bind(Show show) {
+        String name = show.name();
+        Ref<?> ref = show.ref();
+
+        if (!bound.contains(show)) switch (ref) {
+            case BoolVRef boolVRef   -> addDisplay(name, new BoolVDisplay(boolVRef));
+            case BoolVeRef boolVeRef -> addDisplay(name, new BoolVeDisplay(boolVeRef));
+            case BoolVfRef boolVfRef -> addDisplay(name, new BoolVfDisplay(boolVfRef));
+            case BoolERef boolERef   -> addDisplay(name, new BoolEDisplay(boolERef));
+            case BoolEvRef boolEvRef -> addDisplay(name, new BoolEvDisplay(boolEvRef));
+            case BoolEfRef boolEfRef -> addDisplay(name, new BoolEfDisplay(boolEfRef));
+            case BoolFRef boolFRef   -> addDisplay(name, new BoolFDisplay(boolFRef));
+            case BoolFvRef boolFvRef -> addDisplay(name, new BoolFvDisplay(boolFvRef));
+            case BoolFeRef boolFeRef -> addDisplay(name, new BoolFeDisplay(boolFeRef));
+
+            case IntVRef intVRef     -> addDisplay(name, new IntVDisplay(intVRef));
+
+            default -> throw new IllegalArgumentException("Unsupported type for display: " + ref.getClass().getName());
+        }
+
+        bound.add(show);
+        updateDisplay();
+    }
+
+    public void snapshot() {
+        Platform.runLater(this::_snapshot);
+    }
+
+    String path = "snapshots/";
+    String rootName = (new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")).format(new Date());
+    int snapshotCount = 0;
+    public void _snapshot() {
+        WritableImage image = drawer.snapshot(null, null);
+        String filename = rootName + "_" + snapshotCount + ".png";
+        try {
+            File file = new File(path + filename);
+            RenderedImage renderedImage = SwingFXUtils.fromFXImage(image, null);
+            ImageIO.write(renderedImage, "png", file);
+            snapshotCount++;
+        } catch (java.io.IOException e) {
+            System.out.println("Failed to save snapshot: " + e.getMessage());
+        }
+    }
+
     private VColorer  vColorer  = (_ -> new HashMap<>());
     private VeColorer veColorer = (_ -> new HashMap<>());
     private VfColorer vfColorer = (_ -> new HashMap<>());
@@ -41,7 +105,7 @@ public class DisplayController {
     private FvColorer fvColorer = (_ -> new HashMap<>());
     private FeColorer feColorer = (_ -> new HashMap<>());
 
-    public void display() {
+    private void display() {
         drawer.setVColors (vColorer .color(medium));
         drawer.setVeColors(veColorer.color(medium));
         drawer.setVfColors(vfColorer.color(medium));
@@ -57,10 +121,10 @@ public class DisplayController {
     public void addDisplay(String name, Displayable d) {
         DisplayBox box = new DisplayBox(name, d, this);
         displays.add(box);
-        updateDisplayOrder();
+        updateDisplay();
     }
 
-    public void updateDisplayOrder() {
+    public void updateDisplay() {
         boolean vSet  = false;
         boolean veSet = false;
         boolean vfSet = false;

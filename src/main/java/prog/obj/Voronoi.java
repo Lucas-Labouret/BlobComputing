@@ -91,11 +91,9 @@ public class Voronoi extends Obj {
             BoolVRef meetV = new BoolVRef();
 
             redAdd(vf, connectedComponents);
-            show("connectedComponents", connectedComponents);
             gt(connectedComponents, IntVRef.of(IntV.of(3, 4)), meetV);
             BoolVRef meetVCopy = new BoolVRef();
             set(meetV, meetVCopy);
-            show("meetV", meetVCopy);
             and(meetV, notCells, meetV);
 
 //            BoolVRef corners = new BoolVRef();
@@ -108,12 +106,10 @@ public class Voronoi extends Obj {
 
     private static class GrowCells extends Procedure {
         public GrowCells(BoolVRef cells) {
-//            BoolVRef seeds = cells.copy();
-//            add(new Show("seeds", seeds));
-
             BoolVRef startCells = new BoolVRef();
             set(cells, startCells);
             show("cells", startCells);
+            snapshot();
 
             BoolVRef meet = new BoolVRef();
             BoolVRef grow = new BoolVRef();

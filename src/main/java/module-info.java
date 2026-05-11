@@ -1,6 +1,9 @@
 module com.github.lucaslabouret.blobcomputing {
     requires javafx.controls;
-    requires javafx.base;
+    requires javafx.fxml;
+    requires org.controlsfx.controls;
+    requires java.desktop;
+    requires javafx.swing;
 
     opens ui to javafx.fxml;
     opens ui.display to javafx.fxml;

@@ -1,9 +1,6 @@
 package language;
 
-import language.basicInstruction.BasicInstruction;
-import language.basicInstruction.Print;
-import language.basicInstruction.SetRef;
-import language.basicInstruction.Show;
+import language.basicInstruction.*;
 import language.basicInstruction.bitOp.BitOp;
 import language.basicInstruction.commOp.CommOp;
 import language.fieldRef.*;
@@ -56,7 +53,8 @@ public abstract non-sealed class Procedure implements Instruction {
     /** @return false if there are more instructions to execute, true if the loop is finished. */
     @Override
     public final boolean exec() {
-        if (instr.get(instrCounter) instanceof BasicInstruction) System.out.println("Executing " + instr.get(instrCounter).getClass().getSimpleName());
+        //if (instr.get(instrCounter) instanceof BasicInstruction) System.out.println("Executing " + instr.get(instrCounter).getClass().getSimpleName());
+
         boolean done = instr.get(instrCounter).exec();
         if (done) instrCounter++; // If the current instruction is done, we move to the next
 
@@ -73,6 +71,7 @@ public abstract non-sealed class Procedure implements Instruction {
 
     protected void print(@SuppressWarnings("SameParameterValue") String message) { addInstr(new Print(message)); }
     protected <T> void show(String name, Ref<T> fieldRef) { addInstr(new Show(name, fieldRef)); }
+    protected void snapshot() { addInstr(new Snapshot()); }
     protected <T> void set(Ref<T> in, Ref<T> out) { addInstr(new SetRef<>(in, out)); }
 
     protected void not(BoolVRef  a, BoolVRef  res) { addInstr(BitOp.not(a, res)); }
