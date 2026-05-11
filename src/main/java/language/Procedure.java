@@ -9,12 +9,13 @@ import language.basicInstruction.commOp.CommOp;
 import language.fieldRef.*;
 import prog.obj.intField.IntField;
 import prog.ref.intField.*;
+import ui.display.Binder;
 
 import java.util.ArrayList;
 
 /** Represents an instruction composed of a sequence of sub-instructions. */
 @SuppressWarnings("unused")
-public abstract class Procedure implements Instruction {
+public abstract non-sealed class Procedure implements Instruction {
     private int instrCounter = 0;
     private final ArrayList<Instruction> instr;
 
@@ -28,12 +29,10 @@ public abstract class Procedure implements Instruction {
         instr.add(i);
     }
 
+    @Override
     public int leafCount() {
         int count = 0;
-        for (Instruction i : instr) {
-            if (i instanceof Procedure p) count += p.leafCount();
-            else count++;
-        }
+        for (Instruction i : instr) count += i.leafCount();
         return count;
     }
 
@@ -46,6 +45,13 @@ public abstract class Procedure implements Instruction {
             else sb.repeat("|  ", depth + 1).append("--- ").append(i.getClass().getSimpleName()).append("\n");
         }
         return sb.toString();
+    }
+
+    public BasicInstruction currentBasicInstruction() {
+        return switch (instr.get(instrCounter)) {
+            case BasicInstruction i -> i;
+            case Procedure p -> p.currentBasicInstruction();
+        };
     }
 
     /** @return false if there are more instructions to execute, true if the loop is finished. */
@@ -66,7 +72,7 @@ public abstract class Procedure implements Instruction {
 
     // Wrapper functions to make writing procedures easier. These functions simply add the corresponding instruction to this procedure.
 
-    protected void print(String message) { addInstr(new Print(message)); }
+    protected void print(@SuppressWarnings("SameParameterValue") String message) { addInstr(new Print(message)); }
     protected <T> void show(String name, Ref<T> fieldRef) { addInstr(new Show(name, fieldRef)); }
     protected <T> void set(Ref<T> in, Ref<T> out) { addInstr(new SetRef<>(in, out)); }
 

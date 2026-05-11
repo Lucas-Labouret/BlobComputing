@@ -14,8 +14,11 @@ module com.github.lucaslabouret.blobcomputing {
     exports ui.utils;
 
     exports prog;
+    exports prog.ref.intField;
 
+    exports language;
     exports language.fieldRef;
+    exports language.basicInstruction;
 
     exports medium;
     exports medium.locusS;
