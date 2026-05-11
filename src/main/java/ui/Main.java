@@ -13,15 +13,16 @@ import ui.MasterScene;
  * This class initializes the JavaFX application, and serves as the entry point.
  */
 public class Main extends Application {
-
     public static final int WIDTH = 600;
     public static final int HEIGHT = 450;
+
+    private MasterScene ms;
 
     @Override
     public void start(Stage stage) {
         blobStaging(stage);
 
-        MasterScene ms = MasterScene.getInstance();
+        ms = new MasterScene();
 
         Scene scene = new Scene(ms, Main.WIDTH, Main.HEIGHT);
 
@@ -32,7 +33,7 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        MasterScene.getInstance().stop();
+        ms.stop();
     }
 
     private void blobStaging(Stage stage) {

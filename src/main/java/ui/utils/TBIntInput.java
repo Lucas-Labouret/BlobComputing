@@ -7,6 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
+import java.util.function.Consumer;
+
 /** A utility class that provides a simple input field for integer values. */
 public class TBIntInput extends VBox {
 
@@ -36,9 +38,14 @@ public class TBIntInput extends VBox {
     }
 
     public int getValue() {
-
         try { return Integer.parseInt(this.inputField.getText()); }
         catch (NumberFormatException e) { return 0; }
+    }
+
+    public void setOnChange(Consumer<Integer> onChange) {
+        inputField.textProperty().addListener((_, _, _) -> {
+            onChange.accept(getValue());
+        });
     }
 
 }
