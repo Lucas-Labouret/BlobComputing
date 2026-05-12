@@ -70,9 +70,9 @@ public abstract non-sealed class Procedure implements Instruction {
     // Wrapper functions to make writing procedures easier. These functions simply add the corresponding instruction to this procedure.
 
     protected void print(@SuppressWarnings("SameParameterValue") String message) { addInstr(new Print(message)); }
-    protected <T> void show(String name, Ref<T> fieldRef) { addInstr(new Show(name, fieldRef)); }
+    protected <T extends Obj> void show(String name, Ref<T> fieldRef) { addInstr(new Show(name, fieldRef)); }
     protected void snapshot() { addInstr(new Snapshot()); }
-    protected <T> void set(Ref<T> in, Ref<T> out) { addInstr(new SetRef<>(in, out)); }
+    protected <T extends Obj> void set(Ref<T> in, Ref<T> out) { addInstr(new SetRef<>(in, out)); }
 
     protected void not(BoolVRef  a, BoolVRef  res) { addInstr(BitOp.not(a, res)); }
     protected void not(BoolVeRef a, BoolVeRef res) { addInstr(BitOp.not(a, res)); }

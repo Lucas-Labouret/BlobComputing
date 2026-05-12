@@ -1,7 +1,7 @@
 package language;
 
 /** Represents a mutable reference used to pass and store values in interpreter programs. */
-public abstract class Ref<T> {
+public abstract class Ref<T extends Obj> {
     /** Creates a new empty reference */
     public Ref(){}
 

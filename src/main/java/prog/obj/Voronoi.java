@@ -71,6 +71,10 @@ public class Voronoi extends Obj {
             transfer(ev, ve);
             redOr(ve, meet);
 
+            BoolVRef meetd1 = new BoolVRef();
+            set(meet, meetd1);
+            show("meet d=2", meetd1);
+
             //---------------------------------------------------------------------------------------------
 
             BoolERef frontierE = new BoolERef();
@@ -86,8 +90,11 @@ public class Voronoi extends Obj {
             rotCW(ve, cw);
             rotCCW(ve, ccw);
             xor(cw, ccw, vf);
+            show("cw xor ccw", vf);
 
             IntVRef connectedComponents = IntVRef.of(new IntV(4));
+            show("connected components", connectedComponents);
+
             BoolVRef meetV = new BoolVRef();
 
             redAdd(vf, connectedComponents);
@@ -95,12 +102,14 @@ public class Voronoi extends Obj {
             BoolVRef meetVCopy = new BoolVRef();
             set(meetV, meetVCopy);
             and(meetV, notCells, meetV);
+            show("meet d=1", meetV);
 
 //            BoolVRef corners = new BoolVRef();
 //            gt(connectedComponents, IntVRef.of(IntV.of(5, 4)), corners);
 //            add(new Show("corners", corners));
 
             or(meet, meetV, meet);
+            show("meet", meet);
         }
     }
 
@@ -109,7 +118,7 @@ public class Voronoi extends Obj {
             BoolVRef startCells = new BoolVRef();
             set(cells, startCells);
             show("cells", startCells);
-            snapshot();
+            //snapshot();
 
             BoolVRef meet = new BoolVRef();
             BoolVRef grow = new BoolVRef();

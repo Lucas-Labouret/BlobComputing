@@ -5,6 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import language.Instruction;
 import medium.Medium;
 import field.FieldManager;
@@ -23,6 +26,8 @@ public class MasterScene extends BorderPane {
     private final Button stepButton = new Button("Step");
     private final Button loopButton = new Button("Loop");
     private final Button playButton = new Button("Play");
+
+    private final Button snapButton = new Button("Snapshot");
 
     private final TBIntInput speedInput = new TBIntInput("Speed");
     private final InstructionPlayer player;
@@ -60,6 +65,11 @@ public class MasterScene extends BorderPane {
         toolBar.getItems().add(loopButton);
         toolBar.getItems().add(playButton);
         toolBar.getItems().add(speedInput);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        toolBar.getItems().add(spacer);
+        toolBar.getItems().add(snapButton);
     }
 
     private void addHandlers() {
@@ -76,6 +86,7 @@ public class MasterScene extends BorderPane {
             }
         });
         speedInput.setOnChange(player::setSpeed);
+        snapButton.setOnAction(_ -> displayController.snapshot());
     }
 
     public void stop() {

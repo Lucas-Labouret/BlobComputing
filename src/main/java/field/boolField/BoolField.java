@@ -1,7 +1,9 @@
 package field.boolField;
 
+import language.Obj;
+
 /** Represents the abstract base type for boolean fields backed by a BoolFieldLine array. */
-public abstract class BoolField {
+public abstract class BoolField extends Obj {
     public final BoolFieldLine[] lines;
 
     /** Creates a new boolean field base instance. */

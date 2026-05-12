@@ -1,8 +1,9 @@
 package language.basicInstruction;
 
+import language.Obj;
 import language.Ref;
 
-public class SetRef<T> implements BasicInstruction {
+public class SetRef<T extends Obj> implements BasicInstruction {
     private final Ref<T> in;
     private final Ref<T> out;
 

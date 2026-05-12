@@ -124,14 +124,17 @@ public class Medium {
             lineCount++;
 
             String[] vStr = line.split(" ");
-            if (vStr.length != 5)
-                throw new IOException("Expected 5 values for vertex at line " + lineCount);
+            if (vStr.length != 6)
+                throw new IOException("Expected 6 values for vertex at line " + lineCount);
             try {
                 double h = Double.parseDouble(vStr[1]);
                 double w = Double.parseDouble(vStr[2]);
                 int y = Integer.parseInt(vStr[3]);
                 int x = Integer.parseInt(vStr[4]);
-                vertices.add(new Vertex(h, w, y, x));
+                String[] borders = vStr[5].split("");
+                if (borders.length != 4)
+                    throw new IOException("Expected 4 border values for vertex at line " + lineCount);
+                vertices.add(new Vertex(h, w, y, x, borders[0].equals("T"), borders[1].equals("T"), borders[2].equals("T"), borders[3].equals("T")));
             } catch (NumberFormatException e) {
                 throw new IOException("Invalid vertex format at line " + lineCount, e);
             }
@@ -202,15 +205,18 @@ public class Medium {
             lineCount++;
 
             String[] eStr = line.split(" ");
-            if (eStr.length != 6)
-                throw new IOException("Expected 6 values for Edge at line " + lineCount);
+            if (eStr.length != 7)
+                throw new IOException("Expected 7 values for Edge at line " + lineCount);
             try {
                 double h = Double.parseDouble(eStr[1]);
                 double w = Double.parseDouble(eStr[2]);
                 int y = Integer.parseInt(eStr[3]);
                 int x = Integer.parseInt(eStr[4]);
                 int t = Integer.parseInt(eStr[5]);
-                edges.add(new Edge(h, w, y, x, t));
+                String[] borders = eStr[6].split("");
+                if (borders.length != 4)
+                    throw new IOException("Expected 4 border values for vertex at line " + lineCount);
+                edges.add(new Edge(h, w, y, x, t, borders[0].equals("T"), borders[1].equals("T"), borders[2].equals("T"), borders[3].equals("T")));
             } catch (NumberFormatException e) {
                 throw new IOException("Invalid Edge format at line " + lineCount, e);
             }

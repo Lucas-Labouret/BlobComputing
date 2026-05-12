@@ -14,6 +14,7 @@ public class MediumDrawer extends Canvas {
     // Scale of the drawing relative to the medium
     private static final double SCALE_TARGET = 10000;
     private final double scale;
+    private final double offSet;
 
     // The medium to be drawn
     private final Medium medium;
@@ -52,6 +53,7 @@ public class MediumDrawer extends Canvas {
     // The size of circle representing a locus
     private double circleSize;
 
+
     private final GraphicsContext gc = getGraphicsContext2D();
 
     public MediumDrawer(Medium medium) {
@@ -60,11 +62,12 @@ public class MediumDrawer extends Canvas {
         double height = medium.height;
         double width = medium.width;
         double dim = Math.max(height, width);
+        offSet = 0.025 * dim;
         scale = SCALE_TARGET/dim;
 
         // Set canvas size
-        setHeight(height * scale);
-        setWidth(width * scale);
+        setHeight(height * scale + 2*offSet);
+        setWidth(width * scale + 2*offSet);
 
         // Draw grid
         draw();
@@ -91,12 +94,12 @@ public class MediumDrawer extends Canvas {
 
     private void drawV(Vertex l){
         gc.setFill(getColor(l));
-        gc.fillOval(l.w*scale - circleSize/2, l.h*scale - circleSize/2, circleSize, circleSize);
+        gc.fillOval((l.w+offSet)*scale - circleSize/2, (l.h+offSet)*scale - circleSize/2, circleSize, circleSize);
     }
 
     private void drawE(Edge l){
         gc.setFill(getColor(l));
-        gc.fillRect(l.w*scale - circleSize/2, l.h*scale - circleSize/2, circleSize, circleSize);
+        gc.fillRect((l.w+offSet)*scale - circleSize/2, (l.h+offSet)*scale - circleSize/2, circleSize, circleSize);
     }
 
     // equilateral triangle inscribed in unit circle
@@ -106,7 +109,7 @@ public class MediumDrawer extends Canvas {
     private static final double by = -0.5;
     private static final double cx = 0.0;
     private static final double cy = 1.0;
-    private double moveTriangle(double ct, double cl) { return ct * circleSize + cl * scale; }
+    private double moveTriangle(double ct, double cl) { return ct * circleSize + (cl + offSet) * scale; }
     private void drawF(Face l){
         gc.setFill(getColor(l));
         gc.fillPolygon(new double[]{moveTriangle(ax, l.w), moveTriangle(bx, l.w), moveTriangle(cx, l.w)},
@@ -115,7 +118,7 @@ public class MediumDrawer extends Canvas {
 
     private void drawTransfer(Locus l){
         gc.setFill(getColor(l));
-        gc.fillRect(l.w*scale - circleSize/4, l.h*scale - circleSize/4, circleSize/2, circleSize/2);
+        gc.fillRect((l.w+offSet)*scale - circleSize/4, (l.h+offSet)*scale - circleSize/4, circleSize/2, circleSize/2);
     }
 
     private Color getColor(Locus l) {
@@ -167,7 +170,7 @@ public class MediumDrawer extends Canvas {
         if (fv) drawnLoci.addAll(medium.fvs);
         if (fe) drawnLoci.addAll(medium.fes);
 
-        circleSize = (new ClosestPair(drawnLoci)).distance() * scale * 0.75;
+        circleSize = (new ClosestPair(drawnLoci)).distance() * scale * 0.95;
         System.out.println("Circle size: " + circleSize);
     }
 }
@@ -227,6 +230,7 @@ class ClosestPair {
 
         // sort by y-coordinate (but not yet sorted)
         ArrayList<Locus> pointsByY = new ArrayList<>(points);
+        pointsByY.sort(Comparator.comparingDouble(a -> a.h));
 
         // auxiliary array
         ArrayList<Locus> aux = new ArrayList<>(Collections.nCopies(n, null));
@@ -257,14 +261,17 @@ class ClosestPair {
         // aux[0..m-1] = sequence of points closer than delta, sorted by y-coordinate
         int m = 0;
         for (int i = lo; i <= hi; i++) {
-            if (Math.abs(pointsByY.get(i).w - median.w) < delta)
+            double dw = Math.abs(pointsByY.get(i).w - median.w);
+            if (dw * dw < delta)
                 aux.set(m++, pointsByY.get(i));
         }
 
         // compare each point to its neighbors with y-coordinate closer than delta
         for (int i = 0; i < m; i++) {
             // a geometric packing argument shows that this loop iterates at most 7 times
-            for (int j = i+1; (j < m) && (aux.get(j).h - aux.get(i).h < delta); j++) {
+            for (int j = i + 1; j < m; j++) {
+                double dy = aux.get(j).h - aux.get(i).h;
+                if (dy * dy >= delta) break;
                 Locus auxi = aux.get(i);
                 Locus auxj = aux.get(j);
                 double distance = (auxi.w - auxj.w) * (auxi.w - auxj.w) + (auxi.h - auxj.h) * (auxi.h - auxj.h);
