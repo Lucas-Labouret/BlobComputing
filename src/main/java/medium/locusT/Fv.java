@@ -26,4 +26,8 @@ public class Fv extends Locus {
 
     public Vf getPair(){ return pair; }
 
+    @Override
+    public String toString() {
+        return "(" + y + ", " + x + ", " + t + ", " + s + ")";
+    }
 }

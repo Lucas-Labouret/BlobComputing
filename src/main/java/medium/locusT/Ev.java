@@ -26,4 +26,8 @@ public class Ev extends Locus {
 
     public Ve getPair(){ return pair; }
 
+    @Override
+    public String toString() {
+        return "(" + y + ", " + x + ", " + t + ", " + s + ")";
+    }
 }

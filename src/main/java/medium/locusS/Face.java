@@ -15,4 +15,9 @@ public class Face extends Locus {
         this.x = x;
         this.t = t;
     }
+
+    @Override
+    public String toString() {
+        return "(" + y + ", " + x + ", " + t + ")";
+    }
 }

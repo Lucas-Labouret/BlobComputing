@@ -1,0 +1,213 @@
+%author: Pedro Pinto; v2.5; jun 2020
+\documentclass[11pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+%\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{csquotes}
+\usepackage{comment}
+\usepackage{imakeidx}
+%tabela
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\hypersetup{
+     colorlinks=true,
+     linkcolor=blue,
+     filecolor=blue,
+     citecolor = black,      
+     urlcolor=red,
+     }
+\usepackage[toc,acronym,nopostdot,nonumberlist]{glossaries}
+\usepackage{titling}
+\usepackage{tikzpagenodes}
+\usepackage[ddmmyyyy]{datetime}
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage{lipsum}
+\usepackage{cleveref}
+
+
+%para definir a localização das tabelas e imagens em modo strict
+%\usepackage{placeins}
+
+\usepackage{biblatex}
+\addbibresource{ref.bib}
+\makeglossaries
+\input{vars}
+\onehalfspacing
+
+\begin{document}
+
+\begin{titlepage}
+\begin{tikzpicture}[remember picture,overlay,shift={(current page.center)}]
+%\node[anchor=center,xshift=-7.5cm,yshift=10.5cm]{\includegraphics[scale=0.6]{figs/ERSC_logo.pdf}};
+\node[anchor=center,xshift=-4.0cm,yshift=12.7cm]{\includegraphics[scale=0.6]{figs/ufr-logo.png}};
+%\node[anchor=center,xshift=9.5cm,yshift=-12cm]{\includegraphics[scale=0.75]{figs/line.pdf}};
+\node[anchor=center,xshift=6.0cm,yshift=12.7cm]{(Insert company logo here)};
+%\node[anchor=center,xshift=9.5cm,yshift=-12cm]{\includegraphics[scale=0.75]{figs/line.pdf}};
+\end{tikzpicture} 
+
+\centering
+\vspace{5cm}
+\large Université Paris-Saclay UFR des Sciences d'Orsay Computer Science Department \\
+\Large Master 2 Quantum and Distributed Computer Science~(QDCS) \\
+\Large 2023-24 Intership Report \\
+\vspace{3cm}
+\huge {\textsc{Title of the Internship}} \\
+\vspace{3cm}
+%\large a project / an internship authored by\\
+%\large a lab assignment report authored by\\
+\Large \emph{Name Surname} \\
+\vspace{2cm}
+\large performed at \\
+\large Company X, Laboratory Y \\
+\large and supervised by\\
+%#if Project uncomment
+\large Prof. X and Dr. Y \\
+%#if Internship uncomment following lines
+%\large Prof. X (ESTG-IPVC)\\
+%\large Name of Company Supervisor (Company X)\\
+
+%\vspace{3cm}
+%\includegraphics[scale=0.5]{figs/ufr-logo.png};
+
+%#if Internship uncomment following lines
+%\includegraphics[scale=0.35]{figs/ESTG-IPVC.png}
+\vspace{1cm}
+\newdateformat{daymonthyear}{\THEDAY\ \monthname[\THEMONTH], \THEYEAR}
+\daymonthyear\today \\
+%December, 2019
+%\large v2.3
+\end{titlepage}
+
+\input{acro_list}
+
+\pagenumbering{roman} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+\begin{abstract}
+%context
+
+%problem
+
+%proposal
+
+%solution
+
+The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. 
+
+\vspace{2cm}
+\noindent \textbf{Keywords:} word1. word2. word3. word4.
+
+\end{abstract}
+
+
+
+%insert index
+\tableofcontents
+\glsaddall
+\printglossary[type=\acronymtype]
+\printglossary[type=main,title={Glossary},toctitle={Glossary}]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+
+\chapter{Introduction}
+\pagenumbering{arabic} 
+\label{chap:introduction}
+
+IMPORTANT:
+\begin{itemize}
+    \item PLEASE check the file vars.tex: I'm using it in 10\kbps.
+    \item Using glossaries for the first time: \gls{wn}
+    \item Using glossaries after first time: \gls{wn}
+    \item Using glossaries in plural: \glspl{wn}
+    \item Using glossaries extended: \glsdesc{wn}
+\end{itemize}
+
+How to reference and insert a \Cref{fig:labeloffigure}. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.7]{figs/ufr-logo.png}
+    \caption{This is a figure}
+    \label{fig:labeloffigure}
+\end{figure}
+
+This is an example of a citation \cite{Pedro2019}.   
+
+This is a way for you to generate tables: \href{https://www.tablesgenerator.com/}{https://www.tablesgenerator.com/}
+
+This is how to refer to another \Cref{cap:work}
+
+Here is how to do a bullet list
+\begin{itemize}
+    \item First point
+    \item Second point
+    \item and so on...
+\end{itemize}
+
+Here is how to do a numbered list
+\begin{enumerate}
+    \item First point
+    \item Second point
+    \item and so on...
+\end{enumerate}
+
+\section{Presentation of the host organization} 
+\label{sec:context}
+\lipsum[1]
+
+\section{Internship context and objectives}
+\label{sec:motivation}
+\lipsum[1]
+ 
+
+\section{Related or previous work}
+\label{sec:name}
+The general objective is to
+The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+\chapter{Performed work}
+\label{cap:work}
+
+\lipsum[1]
+
+\section{Methodology}
+
+\section{Performed tasks}
+
+\section{Results, deliverables, and artifact description}
+
+
+
+\label{sec:sec2}
+
+\chapter{Evaluation and discussion}
+
+\section{Evaluation of the performed work}
+
+\section{Impact of the internship}
+
+\section{Reflections on the internship}
+
+\subsection{Difficulties encountered and reactions}
+
+\subsection{Skills acquired and lessons learned}
+
+\subsection{Career plans after the internship}
+
+
+
+\chapter{Conclusion}
+
+\section{Acknowledgements}
+
+\addcontentsline{toc}{chapter}{References}
+\printbibliography[title={References}]
+
+\end{document}

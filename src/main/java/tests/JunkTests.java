@@ -1,7 +1,8 @@
 package tests;
 
-import field.FieldManager;
-import field.boolField.fieldT.*;
+import language.utils.BoolFieldManager;
+import language.utils.Border;
+import language.obj.field.boolField.fieldT.*;
 
 import medium.Medium;
 import medium.locusS.*;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class JunkTests {
     static void main(String[] args) {
-        FieldManager.setup(largeMedium());
+        BoolFieldManager.setup(largeMedium());
 
         long startTime = System.currentTimeMillis();
         spatialTestsTransfer();
@@ -28,21 +29,21 @@ public class JunkTests {
     }
 
     private static void transferRoundTripVeEv() {
-        BoolVe orig = BoolVe.rand();
+        BoolVe orig = BoolVe.rand(Border.MIRROR);
 
         BoolVe roundTrip = BoolEv.transfer(BoolVe.transfer(orig));
         printRoundTripResult("Ve <-> Ev", orig, roundTrip);
     }
 
     private static void transferRoundTripVfFv() {
-        BoolVf orig = BoolVf.rand();
+        BoolVf orig = BoolVf.rand(Border.MIRROR);
 
         BoolVf roundTrip = BoolFv.transfer(BoolVf.transfer(orig));
         printRoundTripResult("Vf <-> Fv", orig, roundTrip);
     }
 
     private static void transferRoundTripEfFe() {
-        BoolEf orig = BoolEf.rand();
+        BoolEf orig = BoolEf.rand(Border.MIRROR);
 
         BoolEf roundTrip = BoolFe.transfer(BoolEf.transfer(orig));
         printRoundTripResult("Ef <-> Fe", orig, roundTrip);

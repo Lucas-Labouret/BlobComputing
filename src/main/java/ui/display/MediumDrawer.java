@@ -7,6 +7,8 @@ import medium.Locus;
 import medium.Medium;
 import medium.locusS.*;
 import medium.locusT.*;
+import ui.display.displayable.Displayable;
+import utils.ClosestPair;
 
 import java.util.*;
 
@@ -20,7 +22,7 @@ public class MediumDrawer extends Canvas {
     private final Medium medium;
 
     // Which loci should be shown
-    private boolean v  = true;
+    private boolean v  = false;
     private boolean ve = false;
     private boolean vf = false;
     private boolean e  = false;
@@ -30,6 +32,7 @@ public class MediumDrawer extends Canvas {
     private boolean fv = false;
     private boolean fe = false;
 
+    // Used to only recompute circle size if the loci shown changed
     private boolean lastv  = false;
     private boolean lastve = false;
     private boolean lastvf = false;
@@ -40,19 +43,21 @@ public class MediumDrawer extends Canvas {
     private boolean lastfv = false;
     private boolean lastfe = false;
 
-    private HashMap<Vertex, Color> vColors  = new HashMap<>();
-    private HashMap<Ve, Color>     veColors = new HashMap<>();
-    private HashMap<Vf, Color>     vfColors = new HashMap<>();
-    private HashMap<Edge, Color>   eColors  = new HashMap<>();
-    private HashMap<Ev, Color>     evColors = new HashMap<>();
-    private HashMap<Ef, Color>     efColors = new HashMap<>();
-    private HashMap<Face, Color>   fColors  = new HashMap<>();
-    private HashMap<Fv, Color>     fvColors = new HashMap<>();
-    private HashMap<Fe, Color>     feColors = new HashMap<>();
+    // Contains the displaybles currently displayed
+    private final HashSet<Displayable> displayables = new HashSet<>();
+
+    private final HashMap<Vertex, Color> vColors  = new HashMap<>();
+    private final HashMap<Ve, Color>     veColors = new HashMap<>();
+    private final HashMap<Vf, Color>     vfColors = new HashMap<>();
+    private final HashMap<Edge, Color>   eColors  = new HashMap<>();
+    private final HashMap<Ev, Color>     evColors = new HashMap<>();
+    private final HashMap<Ef, Color>     efColors = new HashMap<>();
+    private final HashMap<Face, Color>   fColors  = new HashMap<>();
+    private final HashMap<Fv, Color>     fvColors = new HashMap<>();
+    private final HashMap<Fe, Color>     feColors = new HashMap<>();
 
     // The size of circle representing a locus
     private double circleSize;
-
 
     private final GraphicsContext gc = getGraphicsContext2D();
 
@@ -66,8 +71,8 @@ public class MediumDrawer extends Canvas {
         scale = SCALE_TARGET/dim;
 
         // Set canvas size
-        setHeight(height * scale + 2*offSet);
-        setWidth(width * scale + 2*offSet);
+        setHeight((height + 2*offSet) * scale);
+        setWidth((width + 2*offSet) * scale);
 
         // Draw grid
         draw();
@@ -75,6 +80,8 @@ public class MediumDrawer extends Canvas {
 
     public void draw() {
         gc.clearRect(0, 0, getWidth(), getHeight());
+
+        computeColors();
 
         if (lastv != v || lastve != ve || lastvf != vf || laste != e || lastev != ev || lastef != ef || lastf != f || lastfv != fv || lastfe != fe) {
             updateCircleSize();
@@ -109,7 +116,7 @@ public class MediumDrawer extends Canvas {
     private static final double by = -0.5;
     private static final double cx = 0.0;
     private static final double cy = 1.0;
-    private double moveTriangle(double ct, double cl) { return ct * circleSize + (cl + offSet) * scale; }
+    private double moveTriangle(double ct, double cl) { return ct * circleSize/2 + (cl + offSet) * scale; }
     private void drawF(Face l){
         gc.setFill(getColor(l));
         gc.fillPolygon(new double[]{moveTriangle(ax, l.w), moveTriangle(bx, l.w), moveTriangle(cx, l.w)},
@@ -123,40 +130,71 @@ public class MediumDrawer extends Canvas {
 
     private Color getColor(Locus l) {
         switch (l) {
-            case Vertex vl -> { return vColors.getOrDefault (vl,  Globals.DEFAULT); }
-            case Ve vel ->    { return veColors.getOrDefault(vel, Globals.DEFAULT); }
-            case Vf vfl ->    { return vfColors.getOrDefault(vfl, Globals.DEFAULT); }
-            case Edge el ->   { return eColors.getOrDefault (el,  Globals.DEFAULT); }
-            case Ev evl ->    { return evColors.getOrDefault(evl, Globals.DEFAULT); }
-            case Ef efl ->    { return efColors.getOrDefault(efl, Globals.DEFAULT); }
-            case Face fl ->   { return fColors.getOrDefault (fl,  Globals.DEFAULT); }
-            case Fv fvl ->    { return fvColors.getOrDefault(fvl, Globals.DEFAULT); }
-            case Fe fel ->    { return feColors.getOrDefault(fel, Globals.DEFAULT); }
+            case Vertex vl -> { return vColors .getOrDefault(vl,  Styles.DEFAULT.DEFAULT()); }
+            case Ve vel ->    { return veColors.getOrDefault(vel, Styles.DEFAULT.DEFAULT()); }
+            case Vf vfl ->    { return vfColors.getOrDefault(vfl, Styles.DEFAULT.DEFAULT()); }
+            case Edge el ->   { return eColors .getOrDefault(el,  Styles.DEFAULT.DEFAULT()); }
+            case Ev evl ->    { return evColors.getOrDefault(evl, Styles.DEFAULT.DEFAULT()); }
+            case Ef efl ->    { return efColors.getOrDefault(efl, Styles.DEFAULT.DEFAULT()); }
+            case Face fl ->   { return fColors .getOrDefault(fl,  Styles.DEFAULT.DEFAULT()); }
+            case Fv fvl ->    { return fvColors.getOrDefault(fvl, Styles.DEFAULT.DEFAULT()); }
+            case Fe fel ->    { return feColors.getOrDefault(fel, Styles.DEFAULT.DEFAULT()); }
             default -> throw new IllegalStateException("Unexpected value: " + l);
         }
     }
 
-    public void setDrawV (boolean b) { v  = b; }
-    public void setDrawVe(boolean b) { ve = b; }
-    public void setDrawVf(boolean b) { vf = b; }
-    public void setDrawE (boolean b) { e  = b; }
-    public void setDrawEv(boolean b) { ev = b; }
-    public void setDrawEf(boolean b) { ef = b; }
-    public void setDrawF (boolean b) { f  = b; }
-    public void setDrawFv(boolean b) { fv = b; }
-    public void setDrawFe(boolean b) { fe = b; }
+    public void addDisplay(Displayable d) { displayables.add(d); }
+    public void removeDisplay(Displayable d) { displayables.remove(d); }
 
-    public void setVColors (HashMap<Vertex, Color> vColors)  { this.vColors  = vColors;  }
-    public void setVeColors(HashMap<Ve,     Color> veColors) { this.veColors = veColors; }
-    public void setVfColors(HashMap<Vf,     Color> vfColors) { this.vfColors = vfColors; }
-    public void setEColors (HashMap<Edge,   Color> eColors)  { this.eColors  = eColors;  }
-    public void setEvColors(HashMap<Ev,     Color> evColors) { this.evColors = evColors; }
-    public void setEfColors(HashMap<Ef,     Color> efColors) { this.efColors = efColors; }
-    public void setFColors (HashMap<Face,   Color> fColors)  { this.fColors  = fColors;  }
-    public void setFvColors(HashMap<Fv,     Color> fvColors) { this.fvColors = fvColors; }
-    public void setFeColors(HashMap<Fe,     Color> feColors) { this.feColors = feColors; }
+    private void computeColors() {
+        HashSet<HashMap<Vertex, Color>> vColorsPrimary  = new HashSet<>();
+        HashSet<HashMap<Ve,     Color>> veColorsPrimary = new HashSet<>();
+        HashSet<HashMap<Vf,     Color>> vfColorsPrimary = new HashSet<>();
+        HashSet<HashMap<Edge,   Color>> eColorsPrimary  = new HashSet<>();
+        HashSet<HashMap<Ev,     Color>> evColorsPrimary = new HashSet<>();
+        HashSet<HashMap<Ef,     Color>> efColorsPrimary = new HashSet<>();
+        HashSet<HashMap<Face,   Color>> fColorsPrimary  = new HashSet<>();
+        HashSet<HashMap<Fv,     Color>> fvColorsPrimary = new HashSet<>();
+        HashSet<HashMap<Fe,     Color>> feColorsPrimary = new HashSet<>();
 
+        v = ve = vf = e = ev = ef = f = fv = fe = false;
+        for (Displayable d: displayables) {
+            if (d.updatesV ()) { v  = true; vColorsPrimary .add(d.displayV (medium)); }
+            if (d.updatesVe()) { ve = true; veColorsPrimary.add(d.displayVe(medium)); }
+            if (d.updatesVf()) { vf = true; vfColorsPrimary.add(d.displayVf(medium)); }
+            if (d.updatesE ()) { e  = true; eColorsPrimary .add(d.displayE (medium)); }
+            if (d.updatesEv()) { ev = true; evColorsPrimary.add(d.displayEv(medium)); }
+            if (d.updatesEf()) { ef = true; efColorsPrimary.add(d.displayEf(medium)); }
+            if (d.updatesF ()) { f  = true; fColorsPrimary .add(d.displayF (medium)); }
+            if (d.updatesFv()) { fv = true; fvColorsPrimary.add(d.displayFv(medium)); }
+            if (d.updatesFe()) { fe = true; feColorsPrimary.add(d.displayFe(medium)); }
+        }
 
+        if (v)  computeColor(medium.vertices, vColorsPrimary,  vColors );
+        if (ve) computeColor(medium.ves,      veColorsPrimary, veColors);
+        if (vf) computeColor(medium.vfs,      vfColorsPrimary, vfColors);
+        if (e)  computeColor(medium.edges,    eColorsPrimary,  eColors );
+        if (ev) computeColor(medium.evs,      evColorsPrimary, evColors);
+        if (ef) computeColor(medium.efs,      efColorsPrimary, efColors);
+        if (f)  computeColor(medium.faces,    fColorsPrimary,  fColors );
+        if (fv) computeColor(medium.fvs,      fvColorsPrimary, fvColors);
+        if (fe) computeColor(medium.fes,      feColorsPrimary, feColors);
+    }
+
+    private <L extends Locus> void computeColor(HashSet<L> loci, HashSet<HashMap<L, Color>> colorsPrimary, HashMap<L, Color> colors) {
+        int size = colorsPrimary.size();
+        for (L l: loci) {
+            double r, g, b;
+            r = g = b = 0;
+            for (HashMap<L, Color> c: colorsPrimary) {
+                Color col = c.get(l);
+                r += col.getRed();
+                g += col.getGreen();
+                b += col.getBlue();
+            }
+            colors.put(l, new Color(r/size, g/size, b/size, 1));
+        }
+    }
 
     private void updateCircleSize(){
         ArrayList<Locus> drawnLoci = new ArrayList<>();
@@ -172,168 +210,5 @@ public class MediumDrawer extends Canvas {
 
         circleSize = (new ClosestPair(drawnLoci)).distance() * scale * 0.95;
         System.out.println("Circle size: " + circleSize);
-    }
-}
-
-/**
- *  The {@code ClosestPair} data type computes the closest pair of points
- *  in a set of <em>n</em> points in the plane and provides accessor methods
- *  for getting the closest pair of points and the distance between them.
- *  The distance between two points is their Euclidean distance.
- *  <p>
- *  This implementation uses a divide-and-conquer algorithm.
- *  It runs in O(<em>n</em> log <em>n</em>) time in the worst case and uses
- *  O(<em>n</em>) extra space.
- *  <p>
- *  For additional documentation, see <a href="https://algs4.cs.princeton.edu/99hull">Section 9.9</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-class ClosestPair {
-
-    // closest pair of points and their Euclidean distance
-    private Locus best1, best2;
-    private double bestDistance = Double.POSITIVE_INFINITY;
-
-    /**
-     * Computes the closest pair of points in the specified array of points.
-     *
-     * @param  points the array of points
-     * @throws IllegalArgumentException if {@code points} is {@code null} or if any
-     *         entry in {@code points[]} is {@code null}
-     */
-    public ClosestPair(ArrayList<Locus> points) {
-        if (points == null) throw new IllegalArgumentException("constructor argument is null");
-        for (int i = 0; i < points.size(); i++) {
-            if (points.get(i) == null) throw new IllegalArgumentException("array element " + i + " is null");
-        }
-
-        int n = points.size();
-        if (n <= 1) return;
-
-        // sort by x-coordinate (breaking ties by y-coordinate via stability)
-        ArrayList<Locus> pointsByX = new ArrayList<>(points);
-        pointsByX.sort(Comparator.comparingDouble(a -> a.h));
-        pointsByX.sort(Comparator.comparingDouble(a -> a.w));
-
-        // check for coincident points
-        for (int i = 0; i < n-1; i++) {
-            if (pointsByX.get(i).equals(pointsByX.get(i+1))) {
-                bestDistance = 0.0;
-                best1 = pointsByX.get(i);
-                best2 = pointsByX.get(i+1);
-                return;
-            }
-        }
-
-        // sort by y-coordinate (but not yet sorted)
-        ArrayList<Locus> pointsByY = new ArrayList<>(points);
-        pointsByY.sort(Comparator.comparingDouble(a -> a.h));
-
-        // auxiliary array
-        ArrayList<Locus> aux = new ArrayList<>(Collections.nCopies(n, null));
-
-        closest(pointsByX, pointsByY, aux, 0, n-1);
-
-        bestDistance = Math.sqrt(bestDistance);
-    }
-
-    // find the closest pair of points in pointsByX[lo..hi]
-    // precondition:  pointsByX[lo..hi] and pointsByY[lo..hi] are the same sequence of points
-    // precondition:  pointsByX[lo..hi] sorted by x-coordinate
-    // postcondition: pointsByY[lo..hi] sorted by y-coordinate
-    private double closest(ArrayList<Locus> pointsByX, ArrayList<Locus> pointsByY, ArrayList<Locus> aux, int lo, int hi) {
-        if (hi <= lo) return Double.POSITIVE_INFINITY;
-
-        int mid = lo + (hi - lo) / 2;
-        Locus median = pointsByX.get(mid);
-
-        // compute the closest pair with both endpoints in left subarray or both in right subarray
-        double delta1 = closest(pointsByX, pointsByY, aux, lo, mid);
-        double delta2 = closest(pointsByX, pointsByY, aux, mid+1, hi);
-        double delta = Math.min(delta1, delta2);
-
-        // merge back so that pointsByY[lo..hi] are sorted by y-coordinate
-        merge(pointsByY, aux, lo, mid, hi);
-
-        // aux[0..m-1] = sequence of points closer than delta, sorted by y-coordinate
-        int m = 0;
-        for (int i = lo; i <= hi; i++) {
-            double dw = Math.abs(pointsByY.get(i).w - median.w);
-            if (dw * dw < delta)
-                aux.set(m++, pointsByY.get(i));
-        }
-
-        // compare each point to its neighbors with y-coordinate closer than delta
-        for (int i = 0; i < m; i++) {
-            // a geometric packing argument shows that this loop iterates at most 7 times
-            for (int j = i + 1; j < m; j++) {
-                double dy = aux.get(j).h - aux.get(i).h;
-                if (dy * dy >= delta) break;
-                Locus auxi = aux.get(i);
-                Locus auxj = aux.get(j);
-                double distance = (auxi.w - auxj.w) * (auxi.w - auxj.w) + (auxi.h - auxj.h) * (auxi.h - auxj.h);
-                if (distance < delta) {
-                    delta = distance;
-                    if (distance < bestDistance) {
-                        bestDistance = delta;
-                        best1 = auxi;
-                        best2 = auxj;
-                    }
-                }
-            }
-        }
-        return delta;
-    }
-
-    /**
-     * Returns one of the points in the closest pair of points.
-     *
-     * @return one of the two points in the closest pair of points;
-     *         {@code null} if no such point (because there are fewer than 2 points)
-     */
-    public Locus either() {
-        return best1;
-    }
-
-    /**
-     * Returns the other point in the closest pair of points.
-     *
-     * @return the other point in the closest pair of points
-     *         {@code null} if no such point (because there are fewer than 2 points)
-     */
-    public Locus other() {
-        return best2;
-    }
-
-    /**
-     * Returns the Euclidean distance between the closest pair of points.
-     *
-     * @return the Euclidean distance between the closest pair of points
-     *         {@code Double.POSITIVE_INFINITY} if no such pair of points
-     *         exist (because there are fewer than 2 points)
-     */
-    public double distance() {
-        return bestDistance;
-    }
-
-    // stably merge a[lo .. mid] with a[mid+1 ..hi] using aux[lo .. hi]
-    // precondition: a[lo .. mid] and a[mid+1 .. hi] are sorted subarrays
-    private static void merge(ArrayList<Locus> a, ArrayList<Locus> aux, int lo, int mid, int hi) {
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux.set(k, a.get(k));
-        }
-
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)                      a.set(k, aux.get(j++));
-            else if (j > hi)                       a.set(k, aux.get(i++));
-            else if (aux.get(j).h  < aux.get(i).h) a.set(k, aux.get(j++));
-            else                                   a.set(k, aux.get(i++));
-        }
     }
 }

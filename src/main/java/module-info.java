@@ -8,26 +8,25 @@ module com.github.lucaslabouret.blobcomputing {
     opens ui to javafx.fxml;
     opens ui.display to javafx.fxml;
     opens ui.display.displayable to javafx.fxml;
+    opens ui.display.displayable.boolFieldDisplay to javafx.fxml;
 
     exports ui;
     exports ui.display;
     exports ui.display.displayable;
+    exports ui.display.displayable.boolFieldDisplay;
+    exports ui.display.displayable.intFieldDisplay;
     exports ui.utils;
-
-    exports prog;
-    exports prog.obj.intField;
-    exports prog.ref.intField;
-
-    exports language;
-    exports language.fieldRef;
-    exports language.basicInstruction;
 
     exports medium;
     exports medium.locusS;
     exports medium.locusT;
 
-    exports field.boolField.fieldS;
-    exports field.boolField.fieldT;
-    exports ui.display.displayable.boolFieldDisplay;
-    opens ui.display.displayable.boolFieldDisplay to javafx.fxml;
+    exports language;
+    exports language.cache;
+    exports language.instruction.basicInstruction;
+    exports language.ref;
+    exports language.ref.field.boolField.fieldT;
+    exports language.ref.field.boolField.fieldS;
+    exports language.ref.field.intField;
+    exports language.instruction;
 }

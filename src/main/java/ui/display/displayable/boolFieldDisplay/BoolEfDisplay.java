@@ -1,20 +1,26 @@
 package ui.display.displayable.boolFieldDisplay;
 
-import field.boolField.fieldT.BoolEf;
-import language.fieldRef.BoolEfRef;
+import language.obj.field.boolField.fieldT.BoolEf;
+import language.ref.field.boolField.fieldT.BoolEfRef;
 import javafx.scene.paint.Color;
 import medium.Medium;
 import medium.locusT.Ef;
-import ui.display.Globals;
+import ui.display.Styles;
 import ui.display.displayable.Displayable;
 
 import java.util.HashMap;
 
 public class BoolEfDisplay implements Displayable {
     private final BoolEfRef ref;
+    private final Styles.Style style;
+
+    public BoolEfDisplay(BoolEfRef ref, Styles.Style style){
+        this.ref = ref;
+        this.style = style;
+    }
 
     public BoolEfDisplay(BoolEfRef ref){
-        this.ref = ref;
+        this(ref, Styles.DEFAULT);
     }
 
     @Override public boolean updatesEf() { return true; }
@@ -24,8 +30,8 @@ public class BoolEfDisplay implements Displayable {
         HashMap<Ef, Boolean> mem = BoolEf.decode(medium.efs, ref.get());
         HashMap<Ef, Color> colors = new HashMap<>();
         for (Ef ef : mem.keySet())
-            if (mem.get(ef)) colors.put(ef, Globals.EF_TRUE);
-            else colors.put(ef, Globals.EF_FALSE);
+            if (mem.get(ef)) colors.put(ef, style.EF_TRUE());
+            else colors.put(ef, style.EF_FALSE());
         return colors;
     }
 }

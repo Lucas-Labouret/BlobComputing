@@ -1,13 +1,17 @@
 package ui;
 
-import language.Instruction;
-import language.Procedure;
-import language.basicInstruction.BasicInstruction;
-import language.basicInstruction.Show;
-import language.basicInstruction.Snapshot;
+import language.cache.Cache;
+import language.instruction.Instruction;
+import language.instruction.Procedure;
+import language.instruction.basicInstruction.BasicInstruction;
+import language.instruction.basicInstruction.Show;
+import language.instruction.basicInstruction.Snapshot;
 
 public class InstructionPlayer {
     private final Instruction instruction;
+    private final int leafCount;
+    private final Cache autoCache = new Cache();
+    private final Cache userCache = new Cache();
     private final DisplayController displayController;
 
     private volatile boolean playing = false;
@@ -17,16 +21,44 @@ public class InstructionPlayer {
 
     private Thread playerThread;
 
+    private static final boolean printLeafCount = false;
+    private static final boolean printInstructionTree = false;
     public InstructionPlayer(Instruction instruction, DisplayController displayController) {
         this.instruction = instruction;
+        leafCount = instruction.leafCount();
         this.displayController = displayController;
         createPlayerThread();
 
-        System.out.println(instruction.leafCount() + " leaves");
-        System.out.println(switch (instruction) {
+        if (printLeafCount) System.out.println(leafCount + " leaves");
+        if (printInstructionTree) System.out.println(switch (instruction) {
             case Procedure p -> p.instructionTree();
             case BasicInstruction i -> i.getClass().getSimpleName();
         });
+    }
+
+    boolean isPowerOf2minus1(long n) {
+        if (n < 0) throw new IllegalArgumentException("n must be >= 0");
+
+        //propagate the highest set bit to the right
+        long value = n;
+        value |= value >> 1;
+        value |= value >> 2;
+        value |= value >> 4;
+        value |= value >> 8;
+        value |= value >> 16;
+        value |= value >> 32;
+
+        return n == value;
+    }
+
+    long stepCounter = 0;
+    long loopCounter = 0;
+    private boolean exec() {
+        boolean done = instruction.exec();
+        stepCounter++;
+        if (done) loopCounter++;
+        if (isPowerOf2minus1(loopCounter)) autoCache.push(stepCounter);
+        return done;
     }
 
     @SuppressWarnings("BusyWait")
@@ -37,7 +69,7 @@ public class InstructionPlayer {
                 catch (InterruptedException _) { break; }
 
                 tryDisplayUpdate();
-                boolean done = instruction.exec();
+                boolean done = exec();
                 if (done && pauseAfterLoop) {
                     playing = false;
                     return;
@@ -59,7 +91,7 @@ public class InstructionPlayer {
     public void step() {
         if (playing) return;
         tryDisplayUpdate();
-        instruction.exec();
+        exec();
     }
     public void start() {
         playing = true;
@@ -82,4 +114,22 @@ public class InstructionPlayer {
     public boolean isPlaying() { return playing; }
 
     public void setSpeed(int ms) { speed = ms; }
+
+    public void loopBack() {
+        if (loopCounter == 0) return; // Can't loop back if we're at the beginning
+        loopCounter--;
+        autoCache.retrieve(loopCounter * leafCount, instruction);
+        stepCounter = loopCounter * leafCount;
+        displayController.refresh();
+    }
+
+    public Cache.CacheEntry saveState() {
+        return userCache.push(stepCounter);
+    }
+
+    public void restoreState(Cache.CacheEntry entry) {
+        stepCounter = userCache.retrieve(entry);
+        loopCounter =  stepCounter/leafCount;
+        displayController.refresh();
+    }
 }

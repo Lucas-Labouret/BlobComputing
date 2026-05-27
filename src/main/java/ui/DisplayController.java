@@ -2,22 +2,16 @@ package ui;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.Node;
 import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
 import language.Ref;
-import language.basicInstruction.Show;
-import language.fieldRef.*;
-import medium.Medium;
-import medium.locusS.Edge;
-import medium.locusS.Face;
-import medium.locusS.Vertex;
-import medium.locusT.*;
-import prog.ref.intField.IntVRef;
+import language.instruction.basicInstruction.Show;
+import language.ref.field.boolField.fieldT.*;
+import language.ref.field.boolField.fieldS.*;
+import language.ref.field.intField.IntVRef;
 import ui.display.MediumDrawer;
 import ui.display.displayable.Displayable;
 import ui.display.displayable.boolFieldDisplay.*;
-import ui.display.displayable.intFIeldDisplay.IntVDisplay;
+import ui.display.displayable.intFieldDisplay.IntVDisplay;
 import ui.utils.DisplayBox;
 import ui.utils.OrderableDisplayPanel;
 
@@ -26,24 +20,20 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class DisplayController {
-    private final Medium medium;
     private final OrderableDisplayPanel displays;
 
     private final MediumDrawer drawer;
 
-    public DisplayController(Medium medium, OrderableDisplayPanel displays) {
-        this.medium = medium;
+    public DisplayController(MediumDrawer drawer, OrderableDisplayPanel displays) {
         this.displays = displays;
-
-        drawer = new MediumDrawer(medium);
+        this.drawer = drawer;
     }
 
-    public MediumDrawer getDrawer() {
-        return drawer;
+    public void refresh() {
+        Platform.runLater(drawer::draw);
     }
 
     public void bind(Show show) {
@@ -56,23 +46,23 @@ public class DisplayController {
         Ref<?> ref = show.ref();
 
         if (!bound.contains(show)) switch (ref) {
-            case BoolVRef boolVRef   -> addDisplay(name, new BoolVDisplay(boolVRef));
-            case BoolVeRef boolVeRef -> addDisplay(name, new BoolVeDisplay(boolVeRef));
-            case BoolVfRef boolVfRef -> addDisplay(name, new BoolVfDisplay(boolVfRef));
-            case BoolERef boolERef   -> addDisplay(name, new BoolEDisplay(boolERef));
-            case BoolEvRef boolEvRef -> addDisplay(name, new BoolEvDisplay(boolEvRef));
-            case BoolEfRef boolEfRef -> addDisplay(name, new BoolEfDisplay(boolEfRef));
-            case BoolFRef boolFRef   -> addDisplay(name, new BoolFDisplay(boolFRef));
-            case BoolFvRef boolFvRef -> addDisplay(name, new BoolFvDisplay(boolFvRef));
-            case BoolFeRef boolFeRef -> addDisplay(name, new BoolFeDisplay(boolFeRef));
+            case BoolVRef boolVRef   -> createDisplay(name, new BoolVDisplay(boolVRef));
+            case BoolVeRef boolVeRef -> createDisplay(name, new BoolVeDisplay(boolVeRef));
+            case BoolVfRef boolVfRef -> createDisplay(name, new BoolVfDisplay(boolVfRef));
+            case BoolERef boolERef   -> createDisplay(name, new BoolEDisplay(boolERef));
+            case BoolEvRef boolEvRef -> createDisplay(name, new BoolEvDisplay(boolEvRef));
+            case BoolEfRef boolEfRef -> createDisplay(name, new BoolEfDisplay(boolEfRef));
+            case BoolFRef boolFRef   -> createDisplay(name, new BoolFDisplay(boolFRef));
+            case BoolFvRef boolFvRef -> createDisplay(name, new BoolFvDisplay(boolFvRef));
+            case BoolFeRef boolFeRef -> createDisplay(name, new BoolFeDisplay(boolFeRef));
 
-            case IntVRef intVRef     -> addDisplay(name, new IntVDisplay(intVRef));
+            case IntVRef intVRef     -> createDisplay(name, new IntVDisplay(intVRef));
 
             default -> throw new IllegalArgumentException("Unsupported type for display: " + ref.getClass().getName());
         }
 
         bound.add(show);
-        updateDisplay();
+        drawer.draw();
     }
 
     public void snapshot() {
@@ -95,109 +85,18 @@ public class DisplayController {
         }
     }
 
-    private VColorer  vColorer  = (_ -> new HashMap<>());
-    private VeColorer veColorer = (_ -> new HashMap<>());
-    private VfColorer vfColorer = (_ -> new HashMap<>());
-    private EColorer  eColorer  = (_ -> new HashMap<>());
-    private EvColorer evColorer = (_ -> new HashMap<>());
-    private EfColorer efColorer = (_ -> new HashMap<>());
-    private FColorer  fColorer  = (_ -> new HashMap<>());
-    private FvColorer fvColorer = (_ -> new HashMap<>());
-    private FeColorer feColorer = (_ -> new HashMap<>());
+    private void createDisplay(String name, Displayable d) {
+        DisplayBox box = new DisplayBox(name, d, this);
+        displays.add(box);
+    }
 
-    private void display() {
-        drawer.setVColors (vColorer .color(medium));
-        drawer.setVeColors(veColorer.color(medium));
-        drawer.setVfColors(vfColorer.color(medium));
-        drawer.setEColors (eColorer .color(medium));
-        drawer.setEvColors(evColorer.color(medium));
-        drawer.setEfColors(efColorer.color(medium));
-        drawer.setFColors (fColorer .color(medium));
-        drawer.setFvColors(fvColorer.color(medium));
-        drawer.setFeColors(feColorer.color(medium));
+    public void addDisplay(Displayable d) {
+        drawer.addDisplay(d);
         drawer.draw();
     }
 
-    public void addDisplay(String name, Displayable d) {
-        DisplayBox box = new DisplayBox(name, d, this);
-        displays.add(box);
-        updateDisplay();
-    }
-
-    public void updateDisplay() {
-        boolean vSet  = false;
-        boolean veSet = false;
-        boolean vfSet = false;
-        boolean eSet  = false;
-        boolean evSet = false;
-        boolean efSet = false;
-        boolean fSet  = false;
-        boolean fvSet = false;
-        boolean feSet = false;
-
-        for (Node node: displays.getChildren()) {
-            if (!(node instanceof DisplayBox box)) continue;
-            if (!box.isShown()) continue;
-            Displayable d = box.displayable;
-
-            if (d.updatesV() && !vSet) {
-                vSet = true;
-                vColorer = d::displayV;
-            }
-            if (d.updatesVe() && !veSet) {
-                veSet = true;
-                veColorer = d::displayVe;
-            }
-            if (d.updatesVf() && !vfSet) {
-                vfSet = true;
-                vfColorer = d::displayVf;
-            }
-            if (d.updatesE() && !eSet) {
-                eSet = true;
-                eColorer = d::displayE;
-            }
-            if (d.updatesEv() && !evSet) {
-                evSet = true;
-                evColorer = d::displayEv;
-            }
-            if (d.updatesEf() && !efSet) {
-                efSet = true;
-                efColorer = d::displayEf;
-            }
-            if (d.updatesF() && !fSet) {
-                fSet = true;
-                fColorer = d::displayF;
-            }
-            if (d.updatesFv() && !fvSet) {
-                fvSet = true;
-                fvColorer = d::displayFv;
-            }
-            if (d.updatesFe() && !feSet) {
-                feSet = true;
-                feColorer = d::displayFe;
-            }
-        }
-
-        drawer.setDrawV(vSet);
-        drawer.setDrawVe(veSet);
-        drawer.setDrawVf(vfSet);
-        drawer.setDrawE(eSet);
-        drawer.setDrawEv(evSet);
-        drawer.setDrawEf(efSet);
-        drawer.setDrawF(fSet);
-        drawer.setDrawFv(fvSet);
-        drawer.setDrawFe(feSet);
-
-        display();
+    public void removeDisplay(Displayable d) {
+        drawer.removeDisplay(d);
+        drawer.draw();
     }
 }
-
-@FunctionalInterface interface VColorer  { HashMap<Vertex, Color> color(Medium medium); }
-@FunctionalInterface interface VeColorer { HashMap<Ve,     Color> color(Medium medium); }
-@FunctionalInterface interface VfColorer { HashMap<Vf,     Color> color(Medium medium); }
-@FunctionalInterface interface EColorer  { HashMap<Edge,   Color> color(Medium medium); }
-@FunctionalInterface interface EvColorer { HashMap<Ev,     Color> color(Medium medium); }
-@FunctionalInterface interface EfColorer { HashMap<Ef,     Color> color(Medium medium); }
-@FunctionalInterface interface FColorer  { HashMap<Face,   Color> color(Medium medium); }
-@FunctionalInterface interface FvColorer { HashMap<Fv,     Color> color(Medium medium); }
-@FunctionalInterface interface FeColorer { HashMap<Fe,     Color> color(Medium medium); }

@@ -26,4 +26,8 @@ public class Fe extends Locus {
 
     public Ef getPair(){ return pair; }
 
+    @Override
+    public String toString() {
+        return "(" + y + ", " + x + ", " + t + ", " + s + ")";
+    }
 }

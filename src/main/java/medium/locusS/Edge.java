@@ -24,4 +24,9 @@ public class Edge extends Locus {
         this.right = right;
         this.bot = bot;
     }
+
+    @Override
+    public String toString() {
+        return "(" + y + ", " + x + ", " + t + ")";
+    }
 }

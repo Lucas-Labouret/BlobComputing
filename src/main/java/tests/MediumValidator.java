@@ -89,7 +89,7 @@ public final class MediumValidator {
         for (Ve ve: medium.ves) {
             int y = ve.y;
             int x = ve.x;
-            int t = ve.t;
+            int t = ve.s;
 
             validateVe.putIfAbsent(y, new HashMap<>());
             validateVe.get(y).putIfAbsent(x, new HashSet<>());
@@ -107,7 +107,7 @@ public final class MediumValidator {
         for (Vf vf: medium.vfs) {
             int y = vf.y;
             int x = vf.x;
-            int t = vf.t;
+            int t = vf.s;
 
             validateVf.putIfAbsent(y, new HashMap<>());
             validateVf.get(y).putIfAbsent(x, new HashSet<>());
@@ -238,7 +238,7 @@ public final class MediumValidator {
 
         List<Ve> sorted = medium.ves.stream()
                 .sorted(Comparator.comparingInt((Ve v) -> v.y)
-                        .thenComparingInt(v -> v.t)
+                        .thenComparingInt(v -> v.s)
                         .thenComparingInt(v -> v.x))
                 .toList();
 
@@ -269,7 +269,7 @@ public final class MediumValidator {
 
         List<Vf> sorted = medium.vfs.stream()
                 .sorted(Comparator.comparingInt((Vf v) -> v.y)
-                        .thenComparingInt(v -> v.t)
+                        .thenComparingInt(v -> v.s)
                         .thenComparingInt(v -> v.x))
                 .toList();
 
@@ -364,7 +364,7 @@ public final class MediumValidator {
     }
 
     private static String veDesc(Ve ve) {
-        return "Ve(y=" + ve.y + ",t=" + ve.t + ",x=" + ve.x + ")";
+        return "Ve(y=" + ve.y + ",t=" + ve.s + ",x=" + ve.x + ")";
     }
 
     private static String evDesc(Ev ev) {
@@ -372,7 +372,7 @@ public final class MediumValidator {
     }
 
     private static String vfDesc(Vf vf) {
-        return "Vf(y=" + vf.y + ",t=" + vf.t + ",x=" + vf.x + ")";
+        return "Vf(y=" + vf.y + ",t=" + vf.s + ",x=" + vf.x + ")";
     }
 
     private static String fvDesc(Fv fv) {

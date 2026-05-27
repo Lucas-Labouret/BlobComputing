@@ -15,6 +15,7 @@ public class DisplayBox extends HBox {
 
     private final CheckBox showCheckBox = new CheckBox();
 
+    private static boolean first = true;
     public DisplayBox(String name, Displayable displayable, DisplayController displayController) {
         super(SPACING);
 
@@ -23,14 +24,18 @@ public class DisplayBox extends HBox {
 
         Label nameLabel = new Label();
         nameLabel.setText(name);
-        showCheckBox.setSelected(true);
+        showCheckBox.setSelected(first);
         showCheckBox.setAllowIndeterminate(false);
-        showCheckBox.setOnAction(_ -> displayController.updateDisplay());
+        showCheckBox.setOnAction(_ -> {
+            if (showCheckBox.isSelected()) displayController.addDisplay(displayable);
+            else displayController.removeDisplay(displayable);
+        });
+
+        if (first) {
+            displayController.addDisplay(displayable);
+            first = false;
+        }
 
         getChildren().addAll(showCheckBox, nameLabel);
-    }
-
-    public boolean isShown() {
-        return showCheckBox.isSelected();
     }
 }

@@ -1,20 +1,26 @@
 package ui.display.displayable.boolFieldDisplay;
 
-import field.boolField.fieldT.BoolFv;
-import language.fieldRef.BoolFvRef;
+import language.obj.field.boolField.fieldT.BoolFv;
+import language.ref.field.boolField.fieldT.BoolFvRef;
 import javafx.scene.paint.Color;
 import medium.Medium;
 import medium.locusT.Fv;
-import ui.display.Globals;
+import ui.display.Styles;
 import ui.display.displayable.Displayable;
 
 import java.util.HashMap;
 
 public class BoolFvDisplay implements Displayable {
     private final BoolFvRef ref;
+    private final Styles.Style style;
+
+    public BoolFvDisplay(BoolFvRef ref, Styles.Style style){
+        this.ref = ref;
+        this.style = style;
+    }
 
     public BoolFvDisplay(BoolFvRef ref){
-        this.ref = ref;
+        this(ref, Styles.DEFAULT);
     }
 
     @Override public boolean updatesFv() { return true; }
@@ -24,8 +30,8 @@ public class BoolFvDisplay implements Displayable {
         HashMap<Fv, Boolean> mem = BoolFv.decode(medium.fvs, ref.get());
         HashMap<Fv, Color> colors = new HashMap<>();
         for (Fv fv : mem.keySet())
-            if (mem.get(fv)) colors.put(fv, Globals.FV_TRUE);
-            else colors.put(fv, Globals.FV_FALSE);
+            if (mem.get(fv)) colors.put(fv, style.FV_TRUE());
+            else colors.put(fv, style.FV_FALSE());
         return colors;
     }
 }

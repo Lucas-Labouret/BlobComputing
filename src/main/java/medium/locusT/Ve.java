@@ -3,18 +3,18 @@ package medium.locusT;
 import medium.Locus;
 
 public class Ve extends Locus {
-    public final int y, x, t;
+    public final int y, x, s;
     private Ev pair;
 
-    public Ve(int y, int x, int t) {
-        this(0, 0, y, x, t);
+    public Ve(int y, int x, int s) {
+        this(0, 0, y, x, s);
     }
 
-    public Ve(double h, double w, int y, int x, int t){
+    public Ve(double h, double w, int y, int x, int s){
         super(h, w);
         this.y = y;
         this.x = x;
-        this.t = t;
+        this.s = s;
     }
 
     public void pairWith(Ev pair) {
@@ -25,4 +25,8 @@ public class Ve extends Locus {
 
     public Ev getPair(){ return pair; }
 
+    @Override
+    public String toString() {
+        return "(" + y + ", " + x + ", " + s + ")";
+    }
 }
