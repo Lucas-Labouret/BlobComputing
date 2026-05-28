@@ -1,4 +1,4 @@
-package language.instruction.basicInstruction;
+package language.instruction.instructionSet;
 
 import language.instruction.Instruction;
 

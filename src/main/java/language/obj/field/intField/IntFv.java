@@ -1,7 +1,7 @@
 package language.obj.field.intField;
 
 import language.instruction.Procedure;
-import language.instruction.basicInstruction.BasicInstruction;
+import language.instruction.instructionSet.BasicInstruction;
 import language.obj.field.boolField.fieldT.BoolFv;
 import language.ref.field.boolField.fieldT.BoolFvRef;
 import language.ref.field.intField.IntFvRef;
@@ -42,10 +42,7 @@ public class IntFv extends IntField<BoolFv> {
         return intFv;
     }
 
-    public static BasicInstruction of(BoolFvRef boolFv, IntFvRef res) {
-        return new boolToIntFv(boolFv, res);
-    }
-
+    @Override
     public BoolFvRef[] getBits() {
         return (BoolFvRef[]) bits;
     }
@@ -69,13 +66,13 @@ public class IntFv extends IntField<BoolFv> {
         return res;
     }
 
-    protected static void lShift(IntFv a, IntFv res, int k, int n) {
+    public static void lShift(IntFv a, IntFv res, int k, int n) {
         if (k > n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
         for (int i = 0; i <= n - k; i++) res.bits[i] = a.bits[i + k].copy();
         for (int i = n - k + 1; i <= n; i++) res.bits[i] = BoolFvRef.of(BoolFv.zeroes(a.border));
     }
 
-    protected static void rShift(IntFv a, IntFv res, int k, int n) {
+    public static void rShift(IntFv a, IntFv res, int k, int n) {
         if (k > n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
         for (int i = k; i <= n; i++) res.bits[i] = a.bits[i - k].copy();
         for (int i = 0; i < k; i++) res.bits[i] = BoolFvRef.of(BoolFv.zeroes(a.border));
@@ -87,202 +84,5 @@ public class IntFv extends IntField<BoolFv> {
             copy.bits[i] = this.bits[i].copy();
         }
         return copy;
-    }
-}
-
-class LShiftFv implements BasicInstruction {
-    private final IntFvRef a;
-    private final IntFvRef res;
-    private final int k;
-
-    public LShiftFv(IntFvRef a, IntFvRef res, int k) {
-        this.a = a;
-        this.res = res;
-        this.k = k;
-    }
-
-    @Override
-    public boolean exec() {
-        IntFv.lShift(a.get(), res.get(), k, a.get().n);
-        return true;
-    }
-}
-
-class RShiftFv implements BasicInstruction {
-    private final IntFvRef a;
-    private final IntFvRef res;
-    private final int k;
-
-    public RShiftFv(IntFvRef a, IntFvRef res, int k) {
-        this.a = a;
-        this.res = res;
-        this.k = k;
-    }
-
-    @Override
-    public boolean exec() {
-        IntFv.rShift(a.get(), res.get(), k, a.get().n);
-        return true;
-    }
-}
-
-class IntNotFv extends Procedure {
-    public IntNotFv(IntFvRef a, IntFvRef res) {
-        BoolFvRef[] bitsA = new BoolFvRef[a.get().n + 1];
-        BoolFvRef[] bitsRes = new BoolFvRef[a.get().n + 1];
-        for (int i = 0; i <= a.get().n; i++) {
-            bitsA[i] = new BoolFvRef();
-            bitsRes[i] = new BoolFvRef();
-        }
-
-        split(a, bitsA);
-        for (int i = 0; i <= a.get().n; i++) not(bitsA[i], bitsRes[i]);
-        join(bitsRes, res);
-    }
-}
-
-class IntAndFv extends Procedure {
-    public IntAndFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        BoolFvRef[] bitsA = new BoolFvRef[a.get().n + 1];
-        BoolFvRef[] bitsB = new BoolFvRef[a.get().n + 1];
-        BoolFvRef[] bitsRes = new BoolFvRef[a.get().n + 1];
-        for (int i = 0; i <= a.get().n; i++) {
-            bitsA[i] = new BoolFvRef();
-            bitsB[i] = new BoolFvRef();
-            bitsRes[i] = new BoolFvRef();
-        }
-
-        split(a, bitsA);
-        split(b, bitsB);
-        for (int i = 0; i <= a.get().n; i++) and(bitsA[i], bitsB[i], bitsRes[i]);
-        join(bitsRes, res);
-    }
-}
-
-class IntOrFv extends Procedure {
-    public IntOrFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        BoolFvRef[] bitsA = new BoolFvRef[a.get().n + 1];
-        BoolFvRef[] bitsB = new BoolFvRef[a.get().n + 1];
-        BoolFvRef[] bitsRes = new BoolFvRef[a.get().n + 1];
-        for (int i = 0; i <= a.get().n; i++) {
-            bitsA[i] = new BoolFvRef();
-            bitsB[i] = new BoolFvRef();
-            bitsRes[i] = new BoolFvRef();
-        }
-
-        split(a, bitsA);
-        split(b, bitsB);
-        for (int i = 0; i <= a.get().n; i++) or(bitsA[i], bitsB[i], bitsRes[i]);
-        join(bitsRes, res);
-    }
-}
-
-class IntXorFv extends Procedure {
-    public IntXorFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        BoolFvRef[] bitsA = new BoolFvRef[a.get().n + 1];
-        BoolFvRef[] bitsB = new BoolFvRef[a.get().n + 1];
-        BoolFvRef[] bitsRes = new BoolFvRef[a.get().n + 1];
-        for (int i = 0; i <= a.get().n; i++) {
-            bitsA[i] = new BoolFvRef();
-            bitsB[i] = new BoolFvRef();
-            bitsRes[i] = new BoolFvRef();
-        }
-
-        split(a, bitsA);
-        split(b, bitsB);
-        for (int i = 0; i <= a.get().n; i++) xor(bitsA[i], bitsB[i], bitsRes[i]);
-        join(bitsRes, res);
-    }
-}
-
-class boolToIntFv implements BasicInstruction {
-    private final BoolFvRef boolFv;
-    private final IntFvRef res;
-
-    public boolToIntFv(BoolFvRef boolFv, IntFvRef res) {
-        this.boolFv = boolFv;
-        this.res = res;
-    }
-
-    @Override
-    public boolean exec() {
-        res.set(IntFv.of(boolFv, res.get().n));
-        return true;
-    }
-}
-
-class IntAddFv extends Procedure {
-    public IntAddFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        IntFvRef carry = IntFvRef.of(new IntFv(a.get().n));
-        IntFvRef tmp = IntFvRef.of(new IntFv(a.get().n));
-        set(a, res);
-        set(b, tmp);
-
-        for (int i = 0; i <= a.get().n; i++){
-            and(res, tmp, carry);
-            xor(res, tmp, res);
-            lShift(carry, tmp, 1);
-        }
-    }
-}
-
-class IntNegFv extends Procedure {
-    public IntNegFv(IntFvRef a, IntFvRef res) {
-        not(a, res);
-        add(res, IntFvRef.of(IntFv.of(1, res.get().n)), res);
-    }
-}
-
-class IntSubFv extends Procedure {
-    public IntSubFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        IntFvRef negB = new IntFvRef();
-        neg(b, negB);
-        add(a, negB, res);
-    }
-}
-
-class GTFv extends Procedure {
-    public GTFv(IntFvRef a, IntFvRef b, BoolFvRef res) {
-        IntFvRef diff = new IntFvRef();
-        sub(a, b, diff);
-
-        BoolFvRef[] bits = new BoolFvRef[diff.get().n + 1];
-        for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolFvRef();
-        split(diff, bits);
-
-        set(bits[0], res);
-        not(res, res);
-    }
-}
-
-class SplitFv implements BasicInstruction {
-    private final IntFvRef a;
-    private final BoolFvRef[] res;
-
-    public SplitFv(IntFvRef a, BoolFvRef[] res) {
-        this.a = a;
-        this.res = res;
-    }
-
-    @Override
-    public boolean exec() {
-        for (int i = 0; i <= a.get().n; i++) res[i].set(a.get().getBits()[i].copy().get());
-        return true;
-    }
-}
-
-class JoinFv implements BasicInstruction {
-    private final BoolFvRef[] a;
-    private final IntFvRef res;
-
-    public JoinFv(BoolFvRef[] a, IntFvRef res) {
-        this.a = a;
-        this.res = res;
-    }
-
-    @Override
-    public boolean exec() {
-        for (int i = 0; i < res.get().n; i++) res.get().bits[i] = a[i].copy();
-        return true;
     }
 }

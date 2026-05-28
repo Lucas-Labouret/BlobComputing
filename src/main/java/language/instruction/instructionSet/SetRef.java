@@ -1,4 +1,4 @@
-package language.instruction.basicInstruction;
+package language.instruction.instructionSet;
 
 import language.Obj;
 import language.Ref;

@@ -1,4 +1,4 @@
-package language.instruction.basicInstruction;
+package language.instruction.instructionSet;
 
 public class Print implements BasicInstruction {
     private final String message;

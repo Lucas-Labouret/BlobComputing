@@ -1,6 +1,6 @@
 package language.instruction;
 
-import language.instruction.basicInstruction.BasicInstruction;
+import language.instruction.instructionSet.BasicInstruction;
 
 /** Instruction are the basic building blocks of programs. <br>
  * They are executed one at a time, and can be either <br>

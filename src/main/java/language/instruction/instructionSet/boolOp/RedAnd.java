@@ -1,6 +1,6 @@
-package language.instruction.basicInstruction.commOp;
+package language.instruction.instructionSet.boolOp;
 
-import language.instruction.basicInstruction.BasicInstruction;
+import language.instruction.instructionSet.BasicInstruction;
 import language.ref.field.boolField.fieldT.*;
 import language.ref.field.boolField.fieldS.*;
 import language.obj.field.boolField.fieldS.*;

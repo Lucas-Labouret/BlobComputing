@@ -4,7 +4,7 @@ import language.utils.BoolFieldManager;
 import language.utils.Border;
 import language.obj.field.boolField.fieldT.BoolEf;
 import language.instruction.Procedure;
-import language.instruction.basicInstruction.*;
+import language.instruction.instructionSet.*;
 import language.ref.field.boolField.fieldT.BoolEfRef;
 import medium.Medium;
 import medium.locusT.Ef;
@@ -42,10 +42,7 @@ public class IntEf extends IntField<BoolEf> {
         return intEf;
     }
 
-    public static BasicInstruction of(BoolEfRef boolEf, IntEfRef res) {
-        return new boolToIntEf(boolEf, res);
-    }
-
+    @Override
     public BoolEfRef[] getBits() {
         return (BoolEfRef[]) bits;
     }
@@ -69,13 +66,13 @@ public class IntEf extends IntField<BoolEf> {
         return res;
     }
 
-    protected static void lShift(IntEf a, IntEf res, int k, int n) {
+    public static void lShift(IntEf a, IntEf res, int k, int n) {
         if (k > n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
         for (int i = 0; i <= n - k; i++) res.bits[i] = a.bits[i + k].copy();
         for (int i = n - k + 1; i <= n; i++) res.bits[i] = BoolEfRef.of(BoolEf.zeroes(a.border));
     }
 
-    protected static void rShift(IntEf a, IntEf res, int k, int n) {
+    public static void rShift(IntEf a, IntEf res, int k, int n) {
         if (k > n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
         for (int i = k; i <= n; i++) res.bits[i] = a.bits[i - k].copy();
         for (int i = 0; i < k; i++) res.bits[i] = BoolEfRef.of(BoolEf.zeroes(a.border));
@@ -87,204 +84,5 @@ public class IntEf extends IntField<BoolEf> {
             copy.bits[i] = this.bits[i].copy();
         }
         return copy;
-    }
-}
-
-class LShiftEf implements BasicInstruction {
-    private final IntEfRef a;
-    private final IntEfRef res;
-    private final int k;
-
-    public LShiftEf(IntEfRef a, IntEfRef res, int k) {
-        this.a = a;
-        this.res = res;
-        this.k = k;
-    }
-
-    @Override
-    public boolean exec() {
-        IntEf.lShift(a.get(), res.get(), k, a.get().n);
-        return true;
-    }
-}
-
-class RShiftEf implements BasicInstruction {
-    private final IntEfRef a;
-    private final IntEfRef res;
-    private final int k;
-
-    public RShiftEf(IntEfRef a, IntEfRef res, int k) {
-        this.a = a;
-        this.res = res;
-        this.k = k;
-    }
-
-    @Override
-    public boolean exec() {
-        IntEf.rShift(a.get(), res.get(), k, a.get().n);
-        return true;
-    }
-}
-
-class IntNotEf extends Procedure {
-    public IntNotEf(IntEfRef a, IntEfRef res) {
-        BoolEfRef[] bitsA = new BoolEfRef[a.get().n + 1];
-        BoolEfRef[] bitsRes = new BoolEfRef[a.get().n + 1];
-        for (int i = 0; i <= a.get().n; i++) {
-            bitsA[i] = new BoolEfRef();
-            bitsRes[i] = new BoolEfRef();
-        }
-
-        split(a, bitsA);
-        for (int i = 0; i <= a.get().n; i++) not(bitsA[i], bitsRes[i]);
-        join(bitsRes, res);
-    }
-}
-
-class IntAndEf extends Procedure {
-    public IntAndEf(IntEfRef a, IntEfRef b, IntEfRef res) {
-        BoolEfRef[] bitsA = new BoolEfRef[a.get().n + 1];
-        BoolEfRef[] bitsB = new BoolEfRef[a.get().n + 1];
-        BoolEfRef[] bitsRes = new BoolEfRef[a.get().n + 1];
-        for (int i = 0; i <= a.get().n; i++) {
-            bitsA[i] = new BoolEfRef();
-            bitsB[i] = new BoolEfRef();
-            bitsRes[i] = new BoolEfRef();
-        }
-
-        split(a, bitsA);
-        split(b, bitsB);
-        for (int i = 0; i <= a.get().n; i++) and(bitsA[i], bitsB[i], bitsRes[i]);
-        join(bitsRes, res);
-    }
-}
-
-class IntOrEf extends Procedure {
-    public IntOrEf(IntEfRef a, IntEfRef b, IntEfRef res) {
-        BoolEfRef[] bitsA = new BoolEfRef[a.get().n + 1];
-        BoolEfRef[] bitsB = new BoolEfRef[a.get().n + 1];
-        BoolEfRef[] bitsRes = new BoolEfRef[a.get().n + 1];
-        for (int i = 0; i <= a.get().n; i++) {
-            bitsA[i] = new BoolEfRef();
-            bitsB[i] = new BoolEfRef();
-            bitsRes[i] = new BoolEfRef();
-        }
-
-        split(a, bitsA);
-        split(b, bitsB);
-        for (int i = 0; i <= a.get().n; i++) or(bitsA[i], bitsB[i], bitsRes[i]);
-        join(bitsRes, res);
-    }
-}
-
-class IntXorEf extends Procedure {
-    public IntXorEf(IntEfRef a, IntEfRef b, IntEfRef res) {
-        BoolEfRef[] bitsA = new BoolEfRef[a.get().n + 1];
-        BoolEfRef[] bitsB = new BoolEfRef[a.get().n + 1];
-        BoolEfRef[] bitsRes = new BoolEfRef[a.get().n + 1];
-        for (int i = 0; i <= a.get().n; i++) {
-            bitsA[i] = new BoolEfRef();
-            bitsB[i] = new BoolEfRef();
-            bitsRes[i] = new BoolEfRef();
-        }
-
-        split(a, bitsA);
-        split(b, bitsB);
-        for (int i = 0; i <= a.get().n; i++) xor(bitsA[i], bitsB[i], bitsRes[i]);
-        join(bitsRes, res);
-    }
-}
-
-class boolToIntEf implements BasicInstruction {
-    private final BoolEfRef boolEf;
-    private final IntEfRef res;
-
-    public boolToIntEf(BoolEfRef boolEf, IntEfRef res) {
-        this.boolEf = boolEf;
-        this.res = res;
-    }
-
-    @Override
-    public boolean exec() {
-        res.set(IntEf.of(boolEf, res.get().n));
-        return true;
-    }
-}
-
-class IntAddEf extends Procedure {
-    public IntAddEf(IntEfRef a, IntEfRef b, IntEfRef res) {
-        IntEfRef carry = new IntEfRef();
-        IntEfRef tmp = new IntEfRef();
-        set(a, res);
-        set(b, tmp);
-
-        for (int i = 0; i <= a.get().n; i++){
-            and(res, tmp, carry);
-            xor(res, tmp, res);
-            lShift(carry, tmp, 1);
-        }
-    }
-}
-
-class IntNegEf extends Procedure {
-    public IntNegEf(IntEfRef a, IntEfRef res) {
-        not(a, res);
-        add(res, IntEfRef.of(IntEf.of(1, res.get().n)), res);
-    }
-}
-
-class IntSubEf extends Procedure {
-    public IntSubEf(IntEfRef a, IntEfRef b, IntEfRef res) {
-        IntEfRef negB = IntEfRef.of(new IntEf(b.get().n));
-        neg(b, negB);
-        add(a, negB, res);
-    }
-}
-
-class GTEf extends Procedure {
-    public GTEf(IntEfRef a, IntEfRef b, BoolEfRef res) {
-        IntEfRef diff = new IntEfRef();
-        sub(a, b, diff);
-
-        BoolEfRef[] bits = new BoolEfRef[diff.get().n + 1];
-        for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolEfRef();
-        split(diff, bits);
-
-        set(bits[0], res);
-        not(res, res);
-    }
-}
-
-class SplitEf implements BasicInstruction {
-    private final IntEfRef a;
-    private final BoolEfRef[] res;
-
-    public SplitEf(IntEfRef a, BoolEfRef[] res) {
-        this.a = a;
-        this.res = res;
-    }
-
-    @Override
-    public boolean exec() {
-        for (int i = 0; i <= a.get().n; i++) res[i].set(a.get().getBits()[i].copy().get());
-        return true;
-    }
-}
-
-class JoinEf implements BasicInstruction {
-    private final BoolEfRef[] a;
-    private final IntEfRef res;
-
-    public JoinEf(BoolEfRef[] a, IntEfRef res) {
-        this.a = a;
-        this.res = res;
-    }
-
-    @Override
-    public boolean exec() {
-        IntEf tmp = new IntEf(res.get().n);
-        for (int i = 0; i <= res.get().n; i++) tmp.bits[i] = a[i].copy();
-        res.set(tmp);
-        return true;
     }
 }

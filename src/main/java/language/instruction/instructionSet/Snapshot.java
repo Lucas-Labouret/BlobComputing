@@ -1,4 +1,4 @@
-package language.instruction.basicInstruction;
+package language.instruction.instructionSet;
 
 /**
  * Snapshot is used as a marker that can be detected by a UI to indicate that the current display should be saved to disk.

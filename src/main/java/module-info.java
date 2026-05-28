@@ -23,7 +23,7 @@ module com.github.lucaslabouret.blobcomputing {
 
     exports language;
     exports language.cache;
-    exports language.instruction.basicInstruction;
+    exports language.instruction.instructionSet;
     exports language.ref;
     exports language.ref.field.boolField.fieldT;
     exports language.ref.field.boolField.fieldS;

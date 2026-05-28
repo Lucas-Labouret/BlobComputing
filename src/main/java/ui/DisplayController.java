@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
 import language.Ref;
-import language.instruction.basicInstruction.Show;
+import language.instruction.instructionSet.Show;
 import language.ref.field.boolField.fieldT.*;
 import language.ref.field.boolField.fieldS.*;
 import language.ref.field.intField.IntVRef;
