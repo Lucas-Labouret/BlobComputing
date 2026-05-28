@@ -1,9 +1,7 @@
-package language.obj.field.boolField.fieldT;
+package language.obj.field.boolField;
 
-import language.obj.field.boolField.BoolField;
 import language.utils.BoolFieldLine;
 import language.utils.Border;
-import language.obj.field.boolField.fieldS.BoolFieldS;
 
 /** Represents the abstract base type for transfer boolean fields. */
 public abstract class BoolFieldT extends BoolField {

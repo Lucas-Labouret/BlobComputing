@@ -3,10 +3,7 @@ package language.instruction.instructionSet.intOp;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
 import language.obj.field.intField.IntField;
-import language.ref.field.boolField.fieldS.BoolERef;
-import language.ref.field.boolField.fieldS.BoolFRef;
-import language.ref.field.boolField.fieldS.BoolVRef;
-import language.ref.field.boolField.fieldT.*;
+import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
 import language.utils.BoolFieldManager;
 

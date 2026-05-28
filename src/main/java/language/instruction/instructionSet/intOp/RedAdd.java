@@ -4,10 +4,7 @@ import language.instruction.Procedure;
 import language.obj.field.intField.IntE;
 import language.obj.field.intField.IntF;
 import language.obj.field.intField.IntV;
-import language.ref.field.boolField.fieldS.BoolERef;
-import language.ref.field.boolField.fieldS.BoolFRef;
-import language.ref.field.boolField.fieldS.BoolVRef;
-import language.ref.field.boolField.fieldT.*;
+import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
 import language.utils.BoolFieldManager;
 

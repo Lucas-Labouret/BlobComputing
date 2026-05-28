@@ -1,15 +1,14 @@
 package language.obj;
 
-import language.utils.BoolFieldManager;
-import language.obj.field.boolField.fieldT.BoolVe;
-import language.obj.field.boolField.fieldT.BoolVf;
 import language.Obj;
 import language.instruction.Procedure;
-import language.ref.field.boolField.fieldT.BoolVeRef;
-import language.ref.field.boolField.fieldT.BoolVfRef;
+import language.obj.field.boolField.BoolVe;
+import language.obj.field.boolField.BoolVf;
+import language.ref.field.boolField.BoolVeRef;
+import language.ref.field.boolField.BoolVfRef;
 
 public class RotateV extends Obj {
-    BoolVeRef state;
+    final BoolVeRef state;
 
     public RotateV(BoolVeRef init) {
         this.state = init;

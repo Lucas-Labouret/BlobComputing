@@ -1,9 +1,9 @@
 package ui.display.displayable.intFieldDisplay;
 
 import javafx.scene.paint.Color;
+import language.ref.field.intField.IntVRef;
 import medium.Medium;
 import medium.locusS.Vertex;
-import language.ref.field.intField.IntVRef;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;
 

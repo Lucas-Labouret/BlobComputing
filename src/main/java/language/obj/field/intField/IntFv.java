@@ -1,10 +1,7 @@
 package language.obj.field.intField;
 
-import language.instruction.Procedure;
-import language.instruction.instructionSet.BasicInstruction;
-import language.obj.field.boolField.fieldT.BoolFv;
-import language.ref.field.boolField.fieldT.BoolFvRef;
-import language.ref.field.intField.IntFvRef;
+import language.obj.field.boolField.BoolFv;
+import language.ref.field.boolField.BoolFvRef;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
 import medium.Medium;

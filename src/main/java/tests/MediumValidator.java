@@ -1,11 +1,16 @@
 package tests;
 
 import medium.Medium;
-import medium.locusS.*;
+import medium.locusS.Edge;
+import medium.locusS.Face;
+import medium.locusS.Vertex;
 import medium.locusT.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 /** Validates that transfer mappings are injective on raw and packed target coordinates. */
 public final class MediumValidator {

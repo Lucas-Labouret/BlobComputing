@@ -1,14 +1,11 @@
 package language.obj.field.intField;
 
+import language.obj.field.boolField.BoolEf;
+import language.ref.field.boolField.BoolEfRef;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
-import language.obj.field.boolField.fieldT.BoolEf;
-import language.instruction.Procedure;
-import language.instruction.instructionSet.*;
-import language.ref.field.boolField.fieldT.BoolEfRef;
 import medium.Medium;
 import medium.locusT.Ef;
-import language.ref.field.intField.IntEfRef;
 
 import java.util.HashMap;
 

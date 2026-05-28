@@ -1,19 +1,17 @@
 package ui;
 
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
-
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+
 import language.instruction.Instruction;
 import language.obj.Rand;
-import language.obj.Voronoi;
-import medium.Medium;
 import language.utils.BoolFieldManager;
-
+import medium.Medium;
 import ui.display.MediumDrawer;
 import ui.utils.CacheMenu;
 import ui.utils.OrderableDisplayPanel;
@@ -21,17 +19,17 @@ import ui.utils.TBIntInput;
 import ui.utils.ZoomableScrollPane;
 
 public class MasterScene extends BorderPane {
-    private ToolBar toolBar;
-    private OrderableDisplayPanel displays;
-    private ScrollPane sidePanel;
-    private ZoomableScrollPane scrollPane;
+    private final ToolBar toolBar;
+    private final OrderableDisplayPanel displays;
+    private final ScrollPane sidePanel;
+    private final ZoomableScrollPane scrollPane;
 
     private final Button stepButton = new Button("Step");
     private final Button loopButton = new Button("Loop");
     private final Button backButton = new Button("Loop Back");
     private final Button playButton = new Button("Play");
 
-    private CacheMenu quicksaveMenu;
+    private final CacheMenu quicksaveMenu;
     private final Button quickloadButton = new Button("Quick Load");
 
     private final Button snapButton = new Button("Snapshot");
@@ -40,7 +38,7 @@ public class MasterScene extends BorderPane {
     private final InstructionPlayer player;
 
     private final Medium medium;
-    private DisplayController displayController;
+    private final DisplayController displayController;
 
     public MasterScene() {
         try { medium = Medium.read("large"); }

@@ -64,13 +64,13 @@ public class Styles {
         }
     }
 
-    public static Style DEFAULT = new Style(
+    public static final Style DEFAULT = new Style(
             Color.LIME, Color.DARKGREEN,
             Color.SALMON, Color.MAROON,
             Color.LIGHTBLUE, Color.DARKBLUE
     );
 
-    public static Style DEFAULT_INT = new Style(
+    public static final Style DEFAULT_INT = new Style(
             Color.rgb(0, 0, 255), Color.rgb(255, 0, 0),
 
             // Undefined for now as I haven't chosen colors for Edges and Faces yet

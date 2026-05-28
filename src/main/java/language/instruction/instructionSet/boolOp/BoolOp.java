@@ -1,8 +1,7 @@
 package language.instruction.instructionSet.boolOp;
 
 import language.instruction.instructionSet.BasicInstruction;
-import language.ref.field.boolField.fieldT.*;
-import language.ref.field.boolField.fieldS.*;
+import language.ref.field.boolField.*;
 
 public class BoolOp {
     public static BasicInstruction not(BoolVRef  a, BoolVRef  res) { return new NotV (a, res); }

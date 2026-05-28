@@ -1,9 +1,7 @@
-package language.obj.field.boolField.fieldS;
+package language.obj.field.boolField;
 
 import language.utils.BoolFieldManager;
 import language.utils.Border;
-import language.obj.field.boolField.fieldT.BoolEf;
-import language.obj.field.boolField.fieldT.BoolEv;
 import medium.locusS.Edge;
 
 import java.util.HashMap;

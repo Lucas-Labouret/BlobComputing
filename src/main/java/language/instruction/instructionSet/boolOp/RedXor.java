@@ -1,9 +1,10 @@
 package language.instruction.instructionSet.boolOp;
 
 import language.instruction.instructionSet.BasicInstruction;
-import language.ref.field.boolField.fieldT.*;
-import language.ref.field.boolField.fieldS.*;
-import language.obj.field.boolField.fieldS.*;
+import language.obj.field.boolField.BoolE;
+import language.obj.field.boolField.BoolF;
+import language.obj.field.boolField.BoolV;
+import language.ref.field.boolField.*;
 
 /** Performs an XOR reduction from a BoolVe to a BoolV. */
 class RedXorVe implements BasicInstruction {

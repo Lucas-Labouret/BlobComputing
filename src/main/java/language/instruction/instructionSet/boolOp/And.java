@@ -1,10 +1,8 @@
 package language.instruction.instructionSet.boolOp;
 
-import language.obj.field.boolField.fieldS.*;
-import language.obj.field.boolField.fieldT.*;
 import language.instruction.instructionSet.BasicInstruction;
-import language.ref.field.boolField.fieldS.*;
-import language.ref.field.boolField.fieldT.*;
+import language.obj.field.boolField.*;
+import language.ref.field.boolField.*;
 
 /** Performs an AND operation on two BoolV. */
 class AndV implements BasicInstruction {

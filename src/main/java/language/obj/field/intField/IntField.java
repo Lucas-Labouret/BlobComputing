@@ -1,18 +1,10 @@
 package language.obj.field.intField;
 
 import language.Obj;
-import language.instruction.Procedure;
 import language.Ref;
-import language.instruction.instructionSet.BasicInstruction;
-import language.instruction.instructionSet.boolOp.BoolOp;
 import language.obj.field.boolField.BoolField;
-import language.ref.field.boolField.fieldS.BoolERef;
-import language.ref.field.boolField.fieldS.BoolFRef;
-import language.ref.field.boolField.fieldS.BoolVRef;
-import language.ref.field.boolField.fieldT.*;
-import language.ref.field.intField.*;
-import language.utils.Border;
 import language.utils.BoolFieldManager;
+import language.utils.Border;
 
 public abstract class IntField<F extends BoolField> extends Obj {
     public final int n;

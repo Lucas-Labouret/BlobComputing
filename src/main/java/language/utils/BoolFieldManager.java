@@ -1,10 +1,10 @@
 package language.utils;
 
-import language.obj.field.boolField.fieldT.*;
-import language.obj.field.boolField.fieldS.*;
-
+import language.obj.field.boolField.*;
 import medium.Medium;
-import medium.locusS.*;
+import medium.locusS.Edge;
+import medium.locusS.Face;
+import medium.locusS.Vertex;
 import medium.locusT.*;
 
 import java.util.ArrayList;

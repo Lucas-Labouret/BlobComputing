@@ -1,8 +1,7 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.ref.field.boolField.fieldS.*;
-import language.ref.field.boolField.fieldT.*;
+import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
 
 class BroadcastVe extends Procedure {

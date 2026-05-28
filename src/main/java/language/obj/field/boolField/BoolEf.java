@@ -1,9 +1,8 @@
-package language.obj.field.boolField.fieldT;
+package language.obj.field.boolField;
 
 import language.utils.BoolFieldLine;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
-import language.obj.field.boolField.fieldS.BoolE;
 import medium.locusT.Ef;
 
 import java.util.HashMap;
@@ -59,12 +58,18 @@ public class BoolEf extends BoolFieldT {
         return res;
     }
 
+    /** @return a new one-filled BoolEf using the default border. */
+    public static BoolEf zeroes(){ return ones(BoolFieldManager.DEFAULT_BORDER()); }
+
     /** @return a new one-filled BoolEf. */
     public static BoolEf ones(Border border){
         BoolEf res = new BoolEf(border);
         onesGeneric(HEIGHT, SPAN, BREADTH, res);
         return res;
     }
+
+    /** @return a new one-filled BoolEf using the default border. */
+    public static BoolEf ones(){ return ones(BoolFieldManager.DEFAULT_BORDER()); }
 
     /** @return a new randomly initialized BoolEf. */
     public static BoolEf rand(Border border){

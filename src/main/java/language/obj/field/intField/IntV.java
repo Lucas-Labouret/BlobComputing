@@ -1,12 +1,9 @@
 package language.obj.field.intField;
 
+import language.obj.field.boolField.BoolV;
+import language.ref.field.boolField.BoolVRef;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
-import language.obj.field.boolField.fieldS.BoolV;
-import language.instruction.Procedure;
-import language.instruction.instructionSet.*;
-import language.ref.field.boolField.fieldS.BoolVRef;
-import language.ref.field.intField.IntVRef;
 import medium.Medium;
 import medium.locusS.Vertex;
 

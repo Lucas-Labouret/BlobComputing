@@ -1,10 +1,7 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.ref.field.boolField.fieldS.BoolERef;
-import language.ref.field.boolField.fieldS.BoolFRef;
-import language.ref.field.boolField.fieldS.BoolVRef;
-import language.ref.field.boolField.fieldT.*;
+import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
 
 class NotV extends Procedure {

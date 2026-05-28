@@ -1,11 +1,12 @@
 package tests;
 
+import language.obj.field.boolField.*;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
-import language.obj.field.boolField.fieldT.*;
-
 import medium.Medium;
-import medium.locusS.*;
+import medium.locusS.Edge;
+import medium.locusS.Face;
+import medium.locusS.Vertex;
 import medium.locusT.*;
 
 import java.util.List;

@@ -2,7 +2,9 @@ package ui.display.displayable;
 
 import javafx.scene.paint.Color;
 import medium.Medium;
-import medium.locusS.*;
+import medium.locusS.Edge;
+import medium.locusS.Face;
+import medium.locusS.Vertex;
 import medium.locusT.*;
 
 import java.util.HashMap;

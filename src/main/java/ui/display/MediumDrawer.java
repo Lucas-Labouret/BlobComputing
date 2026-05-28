@@ -5,12 +5,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import medium.Locus;
 import medium.Medium;
-import medium.locusS.*;
+import medium.locusS.Edge;
+import medium.locusS.Face;
+import medium.locusS.Vertex;
 import medium.locusT.*;
 import ui.display.displayable.Displayable;
 import utils.ClosestPair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class MediumDrawer extends Canvas {
     // Scale of the drawing relative to the medium

@@ -1,8 +1,8 @@
 package language.instruction.instructionSet.boolOp;
 
 import language.instruction.instructionSet.BasicInstruction;
-import language.ref.field.boolField.fieldT.*;
-import language.obj.field.boolField.fieldT.*;
+import language.obj.field.boolField.*;
+import language.ref.field.boolField.*;
 
 /** Represents a transfer instruction for the Ve/Ev transfer-language.obj.field pairing. */
 class TransferVe implements BasicInstruction {

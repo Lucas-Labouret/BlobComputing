@@ -1,6 +1,5 @@
-package language.obj.field.boolField.fieldS;
+package language.obj.field.boolField;
 
-import language.obj.field.boolField.BoolField;
 import language.utils.Border;
 
 /** Represents the abstract base type for simplicial boolean fields. */

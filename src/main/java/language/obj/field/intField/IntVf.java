@@ -1,14 +1,12 @@
 package language.obj.field.intField;
 
-import language.ref.field.boolField.fieldT.*;
+import language.obj.field.boolField.BoolVf;
+import language.ref.field.boolField.BoolVfRef;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
-import language.obj.field.boolField.fieldT.BoolVf;
-import language.instruction.Procedure;
-import language.instruction.instructionSet.*;
-import language.ref.field.intField.*;
 import medium.Medium;
 import medium.locusT.Vf;
+
 import java.util.HashMap;
 
 /** IntVf represents an integer language.obj.field on Vf loci. */

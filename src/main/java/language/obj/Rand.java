@@ -2,9 +2,8 @@ package language.obj;
 
 import language.Obj;
 import language.instruction.Procedure;
-import language.obj.field.boolField.fieldS.BoolV;
-import language.ref.field.boolField.fieldS.*;
-import language.ref.field.boolField.fieldT.*;
+import language.obj.field.boolField.BoolV;
+import language.ref.field.boolField.*;
 
 public class Rand extends Obj {
     private final BoolVRef state;
@@ -220,7 +219,7 @@ public class Rand extends Obj {
     }
 
     @Override
-    public Obj copy() {
+    public Rand copy() {
         return new Rand(state.copy());
     }
 }

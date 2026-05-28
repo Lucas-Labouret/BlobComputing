@@ -1,14 +1,15 @@
 package language.obj;
 
-import language.utils.Border;
-import language.obj.field.boolField.fieldS.*;
-import language.obj.field.boolField.fieldT.*;
 import language.Obj;
 import language.instruction.Procedure;
-import language.ref.field.boolField.fieldS.BoolERef;
-import language.ref.field.boolField.fieldT.BoolEvRef;
-import language.ref.field.boolField.fieldS.BoolVRef;
-import language.ref.field.boolField.fieldT.BoolVeRef;
+import language.obj.field.boolField.BoolE;
+import language.obj.field.boolField.BoolEv;
+import language.obj.field.boolField.BoolV;
+import language.obj.field.boolField.BoolVe;
+import language.ref.field.boolField.BoolERef;
+import language.ref.field.boolField.BoolEvRef;
+import language.ref.field.boolField.BoolVRef;
+import language.ref.field.boolField.BoolVeRef;
 import medium.Medium;
 import medium.locusS.Vertex;
 
@@ -51,7 +52,7 @@ public class GrowV extends Obj {
 
     private static class GrowThroughE extends Procedure {
         public GrowThroughE(BoolVRef in, BoolVRef out) {
-            BoolERef middle = BoolERef.of(BoolE.rand());;
+            BoolERef middle = BoolERef.of(BoolE.rand());
             call(new GrowVtoE(in, middle));
             call(new GrowEtoV(middle, out));
         }
@@ -59,8 +60,8 @@ public class GrowV extends Obj {
 
     private static class GrowVtoE extends Procedure {
         public GrowVtoE(BoolVRef in, BoolERef out) {
-            BoolVeRef ve = BoolVeRef.of(BoolVe.rand());;
-            BoolEvRef ev = BoolEvRef.of(BoolEv.rand());;
+            BoolVeRef ve = BoolVeRef.of(BoolVe.rand());
+            BoolEvRef ev = BoolEvRef.of(BoolEv.rand());
             broadcast(in, ve);
             transfer(ve, ev);
             redOr(ev, out);
@@ -69,8 +70,8 @@ public class GrowV extends Obj {
 
     private static class GrowEtoV extends Procedure {
         public GrowEtoV(BoolERef in, BoolVRef out) {
-            BoolEvRef ev = BoolEvRef.of(BoolEv.rand());;
-            BoolVeRef ve = BoolVeRef.of(BoolVe.rand());;
+            BoolEvRef ev = BoolEvRef.of(BoolEv.rand());
+            BoolVeRef ve = BoolVeRef.of(BoolVe.rand());
             broadcast(in, ev);
             transfer(ev, ve);
             redOr(ve, out);

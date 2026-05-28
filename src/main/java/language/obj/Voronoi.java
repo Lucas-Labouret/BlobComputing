@@ -1,12 +1,10 @@
 package language.obj;
 
-import language.utils.BoolFieldManager;
-import language.obj.field.boolField.fieldS.BoolV;
 import language.Obj;
 import language.instruction.Procedure;
-import language.ref.field.boolField.fieldS.*;
-import language.ref.field.boolField.fieldT.*;
+import language.obj.field.boolField.BoolV;
 import language.obj.field.intField.IntV;
+import language.ref.field.boolField.*;
 import language.ref.field.intField.IntVRef;
 
 public class Voronoi extends Obj {

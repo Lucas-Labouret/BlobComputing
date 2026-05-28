@@ -6,9 +6,8 @@ import language.cache.Cache;
 import language.instruction.instructionSet.*;
 import language.instruction.instructionSet.boolOp.BoolOp;
 import language.instruction.instructionSet.intOp.IntOp;
+import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
-import language.ref.field.boolField.fieldS.*;
-import language.ref.field.boolField.fieldT.*;
 
 import java.util.ArrayList;
 
@@ -240,6 +239,16 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void sub(IntFRef  a, IntFRef  b, IntFRef  res) { call(IntOp.sub(a, b, res)); }
     protected void sub(IntFvRef a, IntFvRef b, IntFvRef res) { call(IntOp.sub(a, b, res)); }
     protected void sub(IntFeRef a, IntFeRef b, IntFeRef res) { call(IntOp.sub(a, b, res)); }
+
+    protected void eq(IntVRef  a, IntVRef  b, BoolVRef  res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntVeRef a, IntVeRef b, BoolVeRef res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntVfRef a, IntVfRef b, BoolVfRef res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntERef  a, IntERef  b, BoolERef  res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntEvRef a, IntEvRef b, BoolEvRef res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntEfRef a, IntEfRef b, BoolEfRef res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntFRef  a, IntFRef  b, BoolFRef  res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntFvRef a, IntFvRef b, BoolFvRef res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntFeRef a, IntFeRef b, BoolFeRef res) { call(IntOp.eq(a, b, res)); }
 
     protected void gt(IntVRef  a, IntVRef  b, BoolVRef  res) { call(IntOp.gt(a, b, res)); }
     protected void gt(IntVeRef a, IntVeRef b, BoolVeRef res) { call(IntOp.gt(a, b, res)); }

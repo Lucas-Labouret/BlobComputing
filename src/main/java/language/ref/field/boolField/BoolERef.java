@@ -1,8 +1,8 @@
-package language.ref.field.boolField.fieldS;
+package language.ref.field.boolField;
 
 import language.Ref;
 
-import language.obj.field.boolField.fieldS.BoolE;
+import language.obj.field.boolField.BoolE;
 
 /** Represents a reference to a BoolE value */
 public class BoolERef extends Ref<BoolE> {

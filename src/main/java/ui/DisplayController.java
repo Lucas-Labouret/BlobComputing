@@ -3,10 +3,10 @@ package ui;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
+
 import language.Ref;
 import language.instruction.instructionSet.Show;
-import language.ref.field.boolField.fieldT.*;
-import language.ref.field.boolField.fieldS.*;
+import language.ref.field.boolField.*;
 import language.ref.field.intField.IntVRef;
 import ui.display.MediumDrawer;
 import ui.display.displayable.Displayable;
@@ -21,6 +21,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+
 
 public class DisplayController {
     private final OrderableDisplayPanel displays;
@@ -69,8 +70,8 @@ public class DisplayController {
         Platform.runLater(this::_snapshot);
     }
 
-    String path = "snapshots/";
-    String rootName = (new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")).format(new Date());
+    final String path = "snapshots/";
+    final String rootName = (new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")).format(new Date());
     int snapshotCount = 0;
     public void _snapshot() {
         WritableImage image = drawer.snapshot(null, null);

@@ -1,8 +1,8 @@
 package language.instruction.instructionSet.boolOp;
 
 import language.instruction.instructionSet.BasicInstruction;
-import language.ref.field.boolField.fieldT.*;
-import language.obj.field.boolField.fieldT.*;
+import language.obj.field.boolField.*;
+import language.ref.field.boolField.*;
 
 /** Rotates a BoolVe clockwise into a BoolVf. */
 class RotVeCW implements BasicInstruction {
