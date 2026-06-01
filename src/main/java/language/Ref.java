@@ -6,7 +6,7 @@ import language.cache.Cache;
 public abstract class Ref<T extends Obj> {
     /** Creates a new empty reference */
     public Ref(){
-        Cache.register(this);
+        //if (!Cache.isCaching()) Cache.register(this);
     }
 
     /** Sets the referenced value. */

@@ -40,13 +40,13 @@ public class IntVDisplay implements Displayable {
 
         for (Vertex v: mem.keySet()) {
             int val = mem.get(v);
-            double shade = 0;
+            double shade;
             if (val == 0) {
                 colors.put(v, style.DEFAULT());
                 continue;
             }
-            if (val > 0) shade = 1 - .5 * val / absMax;
-            else         shade = 1 + .5 * val / absMax;
+            if (val > 0) shade = 1 - .8 * val / absMax;
+            else         shade = 1 + .8 * val / absMax;
             double r = style.VERTEX_TRUE().getRed()   * shade;
             double g = style.VERTEX_TRUE().getGreen() * shade;
             double b = style.VERTEX_TRUE().getBlue()  * shade;

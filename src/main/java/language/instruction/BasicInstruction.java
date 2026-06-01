@@ -1,6 +1,4 @@
-package language.instruction.instructionSet;
-
-import language.instruction.Instruction;
+package language.instruction;
 
 /** Represents an instruction that performs one boolean-language.obj.field operation in a single step. */
 public non-sealed interface BasicInstruction extends Instruction {

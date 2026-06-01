@@ -1,0 +1,234 @@
+package language.obj;
+
+import language.Obj;
+import language.Ref;
+import language.instruction.Procedure;
+import language.obj.field.boolField.BoolV;
+import language.obj.field.intField.IntV;
+import language.ref.BlobVRef;
+import language.ref.field.boolField.*;
+import language.ref.field.intField.IntVRef;
+import medium.Medium;
+import medium.locusS.Vertex;
+
+public class BlobV extends Obj {
+    protected final BoolVRef state;
+    protected final BoolVRef init;
+    private final BlobVRef thisRef = BlobVRef.of(this);
+
+    public BlobV() {
+        this.state = new BoolVRef();
+        init = this.state.copy();
+    }
+
+    public BlobV(BoolVRef cells) {
+        this.state = cells;
+        init = this.state.copy();
+    }
+
+    public static BlobV randOne(Medium medium) {
+        Vertex randomVertex = medium.vertices.toArray(new Vertex[0])[(int)(Math.random() * medium.vertices.size())];
+        BoolV randomBoolV = BoolV.zeroes();
+        BoolV.setBit(randomBoolV, randomVertex, true);
+        return new BlobV(BoolVRef.of(randomBoolV));
+    }
+
+    public static BlobV rand() {return rand(0); }
+    public static BlobV rand(int sparsity) {
+        BoolV cells = BoolV.rand();
+        for (int i = 0; i < sparsity; i++) {
+            cells = BoolV.and(cells, BoolV.rand());
+        }
+        return new BlobV(BoolVRef.of(cells));
+    }
+
+    private static class Grow extends Procedure {
+        public <I extends BlobV, O extends BlobV> Grow(Ref<I> in, Ref<O> out) {
+
+            BoolVeRef ve = new BoolVeRef();
+            BoolEvRef ev = new BoolEvRef();
+            BoolERef middle = new BoolERef();
+
+            broadcast(in.get().state, ve);
+            transfer(ve, ev);
+            redOr(ev, middle);
+            broadcast(middle, ev);
+            transfer(ev, ve);
+            redOr(ve, out.get().state);
+        }
+    }
+
+    public static <I extends BlobV, O extends BlobV> Procedure grow(Ref<I> in, Ref<O> out) { return new Grow(in, out); }
+    public <O extends BlobV> Procedure grow(Ref<O> out) { return new Grow(thisRef, out); }
+    public Procedure grow() { return new Grow(thisRef, BlobVRef.of(this)); }
+
+    private static class GrowDebug extends Procedure {
+        public GrowDebug(BoolVRef in, BoolVRef out) {
+            BoolVRef sart = new BoolVRef();
+            show("BlobV", in);
+
+            BoolVeRef veIn = new BoolVeRef();
+            BoolEvRef evIn = new BoolEvRef();
+            BoolERef middle = new BoolERef();
+            BoolEvRef evOut = new BoolEvRef();
+            BoolVeRef veOut = new BoolVeRef();
+
+            broadcast(in, veIn);
+            show("veIn", veIn);
+
+            transfer(veIn, evIn);
+            show("evIn", evIn);
+
+            redOr(evIn, middle);
+            show("middle", middle);
+
+            broadcast(middle, evOut);
+            show("evOut", evOut);
+
+            transfer(evOut, veOut);
+            show("veOut", veOut);
+
+            redOr(veOut, out);
+        }
+    }
+
+    private static class FrontierE extends Procedure {
+        public <I extends BlobV> FrontierE(Ref<I> in, BoolERef frontier) {
+            BoolVeRef ve = new BoolVeRef();
+            BoolEvRef ev = new BoolEvRef();
+
+            broadcast(in.get().state, ve);
+            transfer(ve, ev);
+            redXor(ev, frontier);
+        }
+    }
+    public Procedure frontierE(BoolERef frontier) { return new FrontierE(thisRef, frontier); }
+
+    private static class FrontierV extends Procedure {
+        public <I extends BlobV> FrontierV(Ref<I> in, BoolVRef frontier) {
+            BoolVRef notIn = new BoolVRef();
+            BlobVRef grow = BlobVRef.of(new BlobV());
+
+            not(in.get().state, notIn);
+            call(in.get().grow(grow));
+            and(grow.get().state, notIn, frontier);
+        }
+    }
+    public Procedure frontierV(BoolVRef frontier) { return new FrontierV(thisRef, frontier); }
+
+    private static class MeetE extends Procedure {
+        public <I extends BlobV> MeetE(Ref<I> in, BoolERef out) {
+            BoolVfRef vf = tmp(new BoolVfRef());
+            BoolFvRef fv = tmp(new BoolFvRef());
+            BoolFRef f = tmp(new BoolFRef());
+            BoolFeRef fe = tmp(new BoolFeRef());
+            BoolEfRef ef = tmp(new BoolEfRef());
+
+            BoolERef frontierInteriorE = tmp(new BoolERef());
+            BoolERef frontierInteriorEInv = tmp(new BoolERef());
+
+            broadcast(in.get().state, vf);
+            transfer(vf, fv);
+            redOr(fv, f);
+            broadcast(f, fe);
+            transfer(fe, ef);
+            redOr(ef, frontierInteriorE);
+            not(frontierInteriorE, frontierInteriorEInv);
+
+            BoolVRef frontierV = tmp(new BoolVRef());
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+
+            call(in.get().frontierV(frontierV));
+            broadcast(frontierV, ve);
+            transfer(ve, ev);
+            redAnd(ev, out);
+
+            and(out, frontierInteriorEInv, out);
+        }
+    }
+    public Procedure meetE(BoolERef out) { return new MeetE(thisRef, out); }
+
+    private static class MeetV extends Procedure {
+        public <I extends BlobV> MeetV(Ref<I> in, BoolVRef out) {
+            BoolERef frontierE = tmp(new BoolERef());
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+
+            call(in.get().frontierE(frontierE));
+            broadcast(frontierE, ev);
+            transfer(ev, ve);
+
+            BoolVfRef cw = tmp(new BoolVfRef());
+            BoolVfRef ccw = tmp(new BoolVfRef());
+            BoolVfRef vf = new BoolVfRef();
+
+            rotCW(ve, cw);
+            rotCCW(ve, ccw);
+            xor(cw, ccw, vf);
+            show("cw xor ccw", vf);
+
+            IntVRef connectedComponents = IntVRef.of(new IntV(4));
+            redAdd(vf, connectedComponents);
+            gt(connectedComponents, IntVRef.of(IntV.of(3, 4)), out);
+            show("connectedComponents", connectedComponents);
+
+            BoolVRef notIn = tmp(new BoolVRef());
+            not(in.get().state, notIn);
+            and(out, notIn, out);
+        }
+    }
+    public Procedure meetV(BoolVRef out) { return new MeetV(thisRef, out); }
+
+    private static class Meet extends Procedure {
+        public <I extends BlobV> Meet(Ref<I> in, BoolVRef out) {
+            BoolERef meetE = tmp(new BoolERef());
+            BoolVRef meetV = tmp(new BoolVRef());
+
+            call(in.get().meetE(meetE));
+            call(in.get().meetV(meetV));
+
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+
+            broadcast(meetE, ev);
+            transfer(ev, ve);
+            redOr(ve, out);
+
+            or(out, meetV, out);
+        }
+    }
+    public Procedure meet(BoolVRef out) { return new Meet(thisRef, out); }
+
+    private static class Voronoi extends Procedure {
+        public <I extends BlobV, O extends BlobV> Voronoi(Ref<I> in, Ref<O> out) {
+            show("Seeds", in.get().init);
+
+            BoolVRef start = new BoolVRef();
+            set(in.get().state, start);
+            show("BlobV", start);
+
+            BoolVRef meet = tmp(new BoolVRef());
+            call(in.get().meet(meet));
+            not(meet, meet);
+
+            set(in.get().state, out.get().state);
+            call(out.get().grow());
+
+            BoolVRef growCopy = new BoolVRef();
+            set(out.get().state, growCopy);
+            show("grow", growCopy);
+
+            and(out.get().state, meet, out.get().state);
+            or(in.get().state, out.get().state, out.get().state);
+
+        }
+    }
+    public Procedure voronoi() { return new Voronoi(thisRef, thisRef); }
+
+
+    @Override
+    public BlobV copy() {
+        return new BlobV(state.copy());
+    }
+}

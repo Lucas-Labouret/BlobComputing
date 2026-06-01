@@ -3,7 +3,7 @@ package ui;
 import language.cache.Cache;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
-import language.instruction.instructionSet.BasicInstruction;
+import language.instruction.BasicInstruction;
 import language.instruction.instructionSet.Show;
 import language.instruction.instructionSet.Snapshot;
 
@@ -57,7 +57,7 @@ public class InstructionPlayer {
         boolean done = instruction.exec();
         stepCounter++;
         if (done) loopCounter++;
-        if (isPowerOf2minus1(loopCounter)) autoCache.push(stepCounter);
+        //if (isPowerOf2minus1(loopCounter)) autoCache.push(stepCounter);
         return done;
     }
 
@@ -124,7 +124,7 @@ public class InstructionPlayer {
     }
 
     public Cache.CacheEntry saveState() {
-        return userCache.push(stepCounter);
+        return null;//userCache.push(stepCounter);
     }
 
     public void restoreState(Cache.CacheEntry entry) {

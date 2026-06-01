@@ -1,6 +1,6 @@
 package language.instruction.instructionSet.boolOp;
 
-import language.instruction.instructionSet.BasicInstruction;
+import language.instruction.BasicInstruction;
 import language.obj.field.boolField.BoolE;
 import language.obj.field.boolField.BoolF;
 import language.obj.field.boolField.BoolV;

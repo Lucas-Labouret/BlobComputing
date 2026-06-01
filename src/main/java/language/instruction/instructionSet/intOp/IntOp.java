@@ -1,7 +1,7 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.instruction.instructionSet.BasicInstruction;
+import language.instruction.BasicInstruction;
 import language.instruction.instructionSet.boolOp.BoolOp;
 import language.ref.field.boolField.*;
 import language.ref.field.intField.*;

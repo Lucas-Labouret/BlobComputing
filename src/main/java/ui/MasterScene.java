@@ -9,6 +9,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
 import language.instruction.Instruction;
+import language.obj.BlobV;
 import language.obj.Rand;
 import language.utils.BoolFieldManager;
 import medium.Medium;
@@ -53,10 +54,10 @@ public class MasterScene extends BorderPane {
         scrollPane = new ZoomableScrollPane(drawer);
 
         BoolFieldManager.setup(medium);
-        //Instruction instruction = Voronoi.rand(5).growCells();
         //Instruction instruction = RotateV.rand().ccw();
-        //Instruction instruction = GrowV.rand(medium).showGrow();
-        Instruction instruction = (new Rand()).showRand();
+        //Instruction instruction = BlobV.rand(medium).showGrow();
+        Instruction instruction = BlobV.rand(5).voronoi();
+        //Instruction instruction = (new Rand()).showRand();
 
         player = new InstructionPlayer(instruction, displayController);
 

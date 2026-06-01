@@ -36,12 +36,20 @@ public class Cache {
 
     private CacheEntry top = null;
 
+    private static boolean caching = false;
+    public static boolean isCaching() { return caching; }
     public CacheEntry push(long stepCount) {
+        System.out.println("Before : " + Cache.valueCache.size());
+        caching = true;
+
         HashMap<Ref<?>, Obj> valueCache = new HashMap<>();
         for (Ref<?> ref : Cache.valueCache) valueCache.put(ref, ref.get() == null ? null : ref.get().copy());
 
         HashMap<Procedure, Integer> instrPtrCache = new HashMap<>();
         for (Procedure procedure : Cache.instrPtrCache) instrPtrCache.put(procedure, procedure.getInstrPtr());
+
+        caching = false;
+        System.out.println("After : " + Cache.valueCache.size());
 
         // Find the cache entries s.t. current.stepCount <= stepCount < previous.stepCount (if they exist)
         CacheEntry previous = null;

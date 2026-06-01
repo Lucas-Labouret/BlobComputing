@@ -1,5 +1,7 @@
 package language.instruction.instructionSet;
 
+import language.instruction.BasicInstruction;
+
 public class Print implements BasicInstruction {
     private final String message;
 

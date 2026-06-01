@@ -10,6 +10,7 @@ import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /** Represents an instruction composed of a sequence of sub-instructions. */
 @SuppressWarnings("unused")
@@ -23,7 +24,7 @@ public abstract non-sealed class Procedure implements Instruction {
     /** Creates a new Procedure. */
     public Procedure() {
         instr = new ArrayList<>();
-        Cache.register(this);
+        //Cache.register(this);
     }
 
     /** Adds the given instruction to this procedure. */
@@ -56,21 +57,41 @@ public abstract non-sealed class Procedure implements Instruction {
         };
     }
 
+    /**
+     * Creates a temporary variable that can be used within this procedure.
+     * The variable will be automatically cleaned up (set to null) when this procedure finishes executing.
+     * This avoids expensive long term storage of fields that are no longer useful
+     */
+    public <O extends Obj, R extends Ref<O>> R tmp(R ref) {
+        tmpVars.add(ref);
+        return ref;
+    }
+    private final HashSet<Ref<?>> tmpVars = new HashSet<>();
+    private void cleanup() {
+        for (Ref<?> ref : tmpVars) ref.set(null);
+    }
+
     /** @return false if there are more instructions to execute, true if the loop is finished. */
     @Override
     public final boolean exec() {
-        //if (instr.get(instrCounter) instanceof BasicInstruction) System.out.println("Executing " + instr.get(instrCounter).getClass().getSimpleName());
+        if (instr.isEmpty()) return exit();
 
+        if (instr.get(instrPtr) instanceof BasicInstruction) System.out.println("Executing " + instr.get(instrPtr).getClass().getSimpleName());
         boolean done = instr.get(instrPtr).exec();
         if (done) instrPtr++; // If the current instruction is done, we move to the next
 
-        if (instrPtr == instr.size()) {
-            // There are no more instruction to perform.
-            // We reset the counter so that the loop can be executed again, and return true to indicate that the loop is finished
-            instrPtr = 0;
-            return true;
-        }
+        // There are no more instruction to perform.
+        if (instrPtr == instr.size()) return exit();
+
+        // There are more instructions to perform.
         return false;
+    }
+
+    // Prepare this procedure for the next execution cycle
+    private boolean exit() {
+        instrPtr = 0;
+        cleanup();
+        return true;
     }
 
     // Wrapper functions to make writing procedures easier. These functions simply add the corresponding instruction to this procedure.
