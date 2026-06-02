@@ -36,33 +36,25 @@ public class Flies extends BlobV {
             BlobVRef grow = tmp(BlobVRef.of(new BlobV()));
             call(in.get().grow(grow));
 
+            BoolVRef notState = tmp(new BoolVRef());
             BoolVRef growable = tmp(new BoolVRef());
             not(meet, meet);
+            not(in.get().state, notState);
             and(meet, grow.get().state, growable);
+            and(notState, growable, growable);
+
 
             IntVeRef randVe = IntVeRef.of(new IntVe(pBits));
             call(rand.get().next(randVe));
 
-            IntVeRef randVeCopy = new IntVeRef();
-            set(randVe, randVeCopy);
-            show("randVe", randVeCopy);
-
             IntVRef maxV = IntVRef.of(new IntV(pBits));
             redMax(randVe, maxV);
-
-            IntVRef maxVCopy = new IntVRef();
-            set(maxV, maxVCopy);
-            show("maxV", maxVCopy);
 
             IntVeRef maxVe = IntVeRef.of(new IntVe(pBits));
             broadcast(maxV, maxVe);
 
             BoolVeRef isMax = tmp(new BoolVeRef());
             eq(randVe, maxVe, isMax);
-
-            BoolVeRef isMaxCopy = tmp(new BoolVeRef());
-            set(isMax, isMaxCopy);
-            show("isMax", isMaxCopy);
 
             IntVRef v = tmp(IntVRef.of(new IntV(4)));
             redAdd(isMax, v);
@@ -83,19 +75,26 @@ public class Flies extends BlobV {
             transfer(ev, ve);
             and(isMax, ve, ve);
 
-            BoolVRef triggered = tmp(new BoolVRef());
-            redOr(ve, triggered);
+            BoolVeRef outVe = tmp(new BoolVeRef());
+            broadcast(in.get().state, outVe);
+            and(outVe, ve, outVe);
 
-            transfer(ve, ev);
+            BoolVeRef outVeCopy = new BoolVeRef();
+            set(outVe, outVeCopy);
+            show("outVe", outVeCopy);
+
+            BoolVRef triggered = tmp(new BoolVRef());
+            BoolVRef notTriggered = tmp(new BoolVRef());
+            BoolVRef untriggered = tmp(new BoolVRef());
+            redOr(outVe, triggered);
+            not(triggered, notTriggered);
+            and(notTriggered, in.get().state, untriggered);
+
+            transfer(outVe, ev);
             rotCW(ev, ef);
             rotCW(ef, ev);
             transfer(ev, ve);
             redOr(ve, out.get().state);
-
-            BoolVRef notTriggered = tmp(new BoolVRef());
-            BoolVRef untriggered = tmp(new BoolVRef());
-            not(triggered, notTriggered);
-            and(notTriggered, in.get().state, untriggered);
 
             or(out.get().state, untriggered, out.get().state);
         }
@@ -106,7 +105,9 @@ public class Flies extends BlobV {
 
     private class ShowFlies extends Procedure {
         public ShowFlies() {
-            show("Flies", state);
+            BoolVRef stateCopy = new BoolVRef();
+            set(state, stateCopy);
+            show("Flies", stateCopy);
             call(fly());
         }
     }

@@ -58,8 +58,8 @@ public class BlobV extends Obj {
         }
     }
     public static <I extends BlobV, O extends BlobV> Procedure grow(Ref<I> in, Ref<O> out) { return new Grow(in, out); }
-    public <O extends BlobV> Procedure grow(Ref<O> out) { return new Grow(thisRef, out); }
-    public Procedure grow() { return new Grow(thisRef, BlobVRef.of(this)); }
+    public <O extends BlobV> Procedure grow(Ref<O> out) { return grow(thisRef, out); }
+    public Procedure grow() { return grow(thisRef, thisRef); }
 
     private static class GrowDebug extends Procedure {
         public GrowDebug(BoolVRef in, BoolVRef out) {
