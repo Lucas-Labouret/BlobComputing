@@ -72,9 +72,7 @@ public class Styles {
 
     public static final Style DEFAULT_INT = new Style(
             Color.rgb(0, 0, 255), Color.rgb(255, 0, 0),
-
-            // Undefined for now as I haven't chosen colors for Edges and Faces yet
-            Color.LIGHTGREY, Color.LIGHTGREY,
-            Color.LIGHTGREY, Color.LIGHTGREY
+            Color.rgb(0, 0, 255), Color.rgb(255, 0, 0),
+            Color.rgb(0, 0, 255), Color.rgb(255, 0, 0)
     );
 }

@@ -78,6 +78,9 @@ public class BoolEf extends BoolFieldT {
         return res;
     }
 
+    /** @return a new one-filled BoolEf using the default border. */
+    public static BoolEf rand(){ return rand(BoolFieldManager.DEFAULT_BORDER()); }
+
     /** Sets a bit in the given BoolEf. */
     public static void setBit(BoolEf target, int y, int x, int t, int s, boolean bit){
         setBitGeneric(HEIGHT, SPAN, BREADTH, target, y, x, t, s, bit);

@@ -222,15 +222,11 @@ public class BoolVf extends BoolFieldT {
     private static void redStackMirror(BoolVf orig, BoolV[] target, boolean neutral) {
         for (Vf m: MIRROR.keySet()) {
             int s = MIRROR.get(m);
-            if (s >= target.length) {
-                int oldLen = target.length;
-                BoolV[] newTarget = new BoolV[s+1];
-                System.arraycopy(target, 0, newTarget, 0, oldLen);
-                for (int i = oldLen; i < s+1; i++)
-                    newTarget[i] = neutral ? BoolV.ones(orig.border) : BoolV.zeroes(orig.border);
-                target = newTarget;
+            try { BoolV.setBit(target[s], m.y, m.x, getBit(orig, m)); }
+            catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Mirror locus (" + m.y + "," + m.x +")" + " with Vf s=" + s + " is out of bounds for target array of length " + target.length);
+                throw e;
             }
-            BoolV.setBit(target[s], m.y, m.x, getBit(orig, m));
         }
     }
 

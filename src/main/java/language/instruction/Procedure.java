@@ -76,10 +76,13 @@ public abstract non-sealed class Procedure implements Instruction {
     public final boolean exec() {
         if (instr.isEmpty()) return exit();
 
-        if (instr.get(instrPtr) instanceof BasicInstruction) System.out.println("Executing " + instr.get(instrPtr).getClass().getSimpleName());
-        boolean done = instr.get(instrPtr).exec();
-        if (done) instrPtr++; // If the current instruction is done, we move to the next
-
+        try {
+            boolean done = instr.get(instrPtr).exec();
+            if (done) instrPtr++; // If the current instruction is done, we move to the next
+        } catch (Exception e) {
+            System.err.println("Error executing instruction " + instr.get(instrPtr).getClass().getSimpleName() + " at index " + instrPtr);
+            throw e;
+        }
         // There are no more instruction to perform.
         if (instrPtr == instr.size()) return exit();
 
@@ -241,6 +244,25 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void xor(IntFvRef a, IntFvRef b, IntFvRef res) { call(IntOp.xor(a, b, res)); }
     protected void xor(IntFeRef a, IntFeRef b, IntFeRef res) { call(IntOp.xor(a, b, res)); }
 
+    protected void fif(BoolVRef  cond, BoolVRef  t, BoolVRef  f, BoolVRef  res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolVeRef cond, BoolVeRef t, BoolVeRef f, BoolVeRef res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolVfRef cond, BoolVfRef t, BoolVfRef f, BoolVfRef res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolERef  cond, BoolERef  t, BoolERef  f, BoolERef  res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolEvRef cond, BoolEvRef t, BoolEvRef f, BoolEvRef res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolEfRef cond, BoolEfRef t, BoolEfRef f, BoolEfRef res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFRef  cond, BoolFRef  t, BoolFRef  f, BoolFRef  res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFvRef cond, BoolFvRef t, BoolFvRef f, BoolFvRef res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFeRef cond, BoolFeRef t, BoolFeRef f, BoolFeRef res) { call(BoolOp.fif(cond, t, f, res)); }
+
+    protected void fif(BoolVRef  cond, IntVRef  t, IntVRef  f, IntVRef  res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolVeRef cond, IntVeRef t, IntVeRef f, IntVeRef res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolVfRef cond, IntVfRef t, IntVfRef f, IntVfRef res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolERef  cond, IntERef  t, IntERef  f, IntERef  res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolEvRef cond, IntEvRef t, IntEvRef f, IntEvRef res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolEfRef cond, IntEfRef t, IntEfRef f, IntEfRef res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFRef  cond, IntFRef  t, IntFRef  f, IntFRef  res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFvRef cond, IntFvRef t, IntFvRef f, IntFvRef res) { call(IntOp.fif(cond, t, f, res)); }
+
     protected void add(IntVRef  a, IntVRef  b, IntVRef  res) { call(IntOp.add(a, b, res)); }
     protected void add(IntVeRef a, IntVeRef b, IntVeRef res) { call(IntOp.add(a, b, res)); }
     protected void add(IntVfRef a, IntVfRef b, IntVfRef res) { call(IntOp.add(a, b, res)); }
@@ -360,6 +382,19 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void redStack1  (IntFeRef a, IntFRef[] res) { call(IntOp.redStack1  (a, res)); }
     protected void redStackMin(IntFeRef a, IntFRef[] res) { call(IntOp.redStackMin(a, res)); }
     protected void redStackMax(IntFeRef a, IntFRef[] res) { call(IntOp.redStackMax(a, res)); }
+
+    protected void redMin(IntVeRef a, IntVRef res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntVeRef a, IntVRef res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntVfRef a, IntVRef res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntVfRef a, IntVRef res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntEvRef a, IntERef res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntEvRef a, IntERef res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntEfRef a, IntERef res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntEfRef a, IntERef res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntFvRef a, IntFRef res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntFvRef a, IntFRef res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntFeRef a, IntFRef res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntFeRef a, IntFRef res) { call(IntOp.redMax(a, res)); }
 
     protected void redAdd(BoolVeRef a, IntVRef res) { call(IntOp.redAdd(a, res)); }
     protected void redAdd(BoolVfRef a, IntVRef res) { call(IntOp.redAdd(a, res)); }

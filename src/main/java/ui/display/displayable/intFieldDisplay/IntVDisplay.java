@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import language.ref.field.intField.IntVRef;
 import medium.Medium;
 import medium.locusS.Vertex;
+import medium.locusT.Ve;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;
 
@@ -29,14 +30,12 @@ public class IntVDisplay implements Displayable {
         HashMap<Vertex, Integer> mem = ref.get().decode(medium);
         HashMap<Vertex, Color> colors = new HashMap<>();
 
-        int max = Integer.MIN_VALUE;
-        int min = Integer.MAX_VALUE;
+        int absMax = 0;
         for (Vertex v : mem.keySet()) {
             int cand = mem.get(v);
-            if (cand > max) max = cand;
-            if (cand < min) min = cand;
+            cand = cand >= 0 ? cand : -cand;
+            if (cand > absMax) absMax = cand;
         }
-        int absMax = Math.max(Math.abs(max), Math.abs(min));
 
         for (Vertex v: mem.keySet()) {
             int val = mem.get(v);
@@ -45,12 +44,17 @@ public class IntVDisplay implements Displayable {
                 colors.put(v, style.DEFAULT());
                 continue;
             }
-            if (val > 0) shade = 1 - .8 * val / absMax;
-            else         shade = 1 + .8 * val / absMax;
-            double r = style.VERTEX_TRUE().getRed()   * shade;
-            double g = style.VERTEX_TRUE().getGreen() * shade;
-            double b = style.VERTEX_TRUE().getBlue()  * shade;
-            colors.put(v, new Color(r, g, b, 1));
+            Color baseColor;
+            if (val > 0) {
+                baseColor = style.VERTEX_TRUE();
+                shade = .8d * val / absMax;
+            } else {
+                baseColor = style.VERTEX_FALSE();
+                shade = - .8d * val / absMax;
+            }
+            Color targetColor = Color.BLACK;
+            Color interpolated = baseColor.interpolate(targetColor, shade);
+            colors.put(v, interpolated);
         }
 
         return colors;

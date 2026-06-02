@@ -238,14 +238,6 @@ public class BoolVe extends BoolFieldT {
     private static void redStackMirror(BoolVe orig, BoolV[] target, boolean neutral) {
         for (Ve m: MIRROR.keySet()) {
             int s = MIRROR.get(m);
-            if (s >= target.length) {
-                int oldLen = target.length;
-                BoolV[] newTarget = new BoolV[s+1];
-                System.arraycopy(target, 0, newTarget, 0, oldLen);
-                for (int i = oldLen; i < s+1; i++)
-                    newTarget[i] = neutral ? BoolV.ones(orig.border) : BoolV.zeroes(orig.border);
-                target = newTarget;
-            }
             BoolV.setBit(target[s], m.y, m.x, getBit(orig, m));
         }
     }

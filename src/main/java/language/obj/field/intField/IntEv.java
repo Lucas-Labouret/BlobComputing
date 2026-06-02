@@ -1,10 +1,13 @@
 package language.obj.field.intField;
 
 import language.obj.field.boolField.BoolEv;
+import language.obj.field.boolField.BoolV;
 import language.ref.field.boolField.BoolEvRef;
+import language.ref.field.boolField.BoolVRef;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
 import medium.Medium;
+import medium.locusS.Vertex;
 import medium.locusT.Ev;
 
 import java.util.HashMap;
@@ -20,7 +23,6 @@ public class IntEv extends IntField<BoolEv> {
     public static IntEv of(int value, int n) {
         return of(value, n, BoolFieldManager.DEFAULT_BORDER());
     }
-
     public static IntEv of(int value, int n, Border border) {
         IntEv intEv = new IntEv(n, border);
         for (int i = 0; value != 0 && value != Integer.MIN_VALUE; i++) {
@@ -31,12 +33,22 @@ public class IntEv extends IntField<BoolEv> {
         intEv.bits[0] = value >>> 31 == 0 ? BoolEvRef.of(BoolEv.zeroes(border)) : BoolEvRef.of(BoolEv.ones(border));
         return intEv;
     }
-
     public static IntEv of(BoolEvRef boolEv, int n) {
         IntEv intEv = new IntEv(n, boolEv.get().border);
         for (int i = 1; i < n; i++) intEv.bits[i] = BoolEvRef.of(BoolEv.zeroes(boolEv.get().border));
         intEv.bits[n] = boolEv.copy();
         return intEv;
+    }
+
+    public static IntEv rand(int n) {
+        IntEv rand = new IntEv(n);
+        IntField.rand(rand, BoolEv::rand);
+        return rand;
+    }
+    public static IntEv randNonNegative(int n) {
+        IntEv rand = new IntEv(n);
+        IntField.randNonNegative(rand, BoolEv::rand);
+        return rand;
     }
 
     @Override
@@ -58,7 +70,11 @@ public class IntEv extends IntField<BoolEv> {
 
         BoolEvRef bit = (BoolEvRef) bits[0];
         HashMap<Ev, Boolean> bitMap = BoolEv.decode(m.evs, bit.get());
-        res.replaceAll((ev, val) -> bitMap.get(ev) ? val | (1 << 31) : val);
+        res.replaceAll((ev, val) -> {
+            if (bitMap.get(ev))
+                for (int i = n; i < 32; i++) val |= (1 << i);
+            return val;
+        });
 
         return res;
     }

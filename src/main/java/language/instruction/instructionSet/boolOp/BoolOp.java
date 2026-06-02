@@ -1,6 +1,7 @@
 package language.instruction.instructionSet.boolOp;
 
 import language.instruction.BasicInstruction;
+import language.instruction.Procedure;
 import language.ref.field.boolField.*;
 
 public class BoolOp {
@@ -43,6 +44,16 @@ public class BoolOp {
     public static BasicInstruction xor(BoolFRef  a, BoolFRef  b, BoolFRef  res) { return new XorF (a, b, res); }
     public static BasicInstruction xor(BoolFvRef a, BoolFvRef b, BoolFvRef res) { return new XorFv(a, b, res); }
     public static BasicInstruction xor(BoolFeRef a, BoolFeRef b, BoolFeRef res) { return new XorFe(a, b, res); }
+
+    public static Procedure fif(BoolVRef  cond, BoolVRef  t, BoolVRef  f, BoolVRef  res) { return new IfV (cond, t, f, res); }
+    public static Procedure fif(BoolVeRef cond, BoolVeRef t, BoolVeRef f, BoolVeRef res) { return new IfVe(cond, t, f, res); }
+    public static Procedure fif(BoolVfRef cond, BoolVfRef t, BoolVfRef f, BoolVfRef res) { return new IfVf(cond, t, f, res); }
+    public static Procedure fif(BoolERef  cond, BoolERef  t, BoolERef  f, BoolERef  res) { return new IfE (cond, t, f, res); }
+    public static Procedure fif(BoolEvRef cond, BoolEvRef t, BoolEvRef f, BoolEvRef res) { return new IfEv(cond, t, f, res); }
+    public static Procedure fif(BoolEfRef cond, BoolEfRef t, BoolEfRef f, BoolEfRef res) { return new IfEf(cond, t, f, res); }
+    public static Procedure fif(BoolFRef  cond, BoolFRef  t, BoolFRef  f, BoolFRef  res) { return new IfF (cond, t, f, res); }
+    public static Procedure fif(BoolFvRef cond, BoolFvRef t, BoolFvRef f, BoolFvRef res) { return new IfFv(cond, t, f, res); }
+    public static Procedure fif(BoolFeRef cond, BoolFeRef t, BoolFeRef f, BoolFeRef res) { return new IfFe(cond, t, f, res); }
 
     public static BasicInstruction broadcast(BoolVRef boolV, BoolVeRef boolVe) { return new BroadcastVe(boolV, boolVe); }
     public static BasicInstruction broadcast(BoolVRef boolV, BoolVfRef boolVf) { return new BroadcastVf(boolV, boolVf); }

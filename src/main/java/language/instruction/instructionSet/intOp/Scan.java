@@ -12,7 +12,8 @@ class ScanLeftV extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolVRef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -23,7 +24,8 @@ class ScanRightV extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolVRef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -34,7 +36,8 @@ class ScanLeftVe extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolVeRef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -45,7 +48,8 @@ class ScanRightVe extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolVeRef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -56,7 +60,8 @@ class ScanLeftVf extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolVfRef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -67,7 +72,8 @@ class ScanRightVf extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolVfRef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -78,7 +84,8 @@ class ScanLeftE extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolERef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -89,7 +96,8 @@ class ScanRightE extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolERef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -100,7 +108,8 @@ class ScanLeftEv extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolEvRef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -111,7 +120,8 @@ class ScanRightEv extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolEvRef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -122,7 +132,8 @@ class ScanLeftEf extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolEfRef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -133,7 +144,8 @@ class ScanRightEf extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolEfRef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -144,7 +156,8 @@ class ScanLeftF extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolFRef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -155,7 +168,8 @@ class ScanRightF extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolFRef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -166,7 +180,8 @@ class ScanLeftFv extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolFvRef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -177,7 +192,8 @@ class ScanRightFv extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolFvRef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -188,7 +204,8 @@ class ScanLeftFe extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolFeRef();
         split(orig, bits);
 
-        for (int i = 0; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }
 
@@ -199,6 +216,7 @@ class ScanRightFe extends Procedure {
         for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolFeRef();
         split(orig, bits);
 
-        for (int i = orig.get().n; i >= 0; i--) call(scan.apply(bits[i], res));
+        set(bits[0], res);
+        for (int i = 1; i <= orig.get().n; i++) call(scan.apply(bits[i], res));
     }
 }

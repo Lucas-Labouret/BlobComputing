@@ -53,7 +53,7 @@ class SubEv extends Procedure {
         if (a.get().n != b.get().n || a.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot subtract IntEs of different sizes.");
 
-        IntEvRef negB = new IntEvRef();
+        IntEvRef negB = IntEvRef.of(new IntEv(b.get().n));
         neg(b, negB);
         add(a, negB, res);
     }
@@ -86,7 +86,7 @@ class SubFv extends Procedure {
         if (a.get().n != b.get().n || a.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot subtract IntFs of different sizes.");
 
-        IntFvRef negB = new IntFvRef();
+        IntFvRef negB = IntFvRef.of(new IntFv(b.get().n));
         neg(b, negB);
         add(a, negB, res);
     }

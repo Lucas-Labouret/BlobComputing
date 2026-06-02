@@ -20,6 +20,16 @@ public abstract class IntField<F extends BoolField> extends Obj {
         this.border = border;
     }
 
+    protected interface RandBitFactory<F extends BoolField> { F rand(); }
+    protected static <F extends BoolField> void rand(IntField<F> intField, RandBitFactory<F> randBitFactory) {
+        for (int i=0; i<= intField.n; i++)
+            intField.bits[i].set(randBitFactory.rand());
+    }
+    protected static <F extends BoolField> void randNonNegative(IntField<F> intField, RandBitFactory<F> randBitFactory) {
+        for (int i=1; i<= intField.n; i++)
+            intField.bits[i].set(randBitFactory.rand());
+    }
+
     public abstract Ref<F>[] getBits();
 
     public static <F extends BoolField, R extends Ref<F>> void transpose(R[][] in, R[][] out, int n, int N) {

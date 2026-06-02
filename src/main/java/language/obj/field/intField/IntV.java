@@ -34,12 +34,22 @@ public class IntV extends IntField<BoolV> {
         intV.bits[0] = value >>> 31 == 0 ? BoolVRef.of(BoolV.zeroes(border)) : BoolVRef.of(BoolV.ones(border));
         return intV;
     }
-
     public static IntV of(BoolVRef boolV, int n) {
         IntV intV = new IntV(n, boolV.get().border);
         for (int i = 1; i < n; i++) intV.bits[i] = BoolVRef.of(BoolV.zeroes(boolV.get().border));
         intV.bits[n] = boolV.copy();
         return intV;
+    }
+
+    public static IntV rand(int n) {
+        IntV rand = new IntV(n);
+        IntField.rand(rand, BoolV::rand);
+        return rand;
+    }
+    public static IntV randNonNegative(int n) {
+        IntV rand = new IntV(n);
+        IntField.randNonNegative(rand, BoolV::rand);
+        return rand;
     }
 
     @Override
@@ -65,8 +75,9 @@ public class IntV extends IntField<BoolV> {
         BoolVRef bit = (BoolVRef) bits[0];
         HashMap<Vertex, Boolean> bitMap = BoolV.decode(m.vertices, bit.get());
         res.replaceAll((v, val) -> {
-            if (bitMap.get(v)) return val | (1 << 31);
-            else return val;
+            if (bitMap.get(v))
+                for (int i = n; i < 32; i++) val |= (1 << i);
+            return val;
         });
 
         return res;

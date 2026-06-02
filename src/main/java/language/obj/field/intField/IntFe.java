@@ -1,10 +1,13 @@
 package language.obj.field.intField;
 
 import language.obj.field.boolField.BoolFe;
+import language.obj.field.boolField.BoolV;
 import language.ref.field.boolField.BoolFeRef;
+import language.ref.field.boolField.BoolVRef;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
 import medium.Medium;
+import medium.locusS.Vertex;
 import medium.locusT.Fe;
 
 import java.util.HashMap;
@@ -30,12 +33,22 @@ public class IntFe extends IntField<BoolFe> {
         intFe.bits[0] = value >>> 31 == 0 ? BoolFeRef.of(BoolFe.zeroes(border)) : BoolFeRef.of(BoolFe.ones(border));
         return intFe;
     }
-
     public static IntFe of(BoolFeRef boolFe, int n) {
         IntFe intFe = new IntFe(n, boolFe.get().border);
         for (int i = 1; i < n; i++) intFe.bits[i] = BoolFeRef.of(BoolFe.zeroes(boolFe.get().border));
         intFe.bits[n] = boolFe.copy();
         return intFe;
+    }
+
+    public static IntFe rand(int n) {
+        IntFe rand = new IntFe(n);
+        IntField.rand(rand, BoolFe::rand);
+        return rand;
+    }
+    public static IntFe randNonNegative(int n) {
+        IntFe rand = new IntFe(n);
+        IntField.randNonNegative(rand, BoolFe::rand);
+        return rand;
     }
 
     @Override
@@ -57,7 +70,11 @@ public class IntFe extends IntField<BoolFe> {
 
         BoolFeRef bit = (BoolFeRef) bits[0];
         HashMap<Fe, Boolean> bitMap = BoolFe.decode(m.fes, bit.get());
-        res.replaceAll((fe, val) -> bitMap.get(fe) ? val | (1 << 31) : val);
+        res.replaceAll((fe, val) -> {
+            if (bitMap.get(fe))
+                for (int i = n; i < 32; i++) val |= (1 << i);
+            return val;
+        });
 
         return res;
     }

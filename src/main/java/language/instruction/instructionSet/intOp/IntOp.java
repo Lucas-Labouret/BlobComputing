@@ -128,6 +128,17 @@ public class IntOp {
     public static Procedure gt(IntFvRef a, IntFvRef b, BoolFvRef res) { return new GTFv(a, b, res); }
     public static Procedure gt(IntFeRef a, IntFeRef b, BoolFeRef res) { return new GTFe(a, b, res); }
 
+    // IF operations
+    public static Procedure fif(BoolVRef  cond, IntVRef  t, IntVRef  f, IntVRef  res) { return new IfV (cond, t, f, res); }
+    public static Procedure fif(BoolVeRef cond, IntVeRef t, IntVeRef f, IntVeRef res) { return new IfVe(cond, t, f, res); }
+    public static Procedure fif(BoolVfRef cond, IntVfRef t, IntVfRef f, IntVfRef res) { return new IfVf(cond, t, f, res); }
+    public static Procedure fif(BoolERef  cond, IntERef  t, IntERef  f, IntERef  res) { return new IfE (cond, t, f, res); }
+    public static Procedure fif(BoolEvRef cond, IntEvRef t, IntEvRef f, IntEvRef res) { return new IfEv(cond, t, f, res); }
+    public static Procedure fif(BoolEfRef cond, IntEfRef t, IntEfRef f, IntEfRef res) { return new IfEf(cond, t, f, res); }
+    public static Procedure fif(BoolFRef  cond, IntFRef  t, IntFRef  f, IntFRef  res) { return new IfF (cond, t, f, res); }
+    public static Procedure fif(BoolFvRef cond, IntFvRef t, IntFvRef f, IntFvRef res) { return new IfFv(cond, t, f, res); }
+    public static Procedure fif(BoolFeRef cond, IntFeRef t, IntFeRef f, IntFeRef res) { return new IfFe(cond, t, f, res); }
+
     // BROADCAST operations
     public static Procedure broadcast(IntVRef orig, IntVeRef res) { return new BroadcastVe(orig, res); }
     public static Procedure broadcast(IntVRef orig, IntVfRef res) { return new BroadcastVf(orig, res); }
@@ -269,6 +280,20 @@ public class IntOp {
         for (int i = 1; i <= orig.get().n; i++) stacks[i] = BoolOp::redStack1;
         return new RedStack_Fe(orig, res, stacks);
     }
+
+    // REDUCE MIN/MAX operations
+    public static Procedure redMin(IntVeRef orig, IntVRef res) { return new RedMinVe(orig, res); }
+    public static Procedure redMax(IntVeRef orig, IntVRef res) { return new RedMaxVe(orig, res); }
+    public static Procedure redMin(IntVfRef orig, IntVRef res) { return new RedMinVf(orig, res); }
+    public static Procedure redMax(IntVfRef orig, IntVRef res) { return new RedMaxVf(orig, res); }
+    public static Procedure redMin(IntEvRef orig, IntERef res) { return new RedMinEv(orig, res); }
+    public static Procedure redMax(IntEvRef orig, IntERef res) { return new RedMaxEv(orig, res); }
+    public static Procedure redMin(IntEfRef orig, IntERef res) { return new RedMinEf(orig, res); }
+    public static Procedure redMax(IntEfRef orig, IntERef res) { return new RedMaxEf(orig, res); }
+    public static Procedure redMin(IntFvRef orig, IntFRef res) { return new RedMinFv(orig, res); }
+    public static Procedure redMax(IntFvRef orig, IntFRef res) { return new RedMaxFv(orig, res); }
+    public static Procedure redMin(IntFeRef orig, IntFRef res) { return new RedMinFe(orig, res); }
+    public static Procedure redMax(IntFeRef orig, IntFRef res) { return new RedMaxFe(orig, res); }
 
     // REDUCE ADD operations
     public static Procedure redAdd(BoolVeRef boolVe, IntVRef intV) { return new RedAddVe(boolVe, intV); }

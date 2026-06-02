@@ -1,11 +1,14 @@
 package language.obj.field.intField;
 
 import language.obj.field.boolField.BoolF;
+import language.obj.field.boolField.BoolV;
 import language.ref.field.boolField.BoolFRef;
+import language.ref.field.boolField.BoolVRef;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
 import medium.Medium;
 import medium.locusS.Face;
+import medium.locusS.Vertex;
 
 import java.util.HashMap;
 
@@ -20,7 +23,6 @@ public class IntF extends IntField<BoolF> {
     public static IntF of(int value, int n) {
         return of(value, n, BoolFieldManager.DEFAULT_BORDER());
     }
-
     public static IntF of(int value, int n, Border border) {
         IntF intF = new IntF(n, border);
         for (int i = 0; value != 0 && value != Integer.MIN_VALUE; i++) {
@@ -31,12 +33,22 @@ public class IntF extends IntField<BoolF> {
         intF.bits[0] = value >>> 31 == 0 ? BoolFRef.of(BoolF.zeroes(border)) : BoolFRef.of(BoolF.ones(border));
         return intF;
     }
-
     public static IntF of(BoolFRef boolF, int n) {
         IntF intF = new IntF(n, boolF.get().border);
         for (int i = 1; i < n; i++) intF.bits[i] = BoolFRef.of(BoolF.zeroes(boolF.get().border));
         intF.bits[n] = boolF.copy();
         return intF;
+    }
+
+    public static IntF rand(int n) {
+        IntF rand = new IntF(n);
+        IntField.rand(rand, BoolF::rand);
+        return rand;
+    }
+    public static IntF randNonNegative(int n) {
+        IntF rand = new IntF(n);
+        IntField.randNonNegative(rand, BoolF::rand);
+        return rand;
     }
 
     @Override
@@ -58,7 +70,11 @@ public class IntF extends IntField<BoolF> {
 
         BoolFRef bit = (BoolFRef) bits[0];
         HashMap<Face, Boolean> bitMap = BoolF.decode(m.faces, bit.get());
-        res.replaceAll((f, val) -> bitMap.get(f) ? val | (1 << 31) : val);
+        res.replaceAll((f, val) -> {
+            if (bitMap.get(f))
+                for (int i = n; i < 32; i++) val |= (1 << i);
+            return val;
+        });
 
         return res;
     }

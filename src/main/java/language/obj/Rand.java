@@ -2,8 +2,9 @@ package language.obj;
 
 import language.Obj;
 import language.instruction.Procedure;
-import language.obj.field.boolField.BoolV;
+import language.obj.field.boolField.*;
 import language.ref.field.boolField.*;
+import language.ref.field.intField.*;
 
 public class Rand extends Obj {
     private final BoolVRef state;
@@ -160,6 +161,132 @@ public class Rand extends Obj {
             broadcast(e, ef);
             transfer(ef, res);
         }
+
+        public Next(IntVRef res) { this(res, ""); }
+        public Next(IntVRef res, String option) {
+            BoolVRef[] bits = new BoolVRef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolVRef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolVRef());
+            if (option.equals("0+")) set(BoolVRef.of(BoolV.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
+
+        public Next(IntVeRef res) { this(res, ""); }
+        public Next(IntVeRef res, String option) {
+            BoolVeRef[] bits = new BoolVeRef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolVeRef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolVeRef());
+            if (option.equals("0+")) set(BoolVeRef.of(BoolVe.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
+
+        public Next(IntVfRef res) { this(res, ""); }
+        public Next(IntVfRef res, String option) {
+            BoolVfRef[] bits = new BoolVfRef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolVfRef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolVfRef());
+            if (option.equals("0+")) set(BoolVfRef.of(BoolVf.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
+
+        public Next(IntERef res) { this(res, ""); }
+        public Next(IntERef res, String option) {
+            BoolERef[] bits = new BoolERef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolERef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolERef());
+            if (option.equals("0+")) set(BoolERef.of(BoolE.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
+
+        public Next(IntEvRef res) { this(res, ""); }
+        public Next(IntEvRef res, String option) {
+            BoolEvRef[] bits = new BoolEvRef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolEvRef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolEvRef());
+            if (option.equals("0+")) set(BoolEvRef.of(BoolEv.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
+
+        public Next(IntEfRef res) { this(res, ""); }
+        public Next(IntEfRef res, String option) {
+            BoolEfRef[] bits = new BoolEfRef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolEfRef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolEfRef());
+            if (option.equals("0+")) set(BoolEfRef.of(BoolEf.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
+
+        public Next(IntFRef res) { this(res, ""); }
+        public Next(IntFRef res, String option) {
+            BoolFRef[] bits = new BoolFRef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolFRef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolFRef());
+            if (option.equals("0+")) set(BoolFRef.of(BoolF.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
+
+        public Next(IntFvRef res) { this(res, ""); }
+        public Next(IntFvRef res, String option) {
+            BoolFvRef[] bits = new BoolFvRef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolFvRef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolFvRef());
+            if (option.equals("0+")) set(BoolFvRef.of(BoolFv.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
+
+        public Next(IntFeRef res) { this(res, ""); }
+        public Next(IntFeRef res, String option) {
+            BoolFeRef[] bits = new BoolFeRef[res.get().n + 1];
+            for (int i = 1; i < bits.length; i++) {
+                bits[i] = tmp(new BoolFeRef());
+                call(next(bits[i]));
+            }
+
+            bits[0] = tmp(new BoolFeRef());
+            if (option.equals("0+")) set(BoolFeRef.of(BoolFe.zeroes()), bits[0]);
+            else call(next(bits[0]));
+            join(bits, res);
+        }
     }
 
     public Procedure next(BoolVRef res) { return new Next(res); }
@@ -173,6 +300,28 @@ public class Rand extends Obj {
     public Procedure next(BoolFRef res) { return new Next(res); }
     public Procedure next(BoolFvRef res) { return new Next(res); }
     public Procedure next(BoolFeRef res) { return new Next(res); }
+
+    public Procedure next(IntVRef res) { return new Next(res); }
+    public Procedure next0p(IntVRef res) { return new Next(res, "0+"); }
+    public Procedure next(IntVeRef res) { return new Next(res); }
+    public Procedure next0p(IntVeRef res) { return new Next(res, "0+"); }
+    public Procedure next(IntVfRef res) { return new Next(res); }
+    public Procedure next0p(IntVfRef res) { return new Next(res, "0+"); }
+
+
+    public Procedure next(IntERef res) { return new Next(res); }
+    public Procedure next0p(IntERef res) { return new Next(res, "0+"); }
+    public Procedure next(IntEvRef res) { return new Next(res); }
+    public Procedure next0p(IntEvRef res) { return new Next(res, "0+"); }
+    public Procedure next(IntEfRef res) { return new Next(res); }
+    public Procedure next0p(IntEfRef res) { return new Next(res, "0+"); }
+
+    public Procedure next(IntFRef res) { return new Next(res); }
+    public Procedure next0p(IntFRef res) { return new Next(res, "0+"); }
+    public Procedure next(IntFvRef res) { return new Next(res); }
+    public Procedure next0p(IntFvRef res) { return new Next(res, "0+"); }
+    public Procedure next(IntFeRef res) { return new Next(res); }
+    public Procedure next0p(IntFeRef res) { return new Next(res, "0+"); }
 
     private class ShowRand extends Procedure {
         public ShowRand() {

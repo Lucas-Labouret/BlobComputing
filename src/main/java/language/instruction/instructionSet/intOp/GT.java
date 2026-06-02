@@ -1,7 +1,8 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.obj.field.intField.IntV;
+import language.obj.field.boolField.*;
+import language.obj.field.intField.*;
 import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
 
@@ -10,32 +11,132 @@ class GTV extends Procedure {
         if  (a.get().n != b.get().n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        IntVRef diff = IntVRef.of(new IntV(a.get().n));
-        sub(a, b, diff);
+        BoolVRef[] aBits = new BoolVRef[a.get().n + 1];
+        BoolVRef[] bBits = new BoolVRef[b.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            aBits[i] = tmp(new BoolVRef());
+            bBits[i] = tmp(new BoolVRef());
+        }
+        split(a, aBits);
+        split(b, bBits);
 
-        BoolVRef[] bits = new BoolVRef[diff.get().n + 1];
-        for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolVRef();
-        split(diff, bits);
+        BoolVRef bothPos = tmp(new BoolVRef());
+        BoolVRef bothNeg = tmp(new BoolVRef());
+        BoolVRef sameSign = tmp(new BoolVRef());
+        BoolVRef diffSign = tmp(new BoolVRef());
 
-        set(bits[0], res);
-        not(res, res);
+        IntVRef notA = IntVRef.of(new IntV(a.get().n));
+        not(a, notA);
+        IntVRef notB = IntVRef.of(new IntV(b.get().n));
+        not(b, notB);
+
+        BoolVRef[] notABits = new BoolVRef[a.get().n + 1];
+        BoolVRef[] notBBits = new BoolVRef[b.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            notABits[i] = tmp(new BoolVRef());
+            notBBits[i] = tmp(new BoolVRef());
+        }
+        split(notA, notABits);
+        split(notB, notBBits);
+
+        and(notABits[0], notBBits[0], bothPos);
+        and(aBits[0], bBits[0], bothNeg);
+        or(bothPos, bothNeg, sameSign);
+        xor(aBits[0], bBits[0], diffSign);
+
+        BoolVRef[] stitchA = new BoolVRef[a.get().n + 1];
+        BoolVRef[] stitchB = new BoolVRef[b.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            stitchA[i] = tmp(new BoolVRef());
+            stitchB[i] = tmp(new BoolVRef());
+            set(BoolVRef.of(BoolV.zeroes()), stitchA[i]);
+            set(BoolVRef.of(BoolV.zeroes()), stitchB[i]);
+
+            fif(bothPos, aBits[i], stitchA[i], stitchA[i]);
+            fif(bothNeg, notABits[i], stitchA[i], stitchA[i]);
+
+            fif(bothPos, bBits[i], stitchB[i], stitchB[i]);
+            fif(bothNeg, notBBits[i], stitchB[i], stitchB[i]);
+        }
+
+        set(BoolVRef.of(BoolV.zeroes()), res);
+
+        BoolVRef diffBits = tmp(new BoolVRef());
+        BoolVRef ssdb = tmp(new BoolVRef());
+        for (int i=a.get().n; i>=1; i--) {
+            xor(stitchA[i], stitchB[i], diffBits);
+            and(sameSign, diffBits, ssdb);
+            fif(ssdb, stitchA[i], stitchB[i], res);
+        }
+
+        fif(diffSign, bBits[0], res, res);
     }
 }
 
 class GTVe extends Procedure {
     public GTVe(IntVeRef a, IntVeRef b, BoolVeRef res) {
-        if (a.get().n != b.get().n)
+        if  (a.get().n != b.get().n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        IntVeRef diff = new IntVeRef();
-        sub(a, b, diff);
+        BoolVeRef[] aBits = new BoolVeRef[a.get().n + 1];
+        BoolVeRef[] bBits = new BoolVeRef[b.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            aBits[i] = tmp(new BoolVeRef());
+            bBits[i] = tmp(new BoolVeRef());
+        }
+        split(a, aBits);
+        split(b, bBits);
 
-        BoolVeRef[] bits = new BoolVeRef[diff.get().n + 1];
-        for (int i = 0; i <= diff.get().n; i++) bits[i] = new BoolVeRef();
-        split(diff, bits);
+        BoolVeRef bothPos = tmp(new BoolVeRef());
+        BoolVeRef bothNeg = tmp(new BoolVeRef());
+        BoolVeRef sameSign = tmp(new BoolVeRef());
+        BoolVeRef diffSign = tmp(new BoolVeRef());
 
-        set(bits[0], res);
-        not(res, res);
+        IntVeRef notA = IntVeRef.of(new IntVe(a.get().n));
+        not(a, notA);
+        IntVeRef notB = IntVeRef.of(new IntVe(b.get().n));
+        not(b, notB);
+
+        BoolVeRef[] notABits = new BoolVeRef[a.get().n + 1];
+        BoolVeRef[] notBBits = new BoolVeRef[b.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            notABits[i] = tmp(new BoolVeRef());
+            notBBits[i] = tmp(new BoolVeRef());
+        }
+        split(notA, notABits);
+        split(notB, notBBits);
+
+        and(notABits[0], notBBits[0], bothPos);
+        and(aBits[0], bBits[0], bothNeg);
+        or(bothPos, bothNeg, sameSign);
+        xor(aBits[0], bBits[0], diffSign);
+
+        BoolVeRef[] stitchA = new BoolVeRef[a.get().n + 1];
+        BoolVeRef[] stitchB = new BoolVeRef[b.get().n + 1];
+        for (int i = 0; i <= a.get().n; i++) {
+            stitchA[i] = tmp(new BoolVeRef());
+            stitchB[i] = tmp(new BoolVeRef());
+            set(BoolVeRef.of(BoolVe.zeroes()), stitchA[i]);
+            set(BoolVeRef.of(BoolVe.zeroes()), stitchB[i]);
+
+            fif(bothPos, aBits[i], stitchA[i], stitchA[i]);
+            fif(bothNeg, notABits[i], stitchA[i], stitchA[i]);
+
+            fif(bothPos, bBits[i], stitchB[i], stitchB[i]);
+            fif(bothNeg, notBBits[i], stitchB[i], stitchB[i]);
+        }
+
+        set(BoolVeRef.of(BoolVe.zeroes()), res);
+
+        BoolVeRef diffBits = tmp(new BoolVeRef());
+        BoolVeRef ssdb = tmp(new BoolVeRef());
+        for (int i=a.get().n; i>=1; i--) {
+            xor(stitchA[i], stitchB[i], diffBits);
+            and(sameSign, diffBits, ssdb);
+            fif(ssdb, stitchA[i], stitchB[i], res);
+        }
+
+        fif(diffSign, bBits[0], res, res);
     }
 }
 

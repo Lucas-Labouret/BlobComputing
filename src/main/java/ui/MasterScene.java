@@ -10,6 +10,7 @@ import javafx.scene.layout.Region;
 
 import language.instruction.Instruction;
 import language.obj.BlobV;
+import language.obj.Flies;
 import language.obj.Rand;
 import language.utils.BoolFieldManager;
 import medium.Medium;
@@ -56,8 +57,10 @@ public class MasterScene extends BorderPane {
         BoolFieldManager.setup(medium);
         //Instruction instruction = RotateV.rand().ccw();
         //Instruction instruction = BlobV.rand(medium).showGrow();
-        Instruction instruction = BlobV.rand(5).voronoi();
-        //Instruction instruction = (new Rand()).showRand();
+        //Instruction instruction = BlobV.rand(5).voronoi();
+        //Instruction instruction = new BlobV().voronoi();
+        //Instruction instruction = new Rand().showRand();
+        Instruction instruction = Flies.rand(8).showFlies();
 
         player = new InstructionPlayer(instruction, displayController);
 

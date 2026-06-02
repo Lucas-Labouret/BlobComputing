@@ -21,8 +21,8 @@ public class InstructionPlayer {
 
     private Thread playerThread;
 
-    private static final boolean printLeafCount = false;
-    private static final boolean printInstructionTree = false;
+    private static final boolean printLeafCount = true;
+    private static final boolean printInstructionTree = true;
     public InstructionPlayer(Instruction instruction, DisplayController displayController) {
         this.instruction = instruction;
         leafCount = instruction.leafCount();

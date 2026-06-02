@@ -45,9 +45,9 @@ public class BlobV extends Obj {
     private static class Grow extends Procedure {
         public <I extends BlobV, O extends BlobV> Grow(Ref<I> in, Ref<O> out) {
 
-            BoolVeRef ve = new BoolVeRef();
-            BoolEvRef ev = new BoolEvRef();
-            BoolERef middle = new BoolERef();
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolERef middle = tmp(new BoolERef());
 
             broadcast(in.get().state, ve);
             transfer(ve, ev);
@@ -57,7 +57,6 @@ public class BlobV extends Obj {
             redOr(ve, out.get().state);
         }
     }
-
     public static <I extends BlobV, O extends BlobV> Procedure grow(Ref<I> in, Ref<O> out) { return new Grow(in, out); }
     public <O extends BlobV> Procedure grow(Ref<O> out) { return new Grow(thisRef, out); }
     public Procedure grow() { return new Grow(thisRef, BlobVRef.of(this)); }
@@ -94,8 +93,8 @@ public class BlobV extends Obj {
 
     private static class FrontierE extends Procedure {
         public <I extends BlobV> FrontierE(Ref<I> in, BoolERef frontier) {
-            BoolVeRef ve = new BoolVeRef();
-            BoolEvRef ev = new BoolEvRef();
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
 
             broadcast(in.get().state, ve);
             transfer(ve, ev);
@@ -106,8 +105,8 @@ public class BlobV extends Obj {
 
     private static class FrontierV extends Procedure {
         public <I extends BlobV> FrontierV(Ref<I> in, BoolVRef frontier) {
-            BoolVRef notIn = new BoolVRef();
-            BlobVRef grow = BlobVRef.of(new BlobV());
+            BoolVRef notIn = tmp(new BoolVRef());
+            BlobVRef grow = tmp(BlobVRef.of(new BlobV()));
 
             not(in.get().state, notIn);
             call(in.get().grow(grow));
@@ -161,17 +160,15 @@ public class BlobV extends Obj {
 
             BoolVfRef cw = tmp(new BoolVfRef());
             BoolVfRef ccw = tmp(new BoolVfRef());
-            BoolVfRef vf = new BoolVfRef();
+            BoolVfRef vf = tmp(new BoolVfRef());
 
             rotCW(ve, cw);
             rotCCW(ve, ccw);
             xor(cw, ccw, vf);
-            show("cw xor ccw", vf);
 
-            IntVRef connectedComponents = IntVRef.of(new IntV(4));
+            IntVRef connectedComponents = tmp(IntVRef.of(new IntV(4)));
             redAdd(vf, connectedComponents);
             gt(connectedComponents, IntVRef.of(IntV.of(3, 4)), out);
-            show("connectedComponents", connectedComponents);
 
             BoolVRef notIn = tmp(new BoolVRef());
             not(in.get().state, notIn);

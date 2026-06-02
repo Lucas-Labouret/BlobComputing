@@ -8,10 +8,12 @@ import language.Ref;
 import language.instruction.instructionSet.Show;
 import language.ref.field.boolField.*;
 import language.ref.field.intField.IntVRef;
+import language.ref.field.intField.IntVeRef;
 import ui.display.MediumDrawer;
 import ui.display.displayable.Displayable;
 import ui.display.displayable.boolFieldDisplay.*;
 import ui.display.displayable.intFieldDisplay.IntVDisplay;
+import ui.display.displayable.intFieldDisplay.IntVeDisplay;
 import ui.utils.DisplayBox;
 import ui.utils.OrderableDisplayPanel;
 
@@ -58,6 +60,7 @@ public class DisplayController {
             case BoolFeRef boolFeRef -> createDisplay(name, new BoolFeDisplay(boolFeRef));
 
             case IntVRef intVRef     -> createDisplay(name, new IntVDisplay(intVRef));
+            case IntVeRef intVeRef   -> createDisplay(name, new IntVeDisplay(intVeRef));
 
             default -> throw new IllegalArgumentException("Unsupported type for display: " + ref.getClass().getName());
         }

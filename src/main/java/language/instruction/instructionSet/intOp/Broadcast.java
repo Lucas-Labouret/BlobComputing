@@ -11,12 +11,12 @@ class BroadcastVe extends Procedure {
 
         BoolVRef[] bitsOrig = new BoolVRef[orig.get().n + 1];
         BoolVeRef[] bitsRes = new BoolVeRef[orig.get().n + 1];
-        for (int i = 1; i <= orig.get().n; i++) {
+        for (int i = 0; i <= orig.get().n; i++) {
             bitsOrig[i] = new BoolVRef();
             bitsRes[i] = new BoolVeRef();
         }
         split(orig, bitsOrig);
-        for (int i = 1; i <= orig.get().n; i++)
+        for (int i = 0; i <= orig.get().n; i++)
             broadcast(bitsOrig[i], bitsRes[i]);
         join(bitsRes, res);
     }
@@ -29,7 +29,7 @@ class BroadcastVf extends Procedure {
 
         BoolVRef[] bitsOrig = new BoolVRef[orig.get().n + 1];
         BoolVfRef[] bitsRes = new BoolVfRef[orig.get().n + 1];
-        for (int i = 1; i <= orig.get().n; i++) {
+        for (int i = 0; i <= orig.get().n; i++) {
             bitsOrig[i] = new BoolVRef();
             bitsRes[i] = new BoolVfRef();
         }
@@ -47,7 +47,7 @@ class BroadcastEv extends Procedure {
 
         BoolERef[] bitsOrig = new BoolERef[orig.get().n + 1];
         BoolEvRef[] bitsRes = new BoolEvRef[orig.get().n + 1];
-        for (int i = 1; i <= orig.get().n; i++) {
+        for (int i = 0; i <= orig.get().n; i++) {
             bitsOrig[i] = new BoolERef();
             bitsRes[i] = new BoolEvRef();
         }
@@ -64,7 +64,7 @@ class BroadcastEf extends Procedure {
 
         BoolERef[] bitsOrig = new BoolERef[orig.get().n + 1];
         BoolEfRef[] bitsRes = new BoolEfRef[orig.get().n + 1];
-        for (int i = 1; i <= orig.get().n; i++) {
+        for (int i = 0; i <= orig.get().n; i++) {
             bitsOrig[i] = new BoolERef();
             bitsRes[i] = new BoolEfRef();
         }
@@ -81,7 +81,7 @@ class BroadcastFv extends Procedure {
 
         BoolFRef[] bitsOrig = new BoolFRef[orig.get().n + 1];
         BoolFvRef[] bitsRes = new BoolFvRef[orig.get().n + 1];
-        for (int i = 1; i <= orig.get().n; i++) {
+        for (int i = 0; i <= orig.get().n; i++) {
             bitsOrig[i] = new BoolFRef();
             bitsRes[i] = new BoolFvRef();
         }
@@ -98,7 +98,7 @@ class BroadcastFe extends Procedure {
 
         BoolFRef[] bitsOrig = new BoolFRef[orig.get().n + 1];
         BoolFeRef[] bitsRes = new BoolFeRef[orig.get().n + 1];
-        for (int i = 1; i <= orig.get().n; i++) {
+        for (int i = 0; i <= orig.get().n; i++) {
             bitsOrig[i] = new BoolFRef();
             bitsRes[i] = new BoolFeRef();
         }

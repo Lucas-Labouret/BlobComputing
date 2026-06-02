@@ -485,11 +485,46 @@ public final class BoolFieldManager {
 
             // Mark non-border transfers of this vertex as interior
             int breadth = ves.size();
-            for (Ve ve: ves)
-                if (ve != border1 && ve != border2) interiorVe.put(ve, breadth + ve.s);
-            for (Vf vf: vfs)
+            HashSet<Integer> takenVe = new HashSet<>();
+            for (Ve ve: ves) {
+                takenVe.add(ve.s);
+                if (ve != border1 && ve != border2) interiorVe.put(ve, 0);
+            }
+            HashSet<Integer> takenVf = new HashSet<>();
+            for (Vf vf: vfs) {
+                takenVf.add(vf.s);
                 interiorVf.put(vf, breadth + vf.s);
+            }
 
+            int i = -1;
+            for (Ve ve: ves) if (interiorVe.containsKey(ve)) {
+                boolean done = false;
+                while (!done) {
+                    i++;
+                    if (i >= getBreadthV())
+                        throw new IllegalStateException("Border vertex would have more Ve than breadth due to mirror.");
+                    if (takenVe.contains(i)) continue;
+                    takenVe.add(i);
+                    interiorVe.put(ve, i);
+                    done = true;
+                }
+            }
+
+            i = -1;
+            for (Vf vf: vfs) {
+                boolean done = false;
+                while (!done) {
+                    i++;
+                    if (i >= getBreadthV())
+                        throw new IllegalStateException("Border vertex would have more Vf than breadth due to mirror.");
+                    if (takenVf.contains(i)) {
+                        continue;
+                    }
+                    takenVe.add(i);
+                    interiorVf.put(vf, i);
+                    done = true;
+                }
+            }
             // Determine directional mappings for vertex faces
             determineDirectionalMappings(border1, border2, vfs, breadth, cw, ccw);
         }
