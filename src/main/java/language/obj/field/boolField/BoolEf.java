@@ -268,7 +268,7 @@ public class BoolEf extends BoolFieldT {
                 target.lines[blockIndex + k] = new BoolFieldLine(orig.lines[blockIndex + (k + 1) % BREADTH]);
             }
         }
-        if (orig.border == Border.MIRROR) applyMirrorRotation(orig, target);
+        //if (orig.border == Border.MIRROR) applyMirrorRotation(orig, target);
         return target;
     }
 
@@ -281,7 +281,7 @@ public class BoolEf extends BoolFieldT {
                 target.lines[blockIndex + k] = new BoolFieldLine(orig.lines[blockIndex + k]);
             }
         }
-        if (orig.border == Border.MIRROR) applyMirrorRotation(orig, target);
+        //if (orig.border == Border.MIRROR) applyMirrorRotation(orig, target);
         return target;
     }
 

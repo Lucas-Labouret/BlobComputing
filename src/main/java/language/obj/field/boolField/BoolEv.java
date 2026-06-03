@@ -242,7 +242,7 @@ public class BoolEv extends BoolFieldT {
         BoolEf target = new BoolEf(orig.border);
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int blockIndex = (i * SPAN + j) * BREADTH;
-            for (int k = 0; k < BREADTH - 1; k++) {
+            for (int k = 0; k < BREADTH; k++) {
                 target.lines[blockIndex + k] = new BoolFieldLine(orig.lines[blockIndex + (k + 1) % BREADTH]);
             }
         }

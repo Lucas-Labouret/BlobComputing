@@ -79,10 +79,6 @@ public class Flies extends BlobV {
             broadcast(in.get().state, outVe);
             and(outVe, ve, outVe);
 
-            BoolVeRef outVeCopy = new BoolVeRef();
-            set(outVe, outVeCopy);
-            show("outVe", outVeCopy);
-
             BoolVRef triggered = tmp(new BoolVRef());
             BoolVRef notTriggered = tmp(new BoolVRef());
             BoolVRef untriggered = tmp(new BoolVRef());
