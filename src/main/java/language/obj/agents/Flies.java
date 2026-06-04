@@ -1,11 +1,12 @@
-package language.obj;
+package language.obj.agents;
 
 import language.Ref;
 import language.instruction.Procedure;
+import language.obj.Rand;
 import language.obj.field.boolField.BoolV;
 import language.obj.field.intField.*;
-import language.ref.BlobVRef;
-import language.ref.FliesRef;
+import language.ref.agents.BlobVRef;
+import language.ref.agents.FliesRef;
 import language.ref.RandRef;
 import language.ref.field.boolField.*;
 import language.ref.field.intField.*;

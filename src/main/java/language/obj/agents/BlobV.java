@@ -1,28 +1,25 @@
-package language.obj;
+package language.obj.agents;
 
-import language.Obj;
 import language.Ref;
 import language.instruction.Procedure;
 import language.obj.field.boolField.BoolV;
 import language.obj.field.intField.IntV;
-import language.ref.BlobVRef;
+import language.ref.agents.BlobVRef;
 import language.ref.field.boolField.*;
 import language.ref.field.intField.IntVRef;
 import medium.Medium;
 import medium.locusS.Vertex;
 
-public class BlobV extends Obj {
-    protected final BoolVRef state;
+public class BlobV extends Agent {
     protected final BoolVRef init;
     private final BlobVRef thisRef = BlobVRef.of(this);
 
     public BlobV() {
-        this.state = new BoolVRef();
         init = this.state.copy();
     }
 
     public BlobV(BoolVRef cells) {
-        this.state = cells;
+        super(cells);
         init = this.state.copy();
     }
 

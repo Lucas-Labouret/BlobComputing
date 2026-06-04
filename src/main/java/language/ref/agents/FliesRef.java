@@ -1,8 +1,8 @@
-package language.ref;
+package language.ref.agents;
 
 import language.Ref;
 
-import language.obj.Flies;
+import language.obj.agents.Flies;
 
 /** Represents a reference to a Flies value */
 public class FliesRef extends Ref<Flies> {

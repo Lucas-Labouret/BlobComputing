@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import language.instruction.Instruction;
-import language.obj.Flies;
+import language.obj.agents.Flies;
 import language.utils.BoolFieldManager;
 import medium.Medium;
 import ui.display.MediumDrawer;

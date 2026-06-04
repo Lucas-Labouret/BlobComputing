@@ -28,4 +28,5 @@ module com.github.lucaslabouret.blobcomputing {
     exports language.ref.field.boolField;
     exports language.ref.field.intField;
     exports language.instruction;
+    exports language.obj.agents;
 }
