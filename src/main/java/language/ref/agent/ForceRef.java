@@ -1,8 +1,8 @@
-package language.ref.agents;
+package language.ref.agent;
 
 import language.Ref;
 
-import language.obj.agents.Force;
+import language.obj.agent.Force;
 
 /** Represents a reference to a Force value */
 public class ForceRef extends Ref<Force> {

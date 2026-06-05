@@ -1,8 +1,8 @@
-package language.ref.agents;
+package language.ref.agent;
 
 import language.Ref;
 
-import language.obj.agents.BlobV;
+import language.obj.agent.BlobV;
 
 /** Represents a reference to a BlobV value */
 public class BlobVRef extends Ref<BlobV> {

@@ -1,8 +1,8 @@
-package language.ref.agents;
+package language.ref.agent;
 
 import language.Ref;
 
-import language.obj.agents.Agent;
+import language.obj.agent.Agent;
 
 /** Represents a reference to a Agent value */
 public class AgentRef extends Ref<Agent> {

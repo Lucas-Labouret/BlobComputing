@@ -51,6 +51,13 @@ public class IntVe extends IntField<BoolVe> {
         return rand;
     }
 
+    public static IntVe minValue(int n) {
+        IntVe intVe = new IntVe(n);
+        intVe.bits[0] = BoolVeRef.of(BoolVe.ones(intVe.border));
+        for (int i = 1; i <= n; i++) intVe.bits[i] = BoolVeRef.of(BoolVe.zeroes(intVe.border));
+        return intVe;
+    }
+
     @Override
     public BoolVeRef[] getBits() {
         return (BoolVeRef[]) bits;

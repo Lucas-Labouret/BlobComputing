@@ -8,8 +8,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import language.instruction.Instruction;
-import language.obj.agents.Flies;
-import language.utils.BoolFieldManager;
 import medium.Medium;
 import ui.display.MediumDrawer;
 import ui.utils.CacheMenu;
@@ -39,9 +37,8 @@ public class MasterScene extends BorderPane {
     private final Medium medium;
     private final DisplayController displayController;
 
-    public MasterScene() {
-        try { medium = Medium.read("large"); }
-        catch (Exception e) { throw new RuntimeException(e); }
+    public MasterScene(Medium medium, Instruction main) {
+        this.medium = medium;
 
         toolBar = new ToolBar();
         displays = new OrderableDisplayPanel();
@@ -51,15 +48,7 @@ public class MasterScene extends BorderPane {
         displayController = new DisplayController(drawer, displays);
         scrollPane = new ZoomableScrollPane(drawer);
 
-        BoolFieldManager.setup(medium);
-        //Instruction instruction = RotateV.rand().ccw();
-        //Instruction instruction = BlobV.rand(medium).showGrow();
-        //Instruction instruction = BlobV.rand(5).voronoi();
-        //Instruction instruction = new BlobV().voronoi();
-        //Instruction instruction = new Rand().showRand();
-        Instruction instruction = Flies.rand(6).showFlies();
-
-        player = new InstructionPlayer(instruction, displayController);
+        player = new InstructionPlayer(main, displayController);
 
         setTop(toolBar);
         setLeft(sidePanel);

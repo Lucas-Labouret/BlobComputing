@@ -1,10 +1,10 @@
-package language.obj.agents;
+package language.obj.agent;
 
 import language.Ref;
 import language.instruction.Procedure;
 import language.obj.field.boolField.BoolV;
 import language.obj.field.intField.IntV;
-import language.ref.agents.BlobVRef;
+import language.ref.agent.BlobVRef;
 import language.ref.field.boolField.*;
 import language.ref.field.intField.IntVRef;
 import medium.Medium;
@@ -39,19 +39,39 @@ public class BlobV extends Agent {
         return new BlobV(BoolVRef.of(cells));
     }
 
+    private static class Send extends Procedure {
+        public Send(BoolVRef in, BoolVeRef out) {
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolEfRef ef = tmp(new BoolEfRef());
+
+            broadcast(in, out);
+            transfer(out, ev);
+            rotCW(ev, ef);
+            rotCW(ef, ev);
+            transfer(ev, out);
+        }
+    }
+    public static Procedure send(BoolVRef in, BoolVeRef out) { return new Send(in, out); }
+
     private static class Grow extends Procedure {
         public <I extends BlobV, O extends BlobV> Grow(Ref<I> in, Ref<O> out) {
+            BoolVRef inState = tmp(new BoolVRef());
+            call(getState(in, inState));
 
             BoolVeRef ve = tmp(new BoolVeRef());
             BoolEvRef ev = tmp(new BoolEvRef());
             BoolERef middle = tmp(new BoolERef());
 
-            broadcast(in.get().state, ve);
+            BoolVRef outState = tmp(new BoolVRef());
+
+            broadcast(inState, ve);
             transfer(ve, ev);
             redOr(ev, middle);
             broadcast(middle, ev);
             transfer(ev, ve);
-            redOr(ve, out.get().state);
+            redOr(ve, outState);
+
+            call(setState(outState, out));
         }
     }
     public static <I extends BlobV, O extends BlobV> Procedure grow(Ref<I> in, Ref<O> out) { return new Grow(in, out); }
@@ -93,7 +113,10 @@ public class BlobV extends Agent {
             BoolVeRef ve = tmp(new BoolVeRef());
             BoolEvRef ev = tmp(new BoolEvRef());
 
-            broadcast(in.get().state, ve);
+            BoolVRef inState = tmp(new BoolVRef());
+            call(getState(in, inState));
+
+            broadcast(inState, ve);
             transfer(ve, ev);
             redXor(ev, frontier);
         }
@@ -105,12 +128,66 @@ public class BlobV extends Agent {
             BoolVRef notIn = tmp(new BoolVRef());
             BlobVRef grow = tmp(BlobVRef.of(new BlobV()));
 
-            not(in.get().state, notIn);
+            BoolVRef inState = tmp(new BoolVRef());
+            call(getState(in, inState));
+
+            not(inState, notIn);
             call(in.get().grow(grow));
-            and(grow.get().state, notIn, frontier);
+            and(inState, notIn, frontier);
         }
     }
     public Procedure frontierV(BoolVRef frontier) { return new FrontierV(thisRef, frontier); }
+
+    private static class OutVe extends Procedure {
+        public <I extends BlobV> OutVe(Ref<I> in, BoolVeRef out) {
+            BoolERef frontierE = tmp(new BoolERef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolVeRef frontierVe = tmp(new BoolVeRef());
+
+            call(in.get().frontierE(frontierE));
+            broadcast(frontierE, ev);
+            transfer(ev, frontierVe);
+
+            BoolVRef inState = tmp(new BoolVRef());
+            BoolVeRef ve = tmp(new BoolVeRef());
+            call(getState(in, inState));
+            broadcast(inState, ve);
+
+            and(ve, frontierVe, out);
+        }
+    }
+    public Procedure outVe(BoolVeRef out) { return new OutVe(thisRef, out); }
+
+    private static class BorderVe extends Procedure {
+        public <I extends BlobV> BorderVe(Ref<I> in, BoolVeRef out) {
+            BoolERef frontierE = tmp(new BoolERef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolVeRef ve = tmp(new BoolVeRef());
+
+            call(in.get().frontierE(frontierE));
+            broadcast(frontierE, ev);
+            transfer(ev, ve);
+
+            BoolVRef inState = tmp(new BoolVRef());
+            BoolVRef borderV = tmp(new BoolVRef());
+            call(getState(in, inState));
+            redOr(ve, borderV);
+            and(borderV, inState, borderV);
+
+            BoolEfRef ef = tmp(new BoolEfRef());
+            broadcast(borderV, ve);
+            transfer(ve, ev);
+            rotCW(ev, ef);
+            rotCW(ef, ev);
+            transfer(ev, ve);
+
+            BoolVeRef inVe = tmp(new BoolVeRef());
+            broadcast(inState, inVe);
+            and(inVe, ve, out);
+        }
+    }
+    public Procedure borderVe(BoolVeRef out) { return new BorderVe(thisRef, out); }
+
 
     private static class MeetE extends Procedure {
         public <I extends BlobV> MeetE(Ref<I> in, BoolERef out) {
@@ -120,10 +197,13 @@ public class BlobV extends Agent {
             BoolFeRef fe = tmp(new BoolFeRef());
             BoolEfRef ef = tmp(new BoolEfRef());
 
+            BoolVRef inState = tmp(new BoolVRef());
+            call(getState(in, inState));
+
             BoolERef frontierInteriorE = tmp(new BoolERef());
             BoolERef frontierInteriorEInv = tmp(new BoolERef());
 
-            broadcast(in.get().state, vf);
+            broadcast(inState, vf);
             transfer(vf, fv);
             redOr(fv, f);
             broadcast(f, fe);
@@ -167,8 +247,11 @@ public class BlobV extends Agent {
             redAdd(vf, connectedComponents);
             gt(connectedComponents, IntVRef.of(IntV.of(3, 4)), out);
 
+            BoolVRef inState = tmp(new BoolVRef());
+            call(getState(in, inState));
+
             BoolVRef notIn = tmp(new BoolVRef());
-            not(in.get().state, notIn);
+            not(inState, notIn);
             and(out, notIn, out);
         }
     }
@@ -198,24 +281,30 @@ public class BlobV extends Agent {
         public <I extends BlobV, O extends BlobV> Voronoi(Ref<I> in, Ref<O> out) {
             show("Seeds", in.get().init);
 
+            BoolVRef inState = tmp(new BoolVRef());
+            call(getState(in, inState));
+
             BoolVRef start = new BoolVRef();
-            set(in.get().state, start);
+            set(inState, start);
             show("BlobV", start);
 
             BoolVRef meet = tmp(new BoolVRef());
             call(in.get().meet(meet));
             not(meet, meet);
 
-            set(in.get().state, out.get().state);
+            BoolVRef outState = tmp(new BoolVRef());
+
+            set(inState, outState);
             call(out.get().grow());
 
             BoolVRef growCopy = new BoolVRef();
-            set(out.get().state, growCopy);
+            set(outState, growCopy);
             show("grow", growCopy);
 
-            and(out.get().state, meet, out.get().state);
-            or(in.get().state, out.get().state, out.get().state);
+            and(outState, meet, outState);
+            or(inState, outState, outState);
 
+            call(setState(outState, out));
         }
     }
     public Procedure voronoi() { return new Voronoi(thisRef, thisRef); }

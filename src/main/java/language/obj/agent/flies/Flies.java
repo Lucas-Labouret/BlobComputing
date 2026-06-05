@@ -1,17 +1,19 @@
-package language.obj.agents;
+package language.obj.agent.flies;
 
 import language.Ref;
 import language.instruction.Procedure;
 import language.obj.Rand;
+import language.obj.agent.BlobV;
+import language.obj.agent.QuasiParticle;
 import language.obj.field.boolField.BoolV;
 import language.obj.field.intField.*;
-import language.ref.agents.BlobVRef;
-import language.ref.agents.FliesRef;
+import language.ref.agent.BlobVRef;
+import language.ref.agent.flies.FliesRef;
 import language.ref.RandRef;
 import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
 
-public class Flies extends BlobV {
+public class Flies extends QuasiParticle {
     private static final RandRef rand = RandRef.of(new Rand());
     private final FliesRef thisRef = FliesRef.of(this);
 

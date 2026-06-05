@@ -1,8 +1,8 @@
-package language.ref.agents;
+package language.ref.agent;
 
 import language.Ref;
 
-import language.obj.agents.Constraint;
+import language.obj.agent.Constraint;
 
 /** Represents a reference to a Constraint value */
 public class ConstraintRef extends Ref<Constraint> {

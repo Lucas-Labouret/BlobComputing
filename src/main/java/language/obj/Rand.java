@@ -7,19 +7,24 @@ import language.ref.field.boolField.*;
 import language.ref.field.intField.*;
 
 public class Rand extends Obj {
-    private final BoolVRef state;
-    private final NextState nextState;
+    private final static BoolVRef state = new BoolVRef();
+    private final NextState nextState = new NextState();
 
-    public Rand(BoolVRef seed){
-        this.state = seed;
-        this.nextState = new NextState();
+    private static boolean initialized = false;
+    public static void init(BoolV seed) {
+        if (initialized) throw new IllegalStateException("Rand has already been initialized");
+        initialized = true;
+        state.set(seed);
+    }
+    public static void init() {
+        init(BoolV.rand());
     }
 
     public Rand() {
-        this(BoolVRef.of(BoolV.rand()));
+
     }
 
-    private class NextState extends Procedure {
+    private static class NextState extends Procedure {
         public NextState() {
             BoolVeRef ve = new BoolVeRef();
             BoolEvRef ev = new BoolEvRef();

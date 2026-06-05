@@ -1,4 +1,4 @@
-package language.obj.agents;
+package language.obj.agent;
 
 import language.Obj;
 
