@@ -1,18 +1,18 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.obj.field.intField.IntEv;
-import language.obj.field.intField.IntFv;
-import language.obj.field.intField.IntV;
-import language.ref.field.intField.*;
+import language.field.intField.IntEv;
+import language.field.intField.IntFv;
+import language.field.intField.IntV;
+import language.fieldRef.intField.*;
 
 class AddV extends Procedure {
     public AddV(IntVRef a, IntVRef b, IntVRef res) {
         if (a.get().n != b.get().n || a.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot add IntVs of different sizes.");
 
-        IntVRef carry = IntVRef.of(new IntV(a.get().n));
-        IntVRef tmp = IntVRef.of(new IntV(a.get().n));
+        IntVRef carry = new IntVRef(new IntV(a.get().n));
+        IntVRef tmp = new IntVRef(new IntV(a.get().n));
         set(a, res);
         set(b, tmp);
 
@@ -83,8 +83,8 @@ class AddEv extends Procedure {
         if (a.get().n != b.get().n || a.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot add IntEs of different sizes.");
 
-        IntEvRef carry = IntEvRef.of(new IntEv(a.get().n));
-        IntEvRef tmp = IntEvRef.of(new IntEv(a.get().n));
+        IntEvRef carry = new IntEvRef(new IntEv(a.get().n));
+        IntEvRef tmp = new IntEvRef(new IntEv(a.get().n));
         set(a, res);
         set(b, tmp);
 
@@ -134,8 +134,8 @@ class AddF extends Procedure {
 
 class AddFv extends Procedure {
     public AddFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        IntFvRef carry = IntFvRef.of(new IntFv(a.get().n));
-        IntFvRef tmp = IntFvRef.of(new IntFv(a.get().n));
+        IntFvRef carry = new IntFvRef(new IntFv(a.get().n));
+        IntFvRef tmp = new IntFvRef(new IntFv(a.get().n));
         set(a, res);
         set(b, tmp);
 

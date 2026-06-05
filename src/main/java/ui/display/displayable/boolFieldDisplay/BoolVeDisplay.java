@@ -1,8 +1,8 @@
 package ui.display.displayable.boolFieldDisplay;
 
 import javafx.scene.paint.Color;
-import language.obj.field.boolField.BoolVe;
-import language.ref.field.boolField.BoolVeRef;
+import language.field.boolField.BoolVe;
+import language.fieldRef.boolField.BoolVeRef;
 import medium.Medium;
 import medium.locusT.Ve;
 import ui.display.Styles;

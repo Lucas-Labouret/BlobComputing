@@ -2,9 +2,9 @@ package language.instruction.instructionSet.intOp;
 
 import language.instruction.Instruction;
 import language.instruction.Procedure;
-import language.obj.field.intField.IntField;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.*;
+import language.field.intField.IntField;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.*;
 import language.utils.BoolFieldManager;
 
 class RedStack_Ve extends Procedure {

@@ -4,11 +4,11 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
 
-import language.Ref;
+import language.fieldRef.Ref;
 import language.instruction.instructionSet.Show;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.IntVRef;
-import language.ref.field.intField.IntVeRef;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.IntVRef;
+import language.fieldRef.intField.IntVeRef;
 import ui.display.MediumDrawer;
 import ui.display.displayable.Displayable;
 import ui.display.displayable.boolFieldDisplay.*;

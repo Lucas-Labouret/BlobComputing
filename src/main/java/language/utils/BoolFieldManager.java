@@ -1,6 +1,6 @@
 package language.utils;
 
-import language.obj.field.boolField.*;
+import language.field.boolField.*;
 import medium.Medium;
 import medium.locusS.Edge;
 import medium.locusS.Face;
@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/** Stores the global language.obj.field-dimension configuration shared by language.obj.field types. */
+/** Stores the global language.field-dimension configuration shared by language.field types. */
 public final class BoolFieldManager {
     // Block instantiation
     private BoolFieldManager(){}
@@ -36,7 +36,7 @@ public final class BoolFieldManager {
     private static final int breadthF = 3;
 
     private static Boolean SETUP_DONE = false;
-    /** Initializes the global language.obj.field configuration from the given medium. */
+    /** Initializes the global language.field configuration from the given medium. */
     public static void setup(Medium m) {
         if (SETUP_DONE) throw new IllegalStateException("Setup has already been done.");
         SETUP_DONE = true;

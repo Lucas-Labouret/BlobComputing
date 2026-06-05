@@ -1,10 +1,10 @@
 package language.instruction.instructionSet.boolOp;
 
 import language.instruction.BasicInstruction;
-import language.obj.field.boolField.*;
-import language.ref.field.boolField.*;
+import language.field.boolField.*;
+import language.fieldRef.boolField.*;
 
-/** Represents a transfer instruction for the Ve/Ev transfer-language.obj.field pairing. */
+/** Represents a transfer instruction for the Ve/Ev transfer-language.field pairing. */
 class TransferVe implements BasicInstruction {
     private final BoolVeRef orig;
     private final BoolEvRef dest;
@@ -23,7 +23,7 @@ class TransferVe implements BasicInstruction {
     }
 }
 
-/** Represents a transfer instruction for the Ev/Ve transfer-language.obj.field pairing. */
+/** Represents a transfer instruction for the Ev/Ve transfer-language.field pairing. */
 class TransferEv implements BasicInstruction {
     private final BoolEvRef orig;
     private final BoolVeRef dest;
@@ -42,7 +42,7 @@ class TransferEv implements BasicInstruction {
     }
 }
 
-/** Represents a transfer instruction for the Vf/Fv transfer-language.obj.field pairing. */
+/** Represents a transfer instruction for the Vf/Fv transfer-language.field pairing. */
 class TransferVf implements BasicInstruction {
     private final BoolVfRef orig;
     private final BoolFvRef dest;
@@ -61,7 +61,7 @@ class TransferVf implements BasicInstruction {
     }
 }
 
-/** Represents a transfer instruction for the Fv/Vf transfer-language.obj.field pairing. */
+/** Represents a transfer instruction for the Fv/Vf transfer-language.field pairing. */
 class TransferFv implements BasicInstruction {
     private final BoolFvRef orig;
     private final BoolVfRef dest;
@@ -80,7 +80,7 @@ class TransferFv implements BasicInstruction {
     }
 }
 
-/** Represents a transfer instruction for the Ef/Fe transfer-language.obj.field pairing. */
+/** Represents a transfer instruction for the Ef/Fe transfer-language.field pairing. */
 class TransferEf implements BasicInstruction {
     private final BoolEfRef orig;
     private final BoolFeRef dest;
@@ -99,7 +99,7 @@ class TransferEf implements BasicInstruction {
     }
 }
 
-/** Represents a transfer instruction for the Fe/Ef transfer-language.obj.field pairing. */
+/** Represents a transfer instruction for the Fe/Ef transfer-language.field pairing. */
 class TransferFe implements BasicInstruction {
     private final BoolFeRef orig;
     private final BoolEfRef dest;

@@ -1,10 +1,9 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.obj.field.boolField.*;
-import language.obj.field.intField.*;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.*;
+import language.field.boolField.*;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.*;
 
 class GTV extends Procedure {
     public GTV(IntVRef a, IntVRef b, BoolVRef res) {
@@ -23,7 +22,7 @@ class GTV extends Procedure {
         BoolVRef diffSign = tmp(new BoolVRef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolVRef.of(BoolV.ones()), res);
+        set(new BoolVRef(BoolV.ones()), res);
 
         BoolVRef diffBits = tmp(new BoolVRef());
         for (int i=a.get().n; i>=1; i--) {
@@ -52,7 +51,7 @@ class GTVe extends Procedure {
         BoolVeRef diffSign = tmp(new BoolVeRef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolVeRef.of(BoolVe.ones()), res);
+        set(new BoolVeRef(BoolVe.ones()), res);
 
         BoolVeRef diffBits = tmp(new BoolVeRef());
         for (int i=a.get().n; i>=1; i--) {
@@ -81,7 +80,7 @@ class GTVf extends Procedure {
         BoolVfRef diffSign = tmp(new BoolVfRef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolVfRef.of(BoolVf.ones()), res);
+        set(new BoolVfRef(BoolVf.ones()), res);
 
         BoolVfRef diffBits = tmp(new BoolVfRef());
         for (int i=a.get().n; i>=1; i--) {
@@ -110,7 +109,7 @@ class GTE extends Procedure {
         BoolERef diffSign = tmp(new BoolERef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolERef.of(BoolE.ones()), res);
+        set(new BoolERef(BoolE.ones()), res);
 
         BoolERef diffBits = tmp(new BoolERef());
         for (int i=a.get().n; i>=1; i--) {
@@ -139,7 +138,7 @@ class GTEv extends Procedure {
         BoolEvRef diffSign = tmp(new BoolEvRef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolEvRef.of(BoolEv.ones()), res);
+        set(new BoolEvRef(BoolEv.ones()), res);
 
         BoolEvRef diffBits = tmp(new BoolEvRef());
         for (int i=a.get().n; i>=1; i--) {
@@ -168,7 +167,7 @@ class GTEf extends Procedure {
         BoolEfRef diffSign = tmp(new BoolEfRef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolEfRef.of(BoolEf.ones()), res);
+        set(new BoolEfRef(BoolEf.ones()), res);
 
         BoolEfRef diffBits = tmp(new BoolEfRef());
         for (int i=a.get().n; i>=1; i--) {
@@ -197,7 +196,7 @@ class GTF extends Procedure {
         BoolFRef diffSign = tmp(new BoolFRef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolFRef.of(BoolF.ones()), res);
+        set(new BoolFRef(BoolF.ones()), res);
 
         BoolFRef diffBits = tmp(new BoolFRef());
         for (int i=a.get().n; i>=1; i--) {
@@ -226,7 +225,7 @@ class GTFv extends Procedure {
         BoolFvRef diffSign = tmp(new BoolFvRef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolFvRef.of(BoolFv.ones()), res);
+        set(new BoolFvRef(BoolFv.ones()), res);
 
         BoolFvRef diffBits = tmp(new BoolFvRef());
         for (int i=a.get().n; i>=1; i--) {
@@ -255,7 +254,7 @@ class GTFe extends Procedure {
         BoolFeRef diffSign = tmp(new BoolFeRef());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(BoolFeRef.of(BoolFe.ones()), res);
+        set(new BoolFeRef(BoolFe.ones()), res);
 
         BoolFeRef diffBits = tmp(new BoolFeRef());
         for (int i=a.get().n; i>=1; i--) {

@@ -1,11 +1,11 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.obj.field.intField.IntE;
-import language.obj.field.intField.IntF;
-import language.obj.field.intField.IntV;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.*;
+import language.field.intField.IntE;
+import language.field.intField.IntF;
+import language.field.intField.IntV;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.*;
 import language.utils.BoolFieldManager;
 
 class RedMinVe extends Procedure {
@@ -14,7 +14,7 @@ class RedMinVe extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntVRef[] stack = new IntVRef[BoolFieldManager.getBreadthV()];
-        for (int i=0; i<stack.length; i++) stack[i] = IntVRef.of(new IntV(orig.get().n));
+        for (int i=0; i<stack.length; i++) stack[i] = new IntVRef(new IntV(orig.get().n));
         redStackMax(orig, stack);
         
         set(stack[0], res);
@@ -32,7 +32,7 @@ class RedMaxVe extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntVRef[] stack = new IntVRef[BoolFieldManager.getBreadthV()];
-        for (int i=0; i<stack.length; i++) stack[i] = IntVRef.of(new IntV(orig.get().n));
+        for (int i=0; i<stack.length; i++) stack[i] = new IntVRef(new IntV(orig.get().n));
         redStackMin(orig, stack);
 
         set(stack[0], res);
@@ -50,7 +50,7 @@ class RedMinVf extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntVRef[] stack = new IntVRef[BoolFieldManager.getBreadthV()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntVRef.of(new IntV(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntVRef(new IntV(orig.get().n));
         redStackMax(orig, stack);
 
         set(stack[0], res);
@@ -68,7 +68,7 @@ class RedMaxVf extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntVRef[] stack = new IntVRef[BoolFieldManager.getBreadthV()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntVRef.of(new IntV(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntVRef(new IntV(orig.get().n));
         redStackMin(orig, stack);
 
         set(stack[0], res);
@@ -86,7 +86,7 @@ class RedMinEv extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntERef[] stack = new IntERef[BoolFieldManager.getBreadthE()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntERef.of(new IntE(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntERef(new IntE(orig.get().n));
         redStackMax(orig, stack);
 
         set(stack[0], res);
@@ -104,7 +104,7 @@ class RedMaxEv extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntERef[] stack = new IntERef[BoolFieldManager.getBreadthE()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntERef.of(new IntE(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntERef(new IntE(orig.get().n));
         redStackMin(orig, stack);
 
         set(stack[0], res);
@@ -122,7 +122,7 @@ class RedMinEf extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntERef[] stack = new IntERef[BoolFieldManager.getBreadthE()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntERef.of(new IntE(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntERef(new IntE(orig.get().n));
         redStackMax(orig, stack);
 
         set(stack[0], res);
@@ -140,7 +140,7 @@ class RedMaxEf extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntERef[] stack = new IntERef[BoolFieldManager.getBreadthE()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntERef.of(new IntE(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntERef(new IntE(orig.get().n));
         redStackMin(orig, stack);
 
         set(stack[0], res);
@@ -158,7 +158,7 @@ class RedMinFv extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntFRef[] stack = new IntFRef[BoolFieldManager.getBreadthF()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntFRef.of(new IntF(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntFRef(new IntF(orig.get().n));
         redStackMax(orig, stack);
 
         set(stack[0], res);
@@ -176,7 +176,7 @@ class RedMaxFv extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntFRef[] stack = new IntFRef[BoolFieldManager.getBreadthF()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntFRef.of(new IntF(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntFRef(new IntF(orig.get().n));
         redStackMin(orig, stack);
 
         set(stack[0], res);
@@ -194,7 +194,7 @@ class RedMinFe extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntFRef[] stack = new IntFRef[BoolFieldManager.getBreadthF()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntFRef.of(new IntF(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntFRef(new IntF(orig.get().n));
         redStackMax(orig, stack);
 
         set(stack[0], res);
@@ -212,7 +212,7 @@ class RedMaxFe extends Procedure {
             throw new IllegalArgumentException("orig and res must have the same number of bits");
 
         IntFRef[] stack = new IntFRef[BoolFieldManager.getBreadthF()];
-        for (int i = 0; i < stack.length; i++) stack[i] = IntFRef.of(new IntF(orig.get().n));
+        for (int i = 0; i < stack.length; i++) stack[i] = new IntFRef(new IntF(orig.get().n));
         redStackMin(orig, stack);
 
         set(stack[0], res);

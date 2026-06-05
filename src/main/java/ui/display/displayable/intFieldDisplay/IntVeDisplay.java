@@ -1,7 +1,7 @@
 package ui.display.displayable.intFieldDisplay;
 
 import javafx.scene.paint.Color;
-import language.ref.field.intField.IntVeRef;
+import language.fieldRef.intField.IntVeRef;
 import medium.Medium;
 import medium.locusT.Ve;
 import ui.display.Styles;

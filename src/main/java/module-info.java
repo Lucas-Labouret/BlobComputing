@@ -20,16 +20,14 @@ module com.github.lucaslabouret.blobcomputing {
     exports medium.locusS;
     exports medium.locusT;
 
-    exports language;
     exports language.cache;
     exports language.instruction.instructionSet;
-    exports language.obj;
-    exports language.ref;
-    exports language.ref.agent;
-    exports language.ref.agent.flies;
-    exports language.ref.field.boolField;
-    exports language.ref.field.intField;
+    exports blobProgram;
+    exports language.fieldRef;
+    exports language.fieldRef.boolField;
+    exports language.fieldRef.intField;
     exports language.instruction;
-    exports language.obj.agent;
-    exports language.obj.agent.flies;
+    exports blobProgram.agent;
+    exports blobProgram.agent.flies;
+    exports language.field;
 }

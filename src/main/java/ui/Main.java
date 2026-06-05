@@ -6,9 +6,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
-import language.obj.agent.BlobV;
-import language.ref.agent.BlobVRef;
-import language.ref.field.boolField.BoolVeRef;
+import blobProgram.BlobV;
+import language.fieldRef.boolField.BoolVeRef;
 import language.utils.BoolFieldManager;
 import medium.Medium;
 
@@ -31,22 +30,26 @@ public class Main extends Application {
         catch (Exception e) { throw new RuntimeException(e); }
         BoolFieldManager.setup(medium);
 
-        //Instruction instruction = RotateV.rand().ccw();
-        //Instruction instruction = BlobV.rand(medium).showGrow();
-        //Instruction instruction = BlobV.rand(5).voronoi();
-        //Instruction instruction = new BlobV().voronoi();
-        //Instruction instruction = new Rand().showRand();
-        //Instruction instruction = Flies.rand(6).showFlies();
+//        Instruction instruction = RotateV.rand().ccw();
+//        Instruction instruction = BlobV.rand(medium).showGrow();
         Instruction instruction = new Procedure() {{
-            BlobVRef blob = BlobVRef.of(BlobV.rand(6));
-            call(blob.get().grow());
-
-            BoolVeRef borderVe = new BoolVeRef();
-            call(blob.get().outVe(borderVe));
-
-            show("Blob", blob.get().state);
-            show("BorderVe", borderVe);
+            BlobV blob = BlobV.rand(5);
+            show("Blob", blob);
+            call(blob.voronoi());
         }};
+//        Instruction instruction = new BlobV().voronoi();
+//        Instruction instruction = new Rand().showRand();
+//        Instruction instruction = Flies.rand(6).showFlies();
+//        Instruction instruction = new Procedure() {{
+//            BlobV blob = BlobV.rand(6);
+//            call(blob.grow());
+//
+//            BoolVeRef borderVe = new BoolVeRef();
+//            call(blob.outVe(borderVe));
+//
+//            show("Blob", blob);
+//            show("BorderVe", borderVe);
+//        }};
 
         ms = new MasterScene(medium, instruction);
 

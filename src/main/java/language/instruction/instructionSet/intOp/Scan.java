@@ -2,8 +2,8 @@ package language.instruction.instructionSet.intOp;
 
 import language.instruction.Instruction;
 import language.instruction.Procedure;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.*;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.*;
 
 class ScanLeftV extends Procedure {
     @FunctionalInterface public interface Scan { Instruction apply(BoolVRef a, BoolVRef res); }

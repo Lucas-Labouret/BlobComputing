@@ -1,9 +1,9 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.BasicInstruction;
-import language.obj.field.intField.*;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.*;
+import language.field.intField.*;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.*;
 
 class BoolToIntV implements BasicInstruction {
     private final BoolVRef orig;

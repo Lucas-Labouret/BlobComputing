@@ -1,10 +1,10 @@
 package language.instruction.instructionSet;
 
-import language.Obj;
-import language.Ref;
+import language.field.Field;
+import language.fieldRef.Ref;
 import language.instruction.BasicInstruction;
 
-public class SetRef<T extends Obj> implements BasicInstruction {
+public class SetRef<T extends Field> implements BasicInstruction {
     private final Ref<T> in;
     private final Ref<T> out;
 

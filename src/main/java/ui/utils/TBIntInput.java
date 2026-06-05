@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.function.Consumer;
 
-/** A utility class that provides a simple input language.obj.field for integer values. */
+/** A utility class that provides a simple input language.field for integer values. */
 public class TBIntInput extends VBox {
 
     private Label text;

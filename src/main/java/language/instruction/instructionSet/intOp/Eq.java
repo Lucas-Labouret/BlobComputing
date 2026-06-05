@@ -2,17 +2,17 @@ package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
 import language.instruction.instructionSet.boolOp.BoolOp;
-import language.obj.field.boolField.*;
-import language.obj.field.intField.*;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.*;
+import language.field.boolField.*;
+import language.field.intField.*;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.*;
 
 class EqV extends Procedure {
     public EqV(IntVRef a, IntVRef b, BoolVRef res) {
-        IntVRef test = IntVRef.of(new IntV(a.get().n));
+        IntVRef test = new IntVRef(new IntV(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolVRef.of(BoolV.zeroes()));
+        set(res, new BoolVRef(BoolV.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -20,10 +20,10 @@ class EqV extends Procedure {
 
 class EqVe extends Procedure {
     public EqVe(IntVeRef a, IntVeRef b, BoolVeRef res) {
-        IntVeRef test = IntVeRef.of(new IntVe(a.get().n));
+        IntVeRef test = new IntVeRef(new IntVe(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolVeRef.of(BoolVe.zeroes()));
+        set(res, new BoolVeRef(BoolVe.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -31,10 +31,10 @@ class EqVe extends Procedure {
 
 class EqVf extends Procedure {
     public EqVf(IntVfRef a, IntVfRef b, BoolVfRef res) {
-        IntVfRef test = IntVfRef.of(new IntVf(a.get().n));
+        IntVfRef test = new IntVfRef(new IntVf(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolVfRef.of(BoolVf.zeroes()));
+        set(res, new BoolVfRef(BoolVf.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -42,10 +42,10 @@ class EqVf extends Procedure {
 
 class EqE extends Procedure {
     public EqE(IntERef a, IntERef b, BoolERef res) {
-        IntERef test = IntERef.of(new IntE(a.get().n));
+        IntERef test = new IntERef(new IntE(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolERef.of(BoolE.zeroes()));
+        set(res, new BoolERef(BoolE.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -53,10 +53,10 @@ class EqE extends Procedure {
 
 class EqEv extends Procedure {
     public EqEv(IntEvRef a, IntEvRef b, BoolEvRef res) {
-        IntEvRef test = IntEvRef.of(new IntEv(a.get().n));
+        IntEvRef test = new IntEvRef(new IntEv(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolEvRef.of(BoolEv.zeroes()));
+        set(res, new BoolEvRef(BoolEv.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -64,10 +64,10 @@ class EqEv extends Procedure {
 
 class EqEf extends Procedure {
     public EqEf(IntEfRef a, IntEfRef b, BoolEfRef res) {
-        IntEfRef test = IntEfRef.of(new IntEf(a.get().n));
+        IntEfRef test = new IntEfRef(new IntEf(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolEfRef.of(BoolEf.zeroes()));
+        set(res, new BoolEfRef(BoolEf.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -75,10 +75,10 @@ class EqEf extends Procedure {
 
 class EqF extends Procedure {
     public EqF(IntFRef a, IntFRef b, BoolFRef res) {
-        IntFRef test = IntFRef.of(new IntF(a.get().n));
+        IntFRef test = new IntFRef(new IntF(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolFRef.of(BoolF.zeroes()));
+        set(res, new BoolFRef(BoolF.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -86,10 +86,10 @@ class EqF extends Procedure {
 
 class EqFv extends Procedure {
     public EqFv(IntFvRef a, IntFvRef b, BoolFvRef res) {
-        IntFvRef test = IntFvRef.of(new IntFv(a.get().n));
+        IntFvRef test = new IntFvRef(new IntFv(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolFvRef.of(BoolFv.zeroes()));
+        set(res, new BoolFvRef(BoolFv.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -97,10 +97,10 @@ class EqFv extends Procedure {
 
 class EqFe extends Procedure {
     public EqFe(IntFeRef a, IntFeRef b, BoolFeRef res) {
-        IntFeRef test = IntFeRef.of(new IntFe(a.get().n));
+        IntFeRef test = new IntFeRef(new IntFe(a.get().n));
         xor(a, b, test);
 
-        set(res, BoolFeRef.of(BoolFe.zeroes()));
+        set(res, new BoolFeRef(BoolFe.zeroes()));
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }

@@ -1,7 +1,7 @@
 package language.cache;
 
-import language.Obj;
-import language.Ref;
+import language.field.Field;
+import language.fieldRef.Ref;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
 
@@ -12,13 +12,13 @@ public class Cache {
     public static class CacheEntry {
         public final long stepCount;
         private CacheEntry next;
-        private final HashMap<Ref<?>, Obj> valueCache;
+        private final HashMap<Ref<?>, ? extends Field> valueCache;
         private final HashMap<Procedure, Integer> instrPtrCache;
 
         private CacheEntry(
                 long stepCount,
                 CacheEntry next,
-                HashMap<Ref<?>, Obj> valueCache,
+                HashMap<Ref<?>, ? extends Field> valueCache,
                 HashMap<Procedure, Integer> instrPtrCache
         ){
             this.stepCount = stepCount;
@@ -28,28 +28,22 @@ public class Cache {
         }
     }
 
-    private static final HashSet<Ref<?>> valueCache = new HashSet<>();
-    private static final HashSet<Procedure> instrPtrCache = new HashSet<>();
+    private static final HashSet<Ref<?>> refs = new HashSet<>();
+    private static final HashSet<Procedure> instrPtrs = new HashSet<>();
 
-    public static void register(Ref<?> ref) { valueCache.add(ref); }
-    public static void register(Procedure procedure) { instrPtrCache.add(procedure); }
+    public static void register(Ref<?> ref) { Cache.refs.add(ref); }
+    public static void register(Procedure procedure) { instrPtrs.add(procedure); }
 
     private CacheEntry top = null;
 
-    private static boolean caching = false;
-    public static boolean isCaching() { return caching; }
     public CacheEntry push(long stepCount) {
-        System.out.println("Before : " + Cache.valueCache.size());
-        caching = true;
+        System.out.println("Cache size = " + refs.size());
 
-        HashMap<Ref<?>, Obj> valueCache = new HashMap<>();
-        for (Ref<?> ref : Cache.valueCache) valueCache.put(ref, ref.get() == null ? null : ref.get().copy());
+        HashMap<Ref<?>, Field> valueCache = new HashMap<>();
+        for (Ref<?> ref : Cache.refs) valueCache.put(ref, ref.get() == null ? null : ref.get().cache());
 
         HashMap<Procedure, Integer> instrPtrCache = new HashMap<>();
-        for (Procedure procedure : Cache.instrPtrCache) instrPtrCache.put(procedure, procedure.getInstrPtr());
-
-        caching = false;
-        System.out.println("After : " + Cache.valueCache.size());
+        for (Procedure procedure : Cache.instrPtrs) instrPtrCache.put(procedure, procedure.getInstrPtr());
 
         // Find the cache entries s.t. current.stepCount <= stepCount < previous.stepCount (if they exist)
         CacheEntry previous = null;
@@ -89,7 +83,11 @@ public class Cache {
         }
     }
 
+    private static boolean retrieving = false;
     public void retrieve(long stepCount, Instruction main) {
+        if (retrieving) { return; }
+        retrieving = true;
+
         CacheEntry current = top;
         while (current != null && current.stepCount > stepCount) {
             current = current.next;
@@ -103,6 +101,8 @@ public class Cache {
         for (long i = 0; i < stepCount - current.stepCount; i++) {
             main.exec();
         }
+
+        retrieving = false;
     }
 
     public long retrieve(CacheEntry entry) {

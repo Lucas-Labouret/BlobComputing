@@ -1,6 +1,6 @@
 package language.instruction.instructionSet;
 
-import language.Ref;
+import language.fieldRef.Ref;
 import language.instruction.BasicInstruction;
 
 /**

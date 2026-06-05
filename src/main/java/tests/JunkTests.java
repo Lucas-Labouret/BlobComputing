@@ -1,6 +1,6 @@
 package tests;
 
-import language.obj.field.boolField.*;
+import language.field.boolField.*;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
 import medium.Medium;

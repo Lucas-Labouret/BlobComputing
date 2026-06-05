@@ -1,8 +1,8 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.*;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.*;
 
 class IfV extends Procedure {
     public IfV(BoolVRef cond, IntVRef t, IntVRef f, IntVRef res) {

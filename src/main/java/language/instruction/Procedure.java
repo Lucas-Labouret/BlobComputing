@@ -1,13 +1,12 @@
 package language.instruction;
 
-import language.Obj;
-import language.Ref;
-import language.cache.Cache;
+import language.field.Field;
+import language.fieldRef.Ref;
 import language.instruction.instructionSet.*;
 import language.instruction.instructionSet.boolOp.BoolOp;
 import language.instruction.instructionSet.intOp.IntOp;
-import language.ref.field.boolField.*;
-import language.ref.field.intField.*;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,7 +61,7 @@ public abstract non-sealed class Procedure implements Instruction {
      * The variable will be automatically cleaned up (set to null) when this procedure finishes executing.
      * This avoids expensive long term storage of fields that are no longer useful
      */
-    public <O extends Obj, R extends Ref<O>> R tmp(R ref) {
+    public <O extends Field, R extends Ref<O>> R tmp(R ref) {
         tmpVars.add(ref);
         return ref;
     }
@@ -100,9 +99,9 @@ public abstract non-sealed class Procedure implements Instruction {
     // Wrapper functions to make writing procedures easier. These functions simply add the corresponding instruction to this procedure.
 
     protected void print(@SuppressWarnings("SameParameterValue") String message) { call(new Print(message)); }
-    protected <T extends Obj> void show(String name, Ref<T> fieldRef) { call(new Show(name, fieldRef)); }
+    protected <T extends Field> void show(String name, Ref<T> fieldRef) { call(new Show(name, fieldRef)); }
     protected void snapshot() { call(new Snapshot()); }
-    protected <T extends Obj> void set(Ref<T> in, Ref<T> out) { call(new SetRef<>(in, out)); }
+    protected <T extends Field> void set(Ref<T> in, Ref<T> out) { call(new SetRef<>(in, out)); }
 
     protected void not(BoolVRef  a, BoolVRef  res) { call(BoolOp.not(a, res)); }
     protected void not(BoolVeRef a, BoolVeRef res) { call(BoolOp.not(a, res)); }

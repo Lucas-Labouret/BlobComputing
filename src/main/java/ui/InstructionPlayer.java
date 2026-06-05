@@ -27,7 +27,8 @@ public class InstructionPlayer {
         this.instruction = instruction;
         leafCount = instruction.leafCount();
         this.displayController = displayController;
-        createPlayerThread();
+
+        autoCache.push(0);
 
         if (printLeafCount) System.out.println(leafCount + " leaves");
         if (printInstructionTree) System.out.println(switch (instruction) {
@@ -56,8 +57,7 @@ public class InstructionPlayer {
     private boolean exec() {
         boolean done = instruction.exec();
         stepCounter++;
-        if (done) loopCounter++;
-        //if (isPowerOf2minus1(loopCounter)) autoCache.push(stepCounter);
+        if (done && isPowerOf2minus1(++loopCounter)) autoCache.push(stepCounter);
         return done;
     }
 
@@ -90,8 +90,8 @@ public class InstructionPlayer {
 
     public void step() {
         if (playing) return;
-        tryDisplayUpdate();
         exec();
+        tryDisplayUpdate();
     }
     public void start() {
         playing = true;
@@ -124,7 +124,7 @@ public class InstructionPlayer {
     }
 
     public Cache.CacheEntry saveState() {
-        return null;//userCache.push(stepCounter);
+        return userCache.push(stepCounter);
     }
 
     public void restoreState(Cache.CacheEntry entry) {

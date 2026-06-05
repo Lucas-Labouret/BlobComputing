@@ -1,8 +1,8 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.Procedure;
-import language.obj.field.intField.*;
-import language.ref.field.intField.*;
+import language.field.intField.*;
+import language.fieldRef.intField.*;
 
 class NegV extends Procedure {
     public NegV(IntVRef orig, IntVRef res) {
@@ -10,7 +10,7 @@ class NegV extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntV to an IntV of different size.");
 
         not(orig, res);
-        add(res, IntVRef.of(IntV.of(1, res.get().n)), res);
+        add(res, new IntVRef(IntV.of(1, res.get().n)), res);
     }
 }
 
@@ -20,7 +20,7 @@ class NegVe extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntVe to an IntVe of different size.");
 
         not(orig, res);
-        add(res, IntVeRef.of(IntVe.of(1, res.get().n)), res);
+        add(res, new IntVeRef(IntVe.of(1, res.get().n)), res);
     }
 }
 
@@ -30,7 +30,7 @@ class NegVf extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntVf to an IntVf of different size.");
 
         not(orig, res);
-        add(res, IntVfRef.of(IntVf.of(1, res.get().n)), res);
+        add(res, new IntVfRef(IntVf.of(1, res.get().n)), res);
     }
 }
 
@@ -40,7 +40,7 @@ class NegE extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntE to an IntE of different size.");
 
         not(orig, res);
-        add(res, IntERef.of(IntE.of(1, res.get().n)), res);
+        add(res, new IntERef(IntE.of(1, res.get().n)), res);
     }
 }
 
@@ -50,7 +50,7 @@ class NegEv extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntEv to an IntEv of different size.");
 
         not(orig, res);
-        add(res, IntEvRef.of(IntEv.of(1, res.get().n)), res);
+        add(res, new IntEvRef(IntEv.of(1, res.get().n)), res);
     }
 }
 
@@ -60,7 +60,7 @@ class NegEf extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntEf to an IntEf of different size.");
 
         not(orig, res);
-        add(res, IntEfRef.of(IntEf.of(1, res.get().n)), res);
+        add(res, new IntEfRef(IntEf.of(1, res.get().n)), res);
     }
 }
 
@@ -70,7 +70,7 @@ class NegF extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntF to an IntF of different size.");
 
         not(orig, res);
-        add(res, IntFRef.of(IntF.of(1, res.get().n)), res);
+        add(res, new IntFRef(IntF.of(1, res.get().n)), res);
     }
 }
 
@@ -80,7 +80,7 @@ class NegFv extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntFv to an IntFv of different size.");
 
         not(orig, res);
-        add(res, IntFvRef.of(IntFv.of(1, res.get().n)), res);
+        add(res, new IntFvRef(IntFv.of(1, res.get().n)), res);
     }
 }
 
@@ -90,6 +90,6 @@ class NegFe extends Procedure {
             throw new IllegalArgumentException("Cannot negate an IntFe to an IntFe of different size.");
 
         not(orig, res);
-        add(res, IntFeRef.of(IntFe.of(1, res.get().n)), res);
+        add(res, new IntFeRef(IntFe.of(1, res.get().n)), res);
     }
 }
