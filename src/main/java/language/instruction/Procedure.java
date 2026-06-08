@@ -2,11 +2,13 @@ package language.instruction;
 
 import language.field.Field;
 import language.fieldRef.Ref;
-import language.instruction.instructionSet.*;
-import language.instruction.instructionSet.boolOp.BoolOp;
-import language.instruction.instructionSet.intOp.IntOp;
 import language.fieldRef.boolField.*;
 import language.fieldRef.intField.*;
+import language.instruction.instructionSet.Print;
+import language.instruction.instructionSet.Show;
+import language.instruction.instructionSet.Snapshot;
+import language.instruction.instructionSet.boolOp.BoolOp;
+import language.instruction.instructionSet.intOp.IntOp;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -101,7 +103,26 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void print(@SuppressWarnings("SameParameterValue") String message) { call(new Print(message)); }
     protected <T extends Field> void show(String name, Ref<T> fieldRef) { call(new Show(name, fieldRef)); }
     protected void snapshot() { call(new Snapshot()); }
-    protected <T extends Field> void set(Ref<T> in, Ref<T> out) { call(new SetRef<>(in, out)); }
+
+    protected void set(BoolVRef a, BoolVRef res) { call(BoolOp.set(a, res));}
+    protected void set(BoolVeRef a, BoolVeRef res) { call(BoolOp.set(a, res)); }
+    protected void set(BoolVfRef a, BoolVfRef res) { call(BoolOp.set(a, res)); }
+    protected void set(BoolERef a, BoolERef res) { call(BoolOp.set(a, res)); }
+    protected void set(BoolEvRef a, BoolEvRef res) { call(BoolOp.set(a, res)); }
+    protected void set(BoolEfRef a, BoolEfRef res) { call(BoolOp.set(a, res)); }
+    protected void set(BoolFRef a, BoolFRef res) { call(BoolOp.set(a, res)); }
+    protected void set(BoolFvRef a, BoolFvRef res) { call(BoolOp.set(a, res)); }
+    protected void set(BoolFeRef a, BoolFeRef res) { call(BoolOp.set(a, res)); }
+
+    protected void set(IntVRef a, IntVRef res) { call(IntOp.set(a, res)); }
+    protected void set(IntVeRef a, IntVeRef res) { call(IntOp.set(a, res)); }
+    protected void set(IntVfRef a, IntVfRef res) { call(IntOp.set(a, res)); }
+    protected void set(IntERef a, IntERef res) { call(IntOp.set(a, res)); }
+    protected void set(IntEvRef a, IntEvRef res) { call(IntOp.set(a, res)); }
+    protected void set(IntEfRef a, IntEfRef res) { call(IntOp.set(a, res)); }
+    protected void set(IntFRef a, IntFRef res) { call(IntOp.set(a, res)); }
+    protected void set(IntFvRef a, IntFvRef res) { call(IntOp.set(a, res)); }
+    protected void set(IntFeRef a, IntFeRef res) { call(IntOp.set(a, res)); }
 
     protected void not(BoolVRef  a, BoolVRef  res) { call(BoolOp.not(a, res)); }
     protected void not(BoolVeRef a, BoolVeRef res) { call(BoolOp.not(a, res)); }

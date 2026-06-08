@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /** IntEf represents an integer language.field on Ef loci. */
-public class IntEf extends IntField<BoolEf> {
+public non-sealed class IntEf extends IntField<BoolEf> {
     public IntEf(int n) { this(n, BoolFieldManager.DEFAULT_BORDER()); }
     public IntEf(int n, Border border) {
         super(n, new BoolEfRef[n + 1]);
@@ -79,18 +79,6 @@ public class IntEf extends IntField<BoolEf> {
         });
 
         return res;
-    }
-
-    public static void lShift(IntEf a, IntEf res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
-        for (int i = 0; i <= n - k; i++) res.bits[i] = a.bits[i + k].copy();
-        for (int i = n - k + 1; i <= n; i++) res.bits[i] = new BoolEfRef(BoolEf.zeroes(a.border));
-    }
-
-    public static void rShift(IntEf a, IntEf res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
-        for (int i = k; i <= n; i++) res.bits[i] = a.bits[i - k].copy();
-        for (int i = 0; i < k; i++) res.bits[i] = new BoolEfRef(BoolEf.zeroes(a.border));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package language.field.intField;
 
+import language.field.boolField.BoolE;
 import language.field.boolField.BoolV;
 import language.fieldRef.boolField.BoolVRef;
 import language.utils.BoolFieldManager;
@@ -17,7 +18,7 @@ import java.util.HashMap;
  * The bits are stored most significant bit first as an array of BoolV.
  * Negative integers are stored using 2's complement, with bits[0] being the sign bit.
  */
-public class IntV extends IntField<BoolV> {
+public non-sealed class IntV extends IntField<BoolV> {
     public IntV(int n) { this(n, BoolFieldManager.DEFAULT_BORDER()); }
     public IntV(int n, Border border) {
         super(n, new BoolVRef[n+1]);
@@ -92,18 +93,6 @@ public class IntV extends IntField<BoolV> {
         });
 
         return res;
-    }
-
-    public static void lShift(IntV a, IntV res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
-        for (int i = 0; i <= n - k; i++) res.bits[i] = a.bits[i + k].copy();
-        for (int i = n - k + 1; i <= n; i++) res.bits[i] = new BoolVRef(BoolV.zeroes(a.border));
-    }
-
-    public static void rShift(IntV a, IntV res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
-        for (int i = k; i <= n; i++) res.bits[i] = a.bits[i - k].copy();
-        for (int i = 0; i < k; i++) res.bits[i] = new BoolVRef(BoolV.zeroes(a.border));
     }
 
     @Override

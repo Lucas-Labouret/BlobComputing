@@ -1,7 +1,9 @@
 package language.field;
 
-public abstract class Field {
-    public abstract Field copy();
+import language.field.boolField.BoolField;
+import language.field.intField.IntField;
 
+public abstract sealed class Field permits BoolField, IntField {
+    public abstract Field copy();
     public abstract Field cache();
 }

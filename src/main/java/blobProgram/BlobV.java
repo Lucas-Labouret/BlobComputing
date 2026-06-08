@@ -226,7 +226,7 @@ public class BlobV extends BoolVRef {
             rotCCW(ve, ccw);
             xor(cw, ccw, vf);
 
-            IntVRef connectedComponents = tmp(new IntVRef(new IntV(4)));
+            IntVRef connectedComponents = new IntVRef(new IntV(4));
             redAdd(vf, connectedComponents);
             gt(connectedComponents, new IntVRef(IntV.of(3, 4)), out);
 

@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /** IntVf represents an integer language.field on Vf loci. */
-public class IntVf extends IntField<BoolVf> {
+public non-sealed class IntVf extends IntField<BoolVf> {
     public IntVf(int n) { this(n, BoolFieldManager.DEFAULT_BORDER()); }
     public IntVf(int n, Border border) {
         super(n, new BoolVfRef[n + 1]);
@@ -79,18 +79,6 @@ public class IntVf extends IntField<BoolVf> {
         });
 
         return res;
-    }
-
-    public static void lShift(IntVf a, IntVf res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
-        for (int i = 0; i <= n - k; i++) res.bits[i] = a.bits[i + k].copy();
-        for (int i = n - k + 1; i <= n; i++) res.bits[i] = new BoolVfRef(BoolVf.zeroes(a.border));
-    }
-
-    public static void rShift(IntVf a, IntVf res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
-        for (int i = k; i <= n; i++) res.bits[i] = a.bits[i - k].copy();
-        for (int i = 0; i < k; i++) res.bits[i] = new BoolVfRef(BoolVf.zeroes(a.border));
     }
 
     @Override

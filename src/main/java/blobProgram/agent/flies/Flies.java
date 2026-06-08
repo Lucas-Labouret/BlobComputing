@@ -59,7 +59,7 @@ public class Flies extends Agent {
             BoolVeRef isMax = tmp(new BoolVeRef());
             eq(randVe, maxVe, isMax);
 
-            IntVRef v = tmp(new IntVRef(new IntV(4)));
+            IntVRef v = new IntVRef(new IntV(4));
             redAdd(isMax, v);
 
             BoolVRef oneMaxV = tmp(new BoolVRef());

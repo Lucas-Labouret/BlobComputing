@@ -6,7 +6,7 @@ import language.field.boolField.BoolField;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
 
-public abstract class IntField<F extends BoolField> extends Field {
+public sealed abstract class IntField<F extends BoolField> extends Field permits IntV, IntVe, IntVf, IntE, IntEv, IntEf, IntF, IntFv, IntFe {
     public final int n;
     public final Border border;
     protected final Ref<F>[] bits;

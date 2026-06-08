@@ -1,10 +1,14 @@
 package language.instruction.instructionSet.boolOp;
 
+import language.field.boolField.BoolField;
+import language.fieldRef.Ref;
 import language.instruction.BasicInstruction;
 import language.instruction.Procedure;
 import language.fieldRef.boolField.*;
 
 public class BoolOp {
+    public static <B extends BoolField> BasicInstruction set(Ref<B> a, Ref<B> res) { return new SetRef<>(a, res); }
+
     public static BasicInstruction not(BoolVRef  a, BoolVRef  res) { return new NotV (a, res); }
     public static BasicInstruction not(BoolVeRef a, BoolVeRef res) { return new NotVe(a, res); }
     public static BasicInstruction not(BoolVfRef a, BoolVfRef res) { return new NotVf(a, res); }
