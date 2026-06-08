@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /** Represents a boolean transfer language.field from edge to vertex orientation. */
-public class BoolEv extends BoolFieldT {
+public non-sealed class BoolEv extends BoolFieldT {
     static int HEIGHT = -1;
     static int SPAN = -1;
     static final int BREADTH = 2;

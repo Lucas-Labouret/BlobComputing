@@ -5,7 +5,7 @@ import language.utils.BoolFieldLine;
 import language.utils.Border;
 
 /** Represents the abstract base type for boolean fields backed by a BoolFieldLine array. */
-public abstract class BoolField extends Field {
+public sealed abstract class BoolField extends Field permits BoolFieldS, BoolFieldT {
     public final BoolFieldLine[] lines;
     public final Border border;
 

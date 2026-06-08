@@ -68,8 +68,8 @@ public class InstructionPlayer {
                 try { Thread.sleep(speed); }
                 catch (InterruptedException _) { break; }
 
-                tryDisplayUpdate();
                 boolean done = exec();
+                tryDisplayUpdate();
                 if (done && pauseAfterLoop) {
                     playing = false;
                     return;

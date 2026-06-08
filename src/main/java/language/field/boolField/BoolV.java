@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /** Represents a boolean language.field over vertex loci. */
-public class BoolV extends BoolFieldS {
+public non-sealed class BoolV extends BoolFieldS {
     private static int HEIGHT = -1;
     private static final int SPAN = 1;
     private static final int BREADTH = 1;

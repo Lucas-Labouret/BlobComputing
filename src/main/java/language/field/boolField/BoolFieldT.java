@@ -4,7 +4,7 @@ import language.utils.BoolFieldLine;
 import language.utils.Border;
 
 /** Represents the abstract base type for transfer boolean fields. */
-public abstract class BoolFieldT extends BoolField {
+public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf, BoolEv, BoolEf, BoolFv, BoolFe {
     /** Creates a new transfer boolean language.field base instance. */
     protected BoolFieldT(int HEIGHT, int SPAN, int BREADTH, Border border) {
         super(HEIGHT, SPAN, BREADTH, border);

@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /** IntE represents an integer language.field on edges. */
-public class IntE extends IntField<BoolE> {
+public non-sealed class IntE extends IntField<BoolE> {
     public IntE(int n) { this(n, BoolFieldManager.DEFAULT_BORDER()); }
     public IntE(int n, Border border) {
         super(n, new BoolERef[n + 1]);
@@ -79,18 +79,6 @@ public class IntE extends IntField<BoolE> {
         });
 
         return res;
-    }
-
-    public static void lShift(IntE a, IntE res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
-        for (int i = 0; i <= n - k; i++) res.bits[i] = a.bits[i + k].copy();
-        for (int i = n - k + 1; i <= n; i++) res.bits[i] = new BoolERef(BoolE.zeroes(a.border));
-    }
-
-    public static void rShift(IntE a, IntE res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
-        for (int i = k; i <= n; i++) res.bits[i] = a.bits[i - k].copy();
-        for (int i = 0; i < k; i++) res.bits[i] = new BoolERef(BoolE.zeroes(a.border));
     }
 
     @Override

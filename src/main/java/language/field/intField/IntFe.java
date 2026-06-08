@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /** IntFe represents an integer language.field on Fe loci. */
-public class IntFe extends IntField<BoolFe> {
+public non-sealed class IntFe extends IntField<BoolFe> {
     public IntFe(int n) { this(n, BoolFieldManager.DEFAULT_BORDER()); }
     public IntFe(int n, Border border) {
         super(n, new BoolFeRef[n + 1]);
@@ -79,18 +79,6 @@ public class IntFe extends IntField<BoolFe> {
         });
 
         return res;
-    }
-
-    public static void lShift(IntFe a, IntFe res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
-        for (int i = 0; i <= n - k; i++) res.bits[i] = a.bits[i + k].copy();
-        for (int i = n - k + 1; i <= n; i++) res.bits[i] = new BoolFeRef(BoolFe.zeroes(a.border));
-    }
-
-    public static void rShift(IntFe a, IntFe res, int k, int n) {
-        if (k > n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
-        for (int i = k; i <= n; i++) res.bits[i] = a.bits[i - k].copy();
-        for (int i = 0; i < k; i++) res.bits[i] = new BoolFeRef(BoolFe.zeroes(a.border));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package language.instruction.instructionSet.intOp;
 
+import language.field.boolField.*;
 import language.instruction.BasicInstruction;
-import language.field.intField.*;
 import language.fieldRef.boolField.*;
 import language.fieldRef.intField.*;
 
@@ -16,135 +16,144 @@ class BoolToIntV implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        res.set(IntV.of(orig, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolV.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }
 
 class BoolToIntVe implements BasicInstruction {
-    private final BoolVeRef boolVe;
+    private final BoolVeRef orig;
     private final IntVeRef res;
 
-    public BoolToIntVe(BoolVeRef boolVe, IntVeRef res) {
-        this.boolVe = boolVe;
+    public BoolToIntVe(BoolVeRef orig, IntVeRef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        res.set(IntVe.of(boolVe, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolVe.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }
 
 class BoolToIntVf implements BasicInstruction {
-    private final BoolVfRef boolVf;
+    private final BoolVfRef orig;
     private final IntVfRef res;
 
-    public BoolToIntVf(BoolVfRef boolVf, IntVfRef res) {
-        this.boolVf = boolVf;
+    public BoolToIntVf(BoolVfRef orig, IntVfRef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        res.set(IntVf.of(boolVf, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolVf.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }
 
 class BoolToIntE implements BasicInstruction {
-    private final BoolERef boolE;
+    private final BoolERef orig;
     private final IntERef res;
 
-    public BoolToIntE(BoolERef boolE, IntERef res) {
-        this.boolE = boolE;
+    public BoolToIntE(BoolERef orig, IntERef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        res.set(IntE.of(boolE, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolE.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }
 
 class BoolToIntEv implements BasicInstruction {
-    private final BoolEvRef boolEv;
+    private final BoolEvRef orig;
     private final IntEvRef res;
 
-    public BoolToIntEv(BoolEvRef boolEv, IntEvRef res) {
-        this.boolEv = boolEv;
+    public BoolToIntEv(BoolEvRef orig, IntEvRef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        res.set(IntEv.of(boolEv, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolEv.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }
 
 class BoolToIntEf implements BasicInstruction {
-    private final BoolEfRef boolEf;
+    private final BoolEfRef orig;
     private final IntEfRef res;
 
-    public BoolToIntEf(BoolEfRef boolEf, IntEfRef res) {
-        this.boolEf = boolEf;
+    public BoolToIntEf(BoolEfRef orig, IntEfRef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        res.set(IntEf.of(boolEf, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolEf.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }
 
 class BoolToIntF implements BasicInstruction {
-    private final BoolFRef boolF;
+    private final BoolFRef orig;
     private final IntFRef res;
 
-    public BoolToIntF(BoolFRef boolF, IntFRef res) {
-        this.boolF = boolF;
+    public BoolToIntF(BoolFRef orig, IntFRef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        res.set(IntF.of(boolF, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolF.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }
 
 class BoolToIntFv implements BasicInstruction {
-    private final BoolFvRef boolFv;
+    private final BoolFvRef orig;
     private final IntFvRef res;
 
-    public BoolToIntFv(BoolFvRef boolFv, IntFvRef res) {
-        this.boolFv = boolFv;
+    public BoolToIntFv(BoolFvRef orig, IntFvRef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        res.set(IntFv.of(boolFv, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolFv.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }
 
 class BoolToIntFe implements BasicInstruction {
-    private final BoolFeRef boolFe;
+    private final BoolFeRef orig;
     private final IntFeRef res;
 
-    public BoolToIntFe(BoolFeRef boolFe, IntFeRef res) {
-        this.boolFe = boolFe;
+    public BoolToIntFe(BoolFeRef orig, IntFeRef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        res.set(IntFe.of(boolFe, res.get().n));
+        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolFe.zeroes());
+        res.get().getBits()[res.get().n].set(orig.get());
         return true;
     }
 }

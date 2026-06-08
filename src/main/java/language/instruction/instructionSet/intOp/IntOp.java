@@ -1,5 +1,8 @@
 package language.instruction.instructionSet.intOp;
 
+import language.field.boolField.BoolField;
+import language.field.intField.IntField;
+import language.fieldRef.Ref;
 import language.instruction.Procedure;
 import language.instruction.BasicInstruction;
 import language.instruction.instructionSet.boolOp.BoolOp;
@@ -7,6 +10,8 @@ import language.fieldRef.boolField.*;
 import language.fieldRef.intField.*;
 
 public class IntOp {
+    public static <B extends BoolField, I extends IntField<B>> BasicInstruction set(Ref<I> orig, Ref<I> res) { return new SetRef<>(orig, res); }
+
     // NOT operations
     public static Procedure not(IntVRef  orig, IntVRef  res) { return new NotV (orig, res); }
     public static Procedure not(IntVeRef orig, IntVeRef res) { return new NotVe(orig, res); }
