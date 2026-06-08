@@ -8,8 +8,6 @@ public abstract class Ref<T extends Field> {
     /** Creates a new reference base. */
     protected Ref(){
         Cache.register(this);
-        try { throw new RuntimeException("New ref created"); }
-        catch (RuntimeException e) { e.printStackTrace(); }
     }
 
     /** Sets the referenced value. */

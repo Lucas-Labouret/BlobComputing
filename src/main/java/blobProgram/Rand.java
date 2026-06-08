@@ -27,9 +27,9 @@ public class Rand {
         public NextState() {
             if (!initialized) throw new IllegalStateException("Rand has not been initialized");
 
-            BoolVeRef ve = new BoolVeRef();
-            BoolEvRef ev = new BoolEvRef();
-            BoolERef e = new BoolERef();
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolERef e = tmp(new BoolERef());
 
             broadcast(state, ve);
             transfer(ve, ev);
@@ -48,12 +48,12 @@ public class Rand {
         public Next(BoolVeRef res) {
             call(nextState);
 
-            BoolVfRef vf = new BoolVfRef();
-            BoolFvRef fv = new BoolFvRef();
-            BoolFRef f = new BoolFRef();
-            BoolFeRef fe = new BoolFeRef();
-            BoolEfRef ef = new BoolEfRef();
-            BoolEvRef ev = new BoolEvRef();
+            BoolVfRef vf = tmp(new BoolVfRef());
+            BoolFvRef fv = tmp(new BoolFvRef());
+            BoolFRef f = tmp(new BoolFRef());
+            BoolFeRef fe = tmp(new BoolFeRef());
+            BoolEfRef ef = tmp(new BoolEfRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
 
             broadcast(state, vf);
             transfer(vf, fv);
@@ -66,12 +66,12 @@ public class Rand {
         public Next(BoolVfRef res) {
             call(nextState);
 
-            BoolVeRef ve = new BoolVeRef();
-            BoolEvRef ev = new BoolEvRef();
-            BoolERef e = new BoolERef();
-            BoolEfRef ef = new BoolEfRef();
-            BoolFeRef fe = new BoolFeRef();
-            BoolFvRef fv = new BoolFvRef();
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolERef e = tmp(new BoolERef());
+            BoolEfRef ef = tmp(new BoolEfRef());
+            BoolFeRef fe = tmp(new BoolFeRef());
+            BoolFvRef fv = tmp(new BoolFvRef());
 
             broadcast(state, ve);
             transfer(ve, ev);
@@ -85,8 +85,8 @@ public class Rand {
         public Next(BoolERef res) {
             call(nextState);
 
-            BoolVeRef ve = new BoolVeRef();
-            BoolEvRef ev = new BoolEvRef();
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
 
             broadcast(state, ve);
             transfer(ve, ev);
@@ -95,10 +95,10 @@ public class Rand {
         public Next(BoolEvRef res) {
             call(nextState);
 
-            BoolVeRef ve = new BoolVeRef();
-            BoolEvRef ev1 = new BoolEvRef();
-            BoolEvRef ev2 = new BoolEvRef();
-            BoolERef e = new BoolERef();
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev1 = tmp(new BoolEvRef());
+            BoolEvRef ev2 = tmp(new BoolEvRef());
+            BoolERef e = tmp(new BoolERef());
 
             broadcast(state, ve);
             transfer(ve, ev1);
@@ -115,10 +115,10 @@ public class Rand {
         public Next(BoolEfRef res) {
             call(nextState);
 
-            BoolVfRef vf  = new BoolVfRef();
-            BoolFvRef fv  = new BoolFvRef();
-            BoolFRef f = new BoolFRef();
-            BoolFeRef fe = new BoolFeRef();
+            BoolVfRef vf  = tmp(new BoolVfRef());
+            BoolFvRef fv  = tmp(new BoolFvRef());
+            BoolFRef f = tmp(new BoolFRef());
+            BoolFeRef fe = tmp(new BoolFeRef());
 
             broadcast(state, vf);
             transfer(vf, fv);
@@ -130,8 +130,8 @@ public class Rand {
         public Next(BoolFRef res) {
             call(nextState);
 
-            BoolVfRef vf = new BoolVfRef();
-            BoolFvRef fv = new BoolFvRef();
+            BoolVfRef vf = tmp(new BoolVfRef());
+            BoolFvRef fv = tmp(new BoolFvRef());
 
             broadcast(state, vf);
             transfer(vf, fv);
@@ -140,11 +140,11 @@ public class Rand {
         public Next(BoolFvRef res) {
             call(nextState);
 
-            BoolVeRef ve = new BoolVeRef();
-            BoolEvRef ev = new BoolEvRef();
-            BoolERef e = new BoolERef();
-            BoolEfRef ef = new BoolEfRef();
-            BoolFeRef fe = new BoolFeRef();
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolERef e = tmp(new BoolERef());
+            BoolEfRef ef = tmp(new BoolEfRef());
+            BoolFeRef fe = tmp(new BoolFeRef());
 
             broadcast(state, ve);
             transfer(ve, ev);
@@ -156,10 +156,10 @@ public class Rand {
         public Next(BoolFeRef res) {
             call(nextState);
 
-            BoolVeRef ve = new BoolVeRef();
-            BoolEvRef ev = new BoolEvRef();
-            BoolERef e = new BoolERef();
-            BoolEfRef ef = new BoolEfRef();
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolERef e = tmp(new BoolERef());
+            BoolEfRef ef = tmp(new BoolEfRef());
 
             broadcast(state, ve);
             transfer(ve, ev);

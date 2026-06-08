@@ -53,8 +53,8 @@ public class BlobV extends BoolVRef {
         }
 
         public Send(IntVeRef in, IntVeRef out) {
-            IntEvRef ev = new IntEvRef(new IntEv(in.get().n));
-            IntEfRef ef = new IntEfRef(new IntEf(in.get().n));
+            IntEvRef ev = tmp(new IntEvRef(new IntEv(in.get().n)));
+            IntEfRef ef = tmp(new IntEfRef(new IntEf(in.get().n)));
 
             transfer(in, ev);
             rotCW(ev, ef);
@@ -249,7 +249,7 @@ public class BlobV extends BoolVRef {
             broadcast(frontierE, ev);
             transfer(ev, ve);
 
-            IntVRef connectedComponents = new IntVRef(new IntV(4));
+            IntVRef connectedComponents = tmp(new IntVRef(new IntV(4)));
             call(connectedComponents(ve, connectedComponents));
             gt(connectedComponents, new IntVRef(IntV.of(2, 4)), out);
 

@@ -1,5 +1,6 @@
 package language.instruction;
 
+import language.cache.Cache;
 import language.field.Field;
 import language.field.boolField.BoolField;
 import language.field.intField.IntField;
@@ -28,7 +29,7 @@ public abstract non-sealed class Procedure implements Instruction {
     /** Creates a new Procedure. */
     public Procedure() {
         instr = new ArrayList<>();
-        //Cache.register(this);
+        Cache.register(this);
     }
 
     /** Adds the given instruction to this procedure. */
@@ -67,7 +68,34 @@ public abstract non-sealed class Procedure implements Instruction {
      * This avoids expensive long term storage of fields that are no longer useful
      */
     public <O extends Field, R extends Ref<O>> R tmp(R ref) {
-        tmpVars.add(ref);
+        Consumer<Ref<? extends BoolField>> tmpBool = tmpVars::add;
+        Consumer<Ref<? extends IntField<?>>> tmpInt = r -> {
+            if (r.get() == null) throw new IllegalArgumentException("Cannot create a temporary variable uninitialized Int Ref.");
+            for (Ref<? extends BoolField> refBit: r.get().getBits()) tmpBool.accept(refBit);
+        };
+        switch (ref) {
+            case BoolVRef  r -> tmpBool.accept(r);
+            case BoolVeRef r -> tmpBool.accept(r);
+            case BoolVfRef r -> tmpBool.accept(r);
+            case BoolERef  r -> tmpBool.accept(r);
+            case BoolEvRef r -> tmpBool.accept(r);
+            case BoolEfRef r -> tmpBool.accept(r);
+            case BoolFRef  r -> tmpBool.accept(r);
+            case BoolFvRef r -> tmpBool.accept(r);
+            case BoolFeRef r -> tmpBool.accept(r);
+
+            case IntVRef  r -> tmpInt.accept(r);
+            case IntVeRef r -> tmpInt.accept(r);
+            case IntVfRef r -> tmpInt.accept(r);
+            case IntERef  r -> tmpInt.accept(r);
+            case IntEvRef r -> tmpInt.accept(r);
+            case IntEfRef r -> tmpInt.accept(r);
+            case IntFRef  r -> tmpInt.accept(r);
+            case IntFvRef r -> tmpInt.accept(r);
+            case IntFeRef r -> tmpInt.accept(r);
+
+            default -> throw new IllegalArgumentException("Unsupported Ref type: " + ref.getClass().getSimpleName());
+        }
         return ref;
     }
     private final HashSet<Ref<?>> tmpVars = new HashSet<>();

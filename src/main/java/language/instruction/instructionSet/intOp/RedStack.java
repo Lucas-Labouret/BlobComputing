@@ -13,13 +13,13 @@ class RedStack_Ve extends Procedure {
         int breadth = BoolFieldManager.getBreadthV();
 
         BoolVeRef[] bits = new BoolVeRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolVeRef();
+        for (int i = 0; i <= orig.get().n; i++) bits[i] = tmp(new BoolVeRef());
         split(orig, bits);
 
         BoolVRef[][] veStacks = new BoolVRef[orig.get().n + 1][breadth];
         for (int i = 0; i <= orig.get().n; i++) {
             veStacks[i] = new BoolVRef[breadth];
-            for (int j = 0; j < breadth; j++) veStacks[i][j] = new BoolVRef();
+            for (int j = 0; j < breadth; j++) veStacks[i][j] = tmp(new BoolVRef());
             call(redStacks[i].stack(bits[i], veStacks[i]));
         }
 
@@ -36,13 +36,13 @@ class RedStack_Vf extends Procedure {
         int breadth = BoolFieldManager.getBreadthV();
 
         BoolVfRef[] bits = new BoolVfRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolVfRef();
+        for (int i = 0; i <= orig.get().n; i++) bits[i] = tmp(new BoolVfRef());
         split(orig, bits);
 
         BoolVRef[][] vfStacks = new BoolVRef[orig.get().n + 1][breadth];
         for (int i = 0; i <= orig.get().n; i++) {
             vfStacks[i] = new BoolVRef[breadth];
-            for (int j = 0; j < breadth; j++) vfStacks[i][j] = new BoolVRef();
+            for (int j = 0; j < breadth; j++) vfStacks[i][j] = tmp(new BoolVRef());
             call(redStack[i].stack(bits[i], vfStacks[i]));
         }
 
@@ -59,13 +59,13 @@ class RedStack_Ev extends Procedure {
         int breadth = BoolFieldManager.getBreadthE();
 
         BoolEvRef[] bits = new BoolEvRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolEvRef();
+        for (int i = 0; i <= orig.get().n; i++) bits[i] = tmp(new BoolEvRef());
         split(orig, bits);
 
         BoolERef[][] evStacks = new BoolERef[orig.get().n + 1][breadth];
         for (int i = 0; i <= orig.get().n; i++) {
             evStacks[i] = new BoolERef[breadth];
-            for (int j = 0; j < breadth; j++) evStacks[i][j] = new BoolERef();
+            for (int j = 0; j < breadth; j++) evStacks[i][j] = tmp(new BoolERef());
             call(redStacks[i].stack(bits[i], evStacks[i]));
         }
 
@@ -84,13 +84,13 @@ class RedStack_Ef extends Procedure {
         int breadth = BoolFieldManager.getBreadthE();
 
         BoolEfRef[] bits = new BoolEfRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolEfRef();
+        for (int i = 0; i <= orig.get().n; i++) bits[i] = tmp(new BoolEfRef());
         split(orig, bits);
 
         BoolERef[][] efStacks = new BoolERef[orig.get().n + 1][breadth];
         for (int i = 0; i <= orig.get().n; i++) {
             efStacks[i] = new BoolERef[breadth];
-            for (int j = 0; j < breadth; j++) efStacks[i][j] = new BoolERef();
+            for (int j = 0; j < breadth; j++) efStacks[i][j] = tmp(new BoolERef());
             call(redStacks[i].stack(bits[i], efStacks[i]));
         }
 
@@ -109,13 +109,13 @@ class RedStack_Fv extends Procedure {
         int breadth = BoolFieldManager.getBreadthF();
 
         BoolFvRef[] bits = new BoolFvRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolFvRef();
+        for (int i = 0; i <= orig.get().n; i++) bits[i] = tmp(new BoolFvRef());
         split(orig, bits);
 
         BoolFRef[][] fvStacks = new BoolFRef[orig.get().n + 1][breadth];
         for (int i = 0; i <= orig.get().n; i++) {
             fvStacks[i] = new BoolFRef[breadth];
-            for (int j = 0; j < breadth; j++) fvStacks[i][j] = new BoolFRef();
+            for (int j = 0; j < breadth; j++) fvStacks[i][j] = tmp(new BoolFRef());
             call(redStacks[i].stack(bits[i], fvStacks[i]));
         }
 
@@ -132,13 +132,13 @@ class RedStack_Fe extends Procedure {
         int breadth = BoolFieldManager.getBreadthF();
 
         BoolFeRef[] bits = new BoolFeRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) bits[i] = new BoolFeRef();
+        for (int i = 0; i <= orig.get().n; i++) bits[i] = tmp(new BoolFeRef());
         split(orig, bits);
 
         BoolFRef[][] feStacks = new BoolFRef[orig.get().n + 1][breadth];
         for (int i = 0; i <= orig.get().n; i++) {
             feStacks[i] = new BoolFRef[breadth];
-            for (int j = 0; j < breadth; j++) feStacks[i][j] = new BoolFRef();
+            for (int j = 0; j < breadth; j++) feStacks[i][j] = tmp(new BoolFRef());
             call(redStacks[i].stack(bits[i], feStacks[i]));
         }
 

@@ -9,7 +9,7 @@ import language.fieldRef.intField.*;
 
 class EqV extends Procedure {
     public EqV(IntVRef a, IntVRef b, BoolVRef res) {
-        IntVRef test = new IntVRef(new IntV(a.get().n));
+        IntVRef test = tmp(new IntVRef(new IntV(a.get().n)));
         xor(a, b, test);
 
         set(new BoolVRef(BoolV.zeroes()), res);
@@ -20,7 +20,7 @@ class EqV extends Procedure {
 
 class EqVe extends Procedure {
     public EqVe(IntVeRef a, IntVeRef b, BoolVeRef res) {
-        IntVeRef test = new IntVeRef(new IntVe(a.get().n));
+        IntVeRef test = tmp(new IntVeRef(new IntVe(a.get().n)));
         xor(a, b, test);
 
         set(new BoolVeRef(BoolVe.zeroes()), res);
@@ -31,7 +31,7 @@ class EqVe extends Procedure {
 
 class EqVf extends Procedure {
     public EqVf(IntVfRef a, IntVfRef b, BoolVfRef res) {
-        IntVfRef test = new IntVfRef(new IntVf(a.get().n));
+        IntVfRef test = tmp(new IntVfRef(new IntVf(a.get().n)));
         xor(a, b, test);
 
         set(new BoolVfRef(BoolVf.zeroes()), res);
@@ -42,7 +42,7 @@ class EqVf extends Procedure {
 
 class EqE extends Procedure {
     public EqE(IntERef a, IntERef b, BoolERef res) {
-        IntERef test = new IntERef(new IntE(a.get().n));
+        IntERef test = tmp(new IntERef(new IntE(a.get().n)));
         xor(a, b, test);
 
         set(new BoolERef(BoolE.zeroes()), res);
@@ -53,7 +53,7 @@ class EqE extends Procedure {
 
 class EqEv extends Procedure {
     public EqEv(IntEvRef a, IntEvRef b, BoolEvRef res) {
-        IntEvRef test = new IntEvRef(new IntEv(a.get().n));
+        IntEvRef test = tmp(new IntEvRef(new IntEv(a.get().n)));
         xor(a, b, test);
 
         set(new BoolEvRef(BoolEv.zeroes()), res);
@@ -64,7 +64,7 @@ class EqEv extends Procedure {
 
 class EqEf extends Procedure {
     public EqEf(IntEfRef a, IntEfRef b, BoolEfRef res) {
-        IntEfRef test = new IntEfRef(new IntEf(a.get().n));
+        IntEfRef test = tmp(new IntEfRef(new IntEf(a.get().n)));
         xor(a, b, test);
 
         set(new BoolEfRef(BoolEf.zeroes()), res);
@@ -75,7 +75,7 @@ class EqEf extends Procedure {
 
 class EqF extends Procedure {
     public EqF(IntFRef a, IntFRef b, BoolFRef res) {
-        IntFRef test = new IntFRef(new IntF(a.get().n));
+        IntFRef test = tmp(new IntFRef(new IntF(a.get().n)));
         xor(a, b, test);
 
         set(new BoolFRef(BoolF.zeroes()), res);
@@ -86,7 +86,7 @@ class EqF extends Procedure {
 
 class EqFv extends Procedure {
     public EqFv(IntFvRef a, IntFvRef b, BoolFvRef res) {
-        IntFvRef test = new IntFvRef(new IntFv(a.get().n));
+        IntFvRef test = tmp(new IntFvRef(new IntFv(a.get().n)));
         xor(a, b, test);
 
         set(new BoolFvRef(BoolFv.zeroes()), res);
@@ -97,7 +97,7 @@ class EqFv extends Procedure {
 
 class EqFe extends Procedure {
     public EqFe(IntFeRef a, IntFeRef b, BoolFeRef res) {
-        IntFeRef test = new IntFeRef(new IntFe(a.get().n));
+        IntFeRef test = tmp(new IntFeRef(new IntFe(a.get().n)));
         xor(a, b, test);
 
         set(new BoolFeRef(BoolFe.zeroes()), res);

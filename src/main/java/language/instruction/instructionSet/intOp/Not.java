@@ -12,8 +12,8 @@ class NotV extends Procedure {
         BoolVRef[] bitsA = new BoolVRef[orig.get().n + 1];
         BoolVRef[] bitsRes = new BoolVRef[orig.get().n + 1];
         for(int i = 0; i <= orig.get().n; i++) {
-            bitsA[i] = new BoolVRef();
-            bitsRes[i] = new BoolVRef();
+            bitsA[i] = tmp(new BoolVRef());
+            bitsRes[i] = tmp(new BoolVRef());
         }
 
         split(orig, bitsA);
@@ -30,8 +30,8 @@ class NotVe extends Procedure {
         BoolVeRef[] bitsOrig = new BoolVeRef[orig.get().n + 1];
         BoolVeRef[] bitsRes = new BoolVeRef[orig.get().n + 1];
         for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = new BoolVeRef();
-            bitsRes[i] = new BoolVeRef();
+            bitsOrig[i] = tmp(new BoolVeRef());
+            bitsRes[i] = tmp(new BoolVeRef());
         }
 
         split(orig, bitsOrig);
@@ -48,8 +48,8 @@ class NotVf extends Procedure {
         BoolVfRef[] bitsOrig = new BoolVfRef[orig.get().n + 1];
         BoolVfRef[] bitsRes = new BoolVfRef[orig.get().n + 1];
         for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = new BoolVfRef();
-            bitsRes[i] = new BoolVfRef();
+            bitsOrig[i] = tmp(new BoolVfRef());
+            bitsRes[i] = tmp(new BoolVfRef());
         }
 
         split(orig, bitsOrig);
@@ -66,8 +66,8 @@ class NotE extends Procedure {
         BoolERef[] bitsOrig = new BoolERef[orig.get().n + 1];
         BoolERef[] bitsRes = new BoolERef[orig.get().n + 1];
         for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = new BoolERef();
-            bitsRes[i] = new BoolERef();
+            bitsOrig[i] = tmp(new BoolERef());
+            bitsRes[i] = tmp(new BoolERef());
         }
 
         split(orig, bitsOrig);
@@ -84,8 +84,8 @@ class NotEv extends Procedure {
         BoolEvRef[] bitsOrig = new BoolEvRef[orig.get().n + 1];
         BoolEvRef[] bitsRes = new BoolEvRef[orig.get().n + 1];
         for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = new BoolEvRef();
-            bitsRes[i] = new BoolEvRef();
+            bitsOrig[i] = tmp(new BoolEvRef());
+            bitsRes[i] = tmp(new BoolEvRef());
         }
 
         split(orig, bitsOrig);
@@ -102,8 +102,8 @@ class NotEf extends Procedure {
         BoolEfRef[] bitsOrig = new BoolEfRef[orig.get().n + 1];
         BoolEfRef[] bitsRes = new BoolEfRef[orig.get().n + 1];
         for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = new BoolEfRef();
-            bitsRes[i] = new BoolEfRef();
+            bitsOrig[i] = tmp(new BoolEfRef());
+            bitsRes[i] = tmp(new BoolEfRef());
         }
 
         split(orig, bitsOrig);
@@ -120,8 +120,8 @@ class NotF extends Procedure {
         BoolFRef[] bitsOrig = new BoolFRef[orig.get().n + 1];
         BoolFRef[] bitsRes = new BoolFRef[orig.get().n + 1];
         for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = new BoolFRef();
-            bitsRes[i] = new BoolFRef();
+            bitsOrig[i] = tmp(new BoolFRef());
+            bitsRes[i] = tmp(new BoolFRef());
         }
 
         split(orig, bitsOrig);
@@ -138,8 +138,8 @@ class NotFv extends Procedure {
         BoolFvRef[] bitsOrig = new BoolFvRef[orig.get().n + 1];
         BoolFvRef[] bitsRes = new BoolFvRef[orig.get().n + 1];
         for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = new BoolFvRef();
-            bitsRes[i] = new BoolFvRef();
+            bitsOrig[i] = tmp(new BoolFvRef());
+            bitsRes[i] = tmp(new BoolFvRef());
         }
 
         split(orig, bitsOrig);
@@ -156,8 +156,8 @@ class NotFe extends Procedure {
         BoolFeRef[] bitsOrig = new BoolFeRef[orig.get().n + 1];
         BoolFeRef[] bitsRes = new BoolFeRef[orig.get().n + 1];
         for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = new BoolFeRef();
-            bitsRes[i] = new BoolFeRef();
+            bitsOrig[i] = tmp(new BoolFeRef());
+            bitsRes[i] = tmp(new BoolFeRef());
         }
 
         split(orig, bitsOrig);

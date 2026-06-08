@@ -61,8 +61,8 @@ public class Flip {
         public Where(BoolVRef where) {
             set(zero, where);
             
-            IntVRef currentPriority = new IntVRef(new IntV(Force.priorityBits));
-            IntVRef currentPrioRand = new IntVRef(new IntV(Force.prioRandBits));
+            IntVRef currentPriority = tmp(new IntVRef(new IntV(Force.priorityBits)));
+            IntVRef currentPrioRand = tmp(new IntVRef(new IntV(Force.prioRandBits)));
             set(minPrio, currentPriority);
             set(minRand, currentPrioRand);
             

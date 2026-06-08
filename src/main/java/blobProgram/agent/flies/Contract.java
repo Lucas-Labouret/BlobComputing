@@ -43,21 +43,21 @@ public class Contract extends Force {
             transfer(ve, ev);
             redAnd(ev, middle);
 
-            IntVeRef randVe = new IntVeRef(new IntVe(prioRandBits));
-            IntEvRef randEv = new IntEvRef(new IntEv(prioRandBits));
-            IntERef maxE = new IntERef(new IntE(prioRandBits));
+            IntVeRef randVe = tmp(new IntVeRef(new IntVe(prioRandBits)));
+            IntEvRef randEv = tmp(new IntEvRef(new IntEv(prioRandBits)));
+            IntERef maxE = tmp(new IntERef(new IntE(prioRandBits)));
 
             broadcast(prioRand, randVe);
             transfer(randVe, randEv);
             redMax(randEv, maxE);
 
-            IntEvRef maxEv = new IntEvRef(new IntEv(prioRandBits));
+            IntEvRef maxEv = tmp(new IntEvRef(new IntEv(prioRandBits)));
             broadcast(maxE, maxEv);
 
             BoolEvRef isMax = tmp(new BoolEvRef());
             eq(randEv, maxEv, isMax);
 
-            IntERef nbOfMax = new IntERef(new IntE(2));
+            IntERef nbOfMax = tmp(new IntERef(new IntE(2)));
             redAdd(isMax, nbOfMax);
 
             BoolERef oneMax = tmp(new BoolERef());
@@ -82,21 +82,21 @@ public class Contract extends Force {
             transfer(vf, fv);
             redAnd(fv, middle);
 
-            IntVfRef randVf = new IntVfRef(new IntVf(prioRandBits));
-            IntFvRef randFv = new IntFvRef(new IntFv(prioRandBits));
-            IntFRef maxF = new IntFRef(new IntF(prioRandBits));
+            IntVfRef randVf = tmp(new IntVfRef(new IntVf(prioRandBits)));
+            IntFvRef randFv = tmp(new IntFvRef(new IntFv(prioRandBits)));
+            IntFRef maxF = tmp(new IntFRef(new IntF(prioRandBits)));
 
             broadcast(prioRand, randVf);
             transfer(randVf, randFv);
             redMax(randFv, maxF);
 
-            IntFvRef maxFv = new IntFvRef(new IntFv(prioRandBits));
+            IntFvRef maxFv = tmp(new IntFvRef(new IntFv(prioRandBits)));
             broadcast(maxF, maxFv);
 
             BoolFvRef isMax = tmp(new BoolFvRef());
             eq(randFv, maxFv, isMax);
 
-            IntFRef nbOfMax = new IntFRef(new IntF(2));
+            IntFRef nbOfMax = tmp(new IntFRef(new IntF(2)));
             redAdd(isMax, nbOfMax);
 
             BoolFRef oneMax = tmp(new BoolFRef());

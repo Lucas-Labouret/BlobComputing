@@ -13,11 +13,11 @@ class RedAddVe extends Procedure {
         int breadth = BoolFieldManager.getBreadthV();
 
         BoolVRef[] stack = new BoolVRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new BoolVRef();
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolVRef());
         redStack0(orig, stack);
 
         set(new IntVRef(IntV.of(0, res.get().n)), res);
-        IntVRef current = new IntVRef(new IntV(res.get().n));
+        IntVRef current = tmp(new IntVRef(new IntV(res.get().n)));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
@@ -31,7 +31,7 @@ class RedAddVe extends Procedure {
         int breadth = BoolFieldManager.getBreadthV();
 
         IntVRef[] stack = new IntVRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new IntVRef(new IntV(res.get().n));
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntVRef(new IntV(res.get().n)));
         redStack0(orig, stack);
 
         res.set(IntV.of(0, res.get().n));
@@ -44,12 +44,12 @@ class RedAddVf extends Procedure {
         int breadth = BoolFieldManager.getBreadthV();
 
         BoolVRef[] stack = new BoolVRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new BoolVRef();
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolVRef());
         redStack0(orig, stack);
 
         set(new IntVRef(IntV.of(0, res.get().n)), res);
         for (int i = 0; i < breadth; i++) {
-            IntVRef current = new IntVRef(new IntV(res.get().n));
+            IntVRef current = tmp(new IntVRef(new IntV(res.get().n)));
             fromBool(stack[i], current);
             add(res, current, res);
         }
@@ -62,7 +62,7 @@ class RedAddVf extends Procedure {
         int breadth = BoolFieldManager.getBreadthV();
 
         IntVRef[] stack = new IntVRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new IntVRef(new IntV(res.get().n));
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntVRef(new IntV(res.get().n)));
         redStack0(orig, stack);
 
         res.set(IntV.of(0, res.get().n));
@@ -75,11 +75,11 @@ class RedAddEv extends Procedure {
         int breadth = BoolFieldManager.getBreadthE();
 
         BoolERef[] stack = new BoolERef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new BoolERef();
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolERef());
         redStack0(orig, stack);
 
         set(new IntERef(IntE.of(0, res.get().n)), res);
-        IntERef current = new IntERef(new IntE(res.get().n));
+        IntERef current = tmp(new IntERef(new IntE(res.get().n)));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
@@ -93,7 +93,7 @@ class RedAddEv extends Procedure {
         int breadth = BoolFieldManager.getBreadthE();
 
         IntERef[] stack = new IntERef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new IntERef(new IntE(res.get().n));
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntERef(new IntE(res.get().n)));
         redStack0(orig, stack);
 
         res.set(IntE.of(0, res.get().n));
@@ -106,11 +106,11 @@ class RedAddEf extends Procedure {
         int breadth = BoolFieldManager.getBreadthE();
 
         BoolERef[] stack = new BoolERef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new BoolERef();
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolERef());
         redStack0(orig, stack);
 
         set(new IntERef(IntE.of(0, res.get().n)), res);
-        IntERef current = new IntERef(new IntE(res.get().n));
+        IntERef current = tmp(new IntERef(new IntE(res.get().n)));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
@@ -124,7 +124,7 @@ class RedAddEf extends Procedure {
         int breadth = BoolFieldManager.getBreadthE();
 
         IntERef[] stack = new IntERef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new IntERef(new IntE(res.get().n));
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntERef(new IntE(res.get().n)));
         redStack0(orig, stack);
 
         res.set(IntE.of(0, res.get().n));
@@ -137,11 +137,11 @@ class RedAddFv extends Procedure {
         int breadth = BoolFieldManager.getBreadthF();
 
         BoolFRef[] stack = new BoolFRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new BoolFRef();
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolFRef());
         redStack0(orig, stack);
 
         set(new IntFRef(IntF.of(0, res.get().n)), res);
-        IntFRef current = new IntFRef(new IntF(res.get().n));
+        IntFRef current = tmp(new IntFRef(new IntF(res.get().n)));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
@@ -155,7 +155,7 @@ class RedAddFv extends Procedure {
         int breadth = BoolFieldManager.getBreadthF();
 
         IntFRef[] stack = new IntFRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new IntFRef(new IntF(res.get().n));
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntFRef(new IntF(res.get().n)));
         redStack0(orig, stack);
 
         res.set(IntF.of(0, res.get().n));
@@ -168,11 +168,11 @@ class RedAddFe extends Procedure {
         int breadth = BoolFieldManager.getBreadthF();
 
         BoolFRef[] stack = new BoolFRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new BoolFRef();
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolFRef());
         redStack0(orig, stack);
 
         set(new IntFRef(IntF.of(0, res.get().n)), res);
-        IntFRef current = new IntFRef(new IntF(res.get().n));
+        IntFRef current = tmp(new IntFRef(new IntF(res.get().n)));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
@@ -186,7 +186,7 @@ class RedAddFe extends Procedure {
         int breadth = BoolFieldManager.getBreadthF();
 
         IntFRef[] stack = new IntFRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = new IntFRef(new IntF(res.get().n));
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntFRef(new IntF(res.get().n)));
         redStack0(orig, stack);
 
         res.set(IntF.of(0, res.get().n));

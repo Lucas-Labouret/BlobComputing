@@ -33,7 +33,6 @@ public class Main extends Application {
         catch (Exception e) { throw new RuntimeException(e); }
         BoolFieldManager.setup(medium);
 
-//        Instruction instruction = RotateV.rand().ccw();
 //        Instruction instruction = BlobV.rand(medium).showGrow();
 //        Instruction instruction = new Procedure() {{
 //            BlobV blob = BlobV.rand(5);
@@ -42,17 +41,6 @@ public class Main extends Application {
 //        }};
 //        Instruction instruction = new BlobV().voronoi();
 //        Instruction instruction = new Rand().showRand();
-//        Instruction instruction = Flies.rand(6).showFlies();
-//        Instruction instruction = new Procedure() {{
-//            BlobV blob = BlobV.rand(6);
-//            call(blob.grow());
-//
-//            BoolVeRef borderVe = new BoolVeRef();
-//            call(blob.outVe(borderVe));
-//
-//            show("Blob", blob);
-//            show("BorderVe", borderVe);
-//        }};
         Instruction instruction = new Procedure() {{
             Rand.init();
             Flies flies = Flies.rand(6);

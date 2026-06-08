@@ -37,8 +37,6 @@ public class Cache {
     private CacheEntry top = null;
 
     public CacheEntry push(long stepCount) {
-        System.out.println("Cache size = " + refs.size());
-
         HashMap<Ref<?>, Field> valueCache = new HashMap<>();
         for (Ref<?> ref : Cache.refs) valueCache.put(ref, ref.get() == null ? null : ref.get().cache());
 

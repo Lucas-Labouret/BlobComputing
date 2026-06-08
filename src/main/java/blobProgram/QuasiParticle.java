@@ -39,7 +39,7 @@ public class QuasiParticle extends BlobV {
             broadcast(in, ve);
             call(send(ve, ve));
 
-            IntVRef nbNeighbors = new IntVRef(new IntV(4));
+            IntVRef nbNeighbors = tmp(new IntVRef(new IntV(4)));
             redAdd(ve, nbNeighbors);
 
             BoolVRef oneNeighbor = tmp(new BoolVRef());

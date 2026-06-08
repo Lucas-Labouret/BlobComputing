@@ -30,13 +30,6 @@ public class Expand extends Force {
             call(state.oneParticle(one));
             call(state.twoParticle(two));
 
-            QuasiParticle oneCopy = new QuasiParticle();
-            QuasiParticle twoCopy = new QuasiParticle();
-            set(one, oneCopy);
-            set(two, twoCopy);
-            show("one", oneCopy);
-            show("two", twoCopy);
-
             BoolVRef meetV = tmp(new BoolVRef());
             BoolVeRef forbiddenVe = tmp(new BoolVeRef());
             BoolVeRef authorizedVe = tmp(new BoolVeRef());
@@ -53,10 +46,6 @@ public class Expand extends Force {
 
             BoolVRef expand = tmp(new BoolVRef());
             or(oneExpand, twoExpand, expand);
-
-            BoolVRef expandCopy = new BoolVRef();
-            set(expand, expandCopy);
-            show("expand", expandCopy);
 
             BoolERef meetE = tmp(new BoolERef());
             call(state.meetE(meetE));
@@ -78,19 +67,15 @@ public class Expand extends Force {
             and(e, meetE, conflict);
             broadcast(conflict, conflictEv);
 
-            BoolEvRef conflictEvCopy = new BoolEvRef();
-            set(conflictEv, conflictEvCopy);
-            show("conflictEv", conflictEvCopy);
-
-            IntVeRef randVe = new IntVeRef(new IntVe(prioRandBits));
-            IntEvRef randEv = new IntEvRef(new IntEv(prioRandBits));
+            IntVeRef randVe = tmp(new IntVeRef(new IntVe(prioRandBits)));
+            IntEvRef randEv = tmp(new IntEvRef(new IntEv(prioRandBits)));
             broadcast(prioRand, randVe);
             transfer(randVe, randEv);
 
-            IntERef maxE = new IntERef(new IntE(prioRandBits));
+            IntERef maxE = tmp(new IntERef(new IntE(prioRandBits)));
             redMax(randEv, maxE);
 
-            IntEvRef maxEv = new IntEvRef(new IntEv(prioRandBits));
+            IntEvRef maxEv = tmp(new IntEvRef(new IntEv(prioRandBits)));
             broadcast(maxE, maxEv);
 
             BoolEvRef isMax = tmp(new BoolEvRef());
@@ -114,23 +99,23 @@ public class Expand extends Force {
             broadcast(one, oneOut);
             and(oneOut, authorizedVe, oneOut);
 
-            IntVeRef randVe = new IntVeRef(new IntVe(prioRandBits));
+            IntVeRef randVe = tmp(new IntVeRef(new IntVe(prioRandBits)));
             broadcast(prioRand, randVe);
             call(BlobV.send(randVe, randVe));
 
             IntVeRef min = new IntVeRef(IntVe.minValue(prioRandBits));
             fif(oneOut, randVe, min, randVe);
 
-            IntVRef maxV = new IntVRef(new IntV(prioRandBits));
+            IntVRef maxV = tmp(new IntVRef(new IntV(prioRandBits)));
             redMax(randVe, maxV);
 
-            IntVeRef maxVe = new IntVeRef(new IntVe(prioRandBits));
+            IntVeRef maxVe = tmp(new IntVeRef(new IntVe(prioRandBits)));
             broadcast(maxV, maxVe);
 
             BoolVeRef isMax = tmp(new BoolVeRef());
             eq(randVe, maxVe, isMax);
 
-            IntVRef nbOfMax = new IntVRef(new IntV(4));
+            IntVRef nbOfMax = tmp(new IntVRef(new IntV(4)));
             redAdd(isMax, nbOfMax);
 
             BoolVRef oneMax = tmp(new BoolVRef());
@@ -144,7 +129,7 @@ public class Expand extends Force {
             broadcast(okMax, okVe);
             and(okVe, isMax, okVe);
 
-            IntVRef connectedComponents = new IntVRef(new IntV(4));
+            IntVRef connectedComponents = tmp(new IntVRef(new IntV(4)));
             BoolVRef oneConnected = tmp(new BoolVRef());
             call(BlobV.connectedComponents(okVe, connectedComponents));
 
@@ -183,7 +168,7 @@ public class Expand extends Force {
 
             broadcast(potentialExpand, ve);
 
-            IntVeRef randVe = new IntVeRef(new IntVe(prioRandBits));
+            IntVeRef randVe = tmp(new IntVeRef(new IntVe(prioRandBits)));
             broadcast(prioRand, randVe);
 
             call(BlobV.send(ve, ve));
@@ -197,16 +182,16 @@ public class Expand extends Force {
             IntVeRef min = new IntVeRef(IntVe.minValue(prioRandBits));
             fif(twoOut, randVe, min, randVe);
 
-            IntVRef maxV = new IntVRef(new IntV(prioRandBits));
+            IntVRef maxV = tmp(new IntVRef(new IntV(prioRandBits)));
             redMax(randVe, maxV);
 
-            IntVeRef maxVe = new IntVeRef(new IntVe(prioRandBits));
+            IntVeRef maxVe = tmp(new IntVeRef(new IntVe(prioRandBits)));
             broadcast(maxV, maxVe);
 
             BoolVeRef isMax = tmp(new BoolVeRef());
             eq(randVe, maxVe, isMax);
 
-            IntVRef nbOfMax = new IntVRef(new IntV(4));
+            IntVRef nbOfMax = tmp(new IntVRef(new IntV(4)));
             redAdd(isMax, nbOfMax);
 
             BoolVRef oneMax = tmp(new BoolVRef());
