@@ -12,6 +12,27 @@ import language.fieldRef.intField.*;
 public class IntOp {
     public static <B extends BoolField, I extends IntField<B>> BasicInstruction set(Ref<I> orig, Ref<I> res) { return new SetRef<>(orig, res); }
 
+    public static Procedure transfer(IntVeRef orig, IntEvRef  res) { return new TransferVe(orig, res); }
+    public static Procedure transfer(IntVfRef orig, IntFvRef  res) { return new TransferVf(orig, res); }
+    public static Procedure transfer(IntEvRef orig, IntVeRef  res) { return new TransferEv(orig, res); }
+    public static Procedure transfer(IntEfRef orig, IntFeRef  res) { return new TransferEf(orig, res); }
+    public static Procedure transfer(IntFvRef orig, IntVfRef  res) { return new TransferFv(orig, res); }
+    public static Procedure transfer(IntFeRef orig, IntEfRef  res) { return new TransferFe(orig, res); }
+
+    public static Procedure rotCW(IntVeRef orig, IntVfRef res) { return new RotVeCW(orig, res); }
+    public static Procedure rotCW(IntVfRef orig, IntVeRef res) { return new RotVfCW(orig, res); }
+    public static Procedure rotCW(IntEvRef orig, IntEfRef res) { return new RotEvCW(orig, res); }
+    public static Procedure rotCW(IntEfRef orig, IntEvRef res) { return new RotEfCW(orig, res); }
+    public static Procedure rotCW(IntFvRef orig, IntFeRef res) { return new RotFvCW(orig, res); }
+    public static Procedure rotCW(IntFeRef orig, IntFvRef res) { return new RotFeCW(orig, res); }
+
+    public static Procedure rotCCW(IntVeRef orig, IntVfRef res) { return new RotVeCCW(orig, res); }
+    public static Procedure rotCCW(IntVfRef orig, IntVeRef res) { return new RotVfCCW(orig, res); }
+    public static Procedure rotCCW(IntEvRef orig, IntEfRef res) { return new RotEvCCW(orig, res); }
+    public static Procedure rotCCW(IntEfRef orig, IntEvRef res) { return new RotEfCCW(orig, res); }
+    public static Procedure rotCCW(IntFvRef orig, IntFeRef res) { return new RotFvCCW(orig, res); }
+    public static Procedure rotCCW(IntFeRef orig, IntFvRef res) { return new RotFeCCW(orig, res); }
+
     // NOT operations
     public static Procedure not(IntVRef  orig, IntVRef  res) { return new NotV (orig, res); }
     public static Procedure not(IntVeRef orig, IntVeRef res) { return new NotVe(orig, res); }

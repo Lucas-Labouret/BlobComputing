@@ -1,6 +1,8 @@
 package language.instruction;
 
 import language.field.Field;
+import language.field.boolField.BoolField;
+import language.field.intField.IntField;
 import language.fieldRef.Ref;
 import language.fieldRef.boolField.*;
 import language.fieldRef.intField.*;
@@ -12,6 +14,7 @@ import language.instruction.instructionSet.intOp.IntOp;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.function.Consumer;
 
 /** Represents an instruction composed of a sequence of sub-instructions. */
 @SuppressWarnings("unused")
@@ -344,6 +347,13 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void transfer(BoolFvRef a, BoolVfRef res) { call(BoolOp.transfer(a, res)); }
     protected void transfer(BoolFeRef a, BoolEfRef res) { call(BoolOp.transfer(a, res)); }
 
+    protected void transfer(IntVeRef a, IntEvRef res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntVfRef a, IntFvRef res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntEvRef a, IntVeRef res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntEfRef a, IntFeRef res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntFvRef a, IntVfRef res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntFeRef a, IntEfRef res) { call(IntOp.transfer(a, res)); }
+
     protected void redAnd(BoolVeRef a, BoolVRef res) { call(BoolOp.redAnd(a, res)); }
     protected void redAnd(BoolVfRef a, BoolVRef res) { call(BoolOp.redAnd(a, res)); }
     protected void redAnd(BoolEvRef a, BoolERef res) { call(BoolOp.redAnd(a, res)); }
@@ -437,10 +447,24 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void rotCW(BoolFvRef a, BoolFeRef res) { call(BoolOp.rotCW(a, res)); }
     protected void rotCW(BoolFeRef a, BoolFvRef res) { call(BoolOp.rotCW(a, res)); }
 
+    protected void rotCW(IntVeRef a, IntVfRef res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntVfRef a, IntVeRef res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntEvRef a, IntEfRef res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntEfRef a, IntEvRef res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntFvRef a, IntFeRef res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntFeRef a, IntFvRef res) { call(IntOp.rotCW(a, res)); }
+
     protected void rotCCW(BoolVeRef a, BoolVfRef res) { call(BoolOp.rotCCW(a, res)); }
     protected void rotCCW(BoolVfRef a, BoolVeRef res) { call(BoolOp.rotCCW(a, res)); }
     protected void rotCCW(BoolEvRef a, BoolEfRef res) { call(BoolOp.rotCCW(a, res)); }
     protected void rotCCW(BoolEfRef a, BoolEvRef res) { call(BoolOp.rotCCW(a, res)); }
     protected void rotCCW(BoolFvRef a, BoolFeRef res) { call(BoolOp.rotCCW(a, res)); }
     protected void rotCCW(BoolFeRef a, BoolFvRef res) { call(BoolOp.rotCCW(a, res)); }
+
+    protected void rotCCW(IntVeRef a, IntVfRef res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntVfRef a, IntVeRef res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntEvRef a, IntEfRef res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntEfRef a, IntEvRef res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntFvRef a, IntFeRef res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntFeRef a, IntFvRef res) { call(IntOp.rotCCW(a, res)); }
 }

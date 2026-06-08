@@ -31,8 +31,9 @@ public non-sealed class IntV extends IntField<BoolV> {
     public static IntV of(int value, int n) { return of(value, n, BoolFieldManager.DEFAULT_BORDER()); }
     public static IntV of(int value, int n, Border border) {
         IntV intV = new IntV(n, border);
+        final int oVal = value;
         for (int i = 0; value != 0 && value != Integer.MIN_VALUE; i++) {
-            if (i+1 == n) throw new IllegalArgumentException("Value "+value+" cannot be represented in "+n+" bits.");
+            if (i+1 > n) throw new IllegalArgumentException("Value "+ oVal +" cannot be represented in "+ n +" bits.");
             intV.bits[n - i] = (value & 1) == 0 ? new BoolVRef(BoolV.zeroes(border)) : new BoolVRef(BoolV.ones(border));
             value = value >> 1;
         }

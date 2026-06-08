@@ -54,16 +54,17 @@ public class Flip {
     private final BoolVRef zero = new BoolVRef(BoolV.zeroes());
     private final BoolVRef one = new BoolVRef(BoolV.ones());
 
-    private final IntVRef min = new IntVRef(IntV.minValue(Force.priorityBits));
+    private final IntVRef minPrio = new IntVRef(IntV.minValue(Force.priorityBits));
+    private final IntVRef minRand = new IntVRef(IntV.minValue(Force.prioRandBits));
 
     private class Where extends Procedure {
         public Where(BoolVRef where) {
             set(zero, where);
             
-            IntVRef currentPriority = new IntVRef();
-            IntVRef currentPrioRand = new IntVRef();
-            set(min, currentPriority);
-            set(min, currentPrioRand);
+            IntVRef currentPriority = new IntVRef(new IntV(Force.priorityBits));
+            IntVRef currentPrioRand = new IntVRef(new IntV(Force.prioRandBits));
+            set(minPrio, currentPriority);
+            set(minRand, currentPrioRand);
             
             for (Force f : yes) { call(applyForce(f, one , currentPriority, currentPrioRand, where)); }
             for (Force f : no ) { call(applyForce(f, zero, currentPriority, currentPrioRand, where)); }

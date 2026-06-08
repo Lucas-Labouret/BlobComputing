@@ -27,8 +27,9 @@ public non-sealed class IntEv extends IntField<BoolEv> {
     }
     public static IntEv of(int value, int n, Border border) {
         IntEv intEv = new IntEv(n, border);
+        final int oVal = value;
         for (int i = 0; value != 0 && value != Integer.MIN_VALUE; i++) {
-            if (i + 1 == n) throw new IllegalArgumentException("Value " + value + " cannot be represented in " + n + " bits.");
+            if (i+1 > n) throw new IllegalArgumentException("Value "+ oVal +" cannot be represented in "+ n +" bits.");
             intEv.bits[n - i] = (value & 1) == 0 ? new BoolEvRef(BoolEv.zeroes(border)) : new BoolEvRef(BoolEv.ones(border));
             value = value >> 1;
         }

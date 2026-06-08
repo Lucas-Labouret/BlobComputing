@@ -27,8 +27,9 @@ public non-sealed class IntF extends IntField<BoolF> {
     }
     public static IntF of(int value, int n, Border border) {
         IntF intF = new IntF(n, border);
+        final int oVal = value;
         for (int i = 0; value != 0 && value != Integer.MIN_VALUE; i++) {
-            if (i + 1 == n) throw new IllegalArgumentException("Value " + value + " cannot be represented in " + n + " bits.");
+            if (i+1 > n) throw new IllegalArgumentException("Value "+ oVal +" cannot be represented in "+ n +" bits.");
             intF.bits[n - i] = (value & 1) == 0 ? new BoolFRef(BoolF.zeroes(border)) : new BoolFRef(BoolF.ones(border));
             value = value >> 1;
         }

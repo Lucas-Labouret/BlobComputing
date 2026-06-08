@@ -1,7 +1,6 @@
 package language.instruction.instructionSet.intOp;
 
 import language.instruction.BasicInstruction;
-import language.field.intField.*;
 import language.fieldRef.boolField.*;
 import language.fieldRef.intField.*;
 
@@ -20,7 +19,7 @@ class SplitV implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get().copy());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
@@ -39,7 +38,7 @@ class JoinV implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get().copy());
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }
@@ -57,7 +56,7 @@ class SplitVe implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get().copy());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
@@ -75,7 +74,7 @@ class JoinVe implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get().copy());
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }
@@ -93,7 +92,7 @@ class SplitVf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get().copy());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
@@ -111,7 +110,7 @@ class JoinVf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get().copy());
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }
@@ -129,7 +128,7 @@ class SplitE implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get().copy());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
@@ -147,7 +146,7 @@ class JoinE implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get().copy());
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }
@@ -165,7 +164,7 @@ class SplitEv implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get().copy());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
@@ -183,7 +182,7 @@ class JoinEv implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get().copy());
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }
@@ -201,7 +200,7 @@ class SplitEf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get().copy());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
@@ -219,7 +218,7 @@ class JoinEf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get().copy());
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }
@@ -237,7 +236,7 @@ class SplitF implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get().copy());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
@@ -255,39 +254,39 @@ class JoinF implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get().copy());
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }
 
 class SplitFv implements BasicInstruction {
-    private final IntFvRef a;
+    private final IntFvRef orig;
     private final BoolFvRef[] res;
 
-    public SplitFv(IntFvRef a, BoolFvRef[] res) {
-        this.a = a;
+    public SplitFv(IntFvRef orig, BoolFvRef[] res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= a.get().n; i++) res[i].set(a.get().getBits()[i].copy().get());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
 
 class JoinFv implements BasicInstruction {
-    private final BoolFvRef[] a;
+    private final BoolFvRef[] orig;
     private final IntFvRef res;
 
-    public JoinFv(BoolFvRef[] a, IntFvRef res) {
-        this.a = a;
+    public JoinFv(BoolFvRef[] orig, IntFvRef res) {
+        this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i = 0; i < res.get().n; i++) res.get().getBits()[i] = a[i].copy();
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }
@@ -305,7 +304,7 @@ class SplitFe implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get().copy());
+        for (int i = 0; i <= orig.get().n; i++) res[i].set(orig.get().getBits()[i].get() == null ? null : orig.get().getBits()[i].get().copy());
         return true;
     }
 }
@@ -323,7 +322,7 @@ class JoinFe implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get().copy());
+        for (int i = 0; i <= res.get().n; i++) res.get().getBits()[i].set(orig[i].get() == null ? null : orig[i].get().copy());
         return true;
     }
 }

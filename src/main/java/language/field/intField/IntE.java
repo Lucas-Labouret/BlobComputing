@@ -27,8 +27,9 @@ public non-sealed class IntE extends IntField<BoolE> {
     }
     public static IntE of(int value, int n, Border border) {
         IntE intE = new IntE(n, border);
+        final int oVal = value;
         for (int i = 0; value != 0 && value != Integer.MIN_VALUE; i++) {
-            if (i + 1 == n) throw new IllegalArgumentException("Value " + value + " cannot be represented in " + n + " bits.");
+            if (i+1 > n) throw new IllegalArgumentException("Value "+ oVal +" cannot be represented in "+ n +" bits.");
             intE.bits[n - i] = (value & 1) == 0 ? new BoolERef(BoolE.zeroes(border)) : new BoolERef(BoolE.ones(border));
             value = value >> 1;
         }

@@ -25,6 +25,8 @@ public class Rand {
 
     private static class NextState extends Procedure {
         public NextState() {
+            if (!initialized) throw new IllegalStateException("Rand has not been initialized");
+
             BoolVeRef ve = new BoolVeRef();
             BoolEvRef ev = new BoolEvRef();
             BoolERef e = new BoolERef();

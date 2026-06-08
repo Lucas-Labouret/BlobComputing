@@ -12,7 +12,7 @@ class EqV extends Procedure {
         IntVRef test = new IntVRef(new IntV(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolVRef(BoolV.zeroes()));
+        set(new BoolVRef(BoolV.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -23,7 +23,7 @@ class EqVe extends Procedure {
         IntVeRef test = new IntVeRef(new IntVe(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolVeRef(BoolVe.zeroes()));
+        set(new BoolVeRef(BoolVe.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -34,7 +34,7 @@ class EqVf extends Procedure {
         IntVfRef test = new IntVfRef(new IntVf(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolVfRef(BoolVf.zeroes()));
+        set(new BoolVfRef(BoolVf.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -45,7 +45,7 @@ class EqE extends Procedure {
         IntERef test = new IntERef(new IntE(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolERef(BoolE.zeroes()));
+        set(new BoolERef(BoolE.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -56,7 +56,7 @@ class EqEv extends Procedure {
         IntEvRef test = new IntEvRef(new IntEv(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolEvRef(BoolEv.zeroes()));
+        set(new BoolEvRef(BoolEv.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -67,7 +67,7 @@ class EqEf extends Procedure {
         IntEfRef test = new IntEfRef(new IntEf(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolEfRef(BoolEf.zeroes()));
+        set(new BoolEfRef(BoolEf.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -78,7 +78,7 @@ class EqF extends Procedure {
         IntFRef test = new IntFRef(new IntF(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolFRef(BoolF.zeroes()));
+        set(new BoolFRef(BoolF.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -89,7 +89,7 @@ class EqFv extends Procedure {
         IntFvRef test = new IntFvRef(new IntFv(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolFvRef(BoolFv.zeroes()));
+        set(new BoolFvRef(BoolFv.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }
@@ -100,7 +100,7 @@ class EqFe extends Procedure {
         IntFeRef test = new IntFeRef(new IntFe(a.get().n));
         xor(a, b, test);
 
-        set(res, new BoolFeRef(BoolFe.zeroes()));
+        set(new BoolFeRef(BoolFe.zeroes()), res);
         call(IntOp.scanLeft(test, res, (bit, acc) -> BoolOp.or(bit, acc, acc)));
         not(res, res);
     }

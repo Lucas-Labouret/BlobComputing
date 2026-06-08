@@ -1,5 +1,7 @@
 package language.instruction.instructionSet.intOp;
 
+import language.fieldRef.Ref;
+import language.instruction.BasicInstruction;
 import language.instruction.Procedure;
 import language.fieldRef.boolField.*;
 import language.fieldRef.intField.*;
@@ -16,8 +18,7 @@ class BroadcastVe extends Procedure {
             bitsRes[i] = new BoolVeRef();
         }
         split(orig, bitsOrig);
-        for (int i = 0; i <= orig.get().n; i++)
-            broadcast(bitsOrig[i], bitsRes[i]);
+        for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
         join(bitsRes, res);
     }
 }
@@ -34,8 +35,7 @@ class BroadcastVf extends Procedure {
             bitsRes[i] = new BoolVfRef();
         }
         split(orig, bitsOrig);
-        for (int i = 1; i <= orig.get().n; i++)
-            broadcast(bitsOrig[i], bitsRes[i]);
+        for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
         join(bitsRes, res);
     }
 }
@@ -52,7 +52,7 @@ class BroadcastEv extends Procedure {
             bitsRes[i] = new BoolEvRef();
         }
         split(orig, bitsOrig);
-        for (int i = 1; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
+        for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
         join(bitsRes, res);
     }
 }
@@ -69,7 +69,7 @@ class BroadcastEf extends Procedure {
             bitsRes[i] = new BoolEfRef();
         }
         split(orig, bitsOrig);
-        for (int i = 1; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
+        for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
         join(bitsRes, res);
     }
 }
@@ -86,7 +86,7 @@ class BroadcastFv extends Procedure {
             bitsRes[i] = new BoolFvRef();
         }
         split(orig, bitsOrig);
-        for (int i = 1; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
+        for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
         join(bitsRes, res);
     }
 }
@@ -103,7 +103,7 @@ class BroadcastFe extends Procedure {
             bitsRes[i] = new BoolFeRef();
         }
         split(orig, bitsOrig);
-        for (int i = 1; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
+        for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
         join(bitsRes, res);
     }
 }

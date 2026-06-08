@@ -2,10 +2,7 @@ package blobProgram;
 
 import language.field.boolField.BoolV;
 import language.field.intField.IntV;
-import language.fieldRef.boolField.BoolFRef;
-import language.fieldRef.boolField.BoolFvRef;
-import language.fieldRef.boolField.BoolVeRef;
-import language.fieldRef.boolField.BoolVfRef;
+import language.fieldRef.boolField.*;
 import language.fieldRef.intField.IntVRef;
 import language.instruction.Procedure;
 
@@ -25,7 +22,8 @@ public class QuasiParticle extends BlobV {
     private static class OneParticle extends Procedure {
         public OneParticle(QuasiParticle in, QuasiParticle out) {
             BoolVeRef ve = tmp(new BoolVeRef());
-            call(send(in, ve));
+            broadcast(in, ve);
+            call(send(ve, ve));
 
             redOr(ve, out);
             not(out, out);
@@ -38,11 +36,16 @@ public class QuasiParticle extends BlobV {
     private static class TwoParticle extends Procedure {
         public TwoParticle(QuasiParticle in, QuasiParticle out) {
             BoolVeRef ve = tmp(new BoolVeRef());
-            call(send(in, ve));
+            broadcast(in, ve);
+            call(send(ve, ve));
 
-            IntVRef count = new IntVRef(new IntV(4));
-            redAdd(ve, count);
-            eq(count, new IntVRef(IntV.of(1, 4)), out);
+            IntVRef nbNeighbors = new IntVRef(new IntV(4));
+            redAdd(ve, nbNeighbors);
+
+            BoolVRef oneNeighbor = tmp(new BoolVRef());
+            eq(nbNeighbors, new IntVRef(IntV.of(1, 4)), oneNeighbor);
+
+            and(in, oneNeighbor, out);
         }
     }
     public static Procedure twoParticle(QuasiParticle in, QuasiParticle out) { return new TwoParticle(in, out); }

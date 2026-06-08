@@ -1,9 +1,14 @@
 package blobProgram;
 
 import language.field.boolField.BoolV;
+import language.field.intField.IntEf;
+import language.field.intField.IntEv;
 import language.field.intField.IntV;
 import language.fieldRef.boolField.*;
+import language.fieldRef.intField.IntEfRef;
+import language.fieldRef.intField.IntEvRef;
 import language.fieldRef.intField.IntVRef;
+import language.fieldRef.intField.IntVeRef;
 import language.instruction.Procedure;
 import medium.Medium;
 import medium.locusS.Vertex;
@@ -37,18 +42,28 @@ public class BlobV extends BoolVRef {
     }
 
     private static class Send extends Procedure {
-        public Send(BoolVRef in, BoolVeRef out) {
+        public Send(BoolVeRef in, BoolVeRef out) {
             BoolEvRef ev = tmp(new BoolEvRef());
             BoolEfRef ef = tmp(new BoolEfRef());
 
-            broadcast(in, out);
-            transfer(out, ev);
+            transfer(in, ev);
+            rotCW(ev, ef);
+            rotCW(ef, ev);
+            transfer(ev, out);
+        }
+
+        public Send(IntVeRef in, IntVeRef out) {
+            IntEvRef ev = new IntEvRef(new IntEv(in.get().n));
+            IntEfRef ef = new IntEfRef(new IntEf(in.get().n));
+
+            transfer(in, ev);
             rotCW(ev, ef);
             rotCW(ef, ev);
             transfer(ev, out);
         }
     }
-    public static Procedure send(BoolVRef in, BoolVeRef out) { return new Send(in, out); }
+    public static Procedure send(BoolVeRef in, BoolVeRef out) { return new Send(in, out); }
+    public static Procedure send(IntVeRef in, IntVeRef out) { return new Send(in, out); }
 
     private static class Grow extends Procedure {
         public Grow(BlobV in, BlobV out) {
@@ -208,6 +223,22 @@ public class BlobV extends BoolVRef {
     public static Procedure meetE(BlobV in, BoolERef out) { return new MeetE(in, out); }
     public Procedure meetE(BoolERef out) { return meetE(this, out); }
 
+    private static class ConnectedComponents extends Procedure {
+        public ConnectedComponents(BoolVeRef in, IntVRef out) {
+            BoolVfRef cw = tmp(new BoolVfRef());
+            BoolVfRef ccw = tmp(new BoolVfRef());
+            BoolVfRef vf = tmp(new BoolVfRef());
+
+            rotCW(in, cw);
+            rotCCW(in, ccw);
+            xor(cw, ccw, vf);
+
+            redAdd(vf, out);
+            rShift(out, out, 1);
+        }
+    }
+    public static Procedure connectedComponents(BoolVeRef in, IntVRef out) { return new ConnectedComponents(in, out); }
+
     private static class MeetV extends Procedure {
         public MeetV(BlobV in, BoolVRef out) {
             BoolERef frontierE = tmp(new BoolERef());
@@ -218,17 +249,9 @@ public class BlobV extends BoolVRef {
             broadcast(frontierE, ev);
             transfer(ev, ve);
 
-            BoolVfRef cw = tmp(new BoolVfRef());
-            BoolVfRef ccw = tmp(new BoolVfRef());
-            BoolVfRef vf = tmp(new BoolVfRef());
-
-            rotCW(ve, cw);
-            rotCCW(ve, ccw);
-            xor(cw, ccw, vf);
-
             IntVRef connectedComponents = new IntVRef(new IntV(4));
-            redAdd(vf, connectedComponents);
-            gt(connectedComponents, new IntVRef(IntV.of(3, 4)), out);
+            call(connectedComponents(ve, connectedComponents));
+            gt(connectedComponents, new IntVRef(IntV.of(2, 4)), out);
 
             BoolVRef notIn = tmp(new BoolVRef());
             not(in, notIn);

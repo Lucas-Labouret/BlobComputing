@@ -1,9 +1,12 @@
 package ui;
 
+import blobProgram.Rand;
+import blobProgram.agent.flies.Flies;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import language.fieldRef.boolField.BoolVRef;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
 import blobProgram.BlobV;
@@ -32,11 +35,11 @@ public class Main extends Application {
 
 //        Instruction instruction = RotateV.rand().ccw();
 //        Instruction instruction = BlobV.rand(medium).showGrow();
-        Instruction instruction = new Procedure() {{
-            BlobV blob = BlobV.rand(5);
-            show("Blob", blob);
-            call(blob.voronoi());
-        }};
+//        Instruction instruction = new Procedure() {{
+//            BlobV blob = BlobV.rand(5);
+//            show("Blob", blob);
+//            call(blob.voronoi());
+//        }};
 //        Instruction instruction = new BlobV().voronoi();
 //        Instruction instruction = new Rand().showRand();
 //        Instruction instruction = Flies.rand(6).showFlies();
@@ -50,7 +53,14 @@ public class Main extends Application {
 //            show("Blob", blob);
 //            show("BorderVe", borderVe);
 //        }};
-
+        Instruction instruction = new Procedure() {{
+            Rand.init();
+            Flies flies = Flies.rand(6);
+            BoolVRef start = new BoolVRef();
+            set(flies.state, start);
+            show("Flies", start);
+            call(flies.flip());
+        }};
         ms = new MasterScene(medium, instruction);
 
         Scene scene = new Scene(ms, Main.WIDTH, Main.HEIGHT);

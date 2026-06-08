@@ -4,7 +4,7 @@ import language.instruction.Procedure;
 import language.fieldRef.boolField.BoolVRef;
 
 public class Agent {
-    protected final BoolVRef state;
+    public final BoolVRef state;
     private final Flip flip;
 
     public Agent(BoolVRef state, Flip flip) {
