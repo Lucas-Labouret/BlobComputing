@@ -3,6 +3,7 @@ package language.field.boolField;
 import language.utils.BoolFieldLine;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
+import language.utils.Coord2D;
 import medium.locusT.Ev;
 
 import java.util.HashMap;
@@ -28,10 +29,10 @@ public non-sealed class BoolEv extends BoolFieldT {
     public BoolEv(Border border) { super(HEIGHT, SPAN, BREADTH, border); }
 
     private static BoolEv DATA_POS;
-    private static HashMap<Integer, HashMap<Integer, BoolEv>> MASKS;
+    private static HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> MASKS;
 
     /** Configures the precomputed masks used for transfers. */
-    public static void SET_MASKS(BoolEv pos, HashMap<Integer, HashMap<Integer, BoolEv>> masks){
+    public static void SET_MASKS(BoolEv pos, HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks){
         DATA_POS = pos;
         MASKS = masks;
     }
@@ -252,15 +253,7 @@ public non-sealed class BoolEv extends BoolFieldT {
     /** @return the transfer result for the given BoolEv. */
     public static BoolVe transfer(BoolEv orig){
         BoolVe res = BoolVe.zeroes(orig.border);
-
-        int origLen = HEIGHT * SPAN * BREADTH;
-        int targetLen = BoolVe.HEIGHT * BoolVe.BREADTH;
-
-        for (int dy: MASKS.keySet()) for (int dx: MASKS.get(dy).keySet()){
-            BoolEv mask = MASKS.get(dy).get(dx);
-            applyTransferMask(origLen, targetLen, dy, dx, mask, orig, res);
-        }
-
+        transferGeneric(orig, res,  MASKS);
         return res;
     }
 

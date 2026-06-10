@@ -126,19 +126,24 @@ public final class BoolFieldManager {
 
     private static void setMasksVe(){
         BoolVe pos = BoolVe.zeroes(Border.MIRROR);
-        HashMap<Integer, HashMap<Integer, BoolVe>> masks = new HashMap<>();
+        HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
 
         for (Ve ve: medium.ves) {
             BoolVe.setBit(pos, ve, true);
 
             Ev ev = ve.getPair();
 
-            int dy = evFlat(ev.y, ev.t, ev.s) - veFlat(ve.y, ve.s);
-            int dx = ev.x - ve.x;
+            Coord2D startCoord =  new Coord2D(veFlat(ve.y, ve.s), ve.x/32);
+            Coord2D endCoord = new Coord2D(evFlat(ev.y, ev.t, ev.s), ev.x/32);
+            int shift = ev.x%32 - ve.x%32;
 
-            if (!masks.containsKey(dy)) masks.put(dy, new HashMap<>());
-            if (!masks.get(dy).containsKey(dx)) masks.get(dy).put(dx, BoolVe.zeroes(Border.MIRROR));
-            BoolVe.setBit(masks.get(dy).get(dx), ve, true);
+            masks.computeIfAbsent(startCoord, _ -> new HashMap<>())
+                 .computeIfAbsent(endCoord, _ -> new HashMap<>())
+                 .putIfAbsent(shift, 0);
+
+            masks.get(startCoord).get(endCoord).put(shift, masks.get(startCoord).get(endCoord).get(shift) |
+                    (1 << (31 - ve.x%32))
+            );
         }
 
         BoolVe.SET_MASKS(pos, masks);
@@ -146,19 +151,24 @@ public final class BoolFieldManager {
 
     private static void setMasksVf(){
         BoolVf pos = BoolVf.zeroes(Border.MIRROR);
-        HashMap<Integer, HashMap<Integer, BoolVf>> masks = new HashMap<>();
+        HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
 
         for (Vf vf: medium.vfs) {
             BoolVf.setBit(pos, vf, true);
 
             Fv fv = vf.getPair();
 
-            int dy = fvFlat(fv.y, fv.t, fv.s) - vfFlat(vf.y, vf.s);
-            int dx = fv.x - vf.x;
+            Coord2D startCoord =  new Coord2D(vfFlat(vf.y, vf.s), vf.x/32);
+            Coord2D endCoord = new Coord2D(fvFlat(fv.y, fv.t, fv.s), fv.x/32);
+            int shift = fv.x%32 - vf.x%32;
 
-            if (!masks.containsKey(dy)) masks.put(dy, new HashMap<>());
-            if (!masks.get(dy).containsKey(dx)) masks.get(dy).put(dx, BoolVf.zeroes(Border.MIRROR));
-            BoolVf.setBit(masks.get(dy).get(dx), vf, true);
+            masks.computeIfAbsent(startCoord, _ -> new HashMap<>())
+                 .computeIfAbsent(endCoord, _ -> new HashMap<>())
+                 .putIfAbsent(shift, 0);
+
+            masks.get(startCoord).get(endCoord).put(shift, masks.get(startCoord).get(endCoord).get(shift) |
+                    (1 << (31 - vf.x%32))
+            );
         }
 
         BoolVf.SET_MASKS(pos, masks);
@@ -166,19 +176,24 @@ public final class BoolFieldManager {
 
     private static void setMasksEv(){
         BoolEv pos = BoolEv.zeroes(Border.MIRROR);
-        HashMap<Integer, HashMap<Integer, BoolEv>> masks = new HashMap<>();
+        HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
 
         for (Ev ev: medium.evs) {
             BoolEv.setBit(pos, ev, true);
 
             Ve ve = ev.getPair();
 
-            int dy = veFlat(ve.y, ve.s) - evFlat(ev.y, ev.t, ev.s);
-            int dx = ve.x - ev.x;
+            Coord2D startCoord = new Coord2D(evFlat(ev.y, ev.t, ev.s), ev.x/32);
+            Coord2D endCoord =  new Coord2D(veFlat(ve.y, ve.s), ve.x/32);
+            int shift = ve.x%32 - ev.x%32;
 
-            if (!masks.containsKey(dy)) masks.put(dy, new HashMap<>());
-            if (!masks.get(dy).containsKey(dx)) masks.get(dy).put(dx, BoolEv.zeroes(Border.MIRROR));
-            BoolEv.setBit(masks.get(dy).get(dx), ev, true);
+            masks.computeIfAbsent(startCoord, _ -> new HashMap<>())
+                 .computeIfAbsent(endCoord, _ -> new HashMap<>())
+                 .putIfAbsent(shift, 0);
+
+            masks.get(startCoord).get(endCoord).put(shift, masks.get(startCoord).get(endCoord).get(shift) |
+                    (1 << (31 - ev.x%32))
+            );
         }
 
         BoolEv.SET_MASKS(pos, masks);
@@ -186,19 +201,24 @@ public final class BoolFieldManager {
 
     private static void setMasksEf(){
         BoolEf pos = BoolEf.zeroes(Border.MIRROR);
-        HashMap<Integer, HashMap<Integer, BoolEf>> masks = new HashMap<>();
+        HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
 
         for (Ef ef: medium.efs) {
             BoolEf.setBit(pos, ef, true);
 
             Fe fe = ef.getPair();
 
-            int dy = feFlat(fe.y, fe.t, fe.s) - efFlat(ef.y, ef.t, ef.s);
-            int dx = fe.x - ef.x;
+            Coord2D startCoord =  new Coord2D(efFlat(ef.y, ef.t, ef.s), ef.x/32);
+            Coord2D endCoord = new Coord2D(feFlat(fe.y, fe.t, fe.s), fe.x/32);
+            int shift = fe.x%32 - ef.x%32;
 
-            if (!masks.containsKey(dy)) masks.put(dy, new HashMap<>());
-            if (!masks.get(dy).containsKey(dx)) masks.get(dy).put(dx, BoolEf.zeroes(Border.MIRROR));
-            BoolEf.setBit(masks.get(dy).get(dx), ef, true);
+            masks.computeIfAbsent(startCoord, _ -> new HashMap<>())
+                 .computeIfAbsent(endCoord, _ -> new HashMap<>())
+                 .putIfAbsent(shift, 0);
+
+            masks.get(startCoord).get(endCoord).put(shift, masks.get(startCoord).get(endCoord).get(shift) |
+                    (1 << (31 - ef.x%32))
+            );
         }
 
         BoolEf.SET_MASKS(pos, masks);
@@ -206,19 +226,24 @@ public final class BoolFieldManager {
 
     private static void setMasksFv(){
         BoolFv pos = BoolFv.zeroes(Border.MIRROR);
-        HashMap<Integer, HashMap<Integer, BoolFv>> masks = new HashMap<>();
+        HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
 
         for (Fv fv: medium.fvs) {
             BoolFv.setBit(pos, fv, true);
 
             Vf vf = fv.getPair();
 
-            int dy = vfFlat(vf.y, vf.s) - fvFlat(fv.y, fv.t, fv.s);
-            int dx = vf.x - fv.x;
+            Coord2D startCoord =  new Coord2D(fvFlat(fv.y, fv.t, fv.s), fv.x/32);
+            Coord2D endCoord = new Coord2D(vfFlat(vf.y, vf.s), vf.x/32);
+            int shift = vf.x%32 - fv.x%32;
 
-            if (!masks.containsKey(dy)) masks.put(dy, new HashMap<>());
-            if (!masks.get(dy).containsKey(dx)) masks.get(dy).put(dx, BoolFv.zeroes(Border.MIRROR));
-            BoolFv.setBit(masks.get(dy).get(dx), fv, true);
+            masks.computeIfAbsent(startCoord, _ -> new HashMap<>())
+                 .computeIfAbsent(endCoord, _ -> new HashMap<>())
+                 .putIfAbsent(shift, 0);
+
+            masks.get(startCoord).get(endCoord).put(shift, masks.get(startCoord).get(endCoord).get(shift) |
+                    (1 << (31 - fv.x%32))
+            );
         }
 
         BoolFv.SET_MASKS(pos, masks);
@@ -226,19 +251,24 @@ public final class BoolFieldManager {
 
     private static void setMasksFe(){
         BoolFe pos = BoolFe.zeroes(Border.MIRROR);
-        HashMap<Integer, HashMap<Integer, BoolFe>> masks = new HashMap<>();
+        HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
 
         for (Fe fe: medium.fes) {
             BoolFe.setBit(pos, fe, true);
 
             Ef ef = fe.getPair();
 
-            int dy = efFlat(ef.y, ef.t, ef.s) - feFlat(fe.y, fe.t, fe.s);
-            int dx = ef.x - fe.x;
+            Coord2D startCoord =  new Coord2D(feFlat(fe.y, fe.t, fe.s), fe.x/32);
+            Coord2D endCoord = new Coord2D(efFlat(ef.y, ef.t, ef.s), ef.x/32);
+            int shift = ef.x%32 - fe.x%32;
 
-            if (!masks.containsKey(dy)) masks.put(dy, new HashMap<>());
-            if (!masks.get(dy).containsKey(dx)) masks.get(dy).put(dx, BoolFe.zeroes(Border.MIRROR));
-            BoolFe.setBit(masks.get(dy).get(dx), fe, true);
+            masks.computeIfAbsent(startCoord, _ -> new HashMap<>())
+                 .computeIfAbsent(endCoord, _ -> new HashMap<>())
+                 .putIfAbsent(shift, 0);
+
+            masks.get(startCoord).get(endCoord).put(shift, masks.get(startCoord).get(endCoord).get(shift) |
+                    (1 << (31 - fe.x%32))
+            );
         }
 
         BoolFe.SET_MASKS(pos, masks);

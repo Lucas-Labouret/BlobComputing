@@ -3,6 +3,7 @@ package language.field.boolField;
 import language.utils.BoolFieldLine;
 import language.utils.BoolFieldManager;
 import language.utils.Border;
+import language.utils.Coord2D;
 import medium.locusT.Ve;
 import medium.locusT.Vf;
 
@@ -30,10 +31,10 @@ public non-sealed class BoolVf extends BoolFieldT {
 
     private static BoolVf DATA_POS;
     private static BoolVf DATA_END;
-    private static HashMap<Integer, HashMap<Integer, BoolVf>> MASKS;
+    private static HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> MASKS;
 
     /** Configures the precomputed masks used for transfers. */
-    public static void SET_MASKS(BoolVf pos, HashMap<Integer, HashMap<Integer, BoolVf>> masks){
+    public static void SET_MASKS(BoolVf pos, HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks){
         DATA_POS = pos;
 
         DATA_END = new BoolVf();
@@ -282,15 +283,7 @@ public non-sealed class BoolVf extends BoolFieldT {
     /** @return the transfer result for the given BoolVf. */
     public static BoolFv transfer(BoolVf orig){
         BoolFv res = BoolFv.zeroes(orig.border);
-
-        int origLen = HEIGHT * BREADTH;
-        int targetLen = BoolFv.HEIGHT * BoolFv.SPAN * BoolFv.BREADTH;
-
-        for (int dy: MASKS.keySet()) for (int dx: MASKS.get(dy).keySet()){
-            BoolVf mask = MASKS.get(dy).get(dx);
-            applyTransferMask(origLen, targetLen, dy, dx, mask, orig, res);
-        }
-
+        transferGeneric(orig, res, MASKS);
         return res;
     }
 

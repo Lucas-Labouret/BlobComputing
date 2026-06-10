@@ -116,6 +116,7 @@ public class InstructionPlayer {
     public void setSpeed(int ms) { speed = ms; }
 
     public void loopBack() {
+        if (playing) return;
         if (loopCounter == 0) return; // Can't loop back if we're at the beginning
         loopCounter--;
         autoCache.retrieve(loopCounter * leafCount, instruction);
@@ -128,6 +129,7 @@ public class InstructionPlayer {
     }
 
     public void restoreState(Cache.CacheEntry entry) {
+        if (playing) return;
         stepCounter = userCache.retrieve(entry);
         loopCounter =  stepCounter/leafCount;
         displayController.refresh();

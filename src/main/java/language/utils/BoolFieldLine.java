@@ -129,6 +129,13 @@ public class BoolFieldLine {
         return line;
     }
 
+    public void setInt(int value, int pos) {
+        line[pos] = value;
+    }
+    public int getInt(int pos) {
+        return line[pos];
+    }
+
     /** @return whether this BoolFieldLine is equal to the given object. */
     @Override
     public boolean equals(Object o){

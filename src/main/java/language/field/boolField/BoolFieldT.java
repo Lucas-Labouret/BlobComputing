@@ -2,6 +2,9 @@ package language.field.boolField;
 
 import language.utils.BoolFieldLine;
 import language.utils.Border;
+import language.utils.Coord2D;
+
+import java.util.HashMap;
 
 /** Represents the abstract base type for transfer boolean fields. */
 public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf, BoolEv, BoolEf, BoolFv, BoolFe {
@@ -84,17 +87,17 @@ public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf
         }
     }
 
-    /** Applies the transfer mask to the target language.field. */
-    protected static void applyTransferMask(int origLen, int targetLen,
-                                            int dy, int dx, BoolFieldT mask,
-                                            BoolFieldT orig, BoolFieldT res){
-        for (int srcIndex = 0; srcIndex < origLen; srcIndex++) {
-            int dstIndex = srcIndex + dy;
-            if (dstIndex < 0 || dstIndex >= targetLen) continue;
+    protected static void transferGeneric(BoolFieldT orig, BoolFieldT target,
+                                          HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks) {
+        for (Coord2D start: masks.keySet()) for (Coord2D end: masks.get(start).keySet()) for (Integer shift: masks.get(start).get(end).keySet()) {
+            int startInt = orig.getInt(start);
+            int mask = masks.get(start).get(end).get(shift);
+            int masked = startInt & mask;
 
-            BoolFieldLine masked = BoolFieldLine.and(orig.lines[srcIndex], mask.lines[srcIndex]);
-            BoolFieldLine shifted = BoolFieldLine.shiftLine(masked, dx);
-            res.lines[dstIndex] = BoolFieldLine.or(res.lines[dstIndex], shifted);
+            masked = shift > 0 ? masked >>> shift : masked << -shift;
+
+            int endInt = target.getInt(end) | masked;
+            target.setInt(endInt, end);
         }
     }
 

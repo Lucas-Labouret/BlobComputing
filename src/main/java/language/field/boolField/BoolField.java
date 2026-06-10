@@ -3,6 +3,7 @@ package language.field.boolField;
 import language.field.Field;
 import language.utils.BoolFieldLine;
 import language.utils.Border;
+import language.utils.Coord2D;
 
 /** Represents the abstract base type for boolean fields backed by a BoolFieldLine array. */
 public sealed abstract class BoolField extends Field permits BoolFieldS, BoolFieldT {
@@ -143,6 +144,13 @@ public sealed abstract class BoolField extends Field permits BoolFieldS, BoolFie
             if (sourceIndex >= 0) res.lines[index] = new BoolFieldLine(orig.lines[sourceIndex]);
             else res.lines[index] = BoolFieldLine.zeroes();
         }
+    }
+
+    protected void setInt(int value, Coord2D coord) {
+        lines[coord.y()].setInt(value, coord.x());
+    }
+    protected int getInt(Coord2D coord) {
+        return lines[coord.y()].getInt(coord.x());
     }
 
     public static String toString(BoolField field) {
