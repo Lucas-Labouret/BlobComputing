@@ -25,7 +25,7 @@ public class IntVDisplay implements Displayable {
     @Override public boolean updatesV() { return true; }
 
     @Override
-    public HashMap<Vertex, Color> displayV(Medium medium) {
+    public HashMap<Vertex, Color> displayColorV(Medium medium) {
         HashMap<Vertex, Integer> mem = ref.get().decode(medium);
         HashMap<Vertex, Color> colors = new HashMap<>();
 
@@ -46,16 +46,26 @@ public class IntVDisplay implements Displayable {
             Color baseColor;
             if (val > 0) {
                 baseColor = style.VERTEX_TRUE();
-                shade = .8d * val / absMax;
+                shade =  .8d * val / absMax;
             } else {
                 baseColor = style.VERTEX_FALSE();
-                shade = - .8d * val / absMax;
+                shade = -.8d * val / absMax;
             }
-            Color targetColor = Color.BLACK;
-            Color interpolated = baseColor.interpolate(targetColor, shade);
+            Color targetColor = Color.WHITE.interpolate(Color.BLACK, shade);
+            Color interpolated = baseColor.interpolate(targetColor, 0.5);
             colors.put(v, interpolated);
         }
 
         return colors;
+    }
+
+    @Override
+    public HashMap<Vertex, String> displayStringV(Medium medium) {
+        HashMap<Vertex, Integer> mem = ref.get().decode(medium);
+        HashMap<Vertex, String> strings = new HashMap<>();
+        for (Vertex v: mem.keySet()) {
+            strings.put(v, Integer.toString(mem.get(v)));
+        }
+        return strings;
     }
 }

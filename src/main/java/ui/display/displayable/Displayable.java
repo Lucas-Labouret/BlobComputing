@@ -26,13 +26,23 @@ public interface Displayable {
 
     // These methods should be overridden to compute the appropriate colors for the loci that this Displayable wants to display.
     // They should only be called if the corresponding updates* returns true
-    default HashMap<Vertex, Color> displayV (Medium medium) { return new HashMap<>(); }
-    default HashMap<Ve,     Color> displayVe(Medium medium) { return new HashMap<>(); }
-    default HashMap<Vf,     Color> displayVf(Medium medium) { return new HashMap<>(); }
-    default HashMap<Edge,   Color> displayE (Medium medium) { return new HashMap<>(); }
-    default HashMap<Ev,     Color> displayEv(Medium medium) { return new HashMap<>(); }
-    default HashMap<Ef,     Color> displayEf(Medium medium) { return new HashMap<>(); }
-    default HashMap<Face,   Color> displayF (Medium medium) { return new HashMap<>(); }
-    default HashMap<Fv,     Color> displayFv(Medium medium) { return new HashMap<>(); }
-    default HashMap<Fe,     Color> displayFe(Medium medium) { return new HashMap<>(); }
+    default HashMap<Vertex, Color> displayColorV (Medium medium) { return new HashMap<>(); }
+    default HashMap<Ve,     Color> displayColorVe(Medium medium) { return new HashMap<>(); }
+    default HashMap<Vf,     Color> displayColorVf(Medium medium) { return new HashMap<>(); }
+    default HashMap<Edge,   Color> displayColorE (Medium medium) { return new HashMap<>(); }
+    default HashMap<Ev,     Color> displayColorEv(Medium medium) { return new HashMap<>(); }
+    default HashMap<Ef,     Color> displayColorEf(Medium medium) { return new HashMap<>(); }
+    default HashMap<Face,   Color> displayColorF (Medium medium) { return new HashMap<>(); }
+    default HashMap<Fv,     Color> displayColorFv(Medium medium) { return new HashMap<>(); }
+    default HashMap<Fe,     Color> displayColorFe(Medium medium) { return new HashMap<>(); }
+
+    default HashMap<Vertex, String> displayStringV (Medium medium) { return new HashMap<>(); }
+    default HashMap<Ve,     String> displayStringVe(Medium medium) { return new HashMap<>(); }
+    default HashMap<Vf,     String> displayStringVf(Medium medium) { return new HashMap<>(); }
+    default HashMap<Edge,   String> displayStringE (Medium medium) { return new HashMap<>(); }
+    default HashMap<Ev,     String> displayStringEv(Medium medium) { return new HashMap<>(); }
+    default HashMap<Ef,     String> displayStringEf(Medium medium) { return new HashMap<>(); }
+    default HashMap<Face,   String> displayStringF (Medium medium) { return new HashMap<>(); }
+    default HashMap<Fv,     String> displayStringFv(Medium medium) { return new HashMap<>(); }
+    default HashMap<Fe,     String> displayStringFe(Medium medium) { return new HashMap<>(); }
 }

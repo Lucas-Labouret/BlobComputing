@@ -26,13 +26,22 @@ public class BoolFDisplay implements Displayable {
     @Override public boolean updatesF() { return true; }
 
     @Override
-    public HashMap<Face, Color> displayF(Medium medium) {
+    public HashMap<Face, Color> displayColorF(Medium medium) {
         HashMap<Face, Boolean> mem = BoolF.decode(medium.faces, ref.get());
         HashMap<Face, Color> colors = new HashMap<>();
         for (Face f : mem.keySet())
             if (mem.get(f)) colors.put(f, style.FACE_TRUE());
             else colors.put(f, style.FACE_FALSE());
         return colors;
+    }
+
+    @Override
+    public HashMap<Face, String> displayStringF(Medium medium) {
+        HashMap<Face, Boolean> mem = BoolF.decode(medium.faces, ref.get());
+        HashMap<Face, String> strings = new HashMap<>();
+        for (Face f : mem.keySet())
+            strings.put(f, mem.get(f).toString());
+        return strings;
     }
 }
 

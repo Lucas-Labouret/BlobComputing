@@ -3,24 +3,24 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage{tabularx}
 \usepackage{adjustbox}
-%\usepackage[colorinlistoftodos]{todonotes}
 \usepackage{csquotes}
 \usepackage{comment}
 \usepackage{imakeidx}
-%tabela
 \usepackage{multirow}
 \usepackage{xcolor}
+\usepackage{minted}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{hyperref}
-\hypersetup{
+\hypersetup {
      colorlinks=true,
      linkcolor=blue,
      filecolor=blue,
      citecolor = black,      
      urlcolor=red,
-     }
+}
 \usepackage[toc,acronym,nopostdot,nonumberlist]{glossaries}
 \usepackage{titling}
 \usepackage{tikzpagenodes}
@@ -29,10 +29,6 @@
 \usepackage{indentfirst}
 \usepackage{lipsum}
 \usepackage{cleveref}
-
-
-%para definir a localização das tabelas e imagens em modo strict
-%\usepackage{placeins}
 
 \usepackage{biblatex}
 \addbibresource{ref.bib}
@@ -44,61 +40,37 @@
 
 \begin{titlepage}
 \begin{tikzpicture}[remember picture,overlay,shift={(current page.center)}]
-%\node[anchor=center,xshift=-7.5cm,yshift=10.5cm]{\includegraphics[scale=0.6]{figs/ERSC_logo.pdf}};
-\node[anchor=center,xshift=-4.0cm,yshift=12.7cm]{\includegraphics[scale=0.6]{figs/ufr-logo.png}};
-%\node[anchor=center,xshift=9.5cm,yshift=-12cm]{\includegraphics[scale=0.75]{figs/line.pdf}};
-\node[anchor=center,xshift=6.0cm,yshift=12.7cm]{(Insert company logo here)};
-%\node[anchor=center,xshift=9.5cm,yshift=-12cm]{\includegraphics[scale=0.75]{figs/line.pdf}};
+\node[anchor=center,xshift=-4.5cm,yshift=12.7cm]{\includegraphics[scale=0.5]{figs/ufr-logo.png}};
+\node[anchor=center,xshift=5.5cm,yshift=12.7cm]{\includegraphics[scale=0.5]{figs/CNRS-LISN-LOGO-Quadri-scaled.jpg}};
 \end{tikzpicture} 
 
 \centering
 \vspace{5cm}
 \large Université Paris-Saclay UFR des Sciences d'Orsay Computer Science Department \\
 \Large Master 2 Quantum and Distributed Computer Science~(QDCS) \\
-\Large 2023-24 Intership Report \\
+\Large 2025-26 Intership Report \\
 \vspace{3cm}
-\huge {\textsc{Title of the Internship}} \\
+\huge {\textsc{Blob Computing in Homogeneous Isotropic Distributed Systems}} \\
 \vspace{3cm}
-%\large a project / an internship authored by\\
-%\large a lab assignment report authored by\\
-\Large \emph{Name Surname} \\
+\large an internship authored by\\
+\Large \emph{Lucas Labouret} \\
 \vspace{2cm}
-\large performed at \\
-\large Company X, Laboratory Y \\
+\large performed at the\\
+\large Laboratoire Interdisciplinaire des Sciences du Numériques\\
 \large and supervised by\\
-%#if Project uncomment
-\large Prof. X and Dr. Y \\
-%#if Internship uncomment following lines
-%\large Prof. X (ESTG-IPVC)\\
-%\large Name of Company Supervisor (Company X)\\
+\large Dr. Frédéric Gruau\\
 
-%\vspace{3cm}
-%\includegraphics[scale=0.5]{figs/ufr-logo.png};
-
-%#if Internship uncomment following lines
-%\includegraphics[scale=0.35]{figs/ESTG-IPVC.png}
 \vspace{1cm}
 \newdateformat{daymonthyear}{\THEDAY\ \monthname[\THEMONTH], \THEYEAR}
 \daymonthyear\today \\
-%December, 2019
-%\large v2.3
 \end{titlepage}
 
 \input{acro_list}
 
 \pagenumbering{roman} 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 \begin{abstract}
-%context
-
-%problem
-
-%proposal
-
-%solution
-
-The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. 
+\lipsum[1]
 
 \vspace{2cm}
 \noindent \textbf{Keywords:} word1. word2. word3. word4.
@@ -106,55 +78,15 @@ The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the 
 \end{abstract}
 
 
-
 %insert index
 \tableofcontents
 \glsaddall
 \printglossary[type=\acronymtype]
 \printglossary[type=main,title={Glossary},toctitle={Glossary}]
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
 \chapter{Introduction}
 \pagenumbering{arabic} 
 \label{chap:introduction}
-
-IMPORTANT:
-\begin{itemize}
-    \item PLEASE check the file vars.tex: I'm using it in 10\kbps.
-    \item Using glossaries for the first time: \gls{wn}
-    \item Using glossaries after first time: \gls{wn}
-    \item Using glossaries in plural: \glspl{wn}
-    \item Using glossaries extended: \glsdesc{wn}
-\end{itemize}
-
-How to reference and insert a \Cref{fig:labeloffigure}. 
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[scale=0.7]{figs/ufr-logo.png}
-    \caption{This is a figure}
-    \label{fig:labeloffigure}
-\end{figure}
-
-This is an example of a citation \cite{Pedro2019}.   
-
-This is a way for you to generate tables: \href{https://www.tablesgenerator.com/}{https://www.tablesgenerator.com/}
-
-This is how to refer to another \Cref{cap:work}
-
-Here is how to do a bullet list
-\begin{itemize}
-    \item First point
-    \item Second point
-    \item and so on...
-\end{itemize}
-
-Here is how to do a numbered list
-\begin{enumerate}
-    \item First point
-    \item Second point
-    \item and so on...
-\end{enumerate}
 
 \section{Presentation of the host organization} 
 \label{sec:context}
@@ -162,27 +94,131 @@ Here is how to do a numbered list
 
 \section{Internship context and objectives}
 \label{sec:motivation}
-\lipsum[1]
- 
 
-\section{Related or previous work}
+This year's internship is the continuation of my M1 internship (2025). Last year, I worked on developing a parallel algorithm for the simulation of some foundamental operations in the context of blob computing. This year's internship was split into three main parts:
+\begin{itemize}
+    \item Specifying a language for the descriptions of Blob programs, and implementing an interpreter for this language making use of the parallel algorithm developed during my M1 internship.
+    \item Building a graphical user interface to easily visualize the execution of Blob programs, and to allow users to interact with the simulation.
+    \item Redevelopping Blob algorithms initially designed to work on a hexagonal lattice in the new language, and adapting them to work on a homogeneous isotropic medium.
+\end{itemize}
+
+The main objective of this internship is to explore the potential of blob computing in homogeneous isotropic distributed systems, and to contribute to the development of tools and algorithms for this computational paradigm. In particular, the aim was to design and implement an algorithm to solve the homogenenization problem : given an initial set of particles in a medium, we want to spread them in the medium so as to minimize the maximal distance between any two particles (or a particle and the border of the medium).
+
+\section{What is Blob computing ?}
 \label{sec:name}
-The general objective is to
-The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. 
+
+Blob computing is a computational paradigm that draws from celluar automatas. In blob computing, computation is performed by a set of simple, locally interacting agents, called "processing elements" (PEs). These PEs all execute the same sequence of operations synchronously. They are arranged in space following the topology of a Delaunay triangulated embedded planar graph. THe set of all PEs is called a "computing medium", or simply"medium". The PEs are of different types, depending on their position in the graph. Each PE can only directly communicate with its neighbors in the graph, and the type of communication depends on the types of the PEs involved.
+
+There are 9 distinct types of PEs : 
+\begin{itemize}
+    \item 3 simplical types that correspond to the vertices, edges, and faces (excluding the exterior face) of the graph
+    \item 6 transfer types. These are used to transfer information between the simplical PEs. They are defined by the type of simplical PE they are transferring from and to. For example, a transfer PE of type "Ve" ("vertex to edge") is used to transfer information from a vertex PE to an edge PE.
+\end{itemize}
+
+While the PEs are simple and have limited computational capabilities, they can interact with their neighbors to perform complex computations. PEs are restricted to a very limited set of operations. 
+\begin{itemize}
+    \item \textbf{Broadcasts} : a simplicial PE can broadcast a message to its neighboring transfer PEs of a given type. For example, a \textit{Vertex} can broadcast a message to its neighboring \textit{Ve}s, and a \textit{Face} can broadcast a message to its neighboring \textit{Fe}s. Importantly, \textit{this is the only way of direct communication from simplicial to transfer PEs}, it is not possible for a simplicial PE to communicate single out a transfer PE to communicate exclusively with.
+    
+    \item \textbf{Logical reductions} : a simplicial PE can perform a reduction operation on the messages received from its neighboring transfer PEs of a given type. For example, a \textit{Vertex} can receive a message that is the result of a successive OR (resp. AND, XOR) of the messages sent by its neighboring \textit{Ve}s. Similarly to broadcasts, this is the only way of direct communication from transfer to simplicial PEs.
+    
+    \item \textbf{Transfers} : a transfer PE can send a message to its dual transfer PE. For example, a \textit{Ve} can send a message to its dual \textit{Ev}.
+    
+    \item \textbf{Rotations} : a simplicial PE can "rotate" a message clockwise or counterclockwise between its neighboring transfer PEs of a given type. For example, a \textit{Vertex} can rotate a message from its \textit{Ve}s to its \textit{Vf}s (and vice versa), and from its \textit{Vf}s to its \textit{Ve}s. This is the only way of direct communication between transfer PEs of different types.
+    
+    \item \textbf{Logical operations} : any PE can perform logical operations (AND, OR, XOR) on any bits of its state.
+\end{itemize}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+\subsection*{About the media}
+
+In this internship I focused on a very specific kind of medium : homogeneous and isotropic with a regular rectangular border. A medium is homogeneous if the vertices of the underlying embedded graph are distrbuted in a way that minimizes (or is close to minimizing) the maximal distance between any two vertices. It is isotropic if the direction of the edges follows no preferential direction (i.e. the distribution of the angles of the edges is close to uniform). 
+
+We accepted a small caveat regarding the homogeneity and anisotropy of the medium : we allowed the border to be a perfect rectangle with regularly spaced vertices. Such a border is very helpful in controlling strange behaviors that can arise near it, because it allows us to easily "trick" the border PEs into behaving as if there a perfect mirror image of the medium on the other side of the border. This mirror image is useful for reasons that will become clear later.
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering\includegraphics[width=\linewidth]{figs/medium_homogeneous_isotropic.png}
+		\caption{Homogeneous and isotropic.}
+	\end{subfigure}
+	\begin{subfigure}{.5\textwidth}
+		\centering\includegraphics[width=\linewidth]{figs/medium_homogeneous.png}
+		\caption{Homogeneous but not isotropic.}
+	\end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+		\centering\includegraphics[width=\linewidth]{figs/medium_isotropic.png}
+		\caption{Isotropic but not homogeneous.}
+	\end{subfigure}
+\end{figure}
+
+We chose to focus on this specific kind of medium for two reasons. First, it is a natural setting for many applications of blob computing, such as swarm robotics or distributed sensor networks. Second, it allows us to explore the potential of blob computing in a more realistic and complex setting than the hexagonal lattice, which was the focus of most of Frédéric's previous work in this area.
+
 \chapter{Performed work}
 \label{cap:work}
 
 \lipsum[1]
 
-\section{Methodology}
+\section{Blob language and interpreter}
 
-\section{Performed tasks}
+The blob language is a simple, high-level language that allows users to write Blob programs in a convenient way. It is based on the notion of field programming : primitive data types are maps from the PEs of a given type to values. Specifically, we only use boolean fields, which are maps from the PEs of a given type to boolean values. A Blob program is then a sequence of instructions that manipulate these fields. It is similar in spirit to an automaton, where the state of the medium at a given time is represented by a collection of fields, and the program defines a transition function that takes the current state as an input and produces the next state.
 
-\section{Results, deliverables, and artifact description}
+This field programming paradigm is very natural in the context of blob computing : since PEs act synchronously, any operation that can be performed by a PE can be easily expressed as an operation on the field of values of that PE type. For example, a rotation \textit{Ve}$\leftarrow$\textit{Vf} can be expressed as an operation that takes the field of values of the \textit{Ve}s and produces a new field of values for the \textit{Vf}s, where the value of each \textit{Vf} is equal to the value of the \textit{Ve} that is rotated to it. Similarly, a broadcast from \textit{Vertex} to \textit{Ve}s can be expressed as an operation that takes the field of values of the \textit{Vertex}s and produces a new field of values for the \textit{Ve}s, where the value of each \textit{Ve} is equal to the value of the \textit{Vertex} that is broadcasting to it.
 
+Because of the limited time available during this internship, I decided to develop a simple language that sits on top of Java. This allows us to avoid the overhead of developing a full-fledged programming language. In particular, this allows us to forgo the development of a lexer and a parser, which would have been necessary if we had developed a standalone language. This also allows us to easily make the Blob language strongly typed object oriented, since we can directly use Java classes and objects in our Blob programs.
+
+\subsection{The interpreter}
+
+The interpreter is built around an Instruction interface, which declares a single method, exec(). This calling this method performs a single step of the instruction, then returns a boolean indicating whether the instruction has finished executing or not. The Instrcution interface has two direct implementations : the BasicInstruction interface, which is implemented by single-step instructions, and the Procedure abstract class, which is used to create composite instructions. Basic instrctions are the building blocks of Blob programs. They correspond to the basic operations that PEs can perform, such as broadcasts and transfers, as well as some interpreter specific operations, such as Show, which mark a value to be displayed in the GUI, but otherwise have no effect on the state of the medium. Procedures are used to create more complex instructions by combining basic instructions and other procedures. They are implemented as a list of instructions, and the exec() method simply executes the instructions in order, moving on to the next instruction only when the current one has finished executing. Ultimately, the interpreter simply executes a given instruction on loop ad-vitam eternam, making the initial state of the medium (i.e. the initial values of the variables in the program) evolve according to the program. 
+
+It is important to note, however, that not all variables in the program are useful to describe the state of the program at the start of an iteration of the loop. Many variables are used temporarily to store intermidiate results. The interpreter allows to mark those variables as temporary. The references to the fields contained in a temporary variable is set to $null$ at the end of the procedure that created it, allowing Java's garbage collector to free the memory used by those fields. While this may not be important for small programs, given that the number of PEs in a medium can be very large, it is crucial to be able to free memory as soon as possible to avoid running out of memory.
+
+\subsection{The language}
+
+Since the Blob language is relatively simple, let's a small example of a Blob program to illustrate its syntax and semantics. The following program implements a simple algorithm that allows a single starting particle to spread in the medium.
+
+\begin{minted}{java}
+public class Grow {
+    BoolVRef grow;
+    
+    public Grow(Medium medium) {
+        int randIndex = (int) (Math.random() * medium.vertices.size());
+        Vertex seed = (Vertex) medium.vertices.toArray()[randIndex];
+        BoolV seedField = BoolV.zeroes();
+        BoolV.setBit(seedField, seed, true);
+        grow = new BoolVRef(seedField);
+    }
+    
+    private class Send extends Procedure {
+        public Send(BoolVeRef ve) {
+            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolEfRef ef = tmp(new BoolEfRef());
+            
+            transfer(ve, ev);
+            rotCW(ev, ef);
+            rotCW(ef, ev);
+            transfer(ev, ve);
+        }
+    }
+    
+    private class Spread extends Procedure {
+        public Spread() {
+            BoolVRef start = tmp(new BoolVRef());
+            BoolVeRef ve = tmp(new BoolVeRef());
+            
+            set(grow, start);
+            broadcast(grow, ve);
+            call(new Send(ve));
+            redOr(ve, grow);
+            or(start, grow, grow);
+        }
+    }
+    public Procedure spread() { return new Spread(); }
+}
+\end{minted}
+
+\subsection{Basic instruction parallelization}
+
+The field programming paradigm forms the basis of the parallelization of basic instructions, which is a key feature of the interpreter. Since the number of PEs in a medium can be very large, it is important to be able to execute instructions in parallel as much as possible. This is achieved by expressing a field of boolean values as an array of integers, where PE is assigned a single bit representing its value (\textit{note : it is possible for a bit to be unused, but all PEs must have exactly one corresponding bit, and no bit can be used by more than one PE}). With a clever organization of this array, it is possible to greatly reduce the number of operations needed to execute an instruction on all PEs of a given type, by performing bitwise operations on the integers in the array.
 
 
 \label{sec:sec2}

@@ -94,13 +94,23 @@ public class DisplayController {
         displays.add(box);
     }
 
-    public void addDisplay(Displayable d) {
-        drawer.addDisplay(d);
+    public void addColorDisplay(Displayable d) {
+        drawer.addColorDisplay(d);
         drawer.draw();
     }
 
-    public void removeDisplay(Displayable d) {
-        drawer.removeDisplay(d);
+    public void removeColorDisplay(Displayable d) {
+        drawer.removeColorDisplay(d);
+        drawer.draw();
+    }
+
+    public void addStringDisplay(Displayable d) {
+        drawer.addStringDisplay(d);
+        drawer.draw();
+    }
+
+    public void removeStringDisplay(Displayable d) {
+        drawer.removeStringDisplay(d);
         drawer.draw();
     }
 }

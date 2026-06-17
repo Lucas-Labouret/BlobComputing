@@ -26,13 +26,22 @@ public class BoolEfDisplay implements Displayable {
     @Override public boolean updatesEf() { return true; }
 
     @Override
-    public HashMap<Ef, Color> displayEf(Medium medium) {
+    public HashMap<Ef, Color> displayColorEf(Medium medium) {
         HashMap<Ef, Boolean> mem = BoolEf.decode(medium.efs, ref.get());
         HashMap<Ef, Color> colors = new HashMap<>();
         for (Ef ef : mem.keySet())
             if (mem.get(ef)) colors.put(ef, style.EF_TRUE());
             else colors.put(ef, style.EF_FALSE());
         return colors;
+    }
+
+    @Override
+    public HashMap<Ef, String> displayStringEf(Medium medium) {
+        HashMap<Ef, Boolean> mem = BoolEf.decode(medium.efs, ref.get());
+        HashMap<Ef, String> strings = new HashMap<>();
+        for (Ef ef : mem.keySet())
+            strings.put(ef, mem.get(ef).toString());
+        return strings;
     }
 }
 

@@ -2,9 +2,6 @@ package language.field.intField;
 
 import language.field.boolField.BoolFv;
 import language.fieldRef.boolField.BoolFvRef;
-import language.fieldRef.boolField.BoolVRef;
-import language.utils.BoolFieldManager;
-import language.utils.Border;
 import medium.Medium;
 import medium.locusT.Fv;
 
@@ -13,33 +10,29 @@ import java.util.HashMap;
 
 /** IntFv represents an integer language.field on Fv loci. */
 public non-sealed class IntFv extends IntField<BoolFv> {
-    public IntFv(int n) { this(n, BoolFieldManager.DEFAULT_BORDER()); }
-    public IntFv(int n, Border border) {
+    public IntFv(int n) {
         super(n, new BoolFvRef[n + 1]);
-        for (int i = 0; i <= n; i++) this.bits[i] = new BoolFvRef(BoolFv.zeroes(border));
+        for (int i = 0; i <= n; i++) this.bits[i] = new BoolFvRef();
     }
     private IntFv(int n, BoolFvRef[] bits) {
         super(n, bits);
     }
 
     public static IntFv of(int value, int n) {
-        return of(value, n, BoolFieldManager.DEFAULT_BORDER());
-    }
-    public static IntFv of(int value, int n, Border border) {
-        IntFv intFv = new IntFv(n, border);
-        final int oVal = value;
-        for (int i = 0; value != 0 && value != Integer.MIN_VALUE; i++) {
-            if (i+1 > n) throw new IllegalArgumentException("Value "+ oVal +" cannot be represented in "+ n +" bits.");
-            intFv.bits[n - i] = (value & 1) == 0 ? new BoolFvRef(BoolFv.zeroes(border)) : new BoolFvRef(BoolFv.ones(border));
-            value = value >> 1;
-        }
-        intFv.bits[0] = value >>> 31 == 0 ? new BoolFvRef(BoolFv.zeroes(border)) : new BoolFvRef(BoolFv.ones(border));
+        IntFv intFv = new IntFv(n);
+        of(intFv, value, BoolFv::zeroes, BoolFv::ones);
         return intFv;
     }
-    public static IntFv of(BoolFvRef boolFv, int n) {
-        IntFv intFv = new IntFv(n, boolFv.get().border);
-        for (int i = 1; i < n; i++) intFv.bits[i] = new BoolFvRef(BoolFv.zeroes(boolFv.get().border));
-        intFv.bits[n] = boolFv.copy();
+    
+    public static IntFv maxValue(int n) {
+        IntFv intFv = new IntFv(n);
+        maxValue(intFv, BoolFv::zeroes, BoolFv::ones);
+        return intFv;
+    }
+    
+    public static IntFv minValue(int n) {
+        IntFv intFv = new IntFv(n);
+        minValue(intFv, BoolFv::zeroes, BoolFv::ones);
         return intFv;
     }
 
@@ -61,33 +54,15 @@ public non-sealed class IntFv extends IntField<BoolFv> {
 
     /** Converts this IntFv to a HashMap<Fv, Integer>. */
     public HashMap<Fv, Integer> decode(Medium m) {
-        if (n > 31) throw new RuntimeException("Cannot represent a >31 bits IntFv as a Java int");
         HashMap<Fv, Integer> res = new HashMap<>();
-        for (Fv fv : m.fvs) res.put(fv, 0);
-        for (int i = 1; i <= n; i++) {
-            BoolFvRef bit = (BoolFvRef) bits[i];
-            HashMap<Fv, Boolean> bitMap = BoolFv.decode(m.fvs, bit.get());
-            final int pos = n - i;
-            res.replaceAll((fv, val) -> bitMap.get(fv) ? val | (1 << pos) : val);
-        }
-
-        BoolFvRef bit = (BoolFvRef) bits[0];
-        HashMap<Fv, Boolean> bitMap = BoolFv.decode(m.fvs, bit.get());
-        res.replaceAll((fv, val) -> {
-            if (bitMap.get(fv))
-                for (int i = n; i < 32; i++) val |= (1 << i);
-            return val;
-        });
-
+        decode(this, res, m.fvs, BoolFv::decode);
         return res;
     }
 
     @Override
     public IntFv copy() {
-        IntFv copy = new IntFv(n, border);
-        for (int i = 0; i <= n; i++) {
-            copy.bits[i] = this.bits[i].copy();
-        }
+        IntFv copy = new IntFv(n);
+        copy(this, copy);
         return copy;
     }
 

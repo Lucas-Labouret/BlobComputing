@@ -25,7 +25,7 @@ public class IntVeDisplay implements Displayable {
     @Override public boolean updatesVe() { return true; }
 
     @Override
-    public HashMap<Ve, Color> displayVe(Medium medium) {
+    public HashMap<Ve, Color> displayColorVe(Medium medium) {
         HashMap<Ve, Integer> mem = ref.get().decode(medium);
         HashMap<Ve, Color> colors = new HashMap<>();
 
@@ -49,13 +49,23 @@ public class IntVeDisplay implements Displayable {
                 shade =  .8d * val / absMax;
             } else {
                 baseColor = style.VE_FALSE();
-                shade = -.8d * (double) val / absMax;
+                shade = -.8d * val / absMax;
             }
-            Color targetColor = Color.BLACK;
-            Color interpolated = baseColor.interpolate(targetColor, shade);
+            Color targetColor = Color.WHITE.interpolate(Color.BLACK, shade);
+            Color interpolated = baseColor.interpolate(targetColor, 0.5);
             colors.put(ve, interpolated);
         }
 
         return colors;
+    }
+
+    @Override
+    public HashMap<Ve, String> displayStringVe(Medium medium) {
+        HashMap<Ve, Integer> mem = ref.get().decode(medium);
+        HashMap<Ve, String> strings = new HashMap<>();
+        for (Ve ve: mem.keySet()) {
+            strings.put(ve, Integer.toString(mem.get(ve)));
+        }
+        return strings;
     }
 }

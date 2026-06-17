@@ -2,9 +2,6 @@ package language.field.intField;
 
 import language.field.boolField.BoolEv;
 import language.fieldRef.boolField.BoolEvRef;
-import language.fieldRef.boolField.BoolVRef;
-import language.utils.BoolFieldManager;
-import language.utils.Border;
 import medium.Medium;
 import medium.locusT.Ev;
 
@@ -13,33 +10,29 @@ import java.util.HashMap;
 
 /** IntEv represents an integer language.field on Ev loci. */
 public non-sealed class IntEv extends IntField<BoolEv> {
-    public IntEv(int n) { this(n, BoolFieldManager.DEFAULT_BORDER()); }
-    public IntEv(int n, Border border) {
+    public IntEv(int n) {
         super(n, new BoolEvRef[n + 1]);
-        for (int i = 0; i <= n; i++) this.bits[i] = new BoolEvRef(BoolEv.zeroes(border));
+        for (int i = 0; i <= n; i++) this.bits[i] = new BoolEvRef();
     }
     private IntEv(int n, BoolEvRef[] bits) {
         super(n, bits);
     }
 
     public static IntEv of(int value, int n) {
-        return of(value, n, BoolFieldManager.DEFAULT_BORDER());
-    }
-    public static IntEv of(int value, int n, Border border) {
-        IntEv intEv = new IntEv(n, border);
-        final int oVal = value;
-        for (int i = 0; value != 0 && value != Integer.MIN_VALUE; i++) {
-            if (i+1 > n) throw new IllegalArgumentException("Value "+ oVal +" cannot be represented in "+ n +" bits.");
-            intEv.bits[n - i] = (value & 1) == 0 ? new BoolEvRef(BoolEv.zeroes(border)) : new BoolEvRef(BoolEv.ones(border));
-            value = value >> 1;
-        }
-        intEv.bits[0] = value >>> 31 == 0 ? new BoolEvRef(BoolEv.zeroes(border)) : new BoolEvRef(BoolEv.ones(border));
+        IntEv intEv = new IntEv(n);
+        of(intEv, value, BoolEv::zeroes, BoolEv::ones);
         return intEv;
     }
-    public static IntEv of(BoolEvRef boolEv, int n) {
-        IntEv intEv = new IntEv(n, boolEv.get().border);
-        for (int i = 1; i < n; i++) intEv.bits[i] = new BoolEvRef(BoolEv.zeroes(boolEv.get().border));
-        intEv.bits[n] = boolEv.copy();
+
+    public static IntEv maxValue(int n) {
+        IntEv intEv = new IntEv(n);
+        maxValue(intEv, BoolEv::zeroes, BoolEv::ones);
+        return intEv;
+    }
+
+    public static IntEv minValue(int n) {
+        IntEv intEv = new IntEv(n);
+        minValue(intEv, BoolEv::zeroes, BoolEv::ones);
         return intEv;
     }
 
@@ -61,33 +54,15 @@ public non-sealed class IntEv extends IntField<BoolEv> {
 
     /** Converts this IntEv to a HashMap<Ev, Integer>. */
     public HashMap<Ev, Integer> decode(Medium m) {
-        if (n > 31) throw new RuntimeException("Cannot represent a >31 bits IntEv as a Java int");
         HashMap<Ev, Integer> res = new HashMap<>();
-        for (Ev ev : m.evs) res.put(ev, 0);
-        for (int i = 1; i <= n; i++) {
-            BoolEvRef bit = (BoolEvRef) bits[i];
-            HashMap<Ev, Boolean> bitMap = BoolEv.decode(m.evs, bit.get());
-            final int pos = n - i;
-            res.replaceAll((ev, val) -> bitMap.get(ev) ? val | (1 << pos) : val);
-        }
-
-        BoolEvRef bit = (BoolEvRef) bits[0];
-        HashMap<Ev, Boolean> bitMap = BoolEv.decode(m.evs, bit.get());
-        res.replaceAll((ev, val) -> {
-            if (bitMap.get(ev))
-                for (int i = n; i < 32; i++) val |= (1 << i);
-            return val;
-        });
-
+        decode(this, res, m.evs, BoolEv::decode);
         return res;
     }
 
     @Override
     public IntEv copy() {
-        IntEv copy = new IntEv(n, border);
-        for (int i = 0; i <= n; i++) {
-            copy.bits[i] = this.bits[i].copy();
-        }
+        IntEv copy = new IntEv(n);
+        copy(this, copy);
         return copy;
     }
 

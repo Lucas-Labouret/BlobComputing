@@ -1,19 +1,16 @@
 package blobProgram.agent.flies;
 
 import blobProgram.QuasiParticle;
-import blobProgram.Rand;
 import blobProgram.agent.Agent;
 import blobProgram.agent.Flip;
 
 public class Flies extends Agent {
-    private static final Rand rand = new Rand();
-
     public Flies(QuasiParticle state) {
         super(
             state,
             new Flip()
-                .addYes(new Expand(state))
-                .addYes(new Contract(state))
+                .addYes(new SlowConstraint(new Expand(state)))
+                .addYes(new SlowConstraint(new Contract(state)))
         );
     }
 

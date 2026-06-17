@@ -3,6 +3,7 @@ package ui.display;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import medium.Locus;
 import medium.Medium;
 import medium.locusS.Edge;
@@ -48,17 +49,20 @@ public class MediumDrawer extends Canvas {
     private boolean lastfe = false;
 
     // Contains the displaybles currently displayed
-    private final HashSet<Displayable> displayables = new HashSet<>();
+    private final HashSet<Displayable> colorDisplayables = new HashSet<>();
+    private final HashSet<Displayable> stringDisplayables = new HashSet<>();
 
     private final HashMap<Vertex, Color> vColors  = new HashMap<>();
-    private final HashMap<Ve, Color>     veColors = new HashMap<>();
-    private final HashMap<Vf, Color>     vfColors = new HashMap<>();
-    private final HashMap<Edge, Color>   eColors  = new HashMap<>();
-    private final HashMap<Ev, Color>     evColors = new HashMap<>();
-    private final HashMap<Ef, Color>     efColors = new HashMap<>();
-    private final HashMap<Face, Color>   fColors  = new HashMap<>();
-    private final HashMap<Fv, Color>     fvColors = new HashMap<>();
-    private final HashMap<Fe, Color>     feColors = new HashMap<>();
+    private final HashMap<Ve,     Color> veColors = new HashMap<>();
+    private final HashMap<Vf,     Color> vfColors = new HashMap<>();
+    private final HashMap<Edge,   Color> eColors  = new HashMap<>();
+    private final HashMap<Ev,     Color> evColors = new HashMap<>();
+    private final HashMap<Ef,     Color> efColors = new HashMap<>();
+    private final HashMap<Face,   Color> fColors  = new HashMap<>();
+    private final HashMap<Fv,     Color> fvColors = new HashMap<>();
+    private final HashMap<Fe,     Color> feColors = new HashMap<>();
+
+    private HashMap<Locus, String> strings;
 
     // The size of circle representing a locus
     private double circleSize;
@@ -86,6 +90,7 @@ public class MediumDrawer extends Canvas {
         gc.clearRect(0, 0, getWidth(), getHeight());
 
         computeColors();
+        computeStrings();
 
         if (lastv != v || lastve != ve || lastvf != vf || laste != e || lastev != ev || lastef != ef || lastf != f || lastfv != fv || lastfe != fe) {
             updateCircleSize();
@@ -101,6 +106,24 @@ public class MediumDrawer extends Canvas {
         if (f ) for (Face   l : medium.faces)    drawF(l);
         if (fv) for (Fv     l : medium.fvs)      drawTransfer(l);
         if (fe) for (Fe     l : medium.fes)      drawTransfer(l);
+
+        for (Locus l: strings.keySet()) {
+            if (l instanceof Vertex && v ||
+                l instanceof Ve && ve    ||
+                l instanceof Vf && vf    ||
+                l instanceof Edge && e   ||
+                l instanceof Ev && ev    ||
+                l instanceof Ef && ef    ||
+                l instanceof Face && f   ||
+                l instanceof Fv && fv    ||
+                l instanceof Fe && fe
+            ) {
+                String s = strings.get(l);
+                gc.setFont(Font.font(circleSize));
+                gc.setFill(Color.BLACK);
+                gc.fillText(s, (l.w+offSet)*scale - circleSize/2, (l.h+offSet)*scale + circleSize/2);
+            }
+        }
     }
 
     private void drawV(Vertex l){
@@ -147,8 +170,10 @@ public class MediumDrawer extends Canvas {
         }
     }
 
-    public void addDisplay(Displayable d) { displayables.add(d); }
-    public void removeDisplay(Displayable d) { displayables.remove(d); }
+    public void addColorDisplay(Displayable d) { colorDisplayables.add(d); }
+    public void removeColorDisplay(Displayable d) { colorDisplayables.remove(d); }
+    public void addStringDisplay(Displayable d) { stringDisplayables.add(d); }
+    public void removeStringDisplay(Displayable d) { stringDisplayables.remove(d); }
 
     private void computeColors() {
         HashSet<HashMap<Vertex, Color>> vColorsPrimary  = new HashSet<>();
@@ -162,16 +187,16 @@ public class MediumDrawer extends Canvas {
         HashSet<HashMap<Fe,     Color>> feColorsPrimary = new HashSet<>();
 
         v = ve = vf = e = ev = ef = f = fv = fe = false;
-        for (Displayable d: displayables) {
-            if (d.updatesV ()) { v  = true; vColorsPrimary .add(d.displayV (medium)); }
-            if (d.updatesVe()) { ve = true; veColorsPrimary.add(d.displayVe(medium)); }
-            if (d.updatesVf()) { vf = true; vfColorsPrimary.add(d.displayVf(medium)); }
-            if (d.updatesE ()) { e  = true; eColorsPrimary .add(d.displayE (medium)); }
-            if (d.updatesEv()) { ev = true; evColorsPrimary.add(d.displayEv(medium)); }
-            if (d.updatesEf()) { ef = true; efColorsPrimary.add(d.displayEf(medium)); }
-            if (d.updatesF ()) { f  = true; fColorsPrimary .add(d.displayF (medium)); }
-            if (d.updatesFv()) { fv = true; fvColorsPrimary.add(d.displayFv(medium)); }
-            if (d.updatesFe()) { fe = true; feColorsPrimary.add(d.displayFe(medium)); }
+        for (Displayable d: colorDisplayables) {
+            if (d.updatesV ()) { v  = true; vColorsPrimary .add(d.displayColorV(medium)); }
+            if (d.updatesVe()) { ve = true; veColorsPrimary.add(d.displayColorVe(medium)); }
+            if (d.updatesVf()) { vf = true; vfColorsPrimary.add(d.displayColorVf(medium)); }
+            if (d.updatesE ()) { e  = true; eColorsPrimary .add(d.displayColorE(medium)); }
+            if (d.updatesEv()) { ev = true; evColorsPrimary.add(d.displayColorEv(medium)); }
+            if (d.updatesEf()) { ef = true; efColorsPrimary.add(d.displayColorEf(medium)); }
+            if (d.updatesF ()) { f  = true; fColorsPrimary .add(d.displayColorF(medium)); }
+            if (d.updatesFv()) { fv = true; fvColorsPrimary.add(d.displayColorFv(medium)); }
+            if (d.updatesFe()) { fe = true; feColorsPrimary.add(d.displayColorFe(medium)); }
         }
 
         if (v)  computeColor(medium.vertices, vColorsPrimary,  vColors );
@@ -197,6 +222,21 @@ public class MediumDrawer extends Canvas {
                 b += col.getBlue();
             }
             colors.put(l, new Color(r/size, g/size, b/size, 1));
+        }
+    }
+
+    private void computeStrings() {
+        strings = new HashMap<>();
+        for (Displayable d: stringDisplayables) {
+            if (d.updatesV ()) { strings.putAll(d.displayStringV (medium)); }
+            if (d.updatesVe()) { strings.putAll(d.displayStringVe(medium)); }
+            if (d.updatesVf()) { strings.putAll(d.displayStringVf(medium)); }
+            if (d.updatesE ()) { strings.putAll(d.displayStringE (medium)); }
+            if (d.updatesEv()) { strings.putAll(d.displayStringEv(medium)); }
+            if (d.updatesEf()) { strings.putAll(d.displayStringEf(medium)); }
+            if (d.updatesF ()) { strings.putAll(d.displayStringF (medium)); }
+            if (d.updatesFv()) { strings.putAll(d.displayStringFv(medium)); }
+            if (d.updatesFe()) { strings.putAll(d.displayStringFe(medium)); }
         }
     }
 

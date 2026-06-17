@@ -23,7 +23,7 @@ class LShiftV implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolV.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolV.zeroes());
         return true;
     }
 }
@@ -46,7 +46,7 @@ class RShiftV implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolV.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolV.zeroes());
         return true;
     }
 }
@@ -69,7 +69,7 @@ class LShiftVe implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolVe.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolVe.zeroes());
         return true;
     }
 }
@@ -92,7 +92,7 @@ class RShiftVe implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolVe.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolVe.zeroes());
         return true;
     }
 }
@@ -115,7 +115,7 @@ class LShiftVf implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolVf.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolVf.zeroes());
         return true;
     }
 }
@@ -138,7 +138,7 @@ class RShiftVf implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolVf.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolVf.zeroes());
         return true;
     }
 }
@@ -161,7 +161,7 @@ class LShiftE implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolE.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolE.zeroes());
         return true;
     }
 }
@@ -184,7 +184,7 @@ class RShiftE implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolE.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolE.zeroes());
         return true;
     }
 }
@@ -207,7 +207,7 @@ class LShiftEv implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolEv.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolEv.zeroes());
         return true;
     }
 }
@@ -230,7 +230,7 @@ class RShiftEv implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolEv.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolEv.zeroes());
         return true;
     }
 }
@@ -253,7 +253,7 @@ class LShiftEf implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolEf.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolEf.zeroes());
         return true;
     }
 }
@@ -276,7 +276,7 @@ class RShiftEf implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = k; i <= orig.get().n; i++) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolEf.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolEf.zeroes());
         return true;
     }
 }
@@ -299,7 +299,7 @@ class LShiftF implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolF.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolF.zeroes());
         return true;
     }
 }
@@ -322,7 +322,7 @@ class RShiftF implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolF.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolF.zeroes());
         return true;
     }
 }
@@ -345,7 +345,7 @@ class LShiftFv implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolFv.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolFv.zeroes());
         return true;
     }
 }
@@ -368,7 +368,7 @@ class RShiftFv implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolFv.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolFv.zeroes());
         return true;
     }
 }
@@ -391,7 +391,7 @@ class LShiftFe implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolFe.zeroes(res.get().border));
+        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolFe.zeroes());
         return true;
     }
 }
@@ -414,7 +414,7 @@ class RShiftFe implements BasicInstruction {
     @Override
     public boolean exec() {
         for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolFe.zeroes(orig.get().border));
+        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolFe.zeroes());
         return true;
     }
 }

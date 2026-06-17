@@ -26,13 +26,22 @@ public class BoolEDisplay implements Displayable {
     @Override public boolean updatesE() { return true; }
 
     @Override
-    public HashMap<Edge, Color> displayE(Medium medium) {
+    public HashMap<Edge, Color> displayColorE(Medium medium) {
         HashMap<Edge, Boolean> mem = BoolE.decode(medium.edges, ref.get());
         HashMap<Edge, Color> colors = new HashMap<>();
         for (Edge e : mem.keySet())
             if (mem.get(e)) colors.put(e, style.EDGE_TRUE());
             else colors.put(e, style.EDGE_FALSE());
         return colors;
+    }
+
+    @Override
+    public HashMap<Edge, String> displayStringE(Medium medium) {
+        HashMap<Edge, Boolean> mem = BoolE.decode(medium.edges, ref.get());
+        HashMap<Edge, String> texts = new HashMap<>();
+        for (Edge e : mem.keySet())
+            texts.put(e, mem.get(e).toString());
+        return texts;
     }
 }
 

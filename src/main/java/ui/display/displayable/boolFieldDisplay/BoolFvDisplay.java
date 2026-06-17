@@ -26,13 +26,22 @@ public class BoolFvDisplay implements Displayable {
     @Override public boolean updatesFv() { return true; }
 
     @Override
-    public HashMap<Fv, Color> displayFv(Medium medium) {
+    public HashMap<Fv, Color> displayColorFv(Medium medium) {
         HashMap<Fv, Boolean> mem = BoolFv.decode(medium.fvs, ref.get());
         HashMap<Fv, Color> colors = new HashMap<>();
         for (Fv fv : mem.keySet())
             if (mem.get(fv)) colors.put(fv, style.FV_TRUE());
             else colors.put(fv, style.FV_FALSE());
         return colors;
+    }
+
+    @Override
+    public HashMap<Fv, String> displayStringFv(Medium medium) {
+        HashMap<Fv, Boolean> mem = BoolFv.decode(medium.fvs, ref.get());
+        HashMap<Fv, String> strings = new HashMap<>();
+        for (Fv fv : mem.keySet())
+            strings.put(fv, mem.get(fv).toString());
+        return strings;
     }
 }
 

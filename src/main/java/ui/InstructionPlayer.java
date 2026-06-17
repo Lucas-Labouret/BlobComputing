@@ -55,6 +55,7 @@ public class InstructionPlayer {
     long stepCounter = 0;
     long loopCounter = 0;
     private boolean exec() {
+        tryDisplayUpdate();
         boolean done = instruction.exec();
         stepCounter++;
         if (done && isPowerOf2minus1(++loopCounter)) autoCache.push(stepCounter);
@@ -69,7 +70,6 @@ public class InstructionPlayer {
                 catch (InterruptedException _) { break; }
 
                 boolean done = exec();
-                tryDisplayUpdate();
                 if (done && pauseAfterLoop) {
                     playing = false;
                     return;
@@ -91,7 +91,6 @@ public class InstructionPlayer {
     public void step() {
         if (playing) return;
         exec();
-        tryDisplayUpdate();
     }
     public void start() {
         playing = true;

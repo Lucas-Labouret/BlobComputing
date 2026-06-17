@@ -1,18 +1,24 @@
 package ui;
 
+import blobProgram.DistField;
+import blobProgram.QuasiParticle;
 import blobProgram.Rand;
 import blobProgram.agent.flies.Flies;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import language.field.boolField.BoolV;
+import language.field.intField.IntV;
+import language.field.intField.IntVe;
 import language.fieldRef.boolField.BoolVRef;
+import language.fieldRef.intField.IntVRef;
+import language.fieldRef.intField.IntVeRef;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
-import blobProgram.BlobV;
-import language.fieldRef.boolField.BoolVeRef;
 import language.utils.BoolFieldManager;
 import medium.Medium;
+import medium.locusS.Vertex;
 
 /**
  * Main class for the Blob application.
@@ -41,14 +47,37 @@ public class Main extends Application {
 //        }};
 //        Instruction instruction = new BlobV().voronoi();
 //        Instruction instruction = new Rand().showRand();
+//        Instruction instruction = new Procedure() {{
+//            Rand.init();
+//            Flies flies = Flies.rand(6);
+//            BoolVRef start = new BoolVRef();
+//            set(flies.state, start);
+//            show("Flies", start);
+//            call(flies.flip());
+//        }};
         Instruction instruction = new Procedure() {{
             Rand.init();
-            Flies flies = Flies.rand(6);
-            BoolVRef start = new BoolVRef();
-            set(flies.state, start);
-            show("Flies", start);
-            call(flies.flip());
+
+            QuasiParticle seed = new QuasiParticle(BoolV.zeroes());
+            for (int i = 0; i < 2; i++){
+                int rand = (int) (Math.random() * medium.vertices.size());
+                Vertex v = (Vertex) medium.vertices.toArray()[rand];
+                BoolV.setBit(seed.get(), v, true);
+            }
+            Flies flies = new Flies(seed);
+            //call(flies.flip());
+            show("Sources", flies.state);
+
+            DistField distField = new DistField(flies.state, 4);
+            IntVRef dist = new IntVRef(new IntV(4));
+            IntVeRef gradient = new IntVeRef(new IntVe(4));
+            call(distField.update());
+            call(distField.getRawDist(dist));
+            call(distField.getGradient(gradient));
+            show("DistField", dist);
+            show("Gradient", gradient);
         }};
+
         ms = new MasterScene(medium, instruction);
 
         Scene scene = new Scene(ms, Main.WIDTH, Main.HEIGHT);
