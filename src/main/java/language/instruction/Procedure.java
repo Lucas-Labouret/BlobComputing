@@ -215,26 +215,6 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void fromBool(BoolFvRef a, IntFvRef res) { call(IntOp.fromBool(a, res)); }
     protected void fromBool(BoolFeRef a, IntFeRef res) { call(IntOp.fromBool(a, res)); }
 
-    protected void split(IntVRef  a, BoolVRef[]  res) { call(IntOp.split(a, res)); }
-    protected void split(IntVeRef a, BoolVeRef[] res) { call(IntOp.split(a, res)); }
-    protected void split(IntVfRef a, BoolVfRef[] res) { call(IntOp.split(a, res)); }
-    protected void split(IntERef  a, BoolERef[]  res) { call(IntOp.split(a, res)); }
-    protected void split(IntEvRef a, BoolEvRef[] res) { call(IntOp.split(a, res)); }
-    protected void split(IntEfRef a, BoolEfRef[] res) { call(IntOp.split(a, res)); }
-    protected void split(IntFRef  a, BoolFRef[]  res) { call(IntOp.split(a, res)); }
-    protected void split(IntFvRef a, BoolFvRef[] res) { call(IntOp.split(a, res)); }
-    protected void split(IntFeRef a, BoolFeRef[] res) { call(IntOp.split(a, res)); }
-
-    protected void join(BoolVRef[]  a, IntVRef  res) { call(IntOp.join(a, res)); }
-    protected void join(BoolVeRef[] a, IntVeRef res) { call(IntOp.join(a, res)); }
-    protected void join(BoolVfRef[] a, IntVfRef res) { call(IntOp.join(a, res)); }
-    protected void join(BoolERef[]  a, IntERef  res) { call(IntOp.join(a, res)); }
-    protected void join(BoolEvRef[] a, IntEvRef res) { call(IntOp.join(a, res)); }
-    protected void join(BoolEfRef[] a, IntEfRef res) { call(IntOp.join(a, res)); }
-    protected void join(BoolFRef[]  a, IntFRef  res) { call(IntOp.join(a, res)); }
-    protected void join(BoolFvRef[] a, IntFvRef res) { call(IntOp.join(a, res)); }
-    protected void join(BoolFeRef[] a, IntFeRef res) { call(IntOp.join(a, res)); }
-
     protected void and(BoolVRef  a, BoolVRef  b, BoolVRef  res) { call(BoolOp.and(a, b, res)); }
     protected void and(BoolVeRef a, BoolVeRef b, BoolVeRef res) { call(BoolOp.and(a, b, res)); }
     protected void and(BoolVfRef a, BoolVfRef b, BoolVfRef res) { call(BoolOp.and(a, b, res)); }

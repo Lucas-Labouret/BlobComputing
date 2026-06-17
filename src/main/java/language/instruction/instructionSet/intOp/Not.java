@@ -9,16 +9,9 @@ class NotV extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntV to an IntV of different size.");
 
-        BoolVRef[] bitsA = new BoolVRef[orig.get().n + 1];
-        BoolVRef[] bitsRes = new BoolVRef[orig.get().n + 1];
-        for(int i = 0; i <= orig.get().n; i++) {
-            bitsA[i] = tmp(new BoolVRef());
-            bitsRes[i] = tmp(new BoolVRef());
-        }
-
-        split(orig, bitsA);
-        for (int i = 0; i <= orig.get().n; i++) not(bitsA[i], bitsRes[i]);
-        join(bitsRes, res);
+        BoolVRef[] bitsOrig = orig.get().getBits();
+        BoolVRef[] bitsRes = res.get().getBits();
+        for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
     }
 }
 
@@ -27,16 +20,9 @@ class NotVe extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntVe to an IntVe of different size.");
 
-        BoolVeRef[] bitsOrig = new BoolVeRef[orig.get().n + 1];
-        BoolVeRef[] bitsRes = new BoolVeRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolVeRef());
-            bitsRes[i] = tmp(new BoolVeRef());
-        }
-
-        split(orig, bitsOrig);
+        BoolVeRef[] bitsOrig = orig.get().getBits();
+        BoolVeRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -45,16 +31,9 @@ class NotVf extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntVf to an IntVf of different size.");
 
-        BoolVfRef[] bitsOrig = new BoolVfRef[orig.get().n + 1];
-        BoolVfRef[] bitsRes = new BoolVfRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolVfRef());
-            bitsRes[i] = tmp(new BoolVfRef());
-        }
-
-        split(orig, bitsOrig);
+        BoolVfRef[] bitsOrig = orig.get().getBits();
+        BoolVfRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -63,16 +42,9 @@ class NotE extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntE to an IntE of different size.");
 
-        BoolERef[] bitsOrig = new BoolERef[orig.get().n + 1];
-        BoolERef[] bitsRes = new BoolERef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolERef());
-            bitsRes[i] = tmp(new BoolERef());
-        }
-
-        split(orig, bitsOrig);
+        BoolERef[] bitsOrig = orig.get().getBits();
+        BoolERef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -81,16 +53,9 @@ class NotEv extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntEv to an IntEv of different size.");
 
-        BoolEvRef[] bitsOrig = new BoolEvRef[orig.get().n + 1];
-        BoolEvRef[] bitsRes = new BoolEvRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolEvRef());
-            bitsRes[i] = tmp(new BoolEvRef());
-        }
-
-        split(orig, bitsOrig);
+        BoolEvRef[] bitsOrig = orig.get().getBits();
+        BoolEvRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -99,16 +64,9 @@ class NotEf extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntEf to an IntEf of different size.");
 
-        BoolEfRef[] bitsOrig = new BoolEfRef[orig.get().n + 1];
-        BoolEfRef[] bitsRes = new BoolEfRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolEfRef());
-            bitsRes[i] = tmp(new BoolEfRef());
-        }
-
-        split(orig, bitsOrig);
+        BoolEfRef[] bitsOrig = orig.get().getBits();
+        BoolEfRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -117,16 +75,9 @@ class NotF extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntF to an IntF of different size.");
 
-        BoolFRef[] bitsOrig = new BoolFRef[orig.get().n + 1];
-        BoolFRef[] bitsRes = new BoolFRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolFRef());
-            bitsRes[i] = tmp(new BoolFRef());
-        }
-
-        split(orig, bitsOrig);
+        BoolFRef[] bitsOrig = orig.get().getBits();
+        BoolFRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -135,16 +86,9 @@ class NotFv extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntFv to an IntFv of different size.");
 
-        BoolFvRef[] bitsOrig = new BoolFvRef[orig.get().n + 1];
-        BoolFvRef[] bitsRes = new BoolFvRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolFvRef());
-            bitsRes[i] = tmp(new BoolFvRef());
-        }
-
-        split(orig, bitsOrig);
+        BoolFvRef[] bitsOrig = orig.get().getBits();
+        BoolFvRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -153,15 +97,8 @@ class NotFe extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot negate an IntFe to an IntFe of different size.");
 
-        BoolFeRef[] bitsOrig = new BoolFeRef[orig.get().n + 1];
-        BoolFeRef[] bitsRes = new BoolFeRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolFeRef());
-            bitsRes[i] = tmp(new BoolFeRef());
-        }
-
-        split(orig, bitsOrig);
+        BoolFeRef[] bitsOrig = orig.get().getBits();
+        BoolFeRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) not(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }

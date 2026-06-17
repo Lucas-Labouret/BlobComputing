@@ -56,10 +56,7 @@ public class DistField {
             IntVRef max = new IntVRef(IntV.maxValue(nbits));
             IntVRef min = new IntVRef(IntV.minValue(nbits));
 
-            BoolVRef[] bits = new BoolVRef[nbits+1]; //Set sign bit to 0, equivalent to modulo 2^nbits
-            for (int i=0; i<=nbits; i++) bits[i] = tmp(new BoolVRef());
-            split(a, bits);
-
+            BoolVRef[] bits = a.get().getBits(); //Set sign bit to 0, equivalent to modulo 2^nbits
             BoolVRef sign = tmp(new BoolVRef());
             set(bits[0], sign);
 

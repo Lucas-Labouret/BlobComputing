@@ -9,15 +9,9 @@ class BroadcastVe extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot broadcast an IntV to an IntVe of different size.");
 
-        BoolVRef[] bitsOrig = new BoolVRef[orig.get().n + 1];
-        BoolVeRef[] bitsRes = new BoolVeRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolVRef());
-            bitsRes[i] = tmp(new BoolVeRef());
-        }
-        split(orig, bitsOrig);
+        BoolVRef[] bitsOrig = orig.get().getBits();
+        BoolVeRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -26,15 +20,9 @@ class BroadcastVf extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot broadcast an IntV to an IntVf of different size.");
 
-        BoolVRef[] bitsOrig = new BoolVRef[orig.get().n + 1];
-        BoolVfRef[] bitsRes = new BoolVfRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolVRef());
-            bitsRes[i] = tmp(new BoolVfRef());
-        }
-        split(orig, bitsOrig);
+        BoolVRef[] bitsOrig = orig.get().getBits();
+        BoolVfRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -43,15 +31,9 @@ class BroadcastEv extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot broadcast an IntE to an IntEv of different size.");
 
-        BoolERef[] bitsOrig = new BoolERef[orig.get().n + 1];
-        BoolEvRef[] bitsRes = new BoolEvRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolERef());
-            bitsRes[i] = tmp(new BoolEvRef());
-        }
-        split(orig, bitsOrig);
+        BoolERef[] bitsOrig = orig.get().getBits();
+        BoolEvRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -60,15 +42,9 @@ class BroadcastEf extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot broadcast an IntE to an IntEf of different size.");
 
-        BoolERef[] bitsOrig = new BoolERef[orig.get().n + 1];
-        BoolEfRef[] bitsRes = new BoolEfRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolERef());
-            bitsRes[i] = tmp(new BoolEfRef());
-        }
-        split(orig, bitsOrig);
+        BoolERef[] bitsOrig = orig.get().getBits();
+        BoolEfRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -77,15 +53,9 @@ class BroadcastFv extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot broadcast an IntF to an IntFv of different size.");
 
-        BoolFRef[] bitsOrig = new BoolFRef[orig.get().n + 1];
-        BoolFvRef[] bitsRes = new BoolFvRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolFRef());
-            bitsRes[i] = tmp(new BoolFvRef());
-        }
-        split(orig, bitsOrig);
+        BoolFRef[] bitsOrig = orig.get().getBits();
+        BoolFvRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
 
@@ -94,14 +64,8 @@ class BroadcastFe extends Procedure {
         if (orig.get().n != res.get().n)
             throw new IllegalArgumentException("Cannot broadcast an IntF to an IntFe of different size.");
 
-        BoolFRef[] bitsOrig = new BoolFRef[orig.get().n + 1];
-        BoolFeRef[] bitsRes = new BoolFeRef[orig.get().n + 1];
-        for (int i = 0; i <= orig.get().n; i++) {
-            bitsOrig[i] = tmp(new BoolFRef());
-            bitsRes[i] = tmp(new BoolFeRef());
-        }
-        split(orig, bitsOrig);
+        BoolFRef[] bitsOrig = orig.get().getBits();
+        BoolFeRef[] bitsRes = res.get().getBits();
         for (int i = 0; i <= orig.get().n; i++) broadcast(bitsOrig[i], bitsRes[i]);
-        join(bitsRes, res);
     }
 }
