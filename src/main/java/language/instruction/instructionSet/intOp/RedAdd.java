@@ -34,7 +34,7 @@ class RedAddVe extends Procedure {
         for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntVRef(new IntV(res.get().n)));
         redStack0(orig, stack);
 
-        res.set(IntV.of(0, res.get().n));
+        set(new IntVRef(IntV.of(0, res.get().n)), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
@@ -65,7 +65,7 @@ class RedAddVf extends Procedure {
         for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntVRef(new IntV(res.get().n)));
         redStack0(orig, stack);
 
-        res.set(IntV.of(0, res.get().n));
+        set(new IntVRef(IntV.of(0, res.get().n)), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
@@ -96,7 +96,7 @@ class RedAddEv extends Procedure {
         for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntERef(new IntE(res.get().n)));
         redStack0(orig, stack);
 
-        res.set(IntE.of(0, res.get().n));
+        set(new IntERef(IntE.of(0, res.get().n)), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
@@ -127,7 +127,7 @@ class RedAddEf extends Procedure {
         for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntERef(new IntE(res.get().n)));
         redStack0(orig, stack);
 
-        res.set(IntE.of(0, res.get().n));
+        set(new IntERef(IntE.of(0, res.get().n)), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
@@ -158,7 +158,7 @@ class RedAddFv extends Procedure {
         for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntFRef(new IntF(res.get().n)));
         redStack0(orig, stack);
 
-        res.set(IntF.of(0, res.get().n));
+        set(new IntFRef(IntF.of(0, res.get().n)), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
@@ -189,7 +189,7 @@ class RedAddFe extends Procedure {
         for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntFRef(new IntF(res.get().n)));
         redStack0(orig, stack);
 
-        res.set(IntF.of(0, res.get().n));
+        set(new IntFRef(IntF.of(0, res.get().n)), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }

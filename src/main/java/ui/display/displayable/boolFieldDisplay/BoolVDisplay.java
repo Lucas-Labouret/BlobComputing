@@ -19,10 +19,6 @@ public class BoolVDisplay implements Displayable {
         this.style = style;
     }
 
-    public BoolVDisplay(BoolVRef ref){
-        this(ref, Styles.DEFAULT);
-    }
-
     @Override public boolean updatesV() { return true; }
 
     @Override

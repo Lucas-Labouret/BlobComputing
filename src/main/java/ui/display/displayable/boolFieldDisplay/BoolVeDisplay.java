@@ -21,10 +21,6 @@ public class BoolVeDisplay implements Displayable {
         this.style = style;
     }
 
-    public BoolVeDisplay(BoolVeRef ref){
-        this(ref, Styles.DEFAULT);
-    }
-
     @Override public boolean updatesVe() { return true; }
 
     @Override

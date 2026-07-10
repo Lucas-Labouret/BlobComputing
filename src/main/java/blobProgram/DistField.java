@@ -2,10 +2,13 @@ package blobProgram;
 
 import language.field.boolField.BoolV;
 import language.field.boolField.BoolVe;
+import language.field.intField.IntE;
+import language.field.intField.IntEv;
 import language.field.intField.IntV;
 import language.field.intField.IntVe;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.boolField.BoolVeRef;
+import language.fieldRef.boolField.*;
+import language.fieldRef.intField.IntERef;
+import language.fieldRef.intField.IntEvRef;
 import language.fieldRef.intField.IntVRef;
 import language.fieldRef.intField.IntVeRef;
 import language.instruction.Procedure;
@@ -28,9 +31,6 @@ public class DistField {
 
     public DistField(BoolVRef sources, int nbits) {
         this.nbits = nbits;
-
-        int a = 2;
-        a = ~a + 1;
 
         this.sources_t1 = sources.copy();
         this.sources_t0 = sources;
@@ -56,7 +56,7 @@ public class DistField {
             IntVRef max = new IntVRef(IntV.maxValue(nbits));
             IntVRef min = new IntVRef(IntV.minValue(nbits));
 
-            BoolVRef[] bits = a.get().getBits(); //Set sign bit to 0, equivalent to modulo 2^nbits
+            BoolVRef[] bits = a.get().getBits();
             BoolVRef sign = tmp(new BoolVRef());
             set(bits[0], sign);
 
@@ -95,10 +95,6 @@ public class DistField {
             broadcast(distField_t1, neighborDist);
             call(BlobV.send(neighborDist, neighborDist));
             gt(neighborDist, deltaDistVe, nPlus);
-
-            BoolVeRef nPlusCopy = new BoolVeRef();
-            set(nPlus, nPlusCopy);
-            show("N+(i)", nPlusCopy);
 
             set(distField_t0, distField_t1);
 
@@ -140,6 +136,9 @@ public class DistField {
             call(BlobV.send(fi, fj));
             sub(fj, fi, gradient);
 
+            IntVeRef rawGradient = new IntVeRef(new IntVe(nbits));
+            set(gradient, rawGradient);
+
             BoolVeRef gradientBugPos =  tmp(new BoolVeRef());
             BoolVeRef gradientBugNeg = tmp(new BoolVeRef());
             gt(gradient, deltaPlus1, gradientBugPos);
@@ -156,10 +155,10 @@ public class DistField {
     }
     public Procedure update() { return new Update(); }
 
-    private class GetRawDist extends Procedure {
-        public GetRawDist(IntVRef distField) { set(distField_t0, distField); }
+    private class GetDist extends Procedure {
+        public GetDist(IntVRef distField) { set(distField_t0, distField); }
     }
-    public Procedure getRawDist(IntVRef distField) { return new GetRawDist(distField); }
+    public Procedure getDist(IntVRef distField) { return new GetDist(distField); }
 
     private class GetGradient extends Procedure {
         public GetGradient(IntVeRef grad) { set(gradient, grad); }

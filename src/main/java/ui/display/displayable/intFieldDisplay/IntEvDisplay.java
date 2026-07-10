@@ -1,38 +1,38 @@
 package ui.display.displayable.intFieldDisplay;
 
 import javafx.scene.paint.Color;
-import language.fieldRef.intField.IntVRef;
+import language.fieldRef.intField.IntEvRef;
 import medium.Medium;
-import medium.locusS.Vertex;
+import medium.locusT.Ev;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;
 
 import java.util.HashMap;
 
-public class IntVDisplay implements Displayable {
-    private final IntVRef ref;
+public class IntEvDisplay implements Displayable {
+    private final IntEvRef ref;
     private final Styles.Style style;
 
-    public IntVDisplay(IntVRef ref, Styles.Style style) {
+    public IntEvDisplay(IntEvRef ref, Styles.Style style) {
         this.ref = ref;
         this.style = style;
     }
 
-    @Override public boolean updatesV() { return true; }
+    @Override public boolean updatesEv() { return true; }
 
     @Override
-    public HashMap<Vertex, Color> displayColorV(Medium medium) {
-        HashMap<Vertex, Integer> mem = ref.get().decode(medium);
-        HashMap<Vertex, Color> colors = new HashMap<>();
+    public HashMap<Ev, Color> displayColorEv(Medium medium) {
+        HashMap<Ev, Integer> mem = ref.get().decode(medium);
+        HashMap<Ev, Color> colors = new HashMap<>();
 
         int absMax = 0;
-        for (Vertex v : mem.keySet()) {
+        for (Ev v : mem.keySet()) {
             int cand = mem.get(v);
             cand = cand >= 0 ? cand : -cand;
             if (cand > absMax) absMax = cand;
         }
 
-        for (Vertex v: mem.keySet()) {
+        for (Ev v: mem.keySet()) {
             int val = mem.get(v);
             double shade;
             if (val == 0) {
@@ -56,10 +56,10 @@ public class IntVDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Vertex, String> displayStringV(Medium medium) {
-        HashMap<Vertex, Integer> mem = ref.get().decode(medium);
-        HashMap<Vertex, String> strings = new HashMap<>();
-        for (Vertex v: mem.keySet()) {
+    public HashMap<Ev, String> displayStringEv(Medium medium) {
+        HashMap<Ev, Integer> mem = ref.get().decode(medium);
+        HashMap<Ev, String> strings = new HashMap<>();
+        for (Ev v: mem.keySet()) {
             strings.put(v, Integer.toString(mem.get(v)));
         }
         return strings;

@@ -19,10 +19,6 @@ public class BoolEDisplay implements Displayable {
         this.style = style;
     }
 
-    public BoolEDisplay(BoolERef ref){
-        this(ref, Styles.DEFAULT);
-    }
-
     @Override public boolean updatesE() { return true; }
 
     @Override

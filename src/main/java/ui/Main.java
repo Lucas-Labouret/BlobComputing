@@ -1,8 +1,6 @@
 package ui;
 
-import blobProgram.DistField;
-import blobProgram.QuasiParticle;
-import blobProgram.Rand;
+import blobProgram.*;
 import blobProgram.agent.flies.Flies;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -33,7 +31,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         blobStaging(stage);
-
+    
         Medium medium;
         try { medium = Medium.read("large"); }
         catch (Exception e) { throw new RuntimeException(e); }
@@ -64,18 +62,25 @@ public class Main extends Application {
                 Vertex v = (Vertex) medium.vertices.toArray()[rand];
                 BoolV.setBit(seed.get(), v, true);
             }
+//            BoolV.setBit(seed.get(), 0, 0, true);
+//            BoolV.setBit(seed.get(), 21, 21, true);
+//            BoolV.setBit(seed.get(), 18, 4, true);
+//            BoolV.setBit(seed.get(), 18, 6, true);
             Flies flies = new Flies(seed);
             //call(flies.flip());
             show("Sources", flies.state);
 
-            DistField distField = new DistField(flies.state, 4);
+            GabrielCenter gabrielCenter = new GabrielCenter(flies.state);
             IntVRef dist = new IntVRef(new IntV(4));
             IntVeRef gradient = new IntVeRef(new IntVe(4));
-            call(distField.update());
-            call(distField.getRawDist(dist));
-            call(distField.getGradient(gradient));
+            BoolVRef saddle = new BoolVRef();
+            call(gabrielCenter.update());
+            call(gabrielCenter.distField.getDist(dist));
+            call(gabrielCenter.distField.getGradient(gradient));
+            call(gabrielCenter.saddle(saddle));
             show("DistField", dist);
             show("Gradient", gradient);
+            show("Saddle", saddle);
         }};
 
         ms = new MasterScene(medium, instruction);

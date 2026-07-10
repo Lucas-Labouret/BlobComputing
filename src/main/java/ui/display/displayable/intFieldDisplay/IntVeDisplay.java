@@ -18,10 +18,6 @@ public class IntVeDisplay implements Displayable {
         this.style = style;
     }
 
-    public IntVeDisplay(IntVeRef ref) {
-        this(ref, Styles.DEFAULT_INT);
-    }
-
     @Override public boolean updatesVe() { return true; }
 
     @Override

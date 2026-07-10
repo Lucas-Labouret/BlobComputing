@@ -1,38 +1,38 @@
 package ui.display.displayable.intFieldDisplay;
 
 import javafx.scene.paint.Color;
-import language.fieldRef.intField.IntVRef;
+import language.fieldRef.intField.IntERef;
 import medium.Medium;
-import medium.locusS.Vertex;
+import medium.locusS.Edge;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;
 
 import java.util.HashMap;
 
-public class IntVDisplay implements Displayable {
-    private final IntVRef ref;
+public class IntEDisplay implements Displayable {
+    private final IntERef ref;
     private final Styles.Style style;
 
-    public IntVDisplay(IntVRef ref, Styles.Style style) {
+    public IntEDisplay(IntERef ref, Styles.Style style) {
         this.ref = ref;
         this.style = style;
     }
 
-    @Override public boolean updatesV() { return true; }
+    @Override public boolean updatesE() { return true; }
 
     @Override
-    public HashMap<Vertex, Color> displayColorV(Medium medium) {
-        HashMap<Vertex, Integer> mem = ref.get().decode(medium);
-        HashMap<Vertex, Color> colors = new HashMap<>();
+    public HashMap<Edge, Color> displayColorE(Medium medium) {
+        HashMap<Edge, Integer> mem = ref.get().decode(medium);
+        HashMap<Edge, Color> colors = new HashMap<>();
 
         int absMax = 0;
-        for (Vertex v : mem.keySet()) {
+        for (Edge v : mem.keySet()) {
             int cand = mem.get(v);
             cand = cand >= 0 ? cand : -cand;
             if (cand > absMax) absMax = cand;
         }
 
-        for (Vertex v: mem.keySet()) {
+        for (Edge v: mem.keySet()) {
             int val = mem.get(v);
             double shade;
             if (val == 0) {
@@ -56,10 +56,10 @@ public class IntVDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Vertex, String> displayStringV(Medium medium) {
-        HashMap<Vertex, Integer> mem = ref.get().decode(medium);
-        HashMap<Vertex, String> strings = new HashMap<>();
-        for (Vertex v: mem.keySet()) {
+    public HashMap<Edge, String> displayStringE(Medium medium) {
+        HashMap<Edge, Integer> mem = ref.get().decode(medium);
+        HashMap<Edge, String> strings = new HashMap<>();
+        for (Edge v: mem.keySet()) {
             strings.put(v, Integer.toString(mem.get(v)));
         }
         return strings;

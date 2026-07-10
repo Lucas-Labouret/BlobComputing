@@ -19,10 +19,6 @@ public class BoolFDisplay implements Displayable {
         this.style = style;
     }
 
-    public BoolFDisplay(BoolFRef ref){
-        this(ref, Styles.DEFAULT);
-    }
-
     @Override public boolean updatesF() { return true; }
 
     @Override

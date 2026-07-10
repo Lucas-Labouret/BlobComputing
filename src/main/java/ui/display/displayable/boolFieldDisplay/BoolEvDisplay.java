@@ -19,10 +19,6 @@ public class BoolEvDisplay implements Displayable {
         this.style = style;
     }
 
-    public BoolEvDisplay(BoolEvRef ref){
-        this(ref, Styles.DEFAULT);
-    }
-
     @Override public boolean updatesEv() { return true; }
 
     @Override
