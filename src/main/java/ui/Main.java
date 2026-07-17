@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import language.field.boolField.BoolV;
 import language.field.intField.IntV;
 import language.field.intField.IntVe;
+import language.fieldRef.boolField.BoolEfRef;
 import language.fieldRef.boolField.BoolVRef;
 import language.fieldRef.intField.IntVRef;
 import language.fieldRef.intField.IntVeRef;
@@ -71,16 +72,20 @@ public class Main extends Application {
             show("Sources", flies.state);
 
             GabrielCenter gabrielCenter = new GabrielCenter(flies.state);
-            IntVRef dist = new IntVRef(new IntV(4));
-            IntVeRef gradient = new IntVeRef(new IntVe(4));
-            BoolVRef saddle = new BoolVRef();
+            IntVRef dist = new IntVRef(new IntV(3));
+            IntVeRef gradient = new IntVeRef(new IntVe(3));
+            BoolVRef floodCenter = new BoolVRef();
+            BoolVRef saddleCenter = new BoolVRef();
             call(gabrielCenter.update());
             call(gabrielCenter.distField.getDist(dist));
             call(gabrielCenter.distField.getGradient(gradient));
-            call(gabrielCenter.saddle(saddle));
+            call(gabrielCenter.flood());
+            call(gabrielCenter.getCenter(floodCenter));
+            call(gabrielCenter.saddle(saddleCenter));
             show("DistField", dist);
             show("Gradient", gradient);
-            show("Saddle", saddle);
+            show("Flood", floodCenter);
+            show("Saddle", saddleCenter);
         }};
 
         ms = new MasterScene(medium, instruction);

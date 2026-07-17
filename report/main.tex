@@ -40,8 +40,8 @@
 
 \begin{titlepage}
 \begin{tikzpicture}[remember picture,overlay,shift={(current page.center)}]
-\node[anchor=center,xshift=-4.5cm,yshift=12.7cm]{\includegraphics[scale=0.5]{figs/ufr-logo.png}};
-\node[anchor=center,xshift=5.5cm,yshift=12.7cm]{\includegraphics[scale=0.5]{figs/CNRS-LISN-LOGO-Quadri-scaled.jpg}};
+	\node[anchor=center,xshift=-4.5cm,yshift=12.7cm]{\includegraphics[scale=0.5]{figs/ufr-logo.png}};
+	\node[anchor=center,xshift=5.5cm,yshift=12.7cm]{\includegraphics[scale=0.5]{figs/CNRS-LISN-LOGO-Quadri-scaled.jpg}};
 \end{tikzpicture} 
 
 \centering
@@ -168,38 +168,79 @@ Because of the limited time available during this internship, I decided to devel
 
 \subsection{The interpreter}
 
-The interpreter is built around an Instruction interface, which declares a single method, exec(). This calling this method performs a single step of the instruction, then returns a boolean indicating whether the instruction has finished executing or not. The Instrcution interface has two direct implementations : the BasicInstruction interface, which is implemented by single-step instructions, and the Procedure abstract class, which is used to create composite instructions. Basic instrctions are the building blocks of Blob programs. They correspond to the basic operations that PEs can perform, such as broadcasts and transfers, as well as some interpreter specific operations, such as Show, which mark a value to be displayed in the GUI, but otherwise have no effect on the state of the medium. Procedures are used to create more complex instructions by combining basic instructions and other procedures. They are implemented as a list of instructions, and the exec() method simply executes the instructions in order, moving on to the next instruction only when the current one has finished executing. Ultimately, the interpreter simply executes a given instruction on loop ad-vitam eternam, making the initial state of the medium (i.e. the initial values of the variables in the program) evolve according to the program. 
+The interpreter is built around an Instruction interface, which declares a single method, exec(). Calling this method performs a single step of the instruction, then returns a boolean indicating whether the instruction has finished executing or not. The Instruction interface has two direct implementations : the BasicInstruction interface, which is implemented by single-step instructions, and the Procedure abstract class, which is used to create composite instructions. Basic instructions are the building blocks of Blob programs. They correspond to the basic operations that PEs can perform, such as broadcasts and transfers, as well as some interpreter specific operations, such as Show which marks a value to be displayed in the GUI, but otherwise has no effect on the state of the medium. Procedures are used to create more complex instructions by combining basic instructions and other procedures. They are implemented as a list of instructions, and the exec() method simply executes the instructions in order, moving on to the next instruction only when the current one has finished executing. Ultimately, the interpreter simply executes a given instruction on loop ad-vitam eternam, making the initial state of the medium (i.e. the initial values of the variables in the program) evolve according to the program. 
 
-It is important to note, however, that not all variables in the program are useful to describe the state of the program at the start of an iteration of the loop. Many variables are used temporarily to store intermidiate results. The interpreter allows to mark those variables as temporary. The references to the fields contained in a temporary variable is set to $null$ at the end of the procedure that created it, allowing Java's garbage collector to free the memory used by those fields. While this may not be important for small programs, given that the number of PEs in a medium can be very large, it is crucial to be able to free memory as soon as possible to avoid running out of memory.
+It is important to note, however, that not all variables in the program are useful to describe the state of the program at the start of an iteration of the loop. Many variables are used temporarily to store intermediate results. The interpreter allows to mark those variables as temporary. The references to the fields contained in a temporary variable is set to $null$ at the end of the procedure that created it, allowing Java's garbage collector to free the memory used by those fields. While this may not be important for small programs, given that the number of PEs in a medium can be very large, it is crucial to be able to free memory as soon as possible to avoid running out of memory.
 
 \subsection{The language}
 
-Since the Blob language is relatively simple, let's a small example of a Blob program to illustrate its syntax and semantics. The following program implements a simple algorithm that allows a single starting particle to spread in the medium.
+Since the Blob language is relatively simple, let's use a small example of a Blob program to illustrate its syntax and semantics. The following program implements a simple algorithm that allows a single starting particle to spread in the medium.
 
 \begin{minted}{java}
+
+// A standard Java class
 public class Grow {
+    // A BoolVRef is a wrapper for a boolean field over the vertices.
+    // Since the fields are meant evolve across iteration, this allows us to
+    // keep a constant reference to pass around the program while new fields 
+    // replace the stale ones.
+    // Here, we store the current spread.
     BoolVRef grow;
     
+    // The constructor is used to define the initial state of the program.
+    // Here, we call various methods which are not part of the Blob instruction set, 
+    // such as Math.random().
+    // This is not an issue as the constructor is only executed once before the
+    // interpretation of the program, and does not interfer with the exection past 
+    // the initial configuration.
     public Grow(Medium medium) {
         int randIndex = (int) (Math.random() * medium.vertices.size());
         Vertex seed = (Vertex) medium.vertices.toArray()[randIndex];
+        
+        // Create a boolean over the vertices that is false everywhere
         BoolV seedField = BoolV.zeroes();
+        
+        // Set a single vertex in the field (the seed) to true
         BoolV.setBit(seedField, seed, true);
-        grow = new BoolVRef(seedField);
+        
+        // Assigns the field to grow as the initial state of the program
+        grow = new BoolVRef(seedField);         
     }
     
+    // A Blob method is defined as an inner class extending the Procedure abstract class.
+    // The method body is defined in the constructor of the class.
+    // This methods enables vertex-to-vertex communication by swapping to two ve's
+    // pointing to each edge.
     private class Send extends Procedure {
         public Send(BoolVeRef ve) {
+            // Boolean fields used to store intermediate results.
+            // The use of tmp(...) makes the fields contained in the refs open
+            // to garbage collection once we finish executing this method.
             BoolEvRef ev = tmp(new BoolEvRef());
             BoolEfRef ef = tmp(new BoolEfRef());
             
+            // Blob instructions
+            // These methods add the corresponding instructions to the execution
+            // list of this procedure. 
             transfer(ve, ev);
             rotCW(ev, ef);
             rotCW(ef, ev);
             transfer(ev, ve);
+            
+            // Note : Similarly the outer class constructor, this is only
+            // executed once before the interpretation of the program.
+            // This means that the ev and ef references are only created once
+            // before the execution.
+            // Additionally this also enable the use of non-Blob methods to
+            // setup the initial state, which can be useful to define deirectly 
+            // here values that should be reused throughout the exection.
         }
     }
     
+    // A small helper that skips the need to use "new" everytime we call the method.
+    private Procedure send(BoolVeRef ve) { return new Send(ve); }
+    
+    // The method that performs the spread.
     private class Spread extends Procedure {
         public Spread() {
             BoolVRef start = tmp(new BoolVRef());
@@ -207,7 +248,11 @@ public class Grow {
             
             set(grow, start);
             broadcast(grow, ve);
-            call(new Send(ve));
+            
+            // Since the send method is user defined and not part of the built-in
+            // instruction set, it needs to be passed through a call(...).
+            call(send(ve));
+            
             redOr(ve, grow);
             or(start, grow, grow);
         }
@@ -218,7 +263,7 @@ public class Grow {
 
 \subsection{Basic instruction parallelization}
 
-The field programming paradigm forms the basis of the parallelization of basic instructions, which is a key feature of the interpreter. Since the number of PEs in a medium can be very large, it is important to be able to execute instructions in parallel as much as possible. This is achieved by expressing a field of boolean values as an array of integers, where PE is assigned a single bit representing its value (\textit{note : it is possible for a bit to be unused, but all PEs must have exactly one corresponding bit, and no bit can be used by more than one PE}). With a clever organization of this array, it is possible to greatly reduce the number of operations needed to execute an instruction on all PEs of a given type, by performing bitwise operations on the integers in the array.
+The field programming paradigm forms the basis of the parallelization of basic instructions, which is a key feature of the interpreter. Since the number of PEs in a medium can be very large, it is important to be able to execute instructions in parallel as much as possible. This is achieved by expressing a field of boolean values as an array of integers, where each PE is assigned a single bit (instead of a full byte) representing its value (\textit{note : it is possible for a bit to be unused, but all PEs must have exactly one corresponding bit, and no bit can be used by more than one PE}). With a clever organization of this array, it is possible to greatly reduce the number of operations needed to execute an instruction on all PEs of a given type, by performing bitwise operations on the integers in the array.
 
 
 \label{sec:sec2}
@@ -237,13 +282,35 @@ The field programming paradigm forms the basis of the parallelization of basic i
 
 \subsection{Career plans after the internship}
 
-
-
 \chapter{Conclusion}
 
 \section{Acknowledgements}
 
 \addcontentsline{toc}{chapter}{References}
 \printbibliography[title={References}]
+
+\chapter*{Appendices}
+
+\renewcommand\thesection{Appendix \Alph{section} -}
+\setcounter{section}{0}
+
+\section{List of built-in Blob instructions}
+
+\textbf{Special instructions}\\
+Instructions that do not affect the execution but can be used by the interpreter.
+\begin{itemize}
+	\item \textbf{print(String s)}: print s to the console whenever it is reached.
+	\item \textbf{show(Ref r)}: indicate that the value of r should be displayed by the UI.
+	\item \textbf{snapshot()}: signal to the ui that the current display should be saved as an image.
+\end{itemize}$ $\\
+
+\textbf{Boolean instructions}\\
+Instructions that only affect boolean fields.
+\begin{itemize}
+	\item \textbf{And(BoolField a, BoolField b, BoolField res)}: store a AND b in c.
+	\item \textbf{Broadcast(BoolFieldS a, BoolFieldT res)}: Broadcast a to res.
+	\item \textbf{If(BoolField cond, BoolField t, BoolField f, BoolField res)}: Store the value of t (resp. f) in res where cond is true (resp. false). 
+\end{itemize}$ $\\
+
 
 \end{document}

@@ -20,7 +20,7 @@ public non-sealed class IntV extends IntField<BoolV> {
         super(n, new BoolVRef[n+1]);
         for (int i = 0; i <= n; i++) this.bits[i] = new BoolVRef();
     }
-    private IntV(int n, BoolVRef[] bits) {
+    public IntV(int n, BoolVRef[] bits) {
         super(n, bits);
     }
 

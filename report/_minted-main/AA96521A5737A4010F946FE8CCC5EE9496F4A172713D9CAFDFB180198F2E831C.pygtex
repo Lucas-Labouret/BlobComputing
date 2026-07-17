@@ -1,0 +1,83 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// A standard Java class}
+\PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{Grow} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{// A BoolVRef is a wrapper for a boolean field over the vertices.}
+    \PYG{c+c1}{// Since the fields are meant evolve across iteration, this allows us to}
+    \PYG{c+c1}{// keep a constant reference to pass around the program while new fields}
+    \PYG{c+c1}{// replace the stale ones.}
+    \PYG{c+c1}{// Here, we store the current spread.}
+    \PYG{n}{BoolVRef} \PYG{n}{grow}\PYG{o}{;}
+
+    \PYG{c+c1}{// The constructor is used to define the initial state of the program.}
+    \PYG{c+c1}{// Here, we call various methods which are not part of the Blob instruction set,}
+    \PYG{c+c1}{// such as Math.random().}
+    \PYG{c+c1}{// This is not an issue as the constructor is only executed once before the}
+    \PYG{c+c1}{// interpretation of the program, and does not interfer with the exection past}
+    \PYG{c+c1}{// the initial configuration.}
+    \PYG{k+kd}{public} \PYG{n+nf}{Grow}\PYG{o}{(}\PYG{n}{Medium} \PYG{n}{medium}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{randIndex} \PYG{o}{=} \PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{)} \PYG{o}{(}\PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{random}\PYG{o}{()} \PYG{o}{*} \PYG{n}{medium}\PYG{o}{.}\PYG{n+na}{vertices}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{());}
+        \PYG{n}{Vertex} \PYG{n}{seed} \PYG{o}{=} \PYG{o}{(}\PYG{n}{Vertex}\PYG{o}{)} \PYG{n}{medium}\PYG{o}{.}\PYG{n+na}{vertices}\PYG{o}{.}\PYG{n+na}{toArray}\PYG{o}{()[}\PYG{n}{randIndex}\PYG{o}{];}
+
+        \PYG{c+c1}{// Create a boolean over the vertices that is false everywhere}
+        \PYG{n}{BoolV} \PYG{n}{seedField} \PYG{o}{=} \PYG{n}{BoolV}\PYG{o}{.}\PYG{n+na}{zeroes}\PYG{o}{();}
+
+        \PYG{c+c1}{// Set a single vertex in the field (the seed) to true}
+        \PYG{n}{BoolV}\PYG{o}{.}\PYG{n+na}{setBit}\PYG{o}{(}\PYG{n}{seedField}\PYG{o}{,} \PYG{n}{seed}\PYG{o}{,} \PYG{k+kc}{true}\PYG{o}{);}
+
+        \PYG{c+c1}{// Assigns the field to grow as the initial state of the program}
+        \PYG{n}{grow} \PYG{o}{=} \PYG{k}{new} \PYG{n}{BoolVRef}\PYG{o}{(}\PYG{n}{seedField}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{c+c1}{// A Blob method is defined as an inner class extending the Procedure abstract class.}
+    \PYG{c+c1}{// The method body is defined in the constructor of the class.}
+    \PYG{c+c1}{// This methods enables vertex\PYGZhy{}to\PYGZhy{}vertex communication by swapping to two ve\PYGZsq{}s}
+    \PYG{c+c1}{// pointing to each edge.}
+    \PYG{k+kd}{private} \PYG{k+kd}{class} \PYG{n+nc}{Send} \PYG{k+kd}{extends} \PYG{n}{Procedure} \PYG{o}{\PYGZob{}}
+        \PYG{k+kd}{public} \PYG{n+nf}{Send}\PYG{o}{(}\PYG{n}{BoolVeRef} \PYG{n}{ve}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            \PYG{c+c1}{// Boolean fields used to store intermediate results.}
+            \PYG{c+c1}{// The use of tmp(...) makes the fields contained in the refs open}
+            \PYG{c+c1}{// to garbage collection once we finish executing this method.}
+            \PYG{n}{BoolEvRef} \PYG{n}{ev} \PYG{o}{=} \PYG{n}{tmp}\PYG{o}{(}\PYG{k}{new} \PYG{n}{BoolEvRef}\PYG{o}{());}
+            \PYG{n}{BoolEfRef} \PYG{n}{ef} \PYG{o}{=} \PYG{n}{tmp}\PYG{o}{(}\PYG{k}{new} \PYG{n}{BoolEfRef}\PYG{o}{());}
+
+            \PYG{c+c1}{// Blob instructions}
+            \PYG{c+c1}{// These methods add the corresponding instructions to the execution}
+            \PYG{c+c1}{// list of this procedure.}
+            \PYG{n}{transfer}\PYG{o}{(}\PYG{n}{ve}\PYG{o}{,} \PYG{n}{ev}\PYG{o}{);}
+            \PYG{n}{rotCW}\PYG{o}{(}\PYG{n}{ev}\PYG{o}{,} \PYG{n}{ef}\PYG{o}{);}
+            \PYG{n}{rotCW}\PYG{o}{(}\PYG{n}{ef}\PYG{o}{,} \PYG{n}{ev}\PYG{o}{);}
+            \PYG{n}{transfer}\PYG{o}{(}\PYG{n}{ev}\PYG{o}{,} \PYG{n}{ve}\PYG{o}{);}
+
+            \PYG{c+c1}{// Note : Similarly the outer class constructor, this is only}
+            \PYG{c+c1}{// executed once before the interpretation of the program.}
+            \PYG{c+c1}{// This means that the ev and ef references are only created once}
+            \PYG{c+c1}{// before the execution.}
+            \PYG{c+c1}{// Additionally this also enable the use of non\PYGZhy{}Blob methods to}
+            \PYG{c+c1}{// setup the initial state, which can be useful to define deirectly}
+            \PYG{c+c1}{// here values that should be reused throughout the exection.}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{c+c1}{// A small helper that skips the need to use \PYGZdq{}new\PYGZdq{} everytime we call the method.}
+    \PYG{k+kd}{private} \PYG{n}{Procedure} \PYG{n+nf}{send}\PYG{o}{(}\PYG{n}{BoolVeRef} \PYG{n}{ve}\PYG{o}{)} \PYG{o}{\PYGZob{}} \PYG{k}{return} \PYG{k}{new} \PYG{n}{Send}\PYG{o}{(}\PYG{n}{ve}\PYG{o}{);} \PYG{o}{\PYGZcb{}}
+
+    \PYG{c+c1}{// The method that performs the spread.}
+    \PYG{k+kd}{private} \PYG{k+kd}{class} \PYG{n+nc}{Spread} \PYG{k+kd}{extends} \PYG{n}{Procedure} \PYG{o}{\PYGZob{}}
+        \PYG{k+kd}{public} \PYG{n+nf}{Spread}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+            \PYG{n}{BoolVRef} \PYG{n}{start} \PYG{o}{=} \PYG{n}{tmp}\PYG{o}{(}\PYG{k}{new} \PYG{n}{BoolVRef}\PYG{o}{());}
+            \PYG{n}{BoolVeRef} \PYG{n}{ve} \PYG{o}{=} \PYG{n}{tmp}\PYG{o}{(}\PYG{k}{new} \PYG{n}{BoolVeRef}\PYG{o}{());}
+
+            \PYG{n}{set}\PYG{o}{(}\PYG{n}{grow}\PYG{o}{,} \PYG{n}{start}\PYG{o}{);}
+            \PYG{n}{broadcast}\PYG{o}{(}\PYG{n}{grow}\PYG{o}{,} \PYG{n}{ve}\PYG{o}{);}
+
+            \PYG{c+c1}{// Since the send method is user defined and not part of the built\PYGZhy{}in}
+            \PYG{c+c1}{// instruction set, it needs to be passed through a call(...).}
+            \PYG{n}{call}\PYG{o}{(}\PYG{n}{send}\PYG{o}{(}\PYG{n}{ve}\PYG{o}{));}
+
+            \PYG{n}{redOr}\PYG{o}{(}\PYG{n}{ve}\PYG{o}{,} \PYG{n}{grow}\PYG{o}{);}
+            \PYG{n}{or}\PYG{o}{(}\PYG{n}{start}\PYG{o}{,} \PYG{n}{grow}\PYG{o}{,} \PYG{n}{grow}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k+kd}{public} \PYG{n}{Procedure} \PYG{n+nf}{spread}\PYG{o}{()} \PYG{o}{\PYGZob{}} \PYG{k}{return} \PYG{k}{new} \PYG{n}{Spread}\PYG{o}{();} \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

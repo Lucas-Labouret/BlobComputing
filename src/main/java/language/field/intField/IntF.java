@@ -14,7 +14,7 @@ public non-sealed class IntF extends IntField<BoolF> {
         super(n, new BoolFRef[n + 1]);
         for (int i = 0; i <= n; i++) this.bits[i] = new BoolFRef();
     }
-    private IntF(int n, BoolFRef[] bits) {
+    public IntF(int n, BoolFRef[] bits) {
         super(n, bits);
     }
 
