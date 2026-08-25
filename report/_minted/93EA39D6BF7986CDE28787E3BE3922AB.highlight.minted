@@ -1,0 +1,4 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// A standard Java class}
+\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{class} \PYG{n+nc}{Grow}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\end{MintedVerbatim}

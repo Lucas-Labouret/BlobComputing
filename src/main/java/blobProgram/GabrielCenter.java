@@ -227,10 +227,32 @@ public class GabrielCenter {
             BoolERef centerE = tmp(new BoolERef());
             BoolEvRef ev = tmp(new BoolEvRef());
             BoolVRef v = tmp(new BoolVRef());
+            
             for (int i=0; i<mod; i++) {
                 eq(dist, new IntVRef(IntV.of(i, nbits)), flood);
+
+                if (i == 0) {
+                    BoolVRef flood0 = new BoolVRef();
+                    set(flood, flood0);
+                    show("Flood Start 0", flood0);
+                }
+
                 for (int j=0; j<mod-2; j++) call(floodOnce(flood, flood));
+
+                if (i == 0) {
+                    BoolVRef flood0 = new BoolVRef();
+                    set(flood, flood0);
+                    show("Flood 0", flood0);
+                }
+
                 for (int j=0; j<mod-3; j++) call(forAll(flood, ve, flood));
+
+                if (i == 0) {
+                    BoolVRef flood0 = new BoolVRef();
+                    set(flood, flood0);
+                    show("Centers 0", flood0);
+                }
+
                 or(flood, center, center);
 
                 call(forAll(flood, ve, flood));

@@ -1,0 +1,9 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{a}\PYG{p}{.}\PYG{n+na}{get}\PYG{p}{().}\PYG{n+na}{n}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{.}\PYG{n+na}{get}\PYG{p}{().}\PYG{n+na}{n}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{.}\PYG{n+na}{get}\PYG{p}{().}\PYG{n+na}{n}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{res}\PYG{p}{.}\PYG{n+na}{get}\PYG{p}{().}\PYG{n+na}{n}\PYG{p}{)}
+\PYG{+w}{            }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IllegalArgumentException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Cannot add IntVs of different sizes.\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{        }\PYG{n}{IntVRef}\PYG{+w}{ }\PYG{n}{carry}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IntVRef}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IntV}\PYG{p}{(}\PYG{n}{a}\PYG{p}{.}\PYG{n+na}{get}\PYG{p}{().}\PYG{n+na}{n}\PYG{p}{)));}
+\PYG{+w}{        }\PYG{n}{IntVRef}\PYG{+w}{ }\PYG{n}{tmp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IntVRef}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IntV}\PYG{p}{(}\PYG{n}{a}\PYG{p}{.}\PYG{n+na}{get}\PYG{p}{().}\PYG{n+na}{n}\PYG{p}{)));}
+\PYG{+w}{        }\PYG{n}{set}\PYG{p}{(}\PYG{n}{a}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{res}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{set}\PYG{p}{(}\PYG{n}{b}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{);}
+\end{MintedVerbatim}

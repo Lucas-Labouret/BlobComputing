@@ -1,0 +1,9 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{.}\PYG{n+na}{get}\PYG{p}{().}\PYG{n+na}{n}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{and}\PYG{p}{(}\PYG{n}{res}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{carry}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{xor}\PYG{p}{(}\PYG{n}{res}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{res}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{lShift}\PYG{p}{(}\PYG{n}{carry}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

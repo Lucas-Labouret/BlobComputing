@@ -1,0 +1,572 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{spatialtypes}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=c3a97ebfcddd21bfc3404d6f09455bc1}{%
+           family={Gruau},
+           familyi={G\bibinitperiod},
+           given={Frederic},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{c3a97ebfcddd21bfc3404d6f09455bc1}
+      \strng{fullhash}{c3a97ebfcddd21bfc3404d6f09455bc1}
+      \strng{fullhashraw}{c3a97ebfcddd21bfc3404d6f09455bc1}
+      \strng{bibnamehash}{c3a97ebfcddd21bfc3404d6f09455bc1}
+      \strng{authorbibnamehash}{c3a97ebfcddd21bfc3404d6f09455bc1}
+      \strng{authornamehash}{c3a97ebfcddd21bfc3404d6f09455bc1}
+      \strng{authorfullhash}{c3a97ebfcddd21bfc3404d6f09455bc1}
+      \strng{authorfullhashraw}{c3a97ebfcddd21bfc3404d6f09455bc1}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.DC}
+      \field{eprinttype}{arXiv}
+      \field{title}{Modular programming of computing media using spatial types, for artificial physics}
+      \field{year}{2019}
+      \verb{eprint}
+      \verb 1904.05787
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/1904.05787
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/1904.05787
+      \endverb
+    \endentry
+    \entry{sdn}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=e3d8d9108482b08025a828037c9fdd11}{%
+           family={Gruau},
+           familyi={G\bibinitperiod},
+           given={Frédéric},
+           giveni={F\bibinitperiod}}}%
+        {{hash=1ebd5a141bb901c8ff5bb7b44ad7c5f1}{%
+           family={Eisenbeis},
+           familyi={E\bibinitperiod},
+           given={Christine},
+           giveni={C\bibinitperiod}}}%
+        {{hash=207aa7100f77edf39b7966e15f2f2236}{%
+           family={Maignan},
+           familyi={M\bibinitperiod},
+           given={Luidnel},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{05219f555ac837b6f185d9f5b40e0e24}
+      \strng{fullhash}{05219f555ac837b6f185d9f5b40e0e24}
+      \strng{fullhashraw}{05219f555ac837b6f185d9f5b40e0e24}
+      \strng{bibnamehash}{05219f555ac837b6f185d9f5b40e0e24}
+      \strng{authorbibnamehash}{05219f555ac837b6f185d9f5b40e0e24}
+      \strng{authornamehash}{05219f555ac837b6f185d9f5b40e0e24}
+      \strng{authorfullhash}{05219f555ac837b6f185d9f5b40e0e24}
+      \strng{authorfullhashraw}{05219f555ac837b6f185d9f5b40e0e24}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The current trend in electronics is to integrate more and more transistors on a chip and produce massive hardware resources. As a consequence, traditional computing models, which mainly compute in the temporal domain, do not work well anymore since it becomes increasingly difficult to orchestrate these massive-scale hardware resources in a centralized way. Spatial computing is a unifying term that embodies many unconventional computing models and means computing on a relatively homogeneous physical medium made of hardware components, where the communication time is dependent on the Euclidean distance between the components (locality constraint). This constraint makes the programming for high performance significantly more complex compared to classical non-spatial hardware because performance now depends on where computation happens in space (mapping problem). Blob computing is a new approach that addresses this parallel computing challenge in a radically new and unconventional way: it decouples the mapping of computations onto the hardware from the software programming while still elegantly exploiting the space of the underlying hardware. Hardware mapping of computations is done by a physical force-based approach that simulates forces between threads of computation (automata). Attractive forces are used to keep automata that need to communicate with each other closer while repulsive forces are used for load balancing. The advantage of these primitives is that they are simple enough to be implemented on an arbitrary computing medium. They form the basis of a runtime system (RTS) that transforms an arbitrary computing medium into an easier-to-program virtual machine called the blob machine. The basic objects of the blob machine are those automata, and the instructions let automata create new automata in specific ways so as to maintain a hierarchical organization (which facilitates both the mapping and the programming). We detail the basic instructions of the blob machine and demonstrate their confluence. Programming a spatial medium to perform a given algorithm then boils down to programming the blob machine, provided the RTS is implemented on it. The advantage of this approach is the hardware independency, meaning that the same program can be used on different media. By means of several examples programmed using a high-level language description, we further show that we can efficiently implement most current parallel computing models, such as Single Instruction Multiple Data (SIMD), data parallelism, “divide-and-conquer” parallelism and pipelining which demonstrates parallel expressiveness. On sorting and matrix multiplication algorithms, we also show that our approach scales up optimally with the number of basic hardware components.}
+      \field{issn}{0167-2789}
+      \field{journaltitle}{Physica D: Nonlinear Phenomena}
+      \field{note}{Novel Computing Paradigms: Quo Vadis?}
+      \field{number}{9}
+      \field{title}{The foundation of self-developing blob machines for spatial computing}
+      \field{volume}{237}
+      \field{year}{2008}
+      \field{pages}{1282\bibrangedash 1301}
+      \range{pages}{20}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.physd.2008.03.046
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S0167278908001255
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S0167278908001255
+      \endverb
+      \keyw{Spatial computing,Distributed algorithm,Self-developing network,Computer architecture,Computer language}
+    \endentry
+    \entry{gabrielcenters}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=207aa7100f77edf39b7966e15f2f2236}{%
+           family={Maignan},
+           familyi={M\bibinitperiod},
+           given={Luidnel},
+           giveni={L\bibinitperiod}}}%
+        {{hash=e3d8d9108482b08025a828037c9fdd11}{%
+           family={Gruau},
+           familyi={G\bibinitperiod},
+           given={Frédéric},
+           giveni={F\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{fullhash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{fullhashraw}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{bibnamehash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{authorbibnamehash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{authornamehash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{authorfullhash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{authorfullhashraw}{8d4362c37309267b5e47579e8806e7e0}
+      \field{extraname}{1}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Gabriel graphs are subgraphs of Delaunay graphs that are used in many domains such as sensor networks and computer graphics. Although very useful in their original form, their definition is bounded to applications involving Euclidean spaces only, but their principles seem to be applicable to a wider range of applications. In this article, we generalize this construct and define metric Gabriel graphs that transport the principles of Gabriel graphs on arbitrary metric space, allowing their use in domains like cellular automata and amorphous computing, or any other domains where a non-Euclidean metric is used. We study global/local properties of metric Gabriel graphs and use them to design a cellular automaton that draws the metric Gabriel graph of its input. This cellular automaton only uses seven states to achieve this goal and has been tested on hexagonal grids, 4-connected, and 8-connected square grids.}
+      \field{issn}{1556-4665}
+      \field{journaltitle}{ACM Trans. Auton. Adapt. Syst.}
+      \field{month}{6}
+      \field{number}{2}
+      \field{title}{Gabriel Graphs in Arbitrary Metric Space and their Cellular Automaton for Many Grids}
+      \field{volume}{6}
+      \field{year}{2011}
+      \verb{doi}
+      \verb 10.1145/1968513.1968515
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/1968513.1968515
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/1968513.1968515
+      \endverb
+      \keyw{Gabriel graphs,cellular automata,metric space}
+    \endentry
+    \entry{distancegradient}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=207aa7100f77edf39b7966e15f2f2236}{%
+           family={Maignan},
+           familyi={M\bibinitperiod},
+           given={Luidnel},
+           giveni={L\bibinitperiod}}}%
+        {{hash=e3d8d9108482b08025a828037c9fdd11}{%
+           family={Gruau},
+           familyi={G\bibinitperiod},
+           given={Frédéric},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{fullhash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{fullhashraw}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{bibnamehash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{authorbibnamehash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{authornamehash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{authorfullhash}{8d4362c37309267b5e47579e8806e7e0}
+      \strng{authorfullhashraw}{8d4362c37309267b5e47579e8806e7e0}
+      \field{extraname}{2}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings - 2nd IEEE International Conference on Self-Adaptive and Self-Organizing Systems Workshops, SASOW 2008}
+      \field{month}{11}
+      \field{title}{Integer Gradient for Cellular Automata: Principle and Examples}
+      \field{year}{2008}
+      \field{pages}{321\bibrangedash 325}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1109/SASOW.2008.52
+      \endverb
+    \endentry
+    \entry{ibm}{inproceedings}{}{}
+      \name{author}{59}{}{%
+        {{hash=171d01dd09772b2613cf15b78e23ddec}{%
+           family={Reboh},
+           familyi={R\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=08835018e7f90fcf262517bf88eb4d72}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=e1a48f0996f4a7c277331c950c24c96f}{%
+           family={Yamashita},
+           familyi={Y\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=26eff6301715df48e990d8ba49c5edc5}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={W.\bibnamedelimi K.},
+           giveni={W\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=48865484840c97799d790ad80cb0cd34}{%
+           family={Xie},
+           familyi={X\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=b7273d390c88ab7e962deb7230099f7d}{%
+           family={Ando},
+           familyi={A\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=91030fe253a635e6754d5c9f51fdc846}{%
+           family={Bajpai},
+           familyi={B\bibinitperiod},
+           given={U.},
+           giveni={U\bibinitperiod}}}%
+        {{hash=fc6f4a874804e6ad945157c9e251941d}{%
+           family={Mazza},
+           familyi={M\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=1f5fa3a1160454de340bf4459532e135}{%
+           family={Lanzillo},
+           familyi={L\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=271a72eaae8dceb2f8c46480afbfa22d}{%
+           family={Cho},
+           familyi={C\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+        {{hash=32c575590c3e6521537cdae5efd16ff0}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=0d500130bc16f7fbc743d55964d2a995}{%
+           family={Strane},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=812e858469002fc6e85e5b4be41e6960}{%
+           family={Miller},
+           familyi={M\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+        {{hash=a6881d525ac86b0eeb1dfa103473bac6}{%
+           family={Satterlee},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=1fee2641bf9ea47765fe56495173b9f9}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=bd6dda21d8c25d13f6ca1a14a549579f}{%
+           family={Sulehria},
+           familyi={S\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=fac7859e4ea6414cbfc6f061f504a722}{%
+           family={Sankarapandian},
+           familyi={S\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9b25e2c4805763272d90129c06aefbf6}{%
+           family={Mochizuki},
+           familyi={M\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=e4988df43a11e9bca6eeeda8ca0241c7}{%
+           family={Shanker},
+           familyi={S\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=fd430eae501f155d9616945b37130fc5}{%
+           family={Johnson},
+           familyi={J\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=de46a004df6d798b19d79c713424bacb}{%
+           family={Chu},
+           familyi={C\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=13d13b7dcfe57b1229ff1035a86ef3a9}{%
+           family={Khan},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=539ad660c4fa9610aaf2afc49dc8c76c}{%
+           family={Malley},
+           familyi={M\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=e0616d70aba31709e08f6be0cbe097bd}{%
+           family={Tseng},
+           familyi={T\bibinitperiod},
+           given={W.-T.},
+           giveni={W\bibinithyphendelim T\bibinitperiod}}}%
+        {{hash=f9a6d711f6a65e79f0fd87b43187ee8f}{%
+           family={Pujari},
+           familyi={P\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=80ef419cfc4c3aa167af5f6f25fdecd3}{%
+           family={Stuckert},
+           familyi={S\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+        {{hash=9069d879ba0eee365d138a60c25d6e59}{%
+           family={Tierney},
+           familyi={T\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+        {{hash=ef065b28c31984323fd6d3483d29aafd}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f2e0ed43d4fafc853c29d789426946b4}{%
+           family={Belyansky},
+           familyi={B\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=006ddf4657952b65835fb4d0a051c4ba}{%
+           family={Nasseri},
+           familyi={N\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=a559f00f0f2aa0845ebe7f8ef2cf2ef4}{%
+           family={Putnam},
+           familyi={P\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=fcc7afe44b8e5c3020caca03b6e3f0b7}{%
+           family={Hubbard},
+           familyi={H\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=c1d480bb5ad9ef8100b1a62f93496fe7}{%
+           family={Durrant},
+           familyi={D\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=d6e5ea0353f1965eee1057d4503fb6e3}{%
+           family={Fulham},
+           familyi={F\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=64c6db26f347b06ad3330461bfc66c79}{%
+           family={Canaperi},
+           familyi={C\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=15ef5738395feb8535be2c43d7d1862a}{%
+           family={Skordas},
+           familyi={S\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0060cd688a569a0f00322603aad1bf0b}{%
+           family={Seo},
+           familyi={S\bibinitperiod},
+           given={S.-C.},
+           giveni={S\bibinithyphendelim C\bibinitperiod}}}%
+        {{hash=2588efb1efd92440169c14bedc1df989}{%
+           family={Gluschenkov},
+           familyi={G\bibinitperiod},
+           given={O.},
+           giveni={O\bibinitperiod}}}%
+        {{hash=76f0dd2125cca48b3f39377db302eaf9}{%
+           family={Sherony},
+           familyi={S\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=3702f1c146e64a6c91fc47b81ea59fc7}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=280dc4c18f682e47f79d502f0e89f614}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=618f5c20adc35b525b832a2bababee75}{%
+           family={Arnold},
+           familyi={A\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=75adb36e8d0e3a6df3c9d3f202eb3180}{%
+           family={Wynne},
+           familyi={W\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5c592a4bcfe86a1eb6353cc1d5aae6fc}{%
+           family={Meli},
+           familyi={M\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+        {{hash=b98ce4314e40d4944099559b7bdd3201}{%
+           family={Peethala},
+           familyi={P\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=8afab9bdc9b292debbeb136dfd97036c}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=a66d35cded8b33f0dca2d85887e0b037}{%
+           family={Tolbert},
+           familyi={T\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=7800a29bf39d2ad34a215bf8f1fbe2ee}{%
+           family={Dechene},
+           familyi={D\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=53dee9773b2c6a566ec38ee743cc60c6}{%
+           family={Shahidi},
+           familyi={S\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=4eff09585da1551b983626a7ff7d13c4}{%
+           family={Edelstein},
+           familyi={E\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=cbd2b7483aa9e98246b9bebef28c2c04}{%
+           family={Ramachandran},
+           familyi={R\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=e9d0465d64c04442a957123f9d8eb92a}{%
+           family={Guo},
+           familyi={G\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=7287b6f23447693b1a0fc3d7b985decb}{%
+           family={Narayanan},
+           familyi={N\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=a4ac1c7b7b9d1949f32fd0f4a39d97f7}{%
+           family={Felix},
+           familyi={F\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=045580483186d60048b1d66f0f1885bf}{%
+           family={Standaert},
+           familyi={S\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=70ffbed1e35db3db9e7c098b6badbb44}{%
+           family={Jagannathan},
+           familyi={J\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=ec30151ffeca97cb7ce150079ae49a31}{%
+           family={Sohn},
+           familyi={S\bibinitperiod},
+           given={D.-K.},
+           giveni={D\bibinithyphendelim K\bibinitperiod}}}%
+        {{hash=74274ab981d5e6f80b933a2a020860c1}{%
+           family={Bu},
+           familyi={B\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=d1eba5eb3bfeef18aaa6b38264e2369d}{%
+           family={Khare},
+           familyi={K\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{676be10390181a4f8cf3113c08277717}
+      \strng{fullhash}{a68cdf6824f0b800cbdde034fd68cc79}
+      \strng{fullhashraw}{a68cdf6824f0b800cbdde034fd68cc79}
+      \strng{bibnamehash}{676be10390181a4f8cf3113c08277717}
+      \strng{authorbibnamehash}{676be10390181a4f8cf3113c08277717}
+      \strng{authornamehash}{676be10390181a4f8cf3113c08277717}
+      \strng{authorfullhash}{a68cdf6824f0b800cbdde034fd68cc79}
+      \strng{authorfullhashraw}{a68cdf6824f0b800cbdde034fd68cc79}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2025 Symposium on VLSI Technology and Circuits (VLSI Technology and Circuits)}
+      \field{title}{NanoStack Transistor Architecture for CMOS 7A Node and Beyond}
+      \field{year}{2025}
+      \field{pages}{1\bibrangedash 3}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.23919/VLSITechnologyandCir65189.2025.11074866
+      \endverb
+      \keyw{Scalability;Stacking;Field effect transistors;Very large scale integration;Logic gates;CMOS technology;Dielectrics;Bonding;Thermal stability}
+    \endentry
+    \entry{fpo}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=d6b2221c05e89bc57729e2eb9696098d}{%
+           family={Schlömer},
+           familyi={S\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=d6af91ae29ac68266c44fd4f050c7ef7}{%
+           family={Heck},
+           familyi={H\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+        {{hash=675352a3dd6162348006cba3551962ee}{%
+           family={Deussen},
+           familyi={D\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vancouver, British Columbia, Canada}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{1692bdecfca60e667bcfcbdd642b241f}
+      \strng{fullhash}{1692bdecfca60e667bcfcbdd642b241f}
+      \strng{fullhashraw}{1692bdecfca60e667bcfcbdd642b241f}
+      \strng{bibnamehash}{1692bdecfca60e667bcfcbdd642b241f}
+      \strng{authorbibnamehash}{1692bdecfca60e667bcfcbdd642b241f}
+      \strng{authornamehash}{1692bdecfca60e667bcfcbdd642b241f}
+      \strng{authorfullhash}{1692bdecfca60e667bcfcbdd642b241f}
+      \strng{authorfullhashraw}{1692bdecfca60e667bcfcbdd642b241f}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Efficient sampling often relies on irregular point sets that uniformly cover the sample space. We present a flexible and simple optimization strategy for such point sets. It is based on the idea of increasing the mutual distances by successively moving each point to the "farthest point," i.e., the location that has the maximum distance from the rest of the point set. We present two iterative algorithms based on this strategy. The first is our main algorithm which distributes points in the plane. Our experimental results show that the resulting distributions have almost optimal blue noise properties and are highly suitable for image plane sampling. The second is a variant of the main algorithm that partitions any point set into equally sized subsets, each with large mutual distances; the resulting partitionings yield improved results in more general integration problems such as those occurring in physically based rendering.}
+      \field{booktitle}{Proceedings of the ACM SIGGRAPH Symposium on High Performance Graphics}
+      \field{isbn}{9781450308960}
+      \field{series}{HPG '11}
+      \field{title}{Farthest-point optimized point sets with maximized minimum distance}
+      \field{year}{2011}
+      \field{pages}{135\bibrangedash 142}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1145/2018323.2018345
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/2018323.2018345
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/2018323.2018345
+      \endverb
+      \keyw{Delaunay triangulations,Poisson-disk,anti-aliasing,blue noise,maximized minimum distance,numerical integration,sampling,trajectory splitting}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

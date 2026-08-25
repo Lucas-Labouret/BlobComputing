@@ -1,0 +1,15 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{    }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{n+nf}{Grow}\PYG{p}{(}\PYG{n}{Medium}\PYG{+w}{ }\PYG{n}{medium}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{randIndex}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{random}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{medium}\PYG{p}{.}\PYG{n+na}{vertices}\PYG{p}{.}\PYG{n+na}{size}\PYG{p}{());}
+\PYG{+w}{        }\PYG{n}{Vertex}\PYG{+w}{ }\PYG{n}{seed}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Vertex}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{medium}\PYG{p}{.}\PYG{n+na}{vertices}\PYG{p}{.}\PYG{n+na}{toArray}\PYG{p}{()}\PYG{o}{[}\PYG{n}{randIndex}\PYG{o}{]}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{c+c1}{// Create a boolean over the vertices that is false everywhere}
+\PYG{+w}{        }\PYG{n}{BoolV}\PYG{+w}{ }\PYG{n}{seedField}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{BoolV}\PYG{p}{.}\PYG{n+na}{zeroes}\PYG{p}{();}
+
+\PYG{+w}{        }\PYG{c+c1}{// Set a single vertex in the field (the seed) to true}
+\PYG{+w}{        }\PYG{n}{BoolV}\PYG{p}{.}\PYG{n+na}{setBit}\PYG{p}{(}\PYG{n}{seedField}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{seed}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{);}
+
+\PYG{+w}{        }\PYG{c+c1}{// Assigns the field to grow as the initial state of the program}
+\PYG{+w}{        }\PYG{n}{grow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{BoolVRef}\PYG{p}{(}\PYG{n}{seedField}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

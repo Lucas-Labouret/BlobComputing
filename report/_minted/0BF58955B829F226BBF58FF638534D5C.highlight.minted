@@ -1,20 +1,15 @@
 \begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{class} \PYG{n+nc}{Grow}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
-\PYG{+w}{    }\PYG{n}{BoolVRef}\PYG{+w}{ }\PYG{n}{grow}\PYG{p}{;}
-
-\PYG{+w}{    }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{n+nf}{Grow}\PYG{p}{(}\PYG{n}{Medium}\PYG{+w}{ }\PYG{n}{medium}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
-\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{randIndex}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Math}\PYG{p}{.}\PYG{n+na}{random}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{medium}\PYG{p}{.}\PYG{n+na}{vertices}\PYG{p}{.}\PYG{n+na}{size}\PYG{p}{());}
-\PYG{+w}{        }\PYG{n}{Vertex}\PYG{+w}{ }\PYG{n}{seed}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Vertex}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{medium}\PYG{p}{.}\PYG{n+na}{vertices}\PYG{p}{.}\PYG{n+na}{toArray}\PYG{p}{()}\PYG{o}{[}\PYG{n}{randIndex}\PYG{o}{]}\PYG{p}{;}
-\PYG{+w}{        }\PYG{n}{BoolV}\PYG{+w}{ }\PYG{n}{seedField}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{BoolV}\PYG{p}{.}\PYG{n+na}{zeroes}\PYG{p}{();}
-\PYG{+w}{        }\PYG{n}{BoolV}\PYG{p}{.}\PYG{n+na}{setBit}\PYG{p}{(}\PYG{n}{seedField}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{seed}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{);}
-\PYG{+w}{        }\PYG{n}{grow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{BoolVRef}\PYG{p}{(}\PYG{n}{seedField}\PYG{p}{);}
-\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
-
 \PYG{+w}{    }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{k+kd}{class} \PYG{n+nc}{Send}\PYG{+w}{ }\PYG{k+kd}{extends}\PYG{+w}{ }\PYG{n}{Procedure}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{        }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{n+nf}{Send}\PYG{p}{(}\PYG{n}{BoolVeRef}\PYG{+w}{ }\PYG{n}{ve}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{c+c1}{// Boolean fields used to store intermediate results.}
+\PYG{+w}{            }\PYG{c+c1}{// The use of tmp(...) makes the fields contained in the refs open}
+\PYG{+w}{            }\PYG{c+c1}{// to garbage collection once we finish executing this method.}
 \PYG{+w}{            }\PYG{n}{BoolEvRef}\PYG{+w}{ }\PYG{n}{ev}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{BoolEvRef}\PYG{p}{());}
 \PYG{+w}{            }\PYG{n}{BoolEfRef}\PYG{+w}{ }\PYG{n}{ef}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{BoolEfRef}\PYG{p}{());}
 
+\PYG{+w}{            }\PYG{c+c1}{// Blob instructions}
+\PYG{+w}{            }\PYG{c+c1}{// These methods add the corresponding instructions to the execution}
+\PYG{+w}{            }\PYG{c+c1}{// list of this procedure.}
 \PYG{+w}{            }\PYG{n}{transfer}\PYG{p}{(}\PYG{n}{ve}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ev}\PYG{p}{);}
 \PYG{+w}{            }\PYG{n}{rotCW}\PYG{p}{(}\PYG{n}{ev}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ef}\PYG{p}{);}
 \PYG{+w}{            }\PYG{n}{rotCW}\PYG{p}{(}\PYG{n}{ef}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ev}\PYG{p}{);}
@@ -22,6 +17,7 @@
 \PYG{+w}{        }\PYG{p}{\PYGZcb{}}
 \PYG{+w}{    }\PYG{p}{\PYGZcb{}}
 
+\PYG{+w}{    }\PYG{c+c1}{// The method that performs the spread.}
 \PYG{+w}{    }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{k+kd}{class} \PYG{n+nc}{Spread}\PYG{+w}{ }\PYG{k+kd}{extends}\PYG{+w}{ }\PYG{n}{Procedure}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{        }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{n+nf}{Spread}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{            }\PYG{n}{BoolVRef}\PYG{+w}{ }\PYG{n}{start}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{tmp}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{BoolVRef}\PYG{p}{());}
@@ -29,11 +25,14 @@
 
 \PYG{+w}{            }\PYG{n}{set}\PYG{p}{(}\PYG{n}{grow}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{start}\PYG{p}{);}
 \PYG{+w}{            }\PYG{n}{broadcast}\PYG{p}{(}\PYG{n}{grow}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ve}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{c+c1}{// Since the send method is user defined and not part of the built\PYGZhy{}in}
+\PYG{+w}{            }\PYG{c+c1}{// instruction set, it needs to be passed through a call(...).}
 \PYG{+w}{            }\PYG{n}{call}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Send}\PYG{p}{(}\PYG{n}{ve}\PYG{p}{));}
+
 \PYG{+w}{            }\PYG{n}{redOr}\PYG{p}{(}\PYG{n}{ve}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{grow}\PYG{p}{);}
 \PYG{+w}{            }\PYG{n}{or}\PYG{p}{(}\PYG{n}{start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{grow}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{grow}\PYG{p}{);}
 \PYG{+w}{        }\PYG{p}{\PYGZcb{}}
 \PYG{+w}{    }\PYG{p}{\PYGZcb{}}
-\PYG{+w}{    }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{n}{Procedure}\PYG{+w}{ }\PYG{n+nf}{spread}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Spread}\PYG{p}{();}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
 \PYG{p}{\PYGZcb{}}
 \end{MintedVerbatim}
