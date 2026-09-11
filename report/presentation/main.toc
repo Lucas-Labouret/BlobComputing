@@ -1,0 +1,7 @@
+\beamer@sectionintoc {2}{Introduction}{3}{0}{1}
+\beamer@sectionintoc {3}{Blob Computing Paradigm}{6}{0}{2}
+\beamer@sectionintoc {4}{Blobs and Fields}{14}{0}{3}
+\beamer@sectionintoc {5}{Language, Interpreter and GUI}{15}{0}{4}
+\beamer@sectionintoc {6}{Homogenization Problem}{17}{0}{5}
+\beamer@sectionintoc {7}{Conclusion}{23}{0}{6}
+\beamer@sectionintoc {8}{Resources}{24}{0}{7}

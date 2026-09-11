@@ -37,18 +37,18 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/report/main.acn
+/report/report/main.acn
 /report/main.aux
-/report/main.bbl
+/report/report/main.bbl
 /report/main.bcf
 /report/main.blg
 /report/main.fdb_latexmk
 /report/main.fls
-/report/main.glo
-/report/main.glsdefs
-/report/main.ist
+/report/report/main.glo
+/report/report/main.glsdefs
+/report/report/main.ist
 /report/main.log
 /report/main.out
 /report/main.run.xml
-/report/main.synctex.gz
+/report/report/main.synctex.gz
 /report/main.toc
