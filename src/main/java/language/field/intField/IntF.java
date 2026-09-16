@@ -52,10 +52,16 @@ public non-sealed class IntF extends IntField<BoolF> {
         return (BoolFRef[]) bits;
     }
 
+    /** Indicates that this IntF should be decoded as an unsigned integer */
+    public IntF decodeAsUnsigned() {
+        decodeAsSigned = false;
+        return this;
+    }
+
     /** Converts this IntF to a HashMap<Face, Integer>. */
     public HashMap<Face, Integer> decode(Medium m) {
         HashMap<Face, Integer> res = new HashMap<>();
-        decode(this, res, m.faces, BoolF::decode);
+        decode(this, res, m.faces, BoolF::decode, decodeAsSigned);
         return res;
     }
 

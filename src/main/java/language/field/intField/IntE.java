@@ -52,10 +52,16 @@ public non-sealed class IntE extends IntField<BoolE> {
         return (BoolERef[]) bits;
     }
 
+    /** Indicates that this IntE should be decoded as an unsigned integer */
+    public IntE decodeAsUnsigned() {
+        decodeAsSigned = false;
+        return this;
+    }
+
     /** Converts this IntE to a HashMap<Edge, Integer>. */
     public HashMap<Edge, Integer> decode(Medium m) {
         HashMap<Edge, Integer> res = new HashMap<>();
-        decode(this, res, m.edges, BoolE::decode);
+        decode(this, res, m.edges, BoolE::decode, decodeAsSigned);
         return res;
     }
 

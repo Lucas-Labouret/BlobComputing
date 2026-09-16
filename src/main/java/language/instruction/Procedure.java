@@ -293,6 +293,7 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void fif(BoolEfRef cond, IntEfRef t, IntEfRef f, IntEfRef res) { call(IntOp.fif(cond, t, f, res)); }
     protected void fif(BoolFRef  cond, IntFRef  t, IntFRef  f, IntFRef  res) { call(IntOp.fif(cond, t, f, res)); }
     protected void fif(BoolFvRef cond, IntFvRef t, IntFvRef f, IntFvRef res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFeRef cond, IntFeRef t, IntFeRef f, IntFeRef res) { call(IntOp.fif(cond, t, f, res)); }
 
     protected void add(IntVRef  a, IntVRef  b, IntVRef  res) { call(IntOp.add(a, b, res)); }
     protected void add(IntVeRef a, IntVeRef b, IntVeRef res) { call(IntOp.add(a, b, res)); }
@@ -323,6 +324,16 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void eq(IntFRef  a, IntFRef  b, BoolFRef  res) { call(IntOp.eq(a, b, res)); }
     protected void eq(IntFvRef a, IntFvRef b, BoolFvRef res) { call(IntOp.eq(a, b, res)); }
     protected void eq(IntFeRef a, IntFeRef b, BoolFeRef res) { call(IntOp.eq(a, b, res)); }
+
+    protected void abs(IntVRef  a, IntVRef  res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntVeRef a, IntVeRef res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntVfRef a, IntVfRef res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntERef  a, IntERef  res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntEvRef a, IntEvRef res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntEfRef a, IntEfRef res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntFRef  a, IntFRef  res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntFvRef a, IntFvRef res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntFeRef a, IntFeRef res) { call(IntOp.abs(a, res)); }
 
     protected void gt(IntVRef  a, IntVRef  b, BoolVRef  res) { call(IntOp.gt(a, b, res)); }
     protected void gt(IntVeRef a, IntVeRef b, BoolVeRef res) { call(IntOp.gt(a, b, res)); }

@@ -38,11 +38,11 @@ public class Main extends Application {
         catch (Exception e) { throw new RuntimeException(e); }
         BoolFieldManager.setup(medium);
 
-        Instruction instruction = new Procedure() {{
-            BlobV blob = BlobV.rand(6);
-            show("Blob", blob);
-            call(blob.grow());
-        }};
+//        Instruction instruction = new Procedure() {{
+//            BlobV blob = BlobV.rand(6);
+//            show("Blob", blob);
+//            call(blob.grow());
+//        }};
 //        Instruction instruction = new Procedure() {{
 //            BlobV blob = BlobV.rand(6);
 //            show("Blob", blob);
@@ -55,45 +55,50 @@ public class Main extends Application {
 //        }};
 //        Instruction instruction = new Procedure() {{
 //            Rand.init();
-//            Flies flies = Flies.rand(6);
-//            BoolVRef start = new BoolVRef();
-//            set(flies.state, start);
-//            show("Flies", start);
-//            call(flies.flip());
-//        }};
-//        Instruction instruction = new Procedure() {{
-//            Rand.init();
-//
 //            QuasiParticle seed = new QuasiParticle(BoolV.zeroes());
-//            for (int i = 0; i < 10; i++){
-//                int rand = (int) (Math.random() * medium.vertices.size());
-//                Vertex v = (Vertex) medium.vertices.toArray()[rand];
-//                BoolV.setBit(seed.get(), v, true);
-//            }
-////            BoolV.setBit(seed.get(), 0, 0, true);
-////            BoolV.setBit(seed.get(), 21, 21, true);
-////            BoolV.setBit(seed.get(), 18, 20, true);
-////            BoolV.setBit(seed.get(), 18, 52, true);
+//            BoolV.setBit(seed.get(), 18, 5, true);
+//            BoolV.setBit(seed.get(), 18, 14, true);
 //            Flies flies = new Flies(seed);
-////            call(flies.flip());
-//            show("Sources", flies.state);
+//            show("Flies", seed);
+//            call(flies.flip());
 //
-//            GabrielCenter gabrielCenter = new GabrielCenter(flies.state);
 //            IntVRef dist = new IntVRef(new IntV(3));
 //            IntVeRef gradient = new IntVeRef(new IntVe(3));
-//            BoolVRef floodCenter = new BoolVRef();
-//            BoolVRef saddleCenter = new BoolVRef();
-//            call(gabrielCenter.update());
-//            call(gabrielCenter.distField.getDist(dist));
-//            call(gabrielCenter.distField.getGradient(gradient));
-//            call(gabrielCenter.flood());
-//            call(gabrielCenter.getCenter(floodCenter));
-//            call(gabrielCenter.saddle(saddleCenter));
+//            DistField distField = new DistField(seed, 3);
+//            call(distField.getDist(dist));
+//            call(distField.getGradient(gradient));
 //            show("DistField", dist);
 //            show("Gradient", gradient);
-//            show("Flood", floodCenter);
-//            show("Saddle", saddleCenter);
+//            call(distField.update());
 //        }};
+        Instruction instruction = new Procedure() {{
+            Rand.init();
+            QuasiParticle seed = new QuasiParticle(BoolV.zeroes());
+            for (int i = 0; i < 5; i++){
+                int rand = (int) (Math.random() * medium.vertices.size());
+                Vertex v = (Vertex) medium.vertices.toArray()[rand];
+                BoolV.setBit(seed.get(), v, true);
+            }
+//            BoolV.setBit(seed.get(), 0, 0, true);
+//            BoolV.setBit(seed.get(), 21, 21, true);
+//            BoolV.setBit(seed.get(), 18, 5, true);
+//            BoolV.setBit(seed.get(), 18, 14, true);
+            Flies flies = new Flies(seed);
+            call(flies.flip());
+            show("Sources", flies.state);
+
+            GabrielCenter gabrielCenter = new GabrielCenter(flies.state);
+            IntVRef dist = new IntVRef(new IntV(3));
+            IntVeRef gradient = new IntVeRef(new IntVe(3));
+            BoolVRef center = new BoolVRef();
+            call(gabrielCenter.update());
+            call(gabrielCenter.distField.getDist(dist));
+            call(gabrielCenter.distField.getGradient(gradient));
+            call(gabrielCenter.saddle(center));
+            show("DistField", dist);
+            show("Gradient", gradient);
+            show("Saddle", center);
+        }};
 
         ms = new MasterScene(medium, instruction);
 

@@ -52,10 +52,16 @@ public non-sealed class IntFe extends IntField<BoolFe> {
         return (BoolFeRef[]) bits;
     }
 
+    /** Indicates that this IntFe should be decoded as an unsigned integer */
+    public IntFe decodeAsUnsigned() {
+        decodeAsSigned = false;
+        return this;
+    }
+
     /** Converts this IntFe to a HashMap<Fe, Integer>. */
     public HashMap<Fe, Integer> decode(Medium m) {
         HashMap<Fe, Integer> res = new HashMap<>();
-        decode(this, res, m.fes, BoolFe::decode);
+        decode(this, res, m.fes, BoolFe::decode, decodeAsSigned);
         return res;
     }
 

@@ -52,10 +52,16 @@ public non-sealed class IntFv extends IntField<BoolFv> {
         return (BoolFvRef[]) bits;
     }
 
+    /** Indicates that this IntFv should be decoded as an unsigned integer */
+    public IntFv decodeAsUnsigned() {
+        decodeAsSigned = false;
+        return this;
+    }
+
     /** Converts this IntFv to a HashMap<Fv, Integer>. */
     public HashMap<Fv, Integer> decode(Medium m) {
         HashMap<Fv, Integer> res = new HashMap<>();
-        decode(this, res, m.fvs, BoolFv::decode);
+        decode(this, res, m.fvs, BoolFv::decode, decodeAsSigned);
         return res;
     }
 

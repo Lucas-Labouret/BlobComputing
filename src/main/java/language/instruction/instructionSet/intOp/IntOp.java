@@ -154,6 +154,17 @@ public class IntOp {
     public static Procedure gt(IntFvRef a, IntFvRef b, BoolFvRef res) { return new GTFv(a, b, res); }
     public static Procedure gt(IntFeRef a, IntFeRef b, BoolFeRef res) { return new GTFe(a, b, res); }
 
+    //ABS operations
+    public static Procedure abs(IntVRef  a, IntVRef  res) { return new AbsV (a, res); }
+    public static Procedure abs(IntVeRef a, IntVeRef res) { return new AbsVe(a, res); }
+    public static Procedure abs(IntVfRef a, IntVfRef res) { return new AbsVf(a, res); }
+    public static Procedure abs(IntERef  a, IntERef  res) { return new AbsE (a, res); }
+    public static Procedure abs(IntEvRef a, IntEvRef res) { return new AbsEv(a, res); }
+    public static Procedure abs(IntEfRef a, IntEfRef res) { return new AbsEf(a, res); }
+    public static Procedure abs(IntFRef  a, IntFRef  res) { return new AbsF (a, res); }
+    public static Procedure abs(IntFvRef a, IntFvRef res) { return new AbsFv(a, res); }
+    public static Procedure abs(IntFeRef a, IntFeRef res) { return new AbsFe(a, res); }
+
     // IF operations
     public static Procedure fif(BoolVRef  cond, IntVRef  t, IntVRef  f, IntVRef  res) { return new IfV (cond, t, f, res); }
     public static Procedure fif(BoolVeRef cond, IntVeRef t, IntVeRef f, IntVeRef res) { return new IfVe(cond, t, f, res); }

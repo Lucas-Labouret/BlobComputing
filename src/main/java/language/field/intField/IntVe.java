@@ -12,7 +12,7 @@ import java.util.HashMap;
 public non-sealed class IntVe extends IntField<BoolVe> {
     public IntVe(int n) {
         super(n, new BoolVeRef[n + 1]);
-        for (int i = 0; i <= n; i++) this.bits[i] = new BoolVeRef();
+        for (int i = 0; i <= n; i++) this.bits[i] = new BoolVeRef(BoolVe.zeroes());
     }
     public IntVe(int n, BoolVeRef[] bits) {
         super(n, bits);
@@ -52,10 +52,16 @@ public non-sealed class IntVe extends IntField<BoolVe> {
         return (BoolVeRef[]) bits;
     }
 
+    /** Indicates that this IntVe should be decoded as an unsigned integer */
+    public IntVe decodeAsUnsigned() {
+        decodeAsSigned = false;
+        return this;
+    }
+
     /** Converts this IntVe to a HashMap<Ve, Integer>. */
     public HashMap<Ve, Integer> decode(Medium m) {
         HashMap<Ve, Integer> res = new HashMap<>();
-        decode(this, res, m.ves, BoolVe::decode);
+        decode(this, res, m.ves, BoolVe::decode, decodeAsSigned);
         return res;
     }
 

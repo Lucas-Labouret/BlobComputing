@@ -58,10 +58,16 @@ public non-sealed class IntV extends IntField<BoolV> {
         return (BoolVRef[]) bits;
     }
 
+    /** Indicates that this IntV should be decoded as an unsigned integer */
+    public IntV decodeAsUnsigned() {
+        decodeAsSigned = false;
+        return this;
+    }
+
     /** Converts this IntV to a HashMap<Vertex, Integer> by decoding each bit and combining them into an integer. */
     public HashMap<Vertex, Integer> decode(Medium m) {
         HashMap<Vertex, Integer> res = new HashMap<>();
-        decode(this, res, m.vertices, BoolV::decode);
+        decode(this, res, m.vertices, BoolV::decode, decodeAsSigned);
         return res;
     }
 

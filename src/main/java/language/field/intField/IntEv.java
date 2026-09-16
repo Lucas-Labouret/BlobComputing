@@ -52,10 +52,16 @@ public non-sealed class IntEv extends IntField<BoolEv> {
         return (BoolEvRef[]) bits;
     }
 
+    /** Indicates that this IntEv should be decoded as an unsigned integer */
+    public IntEv decodeAsUnsigned() {
+        decodeAsSigned = false;
+        return this;
+    }
+
     /** Converts this IntEv to a HashMap<Ev, Integer>. */
     public HashMap<Ev, Integer> decode(Medium m) {
         HashMap<Ev, Integer> res = new HashMap<>();
-        decode(this, res, m.evs, BoolEv::decode);
+        decode(this, res, m.evs, BoolEv::decode, decodeAsSigned);
         return res;
     }
 
