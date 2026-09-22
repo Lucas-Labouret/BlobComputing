@@ -9,8 +9,8 @@ public class Flies extends Agent {
         super(
             state,
             new Flip()
-                .addYes(new SlowConstraint(new Expand(state)))
-                .addYes(new SlowConstraint(new Contract(state)))
+                .addForce(new SlowConstraint(new Expand(state)))
+                .addForce(new SlowConstraint(new Shrink(state)))
         );
     }
 

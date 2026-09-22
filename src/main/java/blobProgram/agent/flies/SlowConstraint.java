@@ -15,13 +15,14 @@ public class SlowConstraint extends Force {
     }
 
     private class Compute extends  Procedure {
-        public Compute(BoolVRef target) {
-            call(origin.compute(target));
-            and(slow, target, target);
+        public Compute(BoolVRef yes, BoolVRef no) {
+            call(origin.compute(yes, no));
+            and(slow, yes, yes);
+            and(slow, no, no);
             not(slow, slow);
         }
     }
 
     @Override
-    protected Procedure _compute(BoolVRef target) { return new Compute(target); }
+    protected Procedure _compute(BoolVRef yes, BoolVRef no) { return new Compute(yes, no); }
 }

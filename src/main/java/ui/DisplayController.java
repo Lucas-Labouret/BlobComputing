@@ -51,9 +51,9 @@ public class DisplayController {
 
     private final HashSet<Show> bound = new HashSet<>();
     private void _bind(Show show) {
-        String name = show.name();
-        Ref<?> ref = show.ref();
-        Optional<Styles.Style> style = show.style();
+        String name = show.name;
+        Ref<?> ref = show.ref;
+        Optional<Styles.Style> style = show.style;
 
         if (!bound.contains(show)) switch (ref) {
             case BoolVRef boolVRef   -> createDisplay(name, new BoolVDisplay(boolVRef, style.orElse(Styles.DEFAULT)));

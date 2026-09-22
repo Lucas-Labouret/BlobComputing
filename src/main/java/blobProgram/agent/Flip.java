@@ -9,53 +9,59 @@ import language.instruction.Procedure;
 import java.util.ArrayList;
 
 public class Flip {
-    private final ArrayList<Force> yes = new ArrayList<>();
-    private final ArrayList<Force> no = new ArrayList<>();
+    private static final BoolVRef zero = new BoolVRef(BoolV.zeroes());
+    private static final BoolVRef one = new BoolVRef(BoolV.ones());
 
-    public Flip addYes(Force f) { yes.add(f); return this; }
-    public Flip addNo(Force f) { no.add(f); return this; }
-    
+    private static final IntVRef minPrio = new IntVRef(IntV.minValue(Force.priorityBits));
+    private static final IntVRef minRand = new IntVRef(IntV.minValue(Force.prioRandBits));
+
+    private final ArrayList<Force> forces = new ArrayList<>();
+
+    public Flip addForce(Force f) { forces.add(f); return this; }
+
     private static class ApplyForce extends Procedure {
-        public ApplyForce(Force force, BoolVRef action,
-                          IntVRef currentPriority, IntVRef currentPrioRand,
+        public ApplyForce(Force force,
+                          IntVRef currentPrio, IntVRef currentPrioRand,
                           BoolVRef where) {
-            BoolVRef fWhere = tmp(new BoolVRef());
-            call(force.compute(fWhere));
+            BoolVRef whereYes = tmp(new BoolVRef());
+            BoolVRef whereNo = tmp(new BoolVRef());
+            call(force.compute(whereYes, whereNo));
 
             BoolVRef priorityEq = tmp(new BoolVRef());
-            eq(force.priority, currentPriority, priorityEq);
+            eq(force.priority, currentPrio, priorityEq);
 
             BoolVRef priorityNotEq = tmp(new BoolVRef());
             not(priorityEq, priorityNotEq);
 
             BoolVRef priorityGt = tmp(new BoolVRef());
             BoolVRef prioRandGte = tmp(new BoolVRef());
-            gt(force.priority, currentPriority, priorityGt);
+            gt(force.priority, currentPrio, priorityGt);
             and(priorityGt, priorityNotEq, priorityGt);
             gt(force.prioRand, currentPrioRand, prioRandGte);
 
             BoolVRef apply = tmp(new BoolVRef());
             and(priorityEq, prioRandGte, apply);
             or(priorityGt, apply, apply);
-            and(apply, fWhere, apply);
 
-            fif(apply, action, where, where);
-            fif(apply, force.priority, currentPriority, currentPriority);
-            fif(apply, force.prioRand, currentPrioRand, currentPrioRand);
+            BoolVRef applyYes = tmp(new BoolVRef());
+            and(apply, whereYes, applyYes);
+            BoolVRef applyNo = tmp(new BoolVRef());
+            and(apply, whereNo, applyNo);
+
+            fif(applyYes, one, where, where);
+            fif(applyNo, zero, where, where);
+
+            BoolVRef affected = tmp(new BoolVRef());
+            or(applyYes, applyNo, affected);
+            fif(affected, force.priority, currentPrio, currentPrio);
+            fif(affected, force.prioRand, currentPrioRand, currentPrioRand);
         }
     }
-    private static Procedure applyForce(Force force, BoolVRef action,
+    private static Procedure applyForce(Force force,
                                         IntVRef currentPriority, IntVRef currentPrioRand,
                                         BoolVRef where) {
-        return new ApplyForce(force, action, currentPriority, currentPrioRand, where);
+        return new ApplyForce(force, currentPriority, currentPrioRand, where);
     }
-
-
-    private final BoolVRef zero = new BoolVRef(BoolV.zeroes());
-    private final BoolVRef one = new BoolVRef(BoolV.ones());
-
-    private final IntVRef minPrio = new IntVRef(IntV.minValue(Force.priorityBits));
-    private final IntVRef minRand = new IntVRef(IntV.minValue(Force.prioRandBits));
 
     private class Where extends Procedure {
         public Where(BoolVRef where) {
@@ -66,8 +72,7 @@ public class Flip {
             set(minPrio, currentPriority);
             set(minRand, currentPrioRand);
             
-            for (Force f : yes) { call(applyForce(f, one , currentPriority, currentPrioRand, where)); }
-            for (Force f : no ) { call(applyForce(f, zero, currentPriority, currentPrioRand, where)); }
+            for (Force f : forces) { call(applyForce(f, currentPriority, currentPrioRand, where)); }
         }
     }
     public Procedure where(BoolVRef where) { return new Where(where); }

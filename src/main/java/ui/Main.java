@@ -1,18 +1,13 @@
 package ui;
 
-import blobProgram.*;
-import blobProgram.agent.flies.Flies;
+import blobProgram.QuasiParticle;
+import blobProgram.Rand;
+import blobProgram.agent.homogeneize.Homogenize;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import language.field.boolField.BoolV;
-import language.field.intField.IntV;
-import language.field.intField.IntVe;
-import language.fieldRef.boolField.BoolEfRef;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.intField.IntVRef;
-import language.fieldRef.intField.IntVeRef;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
 import language.utils.BoolFieldManager;
@@ -71,6 +66,35 @@ public class Main extends Application {
 //            show("Gradient", gradient);
 //            call(distField.update());
 //        }};
+//        Instruction instruction = new Procedure() {{
+//            Rand.init();
+//            QuasiParticle seed = new QuasiParticle(BoolV.zeroes());
+//            for (int i = 0; i < 5; i++){
+//                int rand = (int) (Math.random() * medium.vertices.size());
+//                Vertex v = (Vertex) medium.vertices.toArray()[rand];
+//                BoolV.setBit(seed.get(), v, true);
+//            }
+////            BoolV.setBit(seed.get(), 0, 0, true);
+////            BoolV.setBit(seed.get(), 21, 21, true);
+////            BoolV.setBit(seed.get(), 18, 5, true);
+////            BoolV.setBit(seed.get(), 18, 14, true);
+//            Flies flies = new Flies(seed);
+//            call(flies.flip());
+//            show("Sources", flies.state);
+//
+//            GabrielCenter gabrielCenter = new GabrielCenter(flies.state);
+//            IntVRef dist = new IntVRef(new IntV(3));
+//            IntVeRef gradient = new IntVeRef(new IntVe(3));
+//            BoolVRef center = new BoolVRef();
+//            call(gabrielCenter.update());
+//            call(gabrielCenter.distField.getDist(dist));
+//            call(gabrielCenter.distField.getGradient(gradient));
+//            call(gabrielCenter.saddle(center));
+//            show("DistField", dist);
+//            show("Gradient", gradient);
+//            show("Saddle", center);
+//        }};
+
         Instruction instruction = new Procedure() {{
             Rand.init();
             QuasiParticle seed = new QuasiParticle(BoolV.zeroes());
@@ -79,25 +103,10 @@ public class Main extends Application {
                 Vertex v = (Vertex) medium.vertices.toArray()[rand];
                 BoolV.setBit(seed.get(), v, true);
             }
-//            BoolV.setBit(seed.get(), 0, 0, true);
-//            BoolV.setBit(seed.get(), 21, 21, true);
-//            BoolV.setBit(seed.get(), 18, 5, true);
-//            BoolV.setBit(seed.get(), 18, 14, true);
-            Flies flies = new Flies(seed);
-            call(flies.flip());
-            show("Sources", flies.state);
+            Homogenize homogenize = Homogenize.make(seed);
 
-            GabrielCenter gabrielCenter = new GabrielCenter(flies.state);
-            IntVRef dist = new IntVRef(new IntV(3));
-            IntVeRef gradient = new IntVeRef(new IntVe(3));
-            BoolVRef center = new BoolVRef();
-            call(gabrielCenter.update());
-            call(gabrielCenter.distField.getDist(dist));
-            call(gabrielCenter.distField.getGradient(gradient));
-            call(gabrielCenter.saddle(center));
-            show("DistField", dist);
-            show("Gradient", gradient);
-            show("Saddle", center);
+            show("Sources", seed);
+            call(homogenize.flip());
         }};
 
         ms = new MasterScene(medium, instruction);

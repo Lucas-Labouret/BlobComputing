@@ -191,6 +191,17 @@ public class BlobV extends BoolVRef {
 
     private static class MeetE extends Procedure {
         public MeetE(BlobV in, BoolERef out) {
+            // Select edges that are between two frontier vertices
+            BoolVRef frontierV = tmp(new BoolVRef());
+            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolEvRef ev = tmp(new BoolEvRef());
+
+            call(in.frontierV(frontierV));
+            broadcast(frontierV, ve);
+            transfer(ve, ev);
+            redAnd(ev, out);
+
+            // Filter out edges between vertices belonging to the same frontier
             BoolVfRef vf = tmp(new BoolVfRef());
             BoolFvRef fv = tmp(new BoolFvRef());
             BoolFRef f = tmp(new BoolFRef());
@@ -208,16 +219,22 @@ public class BlobV extends BoolVRef {
             redOr(ef, frontierInteriorE);
             not(frontierInteriorE, frontierInteriorEInv);
 
-            BoolVRef frontierV = tmp(new BoolVRef());
-            BoolVeRef ve = tmp(new BoolVeRef());
-            BoolEvRef ev = tmp(new BoolEvRef());
-
-            call(in.frontierV(frontierV));
-            broadcast(frontierV, ve);
-            transfer(ve, ev);
-            redAnd(ev, out);
-
             and(out, frontierInteriorEInv, out);
+
+            // Filter out edges that have an apex outside the blob
+            BlobV notIn = tmp(new BlobV());
+            BoolERef hasNonBlobApexE = tmp(new BoolERef());
+
+            not(in, notIn);
+            broadcast(notIn, vf);
+            transfer(vf, fv);
+            rotCW(fv, fe);
+            rotCW(fe, fv);
+            rotCW(fv, fe);
+            transfer(fe, ef);
+            redOr(ef, hasNonBlobApexE);
+
+            and(out, hasNonBlobApexE, out);
         }
     }
     public static Procedure meetE(BlobV in, BoolERef out) { return new MeetE(in, out); }

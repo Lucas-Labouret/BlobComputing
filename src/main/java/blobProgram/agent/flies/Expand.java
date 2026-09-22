@@ -3,6 +3,7 @@ package blobProgram.agent.flies;
 import blobProgram.BlobV;
 import blobProgram.QuasiParticle;
 import blobProgram.agent.Force;
+import language.field.boolField.BoolV;
 import language.field.intField.IntE;
 import language.field.intField.IntEv;
 import language.field.intField.IntV;
@@ -18,12 +19,11 @@ public class Expand extends Force {
     private final QuasiParticle state;
 
     public Expand(QuasiParticle state) {
-        super(new IntVRef(IntV.of(0, Force.priorityBits)));
         this.state = state;
     }
 
     private class _Compute extends Procedure {
-        public _Compute(BoolVRef target) {
+        public _Compute(BoolVRef yes, BoolVRef no) {
             QuasiParticle one = tmp(new QuasiParticle());
             QuasiParticle two = tmp(new QuasiParticle());
 
@@ -49,7 +49,8 @@ public class Expand extends Force {
 
             BoolERef meetE = tmp(new BoolERef());
             call(state.meetE(meetE));
-            call(resolveMeetEConflict(meetE, expand, target));
+            call(resolveMeetEConflict(meetE, expand, yes));
+            set(new BoolVRef(BoolV.zeroes()), no);
         }
     }
 
@@ -210,7 +211,7 @@ public class Expand extends Force {
         { return new ComputeTwo(two, authorizedVe, target); }
 
     @Override
-    public Procedure _compute(BoolVRef target) {
-        return new _Compute(target);
+    public Procedure _compute(BoolVRef yes, BoolVRef no) {
+        return new _Compute(yes, no);
     }
 }

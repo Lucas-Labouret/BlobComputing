@@ -2,21 +2,21 @@ package blobProgram.agent.flies;
 
 import blobProgram.QuasiParticle;
 import blobProgram.agent.Force;
+import language.field.boolField.BoolV;
 import language.field.intField.*;
 import language.fieldRef.boolField.*;
 import language.fieldRef.intField.*;
 import language.instruction.Procedure;
 
-public class Contract extends Force {
+public class Shrink extends Force {
     private final QuasiParticle state;
 
-    public Contract(QuasiParticle state) {
-        super(new IntVRef(IntV.of(0, Force.priorityBits)));
+    public Shrink(QuasiParticle state) {
         this.state = state;
     }
 
     private class _Compute extends Procedure {
-        public _Compute(BoolVRef target) {
+        public _Compute(BoolVRef yes, BoolVRef no) {
             QuasiParticle two = tmp(new QuasiParticle());
             QuasiParticle three = tmp(new QuasiParticle());
 
@@ -29,7 +29,8 @@ public class Contract extends Force {
             BoolVRef contractThree = tmp(new BoolVRef());
             call(computeThree(three, contractThree));
 
-            or(contractTwo, contractThree, target);
+            or(contractTwo, contractThree, yes);
+            set(new BoolVRef(BoolV.zeroes()), no);
         }
     }
 
@@ -116,5 +117,5 @@ public class Contract extends Force {
     private Procedure computeThree(QuasiParticle three, BoolVRef target) { return new ComputeThree(three, target); }
 
     @Override
-    protected Procedure _compute(BoolVRef target) { return new _Compute(target); }
+    protected Procedure _compute(BoolVRef yes, BoolVRef no) { return new _Compute(yes, no); }
 }
