@@ -14,7 +14,9 @@ public abstract class Agent {
     }
 
     protected Procedure precompute() {
-        return new Procedure(){};
+        return new Procedure(){{
+            print(""); // Temporary hack until I handle empty procedures better
+        }};
     }
 
     private class ApplyFlip extends Procedure {

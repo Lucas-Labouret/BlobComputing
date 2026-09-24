@@ -12,13 +12,13 @@ import language.instruction.instructionSet.Show;
 import language.instruction.instructionSet.Snapshot;
 import language.instruction.instructionSet.boolOp.BoolOp;
 import language.instruction.instructionSet.intOp.IntOp;
+import ui.display.Styles;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Consumer;
 
 /** Represents an instruction composed of a sequence of sub-instructions. */
-@SuppressWarnings("unused")
 public abstract non-sealed class Procedure implements Instruction {
     private int instrPtr = 0;
     private final ArrayList<Instruction> instr;
@@ -132,7 +132,8 @@ public abstract non-sealed class Procedure implements Instruction {
     // Wrapper functions to make writing procedures easier. These functions simply add the corresponding instruction to this procedure.
 
     protected void print(@SuppressWarnings("SameParameterValue") String message) { call(new Print(message)); }
-    protected <T extends Field> void show(String name, Ref<T> fieldRef) { call(new Show(name, fieldRef)); }
+    protected <T extends Field> void show(String name, Ref<T> fieldRef) { call(new Show<>(name, fieldRef)); }
+    protected <T extends Field> void show(String name, Ref<T> fieldRef, Styles.Style style) { call(new Show<>(name, fieldRef, style)); }
     protected void snapshot() { call(new Snapshot()); }
 
     protected void set(BoolVRef a, BoolVRef res) { call(BoolOp.set(a, res));}

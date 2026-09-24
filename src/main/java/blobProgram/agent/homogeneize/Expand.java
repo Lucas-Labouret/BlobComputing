@@ -40,14 +40,23 @@ public class Expand extends Force {
     private class ComputeOne extends Procedure {
         public ComputeOne(QuasiParticle one, BoolVeRef posGrad, BoolVRef res) {
             int n = gradient.get().n;
-            IntVRef maxGrad = tmp(new IntVRef(new IntV(n)));
-            redMax(gradient, maxGrad);
-            IntVeRef maxGradVe = tmp(new IntVeRef(new IntVe(n)));
-            broadcast(maxGrad, maxGradVe);
+
             BoolVeRef isMaxGrad = tmp(new BoolVeRef());
-            eq(gradient, maxGradVe, isMaxGrad);
+            call(isMax(gradient, isMaxGrad));
             and(isMaxGrad, posGrad, isMaxGrad);
             show("IsMaxGrad", isMaxGrad);
+
+            IntVeRef adjustedPrio = tmp(new IntVeRef(new IntVe(prioRandBits)));
+            broadcast(prioRand, adjustedPrio);
+            call(BlobV.send(adjustedPrio, adjustedPrio));
+            fif(isMaxGrad, adjustedPrio, new IntVeRef(IntVe.minValue(prioRandBits)), adjustedPrio);
+            BoolVeRef isMaxAdjustedPrio = tmp(new BoolVeRef());
+            call(isMax(adjustedPrio, isMaxAdjustedPrio));
+
+            and(isMaxGrad, isMaxAdjustedPrio, isMaxGrad);
+
+
+
             IntVRef nbMaxGrad = tmp(new IntVRef(new IntV(n)));
             redAdd(isMaxGrad, nbMaxGrad);
             BoolVRef oneMaxGrad = tmp(new BoolVRef());
@@ -69,6 +78,20 @@ public class Expand extends Force {
             int n = gradient.get().n;
 
         }
+    }
+
+    private class IsMax extends Procedure {
+        public IsMax(IntVeRef source, BoolVeRef res) {
+            int n = source.get().n;
+            IntVRef max = tmp(new IntVRef(new IntV(n)));
+            redMax(source, max);
+            IntVeRef maxGradVe = tmp(new IntVeRef(new IntVe(n)));
+            broadcast(max, maxGradVe);
+            eq(source, maxGradVe, res);
+        }
+    }
+    private Procedure isMax(IntVeRef source, BoolVeRef res) {
+        return new IsMax(source, res);
     }
 
     @Override

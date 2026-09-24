@@ -15,7 +15,6 @@ import language.instruction.Procedure;
 public class GabrielCenter {
     private final static int nbits = 3;
 
-    private final BoolVRef seeds;
     public final DistField distField;
 
     private final BoolVRef center = new BoolVRef();
@@ -23,12 +22,15 @@ public class GabrielCenter {
     public Procedure getCenter(BoolVRef out) { return new GetCenter(out); }
 
     public GabrielCenter(BoolVRef seeds) {
-        this.seeds = seeds;
         this.distField = new DistField(seeds, nbits);
     }
 
     private class Update extends Procedure { public Update() { call(distField.update()); } }
     public Procedure update() { return new Update(); }
+
+    ///////////////////////////////////////
+    /// Detection through saddle points ///
+    ///////////////////////////////////////
 
     private class SaddleV extends Procedure {
         public SaddleV(BoolVRef saddleV) {
@@ -36,10 +38,10 @@ public class GabrielCenter {
             call(distField.getGradient(gradient));
 
             BoolVeRef negGrad = gradient.get().getBits()[0];
-            IntVRef components = new IntVRef(new IntV(3));
+            IntVRef components = new IntVRef(new IntV(nbits));
             call(BlobV.connectedComponents(negGrad, components));
 
-            gt(components, new IntVRef(IntV.of(2, 3)), saddleV);
+            gt(components, new IntVRef(IntV.of(2, nbits)), saddleV);
         }
     }
     public Procedure saddleV(BoolVRef saddleV) { return new SaddleV(saddleV); }
@@ -186,6 +188,12 @@ public class GabrielCenter {
         }
     }
     public Procedure saddle(BoolVRef saddle) { return new Saddle(saddle); }
+
+
+
+    //////////////////////////////////
+    /// Detection through flooding ///
+    //////////////////////////////////
 
     private class FloodOnce extends Procedure {
         public FloodOnce(BoolVRef in, BoolVRef out) {

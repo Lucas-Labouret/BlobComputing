@@ -3,6 +3,7 @@ package ui;
 import blobProgram.QuasiParticle;
 import blobProgram.Rand;
 import blobProgram.agent.homogeneize.Homogenize;
+import blobProgram.agent.voronoi.Voronoi;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -103,7 +104,7 @@ public class Main extends Application {
                 Vertex v = (Vertex) medium.vertices.toArray()[rand];
                 BoolV.setBit(seed.get(), v, true);
             }
-            Homogenize homogenize = Homogenize.make(seed);
+            Voronoi homogenize = Voronoi.make(seed);
 
             show("Sources", seed);
             call(homogenize.flip());

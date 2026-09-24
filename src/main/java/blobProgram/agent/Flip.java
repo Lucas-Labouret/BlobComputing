@@ -67,12 +67,14 @@ public class Flip {
         public Where(BoolVRef where) {
             set(zero, where);
             
-            IntVRef currentPriority = tmp(new IntVRef(new IntV(Force.priorityBits)));
+            IntVRef currentPriority = new IntVRef(new IntV(Force.priorityBits));
             IntVRef currentPrioRand = tmp(new IntVRef(new IntV(Force.prioRandBits)));
             set(minPrio, currentPriority);
             set(minRand, currentPrioRand);
             
             for (Force f : forces) { call(applyForce(f, currentPriority, currentPrioRand, where)); }
+
+            //show("Prio", currentPriority);
         }
     }
     public Procedure where(BoolVRef where) { return new Where(where); }

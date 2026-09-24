@@ -8,7 +8,7 @@ import language.fieldRef.intField.IntVRef;
 
 public abstract class Force {
     public static final int priorityBits = 2;
-    public static final int prioRandBits = 2;
+    public static final int prioRandBits = 3;
 
     public final IntVRef priority;
     public final IntVRef prioRand;
