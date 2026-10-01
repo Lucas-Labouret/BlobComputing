@@ -39,13 +39,10 @@ public class QuasiParticle extends BlobV {
             broadcast(in, ve);
             call(send(ve, ve));
 
-            IntVRef nbNeighbors = tmp(new IntVRef(new IntV(4)));
+            IntVRef nbNeighbors = tmp(new IntVRef(new IntV(2)));
             redAdd(ve, nbNeighbors);
-
-            BoolVRef oneNeighbor = tmp(new BoolVRef());
-            eq(nbNeighbors, new IntVRef(IntV.of(1, 4)), oneNeighbor);
-
-            and(in, oneNeighbor, out);
+            eq(nbNeighbors, new IntVRef(IntV.of(1, 2)), out);
+            and(in, out, out);
         }
     }
     public static Procedure twoParticle(QuasiParticle in, QuasiParticle out) { return new TwoParticle(in, out); }

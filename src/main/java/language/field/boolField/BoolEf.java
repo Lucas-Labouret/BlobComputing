@@ -60,7 +60,7 @@ public non-sealed class BoolEf extends BoolFieldT {
     }
 
     /** @return a new one-filled BoolEf using the default border. */
-    public static BoolEf zeroes(){ return ones(BoolFieldManager.DEFAULT_BORDER()); }
+    public static BoolEf zeroes(){ return zeroes(BoolFieldManager.DEFAULT_BORDER()); }
 
     /** @return a new one-filled BoolEf. */
     public static BoolEf ones(Border border){

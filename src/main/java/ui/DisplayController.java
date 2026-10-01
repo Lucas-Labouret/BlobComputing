@@ -7,18 +7,28 @@ import javafx.scene.image.WritableImage;
 import language.fieldRef.Ref;
 import language.fieldRef.intField.IntERef;
 import language.fieldRef.intField.IntEvRef;
+import language.fieldRef.intField.IntEfRef;
+import language.fieldRef.intField.IntFRef;
+import language.fieldRef.intField.IntFeRef;
+import language.fieldRef.intField.IntFvRef;
 import language.instruction.instructionSet.Show;
 import language.fieldRef.boolField.*;
 import language.fieldRef.intField.IntVRef;
 import language.fieldRef.intField.IntVeRef;
+import language.fieldRef.intField.IntVfRef;
 import ui.display.MediumDrawer;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;
 import ui.display.displayable.boolFieldDisplay.*;
 import ui.display.displayable.intFieldDisplay.IntEDisplay;
 import ui.display.displayable.intFieldDisplay.IntEvDisplay;
+import ui.display.displayable.intFieldDisplay.IntEfDisplay;
+import ui.display.displayable.intFieldDisplay.IntFDisplay;
+import ui.display.displayable.intFieldDisplay.IntFeDisplay;
+import ui.display.displayable.intFieldDisplay.IntFvDisplay;
 import ui.display.displayable.intFieldDisplay.IntVDisplay;
 import ui.display.displayable.intFieldDisplay.IntVeDisplay;
+import ui.display.displayable.intFieldDisplay.IntVfDisplay;
 import ui.utils.DisplayBox;
 import ui.utils.OrderableDisplayPanel;
 
@@ -68,8 +78,13 @@ public class DisplayController {
 
             case IntVRef intVRef     -> createDisplay(name, new IntVDisplay(intVRef, style.orElse(Styles.DEFAULT_INT)));
             case IntVeRef intVeRef   -> createDisplay(name, new IntVeDisplay(intVeRef, style.orElse(Styles.DEFAULT_INT)));
+            case IntVfRef intVfRef   -> createDisplay(name, new IntVfDisplay(intVfRef, style.orElse(Styles.DEFAULT_INT)));
             case IntERef intERef     -> createDisplay(name, new IntEDisplay(intERef, style.orElse(Styles.DEFAULT_INT)));
             case IntEvRef intEvRef   -> createDisplay(name, new IntEvDisplay(intEvRef, style.orElse(Styles.DEFAULT_INT)));
+            case IntEfRef intEfRef   -> createDisplay(name, new IntEfDisplay(intEfRef, style.orElse(Styles.DEFAULT_INT)));
+            case IntFRef intFRef     -> createDisplay(name, new IntFDisplay(intFRef, style.orElse(Styles.DEFAULT_INT)));
+            case IntFvRef intFvRef   -> createDisplay(name, new IntFvDisplay(intFvRef, style.orElse(Styles.DEFAULT_INT)));
+            case IntFeRef intFeRef   -> createDisplay(name, new IntFeDisplay(intFeRef, style.orElse(Styles.DEFAULT_INT)));
 
             default -> throw new IllegalArgumentException("Unsupported type for display: " + ref.getClass().getName());
         }

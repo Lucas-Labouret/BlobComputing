@@ -55,10 +55,18 @@ public class InstructionPlayer {
     long stepCounter = 0;
     long loopCounter = 0;
     private boolean exec() {
-        tryDisplayUpdate();
+        BasicInstruction current = switch (instruction) {
+            case Procedure p -> p.currentBasicInstruction();
+            case BasicInstruction bi -> bi;
+        };
+
         boolean done = instruction.exec();
+        updateDisplay(current);
+
         stepCounter++;
         if (done && isPowerOf2minus1(++loopCounter)) autoCache.push(stepCounter);
+        if (stepCounter%leafCount == 0) System.out.println("Loop : " + loopCounter);
+
         return done;
     }
 
@@ -78,12 +86,10 @@ public class InstructionPlayer {
         });
     }
 
-    private void tryDisplayUpdate() {
+    private void updateDisplay(BasicInstruction instruction) {
         switch (instruction) {
-            case Show show -> displayController.bind(show);
-            case Procedure p when p.currentBasicInstruction() instanceof Show show -> displayController.bind(show);
+            case Show<?> show -> displayController.bind(show);
             case Snapshot _ -> displayController.snapshot();
-            case Procedure p when p.currentBasicInstruction() instanceof Snapshot -> displayController.snapshot();
             default -> {}
         }
     }

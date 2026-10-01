@@ -8,7 +8,7 @@ import language.fieldRef.intField.IntVRef;
 
 public abstract class Force {
     public static final int priorityBits = 2;
-    public static final int prioRandBits = 3;
+    public static final int prioRandBits = 2;
 
     public final IntVRef priority;
     public final IntVRef prioRand;
@@ -30,14 +30,14 @@ public abstract class Force {
         return this;
     }
 
-    private class Compute extends Procedure {
-        public Compute(BoolVRef yes, BoolVRef no) {
+    private class Apply extends Procedure {
+        public Apply(BoolVRef yes, BoolVRef no) {
             call(rand.next(prioRand));
-            call(_compute(yes, no));
+            call(compute(yes, no));
         }
     }
-    public Procedure compute(BoolVRef yes, BoolVRef no) {
-        return new Compute(yes, no);
+    public Procedure apply(BoolVRef yes, BoolVRef no) {
+        return new Apply(yes, no);
     }
-    protected abstract Procedure _compute(BoolVRef yes, BoolVRef no);
+    protected abstract Procedure compute(BoolVRef yes, BoolVRef no);
 }

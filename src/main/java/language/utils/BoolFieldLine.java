@@ -1,5 +1,7 @@
 package language.utils;
 
+import java.util.Random;
+
 /** Represents a fixed-width line of bits with bitwise line operations. */
 public class BoolFieldLine {
     private static int SIZE = -1;
@@ -42,9 +44,11 @@ public class BoolFieldLine {
 
     /** @return a new randomly initialized language.field line. */
     public static BoolFieldLine rand(){
+        Random rand = new Random(0);
+
         if (SIZE == -1) throw new IllegalStateException("Size not set.");
         BoolFieldLine res = new BoolFieldLine();
-        for (int i=0; i < SIZE; i++) res.line[i] = (int)(2*(Math.random()-0.5) * Integer.MAX_VALUE);
+        for (int i=0; i < SIZE; i++) res.line[i] = (int)(2*(rand.nextDouble()-0.5) * Integer.MAX_VALUE);
         return res;
     }
 

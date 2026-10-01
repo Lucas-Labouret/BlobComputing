@@ -16,8 +16,10 @@ public class Flip {
     private static final IntVRef minRand = new IntVRef(IntV.minValue(Force.prioRandBits));
 
     private final ArrayList<Force> forces = new ArrayList<>();
+    private final ArrayList<Constraint> constraints = new ArrayList<>();
 
     public Flip addForce(Force f) { forces.add(f); return this; }
+    public Flip addConstraint(Constraint c) { constraints.add(c); return this; }
 
     private static class ApplyForce extends Procedure {
         public ApplyForce(Force force,
@@ -25,7 +27,7 @@ public class Flip {
                           BoolVRef where) {
             BoolVRef whereYes = tmp(new BoolVRef());
             BoolVRef whereNo = tmp(new BoolVRef());
-            call(force.compute(whereYes, whereNo));
+            call(force.apply(whereYes, whereNo));
 
             BoolVRef priorityEq = tmp(new BoolVRef());
             eq(force.priority, currentPrio, priorityEq);
@@ -64,17 +66,20 @@ public class Flip {
     }
 
     private class Where extends Procedure {
-        public Where(BoolVRef where) {
-            set(zero, where);
+        public Where(BoolVRef flip) {
+            set(zero, flip);
             
             IntVRef currentPriority = new IntVRef(new IntV(Force.priorityBits));
-            IntVRef currentPrioRand = tmp(new IntVRef(new IntV(Force.prioRandBits)));
+            IntVRef currentPrioRand = new IntVRef(new IntV(Force.prioRandBits));
             set(minPrio, currentPriority);
             set(minRand, currentPrioRand);
             
-            for (Force f : forces) { call(applyForce(f, currentPriority, currentPrioRand, where)); }
+            for (Force f : forces) { call(applyForce(f, currentPriority, currentPrioRand, flip)); }
 
-            //show("Prio", currentPriority);
+            show("priority", currentPriority);
+            show("prioRand", currentPrioRand);
+
+            for (Constraint c : constraints) { call(c.verify(flip, currentPriority, currentPrioRand)); }
         }
     }
     public Procedure where(BoolVRef where) { return new Where(where); }

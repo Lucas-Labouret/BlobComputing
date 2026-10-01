@@ -19,9 +19,7 @@ public class Rand {
         init(BoolV.rand());
     }
 
-    public Rand() {
-
-    }
+    public Rand() {}
 
     private static class NextState extends Procedure {
         public NextState() {

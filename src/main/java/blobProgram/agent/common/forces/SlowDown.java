@@ -1,4 +1,4 @@
-package blobProgram.agent.voronoi;
+package blobProgram.agent.common.forces;
 
 import blobProgram.agent.Force;
 import language.field.boolField.BoolV;
@@ -19,8 +19,8 @@ public class SlowDown extends Force {
         this.counter = new IntVRef(IntV.of(factor-1, nbits));
     }
 
-    private class _Compute extends Procedure {
-        public _Compute(BoolVRef yes, BoolVRef no) {
+    private class Compute extends Procedure {
+        public Compute(BoolVRef yes, BoolVRef no) {
             eq(counter, new IntVRef(IntV.of(factor-1, nbits)), no);
 
             IntVRef nextCounter = new IntVRef(new IntV(nbits));
@@ -34,7 +34,7 @@ public class SlowDown extends Force {
     }
 
     @Override
-    protected Procedure _compute(BoolVRef yes, BoolVRef no) {
-        return new _Compute(yes, no);
+    protected Procedure compute(BoolVRef yes, BoolVRef no) {
+        return new Compute(yes, no);
     }
 }

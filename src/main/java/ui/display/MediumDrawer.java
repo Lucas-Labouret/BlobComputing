@@ -211,17 +211,21 @@ public class MediumDrawer extends Canvas {
     }
 
     private <L extends Locus> void computeColor(HashSet<L> loci, HashSet<HashMap<L, Color>> colorsPrimary, HashMap<L, Color> colors) {
-        int size = colorsPrimary.size();
         for (L l: loci) {
+            int size = 0;
             double r, g, b;
             r = g = b = 0;
             for (HashMap<L, Color> c: colorsPrimary) {
                 Color col = c.get(l);
+                if (col == null) continue;
+
+                size++;
                 r += col.getRed();
                 g += col.getGreen();
                 b += col.getBlue();
             }
-            colors.put(l, new Color(r/size, g/size, b/size, 1));
+            if (size == 0) colors.put(l, Styles.DEFAULT.DEFAULT());
+            else colors.put(l, new Color(r/size, g/size, b/size, 1));
         }
     }
 

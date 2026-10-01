@@ -13,8 +13,7 @@ import language.fieldRef.intField.IntVeRef;
 import language.instruction.Procedure;
 
 public class GabrielCenter {
-    private final static int nbits = 3;
-
+    private final int nbits;
     public final DistField distField;
 
     private final BoolVRef center = new BoolVRef();
@@ -22,7 +21,13 @@ public class GabrielCenter {
     public Procedure getCenter(BoolVRef out) { return new GetCenter(out); }
 
     public GabrielCenter(BoolVRef seeds) {
+        this.nbits = 3;
         this.distField = new DistField(seeds, nbits);
+    }
+
+    public GabrielCenter(DistField distField) {
+        this.nbits = distField.nbits;
+        this.distField = distField;
     }
 
     private class Update extends Procedure { public Update() { call(distField.update()); } }
@@ -92,10 +97,6 @@ public class GabrielCenter {
             transfer(veB, evB);
             redAdd(evB, apexCount);
 
-            IntERef apexCountCopy = new IntERef(new IntE(2));
-            set(apexCount, apexCountCopy);
-            show("apexCount", apexCountCopy);
-
             BoolERef oneApex = tmp(new BoolERef());
             BoolERef twoApex = tmp(new BoolERef());
             eq(apexCount, new IntERef(IntE.of(1, 2)), oneApex);
@@ -150,10 +151,6 @@ public class GabrielCenter {
             IntERef apexDeadEndCount = tmp(new IntERef(new IntE(4)));
             redAdd(apexDeadEnd, apexDeadEndCount);
 
-            BoolVRef deadEndCopy = new BoolVRef();
-            set(deadEnd, deadEndCopy);
-            show("deadEnd", deadEndCopy);
-
             IntERef componentsE = tmp(new IntERef(new IntE(4)));
             fif(oneApex, componentsM1, componentSum, componentsE);
             fif(twoApex, componentsM2, componentsE, componentsE);
@@ -163,10 +160,6 @@ public class GabrielCenter {
 
             gt(componentsE, new IntERef(IntE.of(2, 4)), saddleE);
             and(saddleE, flatEdges, saddleE);
-
-            BoolERef saddleECopy = new BoolERef();
-            set(saddleE, saddleECopy);
-            show("saddleE", saddleECopy);
         }
     }
     public Procedure saddleE(BoolERef saddleE) { return new SaddleE(saddleE); }
