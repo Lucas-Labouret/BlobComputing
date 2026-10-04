@@ -23,11 +23,11 @@ module com.github.lucaslabouret.blobcomputing {
     exports language.cache;
     exports language.instruction.instructionSet;
     exports blobProgram;
-    exports language.fieldRef;
-    exports language.fieldRef.boolField;
-    exports language.fieldRef.intField;
+    exports language.field;
+    exports language.field.boolField;
+    exports language.field.intField;
+    exports language.utils;
     exports language.instruction;
     exports blobProgram.agent;
     exports blobProgram.agent.flies;
-    exports language.field;
 }

@@ -1,31 +1,30 @@
 package blobProgram;
 
 import language.field.boolField.BoolV;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.boolField.BoolVeRef;
+import language.field.boolField.BoolVe;
 import language.instruction.Procedure;
 
 public class BeepWave {
-    private final BoolVRef state_t;
-    private final BoolVRef state_tm1;
+    private final BoolV state_t;
+    private final BoolV state_tm1;
 
-    public BeepWave(BoolVRef seed) {
+    public BeepWave(BoolV seed) {
         state_t = seed.copy();
-        state_tm1 = new BoolVRef(BoolV.zeroes());
+        state_tm1 = new BoolV().zeroes();
     }
 
     private class Propagate extends Procedure {
         public Propagate() {
             show("BeepWave", state_t);
 
-            BoolVRef notTm1 = tmp(new BoolVRef());
+            BoolV notTm1 = tmp(new BoolV());
             not(state_tm1, notTm1);
             set(state_t, state_tm1);
 
-            BoolVRef notT = tmp(new BoolVRef());
+            BoolV notT = tmp(new BoolV());
             not(state_t, notT);
 
-            BoolVeRef ve = new BoolVeRef();
+            BoolVe ve = new BoolVe();
             broadcast(state_t, ve);
             call(BlobV.send(ve, ve));
             show("ve", ve);

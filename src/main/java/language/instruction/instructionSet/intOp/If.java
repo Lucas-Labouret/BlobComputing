@@ -1,114 +1,114 @@
 package language.instruction.instructionSet.intOp;
 
+import language.field.boolField.*;
+import language.field.intField.*;
 import language.instruction.Procedure;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.*;
 
 class IfV extends Procedure {
-    public IfV(BoolVRef cond, IntVRef t, IntVRef f, IntVRef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfV(BoolV cond, IntV t, IntV f, IntV res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolVRef[] tBits = t.get().getBits();
-        BoolVRef[] fBits = f.get().getBits();
-        BoolVRef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolV[] tBits = t.getBits();
+        BoolV[] fBits = f.getBits();
+        BoolV[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 
 class IfVe extends Procedure {
-    public IfVe(BoolVeRef cond, IntVeRef t, IntVeRef f, IntVeRef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfVe(BoolVe cond, IntVe t, IntVe f, IntVe res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolVeRef[] tBits = t.get().getBits();
-        BoolVeRef[] fBits = f.get().getBits();
-        BoolVeRef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolVe[] tBits = t.getBits();
+        BoolVe[] fBits = f.getBits();
+        BoolVe[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 
 class IfVf extends Procedure {
-    public IfVf(BoolVfRef cond, IntVfRef t, IntVfRef f, IntVfRef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfVf(BoolVf cond, IntVf t, IntVf f, IntVf res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolVfRef[] tBits = t.get().getBits();
-        BoolVfRef[] fBits = f.get().getBits();
-        BoolVfRef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolVf[] tBits = t.getBits();
+        BoolVf[] fBits = f.getBits();
+        BoolVf[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 
 class IfE extends Procedure {
-    public IfE(BoolERef cond, IntERef t, IntERef f, IntERef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfE(BoolE cond, IntE t, IntE f, IntE res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolERef[] tBits = t.get().getBits();
-        BoolERef[] fBits = f.get().getBits();
-        BoolERef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolE[] tBits = t.getBits();
+        BoolE[] fBits = f.getBits();
+        BoolE[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 
 class IfEv extends Procedure {
-    public IfEv(BoolEvRef cond, IntEvRef t, IntEvRef f, IntEvRef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfEv(BoolEv cond, IntEv t, IntEv f, IntEv res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolEvRef[] tBits = t.get().getBits();
-        BoolEvRef[] fBits = f.get().getBits();
-        BoolEvRef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolEv[] tBits = t.getBits();
+        BoolEv[] fBits = f.getBits();
+        BoolEv[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 
 class IfEf extends Procedure {
-    public IfEf(BoolEfRef cond, IntEfRef t, IntEfRef f, IntEfRef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfEf(BoolEf cond, IntEf t, IntEf f, IntEf res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolEfRef[] tBits = t.get().getBits();
-        BoolEfRef[] fBits = f.get().getBits();
-        BoolEfRef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolEf[] tBits = t.getBits();
+        BoolEf[] fBits = f.getBits();
+        BoolEf[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 
 class IfF extends Procedure {
-    public IfF(BoolFRef cond, IntFRef t, IntFRef f, IntFRef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfF(BoolF cond, IntF t, IntF f, IntF res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolFRef[] tBits = t.get().getBits();
-        BoolFRef[] fBits = f.get().getBits();
-        BoolFRef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolF[] tBits = t.getBits();
+        BoolF[] fBits = f.getBits();
+        BoolF[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 
 class IfFv extends Procedure {
-    public IfFv(BoolFvRef cond, IntFvRef t, IntFvRef f, IntFvRef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfFv(BoolFv cond, IntFv t, IntFv f, IntFv res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolFvRef[] tBits = t.get().getBits();
-        BoolFvRef[] fBits = f.get().getBits();
-        BoolFvRef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolFv[] tBits = t.getBits();
+        BoolFv[] fBits = f.getBits();
+        BoolFv[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 
 class IfFe extends Procedure {
-    public IfFe(BoolFeRef cond, IntFeRef t, IntFeRef f, IntFeRef res) {
-        if (t.get().n != f.get().n || t.get().n != res.get().n)
+    public IfFe(BoolFe cond, IntFe t, IntFe f, IntFe res) {
+        if (t.n != f.n || t.n != res.n)
             throw new IllegalArgumentException("t, f, and res must have the same number of bits");
 
-        BoolFeRef[] tBits = t.get().getBits();
-        BoolFeRef[] fBits = f.get().getBits();
-        BoolFeRef[] resBits = res.get().getBits();
-        for (int i=0; i<=t.get().n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
+        BoolFe[] tBits = t.getBits();
+        BoolFe[] fBits = f.getBits();
+        BoolFe[] resBits = res.getBits();
+        for (int i=0; i<=t.n; i++) fif(cond, tBits[i], fBits[i], resBits[i]);
     }
 }
 

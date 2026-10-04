@@ -1,13 +1,13 @@
 package language.instruction.instructionSet.boolOp;
 
+import language.field.boolField.*;
 import language.instruction.Procedure;
-import language.fieldRef.boolField.*;
 
 class IfV extends Procedure {
-    public IfV(BoolVRef cond, BoolVRef t, BoolVRef f, BoolVRef res) {
-        BoolVRef notCond = tmp(new BoolVRef());
-        BoolVRef tmpTrue = tmp(new BoolVRef());
-        BoolVRef tmpFalse = tmp(new BoolVRef());
+    public IfV(BoolV cond, BoolV t, BoolV f, BoolV res) {
+        BoolV notCond = tmp(new BoolV());
+        BoolV tmpTrue = tmp(new BoolV());
+        BoolV tmpFalse = tmp(new BoolV());
 
         and(cond, t, tmpTrue);
 
@@ -19,10 +19,10 @@ class IfV extends Procedure {
 }
 
 class IfVe extends Procedure {
-    public IfVe(BoolVeRef cond, BoolVeRef t, BoolVeRef f, BoolVeRef res) {
-        BoolVeRef notCond = tmp(new BoolVeRef());
-        BoolVeRef tmpTrue = tmp(new BoolVeRef());
-        BoolVeRef tmpFalse = tmp(new BoolVeRef());
+    public IfVe(BoolVe cond, BoolVe t, BoolVe f, BoolVe res) {
+        BoolVe notCond = tmp(new BoolVe());
+        BoolVe tmpTrue = tmp(new BoolVe());
+        BoolVe tmpFalse = tmp(new BoolVe());
 
         and(cond, t, tmpTrue);
 
@@ -34,10 +34,10 @@ class IfVe extends Procedure {
 }
 
 class IfVf extends Procedure {
-    public IfVf(BoolVfRef cond, BoolVfRef t, BoolVfRef f, BoolVfRef res) {
-        BoolVfRef notCond = tmp(new BoolVfRef());
-        BoolVfRef tmpTrue = tmp(new BoolVfRef());
-        BoolVfRef tmpFalse = tmp(new BoolVfRef());
+    public IfVf(BoolVf cond, BoolVf t, BoolVf f, BoolVf res) {
+        BoolVf notCond = tmp(new BoolVf());
+        BoolVf tmpTrue = tmp(new BoolVf());
+        BoolVf tmpFalse = tmp(new BoolVf());
 
         and(cond, t, tmpTrue);
 
@@ -49,10 +49,10 @@ class IfVf extends Procedure {
 }
 
 class IfE extends Procedure {
-    public IfE(BoolERef cond, BoolERef t, BoolERef f, BoolERef res) {
-        BoolERef notCond = tmp(new BoolERef());
-        BoolERef tmpTrue = tmp(new BoolERef());
-        BoolERef tmpFalse = tmp(new BoolERef());
+    public IfE(BoolE cond, BoolE t, BoolE f, BoolE res) {
+        BoolE notCond = tmp(new BoolE());
+        BoolE tmpTrue = tmp(new BoolE());
+        BoolE tmpFalse = tmp(new BoolE());
 
         and(cond, t, tmpTrue);
 
@@ -64,10 +64,10 @@ class IfE extends Procedure {
 }
 
 class IfEv extends Procedure {
-    public IfEv(BoolEvRef cond, BoolEvRef t, BoolEvRef f, BoolEvRef res) {
-        BoolEvRef notCond = tmp(new BoolEvRef());
-        BoolEvRef tmpTrue = tmp(new BoolEvRef());
-        BoolEvRef tmpFalse = tmp(new BoolEvRef());
+    public IfEv(BoolEv cond, BoolEv t, BoolEv f, BoolEv res) {
+        BoolEv notCond = tmp(new BoolEv());
+        BoolEv tmpTrue = tmp(new BoolEv());
+        BoolEv tmpFalse = tmp(new BoolEv());
 
         and(cond, t, tmpTrue);
 
@@ -79,10 +79,10 @@ class IfEv extends Procedure {
 }
 
 class IfEf extends Procedure {
-    public IfEf(BoolEfRef cond, BoolEfRef t, BoolEfRef f, BoolEfRef res) {
-        BoolEfRef notCond = tmp(new BoolEfRef());
-        BoolEfRef tmpTrue = tmp(new BoolEfRef());
-        BoolEfRef tmpFalse = tmp(new BoolEfRef());
+    public IfEf(BoolEf cond, BoolEf t, BoolEf f, BoolEf res) {
+        BoolEf notCond = tmp(new BoolEf());
+        BoolEf tmpTrue = tmp(new BoolEf());
+        BoolEf tmpFalse = tmp(new BoolEf());
 
         and(cond, t, tmpTrue);
 
@@ -94,10 +94,10 @@ class IfEf extends Procedure {
 }
 
 class IfF extends Procedure {
-    public IfF(BoolFRef cond, BoolFRef t, BoolFRef f, BoolFRef res) {
-        BoolFRef notCond = tmp(new BoolFRef());
-        BoolFRef tmpTrue = tmp(new BoolFRef());
-        BoolFRef tmpFalse = tmp(new BoolFRef());
+    public IfF(BoolF cond, BoolF t, BoolF f, BoolF res) {
+        BoolF notCond = tmp(new BoolF());
+        BoolF tmpTrue = tmp(new BoolF());
+        BoolF tmpFalse = tmp(new BoolF());
 
         and(cond, t, tmpTrue);
 
@@ -109,10 +109,10 @@ class IfF extends Procedure {
 }
 
 class IfFv extends Procedure {
-    public IfFv(BoolFvRef cond, BoolFvRef t, BoolFvRef f, BoolFvRef res) {
-        BoolFvRef notCond = tmp(new BoolFvRef());
-        BoolFvRef tmpTrue = tmp(new BoolFvRef());
-        BoolFvRef tmpFalse = tmp(new BoolFvRef());
+    public IfFv(BoolFv cond, BoolFv t, BoolFv f, BoolFv res) {
+        BoolFv notCond = tmp(new BoolFv());
+        BoolFv tmpTrue = tmp(new BoolFv());
+        BoolFv tmpFalse = tmp(new BoolFv());
 
         and(cond, t, tmpTrue);
 
@@ -124,10 +124,10 @@ class IfFv extends Procedure {
 }
 
 class IfFe extends Procedure {
-    public IfFe(BoolFeRef cond, BoolFeRef t, BoolFeRef f, BoolFeRef res) {
-        BoolFeRef notCond = tmp(new BoolFeRef());
-        BoolFeRef tmpTrue = tmp(new BoolFeRef());
-        BoolFeRef tmpFalse = tmp(new BoolFeRef());
+    public IfFe(BoolFe cond, BoolFe t, BoolFe f, BoolFe res) {
+        BoolFe notCond = tmp(new BoolFe());
+        BoolFe tmpTrue = tmp(new BoolFe());
+        BoolFe tmpFalse = tmp(new BoolFe());
 
         and(cond, t, tmpTrue);
 

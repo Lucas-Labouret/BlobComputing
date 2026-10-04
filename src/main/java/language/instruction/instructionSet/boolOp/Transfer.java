@@ -1,16 +1,15 @@
 package language.instruction.instructionSet.boolOp;
 
-import language.instruction.BasicInstruction;
 import language.field.boolField.*;
-import language.fieldRef.boolField.*;
+import language.instruction.BasicInstruction;
 
 /** Represents a transfer instruction for the Ve/Ev transfer-language.field pairing. */
 class TransferVe implements BasicInstruction {
-    private final BoolVeRef orig;
-    private final BoolEvRef dest;
+    private final BoolVe orig;
+    private final BoolEv dest;
 
     /** Creates a new TransferVe. */
-    public TransferVe(BoolVeRef orig, BoolEvRef dest) {
+    public TransferVe(BoolVe orig, BoolEv dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -18,18 +17,18 @@ class TransferVe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolVe.transfer(orig.get()));
+        dest.transfer(orig);
         return true;
     }
 }
 
 /** Represents a transfer instruction for the Ev/Ve transfer-language.field pairing. */
 class TransferEv implements BasicInstruction {
-    private final BoolEvRef orig;
-    private final BoolVeRef dest;
+    private final BoolEv orig;
+    private final BoolVe dest;
 
     /** Creates a new TransferEv. */
-    public TransferEv(BoolEvRef orig, BoolVeRef dest) {
+    public TransferEv(BoolEv orig, BoolVe dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -37,18 +36,18 @@ class TransferEv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolEv.transfer(orig.get()));
+        dest.transfer(orig);
         return true;
     }
 }
 
 /** Represents a transfer instruction for the Vf/Fv transfer-language.field pairing. */
 class TransferVf implements BasicInstruction {
-    private final BoolVfRef orig;
-    private final BoolFvRef dest;
+    private final BoolVf orig;
+    private final BoolFv dest;
 
     /** Creates a new TransferVf. */
-    public TransferVf(BoolVfRef orig, BoolFvRef dest) {
+    public TransferVf(BoolVf orig, BoolFv dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -56,18 +55,18 @@ class TransferVf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolVf.transfer(orig.get()));
+        dest.transfer(orig);
         return true;
     }
 }
 
 /** Represents a transfer instruction for the Fv/Vf transfer-language.field pairing. */
 class TransferFv implements BasicInstruction {
-    private final BoolFvRef orig;
-    private final BoolVfRef dest;
+    private final BoolFv orig;
+    private final BoolVf dest;
 
     /** Creates a new TransferFv. */
-    public TransferFv(BoolFvRef orig, BoolVfRef dest) {
+    public TransferFv(BoolFv orig, BoolVf dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -75,18 +74,18 @@ class TransferFv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolFv.transfer(orig.get()));
+        dest.transfer(orig);
         return true;
     }
 }
 
 /** Represents a transfer instruction for the Ef/Fe transfer-language.field pairing. */
 class TransferEf implements BasicInstruction {
-    private final BoolEfRef orig;
-    private final BoolFeRef dest;
+    private final BoolEf orig;
+    private final BoolFe dest;
 
     /** Creates a new TransferEf. */
-    public TransferEf(BoolEfRef orig, BoolFeRef dest) {
+    public TransferEf(BoolEf orig, BoolFe dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -94,18 +93,18 @@ class TransferEf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolEf.transfer(orig.get()));
+        dest.transfer(orig);
         return true;
     }
 }
 
 /** Represents a transfer instruction for the Fe/Ef transfer-language.field pairing. */
 class TransferFe implements BasicInstruction {
-    private final BoolFeRef orig;
-    private final BoolEfRef dest;
+    private final BoolFe orig;
+    private final BoolEf dest;
 
     /** Creates a new TransferFe. */
-    public TransferFe(BoolFeRef orig, BoolEfRef dest) {
+    public TransferFe(BoolFe orig, BoolEf dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -113,7 +112,7 @@ class TransferFe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolFe.transfer(orig.get()));
+        dest.transfer(orig);
         return true;
     }
 }

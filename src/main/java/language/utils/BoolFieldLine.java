@@ -43,9 +43,8 @@ public class BoolFieldLine {
     }
 
     /** @return a new randomly initialized language.field line. */
+    private static Random rand = new Random(0);
     public static BoolFieldLine rand(){
-        Random rand = new Random(0);
-
         if (SIZE == -1) throw new IllegalStateException("Size not set.");
         BoolFieldLine res = new BoolFieldLine();
         for (int i=0; i < SIZE; i++) res.line[i] = (int)(2*(rand.nextDouble()-0.5) * Integer.MAX_VALUE);

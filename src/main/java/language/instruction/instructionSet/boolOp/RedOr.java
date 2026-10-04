@@ -1,18 +1,15 @@
 package language.instruction.instructionSet.boolOp;
 
+import language.field.boolField.*;
 import language.instruction.BasicInstruction;
-import language.field.boolField.BoolE;
-import language.field.boolField.BoolF;
-import language.field.boolField.BoolV;
-import language.fieldRef.boolField.*;
 
 /** Performs an OR reduction from a BoolVe to a BoolV. */
 class RedOrVe implements BasicInstruction {
-    private final BoolVeRef orig;
-    private final BoolVRef dest;
+    private final BoolVe orig;
+    private final BoolV dest;
 
     /** Creates a new RedOrVe. */
-    public RedOrVe(BoolVeRef orig, BoolVRef dest) {
+    public RedOrVe(BoolVe orig, BoolV dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -20,18 +17,18 @@ class RedOrVe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolV.redOrVe(orig.get()));
+        dest.redOr(orig);
         return true;
     }
 }
 
 /** Performs an OR reduction from a BoolVf to a BoolV. */
 class RedOrVf implements BasicInstruction {
-    private final BoolVfRef orig;
-    private final BoolVRef dest;
+    private final BoolVf orig;
+    private final BoolV dest;
 
     /** Creates a new RedOrVf. */
-    public RedOrVf(BoolVfRef orig, BoolVRef dest) {
+    public RedOrVf(BoolVf orig, BoolV dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -39,18 +36,18 @@ class RedOrVf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolV.redOrVf(orig.get()));
+        dest.redOr(orig);
         return true;
     }
 }
 
 /** Performs an OR reduction from a BoolEv to a BoolE. */
 class RedOrEv implements BasicInstruction {
-    private final BoolEvRef orig;
-    private final BoolERef dest;
+    private final BoolEv orig;
+    private final BoolE dest;
 
     /** Creates a new RedOrEv. */
-    public RedOrEv(BoolEvRef orig, BoolERef dest) {
+    public RedOrEv(BoolEv orig, BoolE dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -58,18 +55,18 @@ class RedOrEv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolE.redOrEv(orig.get()));
+        dest.redOr(orig);
         return true;
     }
 }
 
 /** Performs an OR reduction from a BoolEf to a BoolE. */
 class RedOrEf implements BasicInstruction {
-    private final BoolEfRef orig;
-    private final BoolERef dest;
+    private final BoolEf orig;
+    private final BoolE dest;
 
     /** Creates a new RedOrEf. */
-    public RedOrEf(BoolEfRef orig, BoolERef dest) {
+    public RedOrEf(BoolEf orig, BoolE dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -77,18 +74,18 @@ class RedOrEf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolE.redOrEf(orig.get()));
+        dest.redOr(orig);
         return true;
     }
 }
 
 /** Performs an OR reduction from a BoolFv to a BoolF. */
 class RedOrFv implements BasicInstruction {
-    private final BoolFvRef orig;
-    private final BoolFRef dest;
+    private final BoolFv orig;
+    private final BoolF dest;
 
     /** Creates a new RedOrFv. */
-    public RedOrFv(BoolFvRef orig, BoolFRef dest) {
+    public RedOrFv(BoolFv orig, BoolF dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -96,18 +93,18 @@ class RedOrFv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolF.redOrFv(orig.get()));
+        dest.redOr(orig);
         return true;
     }
 }
 
 /** Performs an OR reduction from a BoolFe to a BoolF. */
 class RedOrFe implements BasicInstruction {
-    private final BoolFeRef orig;
-    private final BoolFRef dest;
+    private final BoolFe orig;
+    private final BoolF dest;
 
     /** Creates a new RedOrFe. */
-    public RedOrFe(BoolFeRef orig, BoolFRef dest) {
+    public RedOrFe(BoolFe orig, BoolF dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -115,7 +112,7 @@ class RedOrFe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolF.redOrFe(orig.get()));
+        dest.redOr(orig);
         return true;
     }
 }

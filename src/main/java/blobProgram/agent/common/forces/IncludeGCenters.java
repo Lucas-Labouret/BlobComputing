@@ -4,7 +4,7 @@ import blobProgram.BlobV;
 import blobProgram.GabrielCenter;
 import blobProgram.agent.Force;
 import javafx.scene.paint.Color;
-import language.fieldRef.boolField.BoolVRef;
+import language.field.boolField.BoolV;
 import language.instruction.Procedure;
 import ui.display.Styles;
 
@@ -18,11 +18,11 @@ public class IncludeGCenters extends Force {
     }
 
     private class Compute extends Procedure {
-        public Compute(BoolVRef yes, BoolVRef no) {
+        public Compute(BoolV yes, BoolV no) {
             BlobV frontier = tmp(new BlobV());
             call(state.frontierV(frontier));
 
-            BoolVRef centers = tmp(new BoolVRef());
+            BoolV centers = tmp(new BoolV());
             call(gCenters.saddle(centers));
 
             show("Gabriel Centers", centers, new Styles.Factory().vertexTrue(Color.HOTPINK).make());
@@ -33,7 +33,7 @@ public class IncludeGCenters extends Force {
     }
 
     @Override
-    protected Procedure compute(BoolVRef yes, BoolVRef no) {
+    protected Procedure compute(BoolV yes, BoolV no) {
         return new Compute(yes, no);
     }
 }

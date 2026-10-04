@@ -1,195 +1,192 @@
 package language.instruction.instructionSet.intOp;
 
+import language.field.boolField.*;
+import language.field.intField.*;
 import language.instruction.Procedure;
-import language.field.intField.IntE;
-import language.field.intField.IntF;
-import language.field.intField.IntV;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.*;
 import language.utils.BoolFieldManager;
 
 class RedAddVe extends Procedure {
-    public RedAddVe(BoolVeRef orig, IntVRef res) {
+    public RedAddVe(BoolVe orig, IntV res) {
         int breadth = BoolFieldManager.getBreadthV();
 
-        BoolVRef[] stack = new BoolVRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolVRef());
+        BoolV[] stack = new BoolV[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolV());
         redStack0(orig, stack);
 
-        set(new IntVRef(IntV.of(0, res.get().n)), res);
-        IntVRef current = tmp(new IntVRef(new IntV(res.get().n)));
+        set(IntV.of(0, res.n), res);
+        IntV current = tmp(new IntV(res.n));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
         }
     }
 
-    public RedAddVe(IntVeRef orig, IntVRef res) {
-        if (orig.get().n != res.get().n)
+    public RedAddVe(IntVe orig, IntV res) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot reduce an IntVe to an IntV of different size.");
 
         int breadth = BoolFieldManager.getBreadthV();
 
-        IntVRef[] stack = new IntVRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntVRef(new IntV(res.get().n)));
+        IntV[] stack = new IntV[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntV(res.n));
         redStack0(orig, stack);
 
-        set(new IntVRef(IntV.of(0, res.get().n)), res);
+        set(IntV.of(0, res.n), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
 
 class RedAddVf extends Procedure {
-    public RedAddVf(BoolVfRef orig, IntVRef res) {
+    public RedAddVf(BoolVf orig, IntV res) {
         int breadth = BoolFieldManager.getBreadthV();
 
-        BoolVRef[] stack = new BoolVRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolVRef());
+        BoolV[] stack = new BoolV[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolV());
         redStack0(orig, stack);
 
-        set(new IntVRef(IntV.of(0, res.get().n)), res);
+        set(IntV.of(0, res.n), res);
         for (int i = 0; i < breadth; i++) {
-            IntVRef current = tmp(new IntVRef(new IntV(res.get().n)));
+            IntV current = tmp(new IntV(res.n));
             fromBool(stack[i], current);
             add(res, current, res);
         }
     }
 
-    public RedAddVf(IntVfRef orig, IntVRef res) {
-        if (orig.get().n != res.get().n)
+    public RedAddVf(IntVf orig, IntV res) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot reduce an IntVf to an IntV of different size.");
 
         int breadth = BoolFieldManager.getBreadthV();
 
-        IntVRef[] stack = new IntVRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntVRef(new IntV(res.get().n)));
+        IntV[] stack = new IntV[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntV(res.n));
         redStack0(orig, stack);
 
-        set(new IntVRef(IntV.of(0, res.get().n)), res);
+        set(IntV.of(0, res.n), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
 
 class RedAddEv extends Procedure {
-    public RedAddEv(BoolEvRef orig, IntERef res) {
+    public RedAddEv(BoolEv orig, IntE res) {
         int breadth = BoolFieldManager.getBreadthE();
 
-        BoolERef[] stack = new BoolERef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolERef());
+        BoolE[] stack = new BoolE[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolE());
         redStack0(orig, stack);
 
-        set(new IntERef(IntE.of(0, res.get().n)), res);
-        IntERef current = tmp(new IntERef(new IntE(res.get().n)));
+        set(IntE.of(0, res.n), res);
+        IntE current = tmp(new IntE(res.n));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
         }
     }
 
-    public RedAddEv(IntEvRef orig, IntERef res) {
-        if (orig.get().n != res.get().n)
+    public RedAddEv(IntEv orig, IntE res) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot reduce an IntEv to an IntE of different size.");
 
         int breadth = BoolFieldManager.getBreadthE();
 
-        IntERef[] stack = new IntERef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntERef(new IntE(res.get().n)));
+        IntE[] stack = new IntE[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntE(res.n));
         redStack0(orig, stack);
 
-        set(new IntERef(IntE.of(0, res.get().n)), res);
+        set(IntE.of(0, res.n), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
 
 class RedAddEf extends Procedure {
-    public RedAddEf(BoolEfRef orig, IntERef res) {
+    public RedAddEf(BoolEf orig, IntE res) {
         int breadth = BoolFieldManager.getBreadthE();
 
-        BoolERef[] stack = new BoolERef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolERef());
+        BoolE[] stack = new BoolE[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolE());
         redStack0(orig, stack);
 
-        set(new IntERef(IntE.of(0, res.get().n)), res);
-        IntERef current = tmp(new IntERef(new IntE(res.get().n)));
+        set(IntE.of(0, res.n), res);
+        IntE current = tmp(new IntE(res.n));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
         }
     }
 
-    public RedAddEf(IntEfRef orig, IntERef res) {
-        if (orig.get().n != res.get().n)
+    public RedAddEf(IntEf orig, IntE res) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot reduce an IntEf to an IntE of different size.");
 
         int breadth = BoolFieldManager.getBreadthE();
 
-        IntERef[] stack = new IntERef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntERef(new IntE(res.get().n)));
+        IntE[] stack = new IntE[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntE(res.n));
         redStack0(orig, stack);
 
-        set(new IntERef(IntE.of(0, res.get().n)), res);
+        set(IntE.of(0, res.n), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
 
 class RedAddFv extends Procedure {
-    public RedAddFv(BoolFvRef orig, IntFRef res) {
+    public RedAddFv(BoolFv orig, IntF res) {
         int breadth = BoolFieldManager.getBreadthF();
 
-        BoolFRef[] stack = new BoolFRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolFRef());
+        BoolF[] stack = new BoolF[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolF());
         redStack0(orig, stack);
 
-        set(new IntFRef(IntF.of(0, res.get().n)), res);
-        IntFRef current = tmp(new IntFRef(new IntF(res.get().n)));
+        set(IntF.of(0, res.n), res);
+        IntF current = tmp(new IntF(res.n));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
         }
     }
 
-    public RedAddFv(IntFvRef orig, IntFRef res) {
-        if (orig.get().n != res.get().n)
+    public RedAddFv(IntFv orig, IntF res) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot reduce an IntFv to an IntF of different size.");
 
         int breadth = BoolFieldManager.getBreadthF();
 
-        IntFRef[] stack = new IntFRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntFRef(new IntF(res.get().n)));
+        IntF[] stack = new IntF[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntF(res.n));
         redStack0(orig, stack);
 
-        set(new IntFRef(IntF.of(0, res.get().n)), res);
+        set(IntF.of(0, res.n), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }
 
 class RedAddFe extends Procedure {
-    public RedAddFe(BoolFeRef orig, IntFRef res) {
+    public RedAddFe(BoolFe orig, IntF res) {
         int breadth = BoolFieldManager.getBreadthF();
 
-        BoolFRef[] stack = new BoolFRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolFRef());
+        BoolF[] stack = new BoolF[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new BoolF());
         redStack0(orig, stack);
 
-        set(new IntFRef(IntF.of(0, res.get().n)), res);
-        IntFRef current = tmp(new IntFRef(new IntF(res.get().n)));
+        set(IntF.of(0, res.n), res);
+        IntF current = tmp(new IntF(res.n));
         for (int i = 0; i < breadth; i++) {
             fromBool(stack[i], current);
             add(res, current, res);
         }
     }
 
-    public RedAddFe(IntFeRef orig, IntFRef res) {
-        if (orig.get().n != res.get().n)
+    public RedAddFe(IntFe orig, IntF res) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot reduce an IntFe to an IntF of different size.");
 
         int breadth = BoolFieldManager.getBreadthF();
 
-        IntFRef[] stack = new IntFRef[breadth];
-        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntFRef(new IntF(res.get().n)));
+        IntF[] stack = new IntF[breadth];
+        for (int i = 0; i < breadth; i++) stack[i] = tmp(new IntF(res.n));
         redStack0(orig, stack);
 
-        set(new IntFRef(IntF.of(0, res.get().n)), res);
+        set(IntF.of(0, res.n), res);
         for (int i = 0; i < breadth; i++) add(res, stack[i], res);
     }
 }

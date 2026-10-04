@@ -3,35 +3,33 @@ package blobProgram.agent.common.forces;
 import blobProgram.BlobV;
 import blobProgram.agent.Force;
 import language.field.boolField.BoolV;
+import language.field.boolField.BoolVe;
 import language.field.intField.IntVe;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.boolField.BoolVeRef;
-import language.fieldRef.intField.IntVeRef;
 import language.instruction.Procedure;
 
 public class Unblock extends Force {
     private final BlobV state;
-    private final IntVeRef gradient;
+    private final IntVe gradient;
 
-    public Unblock(BlobV state, IntVeRef gradient) {
+    public Unblock(BlobV state, IntVe gradient) {
         this.state = state;
         this.gradient = gradient;
     }
 
     private class Compute extends Procedure {
-        public Compute(BoolVRef yes, BoolVRef no) {
+        public Compute(BoolV yes, BoolV no) {
             BlobV notState = tmp(new BlobV());
             not(state, notState);
 
-            BoolVeRef posGrad = tmp(new BoolVeRef());
-            gt(gradient, new IntVeRef(IntVe.of(1, gradient.get().n)), posGrad);
+            BoolVe posGrad = tmp(new BoolVe());
+            gt(gradient, IntVe.of(1, gradient.n), posGrad);
 
-            BoolVeRef nullGrad = tmp(new BoolVeRef());
-            eq(gradient, new IntVeRef(IntVe.of(0, gradient.get().n)), nullGrad);
+            BoolVe nullGrad = tmp(new BoolVe());
+            eq(gradient, IntVe.of(0, gradient.n), nullGrad);
 
-            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolVe ve = tmp(new BoolVe());
 
-            BoolVRef deadEnd = tmp(new BoolVRef());
+            BoolV deadEnd = tmp(new BoolV());
             redOr(posGrad, deadEnd);
             not(deadEnd, deadEnd);
             and(deadEnd, state, deadEnd);
@@ -39,7 +37,7 @@ public class Unblock extends Force {
             show("deadEnd", deadEnd);
 
             // Allow dead ends to expand through null gradient
-            BoolVRef toAdd = tmp(new BoolVRef());
+            BoolV toAdd = tmp(new BoolV());
             broadcast(deadEnd, ve);
             and(nullGrad, ve, ve);
             call(BlobV.send(ve, ve));
@@ -47,7 +45,7 @@ public class Unblock extends Force {
             and(toAdd, notState, toAdd);
 
             // Allow dead ends to contract through null gradient
-            BoolVRef toRemove = tmp(new BoolVRef());
+            BoolV toRemove = tmp(new BoolV());
             broadcast(state, ve);
             and(nullGrad, ve, ve);
             call(BlobV.send(ve, ve));
@@ -56,12 +54,12 @@ public class Unblock extends Force {
 
             // Build the yes and no
             or(toAdd, toRemove, yes);
-            set(new BoolVRef(BoolV.zeroes()), no);
+            set(new BoolV().zeroes(), no);
         }
     }
 
     @Override
-    protected Procedure compute(BoolVRef yes, BoolVRef no) {
+    protected Procedure compute(BoolV yes, BoolV no) {
         return new Compute(yes, no);
     }
 }

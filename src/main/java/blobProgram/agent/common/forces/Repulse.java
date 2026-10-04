@@ -3,33 +3,31 @@ package blobProgram.agent.common.forces;
 import blobProgram.BlobV;
 import blobProgram.agent.Force;
 import language.field.boolField.BoolV;
+import language.field.boolField.BoolVe;
 import language.field.intField.IntVe;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.boolField.BoolVeRef;
-import language.fieldRef.intField.IntVeRef;
 import language.instruction.Procedure;
 
 public class Repulse extends Force {
     private final BlobV state;
-    private final IntVeRef gradient;
+    private final IntVe gradient;
 
-public Repulse(BlobV state, IntVeRef gradient) {
+public Repulse(BlobV state, IntVe gradient) {
         this.state = state;
         this.gradient = gradient;
     }
 
     private class Compute extends Procedure {
-        public Compute(BoolVRef yes, BoolVRef no) {
+        public Compute(BoolV yes, BoolV no) {
             BlobV notState = tmp(new BlobV());
             not(state, notState);
 
-            BoolVeRef posGrad = tmp(new BoolVeRef());
-            gt(gradient, new IntVeRef(IntVe.of(1, gradient.get().n)), posGrad);
+            BoolVe posGrad = tmp(new BoolVe());
+            gt(gradient, IntVe.of(1, gradient.n), posGrad);
 
-            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolVe ve = tmp(new BoolVe());
 
             // Remove vertices in the blob that have a positive gradient inward
-            BoolVRef toRemove = tmp(new BoolVRef());
+            BoolV toRemove = tmp(new BoolV());
             broadcast(state, ve);
             call(BlobV.send(ve, ve));
             and(posGrad, ve, ve);
@@ -39,7 +37,7 @@ public Repulse(BlobV state, IntVeRef gradient) {
             show("Repulse toRemove", toRemove);
 
             // Add vertices outside the blob that have a negative gradient inward
-            BoolVRef toAdd = tmp(new BoolVRef());
+            BoolV toAdd = tmp(new BoolV());
             broadcast(state, ve);
             and(posGrad, ve, ve);
             call(BlobV.send(ve, ve));
@@ -51,12 +49,12 @@ public Repulse(BlobV state, IntVeRef gradient) {
 
             // Build the yes and no
             or(toAdd, toRemove, yes);
-            set(new BoolVRef(BoolV.zeroes()), no);
+            set(new BoolV().zeroes(), no);
         }
     }
 
     @Override
-    protected Procedure compute(BoolVRef yes, BoolVRef no) {
+    protected Procedure compute(BoolV yes, BoolV no) {
         return new Compute(yes, no);
     }
 }

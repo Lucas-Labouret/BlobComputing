@@ -1,18 +1,15 @@
 package language.instruction.instructionSet.boolOp;
 
+import language.field.boolField.*;
 import language.instruction.BasicInstruction;
-import language.field.boolField.BoolE;
-import language.field.boolField.BoolF;
-import language.field.boolField.BoolV;
-import language.fieldRef.boolField.*;
 
 /** Performs an AND reduction from a BoolVe to a BoolV. */
 class RedAndVe implements BasicInstruction {
-    private final BoolVeRef orig;
-    private final BoolVRef dest;
+    private final BoolVe orig;
+    private final BoolV dest;
 
     /** Creates a new RedAndVe. */
-    public RedAndVe(BoolVeRef orig, BoolVRef dest) {
+    public RedAndVe(BoolVe orig, BoolV dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -20,18 +17,18 @@ class RedAndVe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolV.redAndVe(orig.get()));
+        dest.redAnd(orig);
         return true;
     }
 }
 
 /** Performs an AND reduction from a BoolVf to a BoolV. */
 class RedAndVf implements BasicInstruction {
-    private final BoolVfRef orig;
-    private final BoolVRef dest;
+    private final BoolVf orig;
+    private final BoolV dest;
 
     /** Creates a new RedAndVf. */
-    public RedAndVf(BoolVfRef orig, BoolVRef dest) {
+    public RedAndVf(BoolVf orig, BoolV dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -39,18 +36,18 @@ class RedAndVf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolV.redAndVf(orig.get()));
+        dest.redAnd(orig);
         return true;
     }
 }
 
 /** Performs an AND reduction from a BoolEv to a BoolE. */
 class RedAndEv implements BasicInstruction {
-    private final BoolEvRef orig;
-    private final BoolERef dest;
+    private final BoolEv orig;
+    private final BoolE dest;
 
     /** Creates a new RedAndEv. */
-    public RedAndEv(BoolEvRef orig, BoolERef dest) {
+    public RedAndEv(BoolEv orig, BoolE dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -58,18 +55,18 @@ class RedAndEv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolE.redAndEv(orig.get()));
+        dest.redAnd(orig);
         return true;
     }
 }
 
 /** Performs an AND reduction from a BoolEf to a BoolE. */
 class RedAndEf implements BasicInstruction {
-    private final BoolEfRef orig;
-    private final BoolERef dest;
+    private final BoolEf orig;
+    private final BoolE dest;
 
     /** Creates a new RedAndEf. */
-    public RedAndEf(BoolEfRef orig, BoolERef dest) {
+    public RedAndEf(BoolEf orig, BoolE dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -77,18 +74,18 @@ class RedAndEf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolE.redAndEf(orig.get()));
+        dest.redAnd(orig);
         return true;
     }
 }
 
 /** Performs an AND reduction from a BoolFv to a BoolF. */
 class RedAndFv implements BasicInstruction {
-    private final BoolFvRef orig;
-    private final BoolFRef dest;
+    private final BoolFv orig;
+    private final BoolF dest;
 
     /** Creates a new RedAndFv. */
-    public RedAndFv(BoolFvRef orig, BoolFRef dest) {
+    public RedAndFv(BoolFv orig, BoolF dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -96,18 +93,18 @@ class RedAndFv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolF.redAndFv(orig.get()));
+        dest.redAnd(orig);
         return true;
     }
 }
 
 /** Performs an AND reduction from a BoolFe to a BoolF. */
 class RedAndFe implements BasicInstruction {
-    private final BoolFeRef orig;
-    private final BoolFRef dest;
+    private final BoolFe orig;
+    private final BoolF dest;
 
     /** Creates a new RedAndFe. */
-    public RedAndFe(BoolFeRef orig, BoolFRef dest) {
+    public RedAndFe(BoolFe orig, BoolF dest) {
         this.orig = orig;
         this.dest = dest;
     }
@@ -115,7 +112,7 @@ class RedAndFe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        dest.set(BoolF.redAndFe(orig.get()));
+        dest.redAnd(orig);
         return true;
     }
 }

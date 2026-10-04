@@ -1,119 +1,118 @@
 package language.instruction.instructionSet.boolOp;
 
-import language.instruction.BasicInstruction;
 import language.field.boolField.*;
-import language.fieldRef.boolField.*;
+import language.instruction.BasicInstruction;
 
 /** Rotates a BoolVe clockwise into a BoolVf. */
 class RotVeCW implements BasicInstruction {
-    private final BoolVeRef orig;
-    private final BoolVfRef res;
+    private final BoolVe orig;
+    private final BoolVf dest;
 
     /** Creates a new RotVeCW. */
-    public RotVeCW(BoolVeRef orig, BoolVfRef res) {
+    public RotVeCW(BoolVe orig, BoolVf dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVe.rotateCW(orig.get()));
+        dest.rotateCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolVf clockwise into a BoolVe. */
 class RotVfCW implements BasicInstruction {
-    private final BoolVfRef orig;
-    private final BoolVeRef res;
+    private final BoolVf orig;
+    private final BoolVe dest;
 
     /** Creates a new RotVfCW. */
-    public RotVfCW(BoolVfRef orig, BoolVeRef res) {
+    public RotVfCW(BoolVf orig, BoolVe dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVf.rotateCW(orig.get()));
+        dest.rotateCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolEv clockwise into a BoolEf. */
 class RotEvCW implements BasicInstruction {
-    private final BoolEvRef orig;
-    private final BoolEfRef res;
+    private final BoolEv orig;
+    private final BoolEf dest;
 
     /** Creates a new RotEvCW. */
-    public RotEvCW(BoolEvRef orig, BoolEfRef res) {
+    public RotEvCW(BoolEv orig, BoolEf dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEv.rotateCW(orig.get()));
+        dest.rotateCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolEf clockwise into a BoolEv. */
 class RotEfCW implements BasicInstruction {
-    private final BoolEfRef orig;
-    private final BoolEvRef res;
+    private final BoolEf orig;
+    private final BoolEv dest;
 
     /** Creates a new RotEfCW. */
-    public RotEfCW(BoolEfRef orig, BoolEvRef res) {
+    public RotEfCW(BoolEf orig, BoolEv dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEf.rotateCW(orig.get()));
+        dest.rotateCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolFv clockwise into a BoolFe. */
 class RotFvCW implements BasicInstruction {
-    private final BoolFvRef orig;
-    private final BoolFeRef res;
+    private final BoolFv orig;
+    private final BoolFe dest;
 
     /** Creates a new RotFvCW. */
-    public RotFvCW(BoolFvRef orig, BoolFeRef res) {
+    public RotFvCW(BoolFv orig, BoolFe dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFv.rotateCW(orig.get()));
+        dest.rotateCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolFe clockwise into a BoolFv. */
 class RotFeCW implements BasicInstruction {
-    private final BoolFeRef orig;
-    private final BoolFvRef res;
+    private final BoolFe orig;
+    private final BoolFv dest;
 
     /** Creates a new RotFeCW. */
-    public RotFeCW(BoolFeRef orig, BoolFvRef res) {
+    public RotFeCW(BoolFe orig, BoolFv dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFe.rotateCW(orig.get()));
+        dest.rotateCW(orig);
         return true;
     }
 }

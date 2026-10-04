@@ -1,25 +1,24 @@
 package language.instruction.instructionSet.intOp;
 
-import language.instruction.Procedure;
 import language.field.boolField.*;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.*;
+import language.field.intField.*;
+import language.instruction.Procedure;
 
 class GTV extends Procedure {
-    public GTV(IntVRef a, IntVRef b, BoolVRef res) {
-        if  (a.get().n != b.get().n)
+    public GTV(IntV a, IntV b, BoolV res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolVRef[] aBits = a.get().getBits();
-        BoolVRef[] bBits = b.get().getBits();
+        BoolV[] aBits = a.getBits();
+        BoolV[] bBits = b.getBits();
 
-        BoolVRef diffSign = tmp(new BoolVRef());
+        BoolV diffSign = tmp(new BoolV());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolVRef(BoolV.ones()), res);
+        set(new BoolV().ones(), res);
 
-        BoolVRef diffBits = tmp(new BoolVRef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolV diffBits = tmp(new BoolV());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }
@@ -29,20 +28,20 @@ class GTV extends Procedure {
 }
 
 class GTVe extends Procedure {
-    public GTVe(IntVeRef a, IntVeRef b, BoolVeRef res) {
-        if  (a.get().n != b.get().n)
+    public GTVe(IntVe a, IntVe b, BoolVe res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolVeRef[] aBits = a.get().getBits();
-        BoolVeRef[] bBits = b.get().getBits();
+        BoolVe[] aBits = a.getBits();
+        BoolVe[] bBits = b.getBits();
 
-        BoolVeRef diffSign = tmp(new BoolVeRef());
+        BoolVe diffSign = tmp(new BoolVe());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolVeRef(BoolVe.ones()), res);
+        set(new BoolVe().ones(), res);
 
-        BoolVeRef diffBits = tmp(new BoolVeRef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolVe diffBits = tmp(new BoolVe());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }
@@ -52,20 +51,20 @@ class GTVe extends Procedure {
 }
 
 class GTVf extends Procedure {
-    public GTVf(IntVfRef a, IntVfRef b, BoolVfRef res) {
-        if  (a.get().n != b.get().n)
+    public GTVf(IntVf a, IntVf b, BoolVf res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolVfRef[] aBits = a.get().getBits();
-        BoolVfRef[] bBits = b.get().getBits();
+        BoolVf[] aBits = a.getBits();
+        BoolVf[] bBits = b.getBits();
 
-        BoolVfRef diffSign = tmp(new BoolVfRef());
+        BoolVf diffSign = tmp(new BoolVf());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolVfRef(BoolVf.ones()), res);
+        set(new BoolVf().ones(), res);
 
-        BoolVfRef diffBits = tmp(new BoolVfRef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolVf diffBits = tmp(new BoolVf());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }
@@ -75,20 +74,20 @@ class GTVf extends Procedure {
 }
 
 class GTE extends Procedure {
-    public GTE(IntERef a, IntERef b, BoolERef res) {
-        if  (a.get().n != b.get().n)
+    public GTE(IntE a, IntE b, BoolE res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolERef[] aBits = a.get().getBits();
-        BoolERef[] bBits = b.get().getBits();
+        BoolE[] aBits = a.getBits();
+        BoolE[] bBits = b.getBits();
 
-        BoolERef diffSign = tmp(new BoolERef());
+        BoolE diffSign = tmp(new BoolE());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolERef(BoolE.ones()), res);
+        set(new BoolE().ones(), res);
 
-        BoolERef diffBits = tmp(new BoolERef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolE diffBits = tmp(new BoolE());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }
@@ -98,20 +97,20 @@ class GTE extends Procedure {
 }
 
 class GTEv extends Procedure {
-    public GTEv(IntEvRef a, IntEvRef b, BoolEvRef res) {
-        if  (a.get().n != b.get().n)
+    public GTEv(IntEv a, IntEv b, BoolEv res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolEvRef[] aBits = a.get().getBits();
-        BoolEvRef[] bBits = b.get().getBits();
+        BoolEv[] aBits = a.getBits();
+        BoolEv[] bBits = b.getBits();
 
-        BoolEvRef diffSign = tmp(new BoolEvRef());
+        BoolEv diffSign = tmp(new BoolEv());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolEvRef(BoolEv.ones()), res);
+        set(new BoolEv().ones(), res);
 
-        BoolEvRef diffBits = tmp(new BoolEvRef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolEv diffBits = tmp(new BoolEv());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }
@@ -121,20 +120,20 @@ class GTEv extends Procedure {
 }
 
 class GTEf extends Procedure {
-    public GTEf(IntEfRef a, IntEfRef b, BoolEfRef res) {
-        if  (a.get().n != b.get().n)
+    public GTEf(IntEf a, IntEf b, BoolEf res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolEfRef[] aBits = a.get().getBits();
-        BoolEfRef[] bBits = b.get().getBits();
+        BoolEf[] aBits = a.getBits();
+        BoolEf[] bBits = b.getBits();
 
-        BoolEfRef diffSign = tmp(new BoolEfRef());
+        BoolEf diffSign = tmp(new BoolEf());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolEfRef(BoolEf.ones()), res);
+        set(new BoolEf().ones(), res);
 
-        BoolEfRef diffBits = tmp(new BoolEfRef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolEf diffBits = tmp(new BoolEf());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }
@@ -144,20 +143,20 @@ class GTEf extends Procedure {
 }
 
 class GTF extends Procedure {
-    public GTF(IntFRef a, IntFRef b, BoolFRef res) {
-        if  (a.get().n != b.get().n)
+    public GTF(IntF a, IntF b, BoolF res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolFRef[] aBits = a.get().getBits();
-        BoolFRef[] bBits = b.get().getBits();
+        BoolF[] aBits = a.getBits();
+        BoolF[] bBits = b.getBits();
 
-        BoolFRef diffSign = tmp(new BoolFRef());
+        BoolF diffSign = tmp(new BoolF());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolFRef(BoolF.ones()), res);
+        set(new BoolF().ones(), res);
 
-        BoolFRef diffBits = tmp(new BoolFRef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolF diffBits = tmp(new BoolF());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }
@@ -167,20 +166,20 @@ class GTF extends Procedure {
 }
 
 class GTFv extends Procedure {
-    public GTFv(IntFvRef a, IntFvRef b, BoolFvRef res) {
-        if  (a.get().n != b.get().n)
+    public GTFv(IntFv a, IntFv b, BoolFv res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolFvRef[] aBits = a.get().getBits();
-        BoolFvRef[] bBits = b.get().getBits();
+        BoolFv[] aBits = a.getBits();
+        BoolFv[] bBits = b.getBits();
 
-        BoolFvRef diffSign = tmp(new BoolFvRef());
+        BoolFv diffSign = tmp(new BoolFv());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolFvRef(BoolFv.ones()), res);
+        set(new BoolFv().ones(), res);
 
-        BoolFvRef diffBits = tmp(new BoolFvRef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolFv diffBits = tmp(new BoolFv());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }
@@ -190,20 +189,20 @@ class GTFv extends Procedure {
 }
 
 class GTFe extends Procedure {
-    public GTFe(IntFeRef a, IntFeRef b, BoolFeRef res) {
-        if  (a.get().n != b.get().n)
+    public GTFe(IntFe a, IntFe b, BoolFe res) {
+        if  (a.n != b.n)
             throw new IllegalArgumentException("Cannot compare IntVs of different sizes.");
 
-        BoolFeRef[] aBits = a.get().getBits();
-        BoolFeRef[] bBits = b.get().getBits();
+        BoolFe[] aBits = a.getBits();
+        BoolFe[] bBits = b.getBits();
 
-        BoolFeRef diffSign = tmp(new BoolFeRef());
+        BoolFe diffSign = tmp(new BoolFe());
         xor(aBits[0], bBits[0], diffSign);
 
-        set(new BoolFeRef(BoolFe.ones()), res);
+        set(new BoolFe().ones(), res);
 
-        BoolFeRef diffBits = tmp(new BoolFeRef());
-        for (int i=a.get().n; i>=1; i--) {
+        BoolFe diffBits = tmp(new BoolFe());
+        for (int i=a.n; i>=1; i--) {
             xor(aBits[i], bBits[i], diffBits);
             fif(diffBits, aBits[i], res, res);
         }

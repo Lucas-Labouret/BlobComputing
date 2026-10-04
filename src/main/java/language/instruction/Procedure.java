@@ -2,12 +2,10 @@ package language.instruction;
 
 import language.cache.Cache;
 import language.field.Field;
-import language.field.boolField.BoolField;
-import language.field.intField.IntField;
-import language.fieldRef.Ref;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.*;
+import language.field.boolField.*;
+import language.field.intField.*;
 import language.instruction.instructionSet.Print;
+import language.instruction.instructionSet.SetField;
 import language.instruction.instructionSet.Show;
 import language.instruction.instructionSet.Snapshot;
 import language.instruction.instructionSet.boolOp.BoolOp;
@@ -16,7 +14,6 @@ import ui.display.Styles;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.function.Consumer;
 
 /** Represents an instruction composed of a sequence of sub-instructions. */
 public abstract non-sealed class Procedure implements Instruction {
@@ -67,41 +64,9 @@ public abstract non-sealed class Procedure implements Instruction {
      * The variable will be automatically cleaned up (set to null) when this procedure finishes executing.
      * This avoids expensive long term storage of fields that are no longer useful
      */
-    public <O extends Field, R extends Ref<O>> R tmp(R ref) {
-        Consumer<Ref<? extends BoolField>> tmpBool = tmpVars::add;
-        Consumer<Ref<? extends IntField<?>>> tmpInt = r -> {
-            if (r.get() == null) throw new IllegalArgumentException("Cannot create a temporary variable uninitialized Int Ref.");
-            for (Ref<? extends BoolField> refBit: r.get().getBits()) tmpBool.accept(refBit);
-        };
-        switch (ref) {
-            case BoolVRef  r -> tmpBool.accept(r);
-            case BoolVeRef r -> tmpBool.accept(r);
-            case BoolVfRef r -> tmpBool.accept(r);
-            case BoolERef  r -> tmpBool.accept(r);
-            case BoolEvRef r -> tmpBool.accept(r);
-            case BoolEfRef r -> tmpBool.accept(r);
-            case BoolFRef  r -> tmpBool.accept(r);
-            case BoolFvRef r -> tmpBool.accept(r);
-            case BoolFeRef r -> tmpBool.accept(r);
-
-            case IntVRef  r -> tmpInt.accept(r);
-            case IntVeRef r -> tmpInt.accept(r);
-            case IntVfRef r -> tmpInt.accept(r);
-            case IntERef  r -> tmpInt.accept(r);
-            case IntEvRef r -> tmpInt.accept(r);
-            case IntEfRef r -> tmpInt.accept(r);
-            case IntFRef  r -> tmpInt.accept(r);
-            case IntFvRef r -> tmpInt.accept(r);
-            case IntFeRef r -> tmpInt.accept(r);
-
-            default -> throw new IllegalArgumentException("Unsupported Ref type: " + ref.getClass().getSimpleName());
-        }
-        return ref;
-    }
-    private final HashSet<Ref<?>> tmpVars = new HashSet<>();
-    private void cleanup() {
-        for (Ref<?> ref : tmpVars) ref.set(null);
-    }
+    public <F extends Field> F tmp(F field) { tmpVars.add(field); return field; }
+    private final HashSet<Field> tmpVars = new HashSet<>();
+    private void cleanup() { for (Field field : tmpVars) field.clear(); }
 
     /** @return false if there are more instructions to execute, true if the loop is finished. */
     @Override
@@ -132,359 +97,341 @@ public abstract non-sealed class Procedure implements Instruction {
     // Wrapper functions to make writing procedures easier. These functions simply add the corresponding instruction to this procedure.
 
     protected void print(@SuppressWarnings("SameParameterValue") String message) { call(new Print(message)); }
-    protected <T extends Field> void show(String name, Ref<T> fieldRef) { call(new Show<>(name, fieldRef)); }
-    protected <T extends Field> void show(String name, Ref<T> fieldRef, Styles.Style style) { call(new Show<>(name, fieldRef, style)); }
+    protected <F extends Field<F>> void show(String name, F field) { call(new Show<>(name, field)); }
+    protected <F extends Field<F>> void show(String name, F field, Styles.Style style) { call(new Show<>(name, field, style)); }
     protected void snapshot() { call(new Snapshot()); }
 
-    protected void set(BoolVRef a, BoolVRef res) { call(BoolOp.set(a, res));}
-    protected void set(BoolVeRef a, BoolVeRef res) { call(BoolOp.set(a, res)); }
-    protected void set(BoolVfRef a, BoolVfRef res) { call(BoolOp.set(a, res)); }
-    protected void set(BoolERef a, BoolERef res) { call(BoolOp.set(a, res)); }
-    protected void set(BoolEvRef a, BoolEvRef res) { call(BoolOp.set(a, res)); }
-    protected void set(BoolEfRef a, BoolEfRef res) { call(BoolOp.set(a, res)); }
-    protected void set(BoolFRef a, BoolFRef res) { call(BoolOp.set(a, res)); }
-    protected void set(BoolFvRef a, BoolFvRef res) { call(BoolOp.set(a, res)); }
-    protected void set(BoolFeRef a, BoolFeRef res) { call(BoolOp.set(a, res)); }
+    protected <F extends Field<F>> void set(F in, F out) { call(new SetField<>(in, out)); }
 
-    protected void set(IntVRef a, IntVRef res) { call(IntOp.set(a, res)); }
-    protected void set(IntVeRef a, IntVeRef res) { call(IntOp.set(a, res)); }
-    protected void set(IntVfRef a, IntVfRef res) { call(IntOp.set(a, res)); }
-    protected void set(IntERef a, IntERef res) { call(IntOp.set(a, res)); }
-    protected void set(IntEvRef a, IntEvRef res) { call(IntOp.set(a, res)); }
-    protected void set(IntEfRef a, IntEfRef res) { call(IntOp.set(a, res)); }
-    protected void set(IntFRef a, IntFRef res) { call(IntOp.set(a, res)); }
-    protected void set(IntFvRef a, IntFvRef res) { call(IntOp.set(a, res)); }
-    protected void set(IntFeRef a, IntFeRef res) { call(IntOp.set(a, res)); }
+    protected void not(BoolV  a, BoolV  res) { call(BoolOp.not(a, res)); }
+    protected void not(BoolVe a, BoolVe res) { call(BoolOp.not(a, res)); }
+    protected void not(BoolVf a, BoolVf res) { call(BoolOp.not(a, res)); }
+    protected void not(BoolE  a, BoolE  res) { call(BoolOp.not(a, res)); }
+    protected void not(BoolEv a, BoolEv res) { call(BoolOp.not(a, res)); }
+    protected void not(BoolEf a, BoolEf res) { call(BoolOp.not(a, res)); }
+    protected void not(BoolF  a, BoolF  res) { call(BoolOp.not(a, res)); }
+    protected void not(BoolFv a, BoolFv res) { call(BoolOp.not(a, res)); }
+    protected void not(BoolFe a, BoolFe res) { call(BoolOp.not(a, res)); }
 
-    protected void not(BoolVRef  a, BoolVRef  res) { call(BoolOp.not(a, res)); }
-    protected void not(BoolVeRef a, BoolVeRef res) { call(BoolOp.not(a, res)); }
-    protected void not(BoolVfRef a, BoolVfRef res) { call(BoolOp.not(a, res)); }
-    protected void not(BoolERef  a, BoolERef  res) { call(BoolOp.not(a, res)); }
-    protected void not(BoolEvRef a, BoolEvRef res) { call(BoolOp.not(a, res)); }
-    protected void not(BoolEfRef a, BoolEfRef res) { call(BoolOp.not(a, res)); }
-    protected void not(BoolFRef  a, BoolFRef  res) { call(BoolOp.not(a, res)); }
-    protected void not(BoolFvRef a, BoolFvRef res) { call(BoolOp.not(a, res)); }
-    protected void not(BoolFeRef a, BoolFeRef res) { call(BoolOp.not(a, res)); }
+    protected void not(IntV  a, IntV  res) { call(IntOp.not(a, res)); }
+    protected void not(IntVe a, IntVe res) { call(IntOp.not(a, res)); }
+    protected void not(IntVf a, IntVf res) { call(IntOp.not(a, res)); }
+    protected void not(IntE  a, IntE  res) { call(IntOp.not(a, res)); }
+    protected void not(IntEv a, IntEv res) { call(IntOp.not(a, res)); }
+    protected void not(IntEf a, IntEf res) { call(IntOp.not(a, res)); }
+    protected void not(IntF  a, IntF  res) { call(IntOp.not(a, res)); }
+    protected void not(IntFv a, IntFv res) { call(IntOp.not(a, res)); }
+    protected void not(IntFe a, IntFe res) { call(IntOp.not(a, res)); }
 
-    protected void not(IntVRef  a, IntVRef  res) { call(IntOp.not(a, res)); }
-    protected void not(IntVeRef a, IntVeRef res) { call(IntOp.not(a, res)); }
-    protected void not(IntVfRef a, IntVfRef res) { call(IntOp.not(a, res)); }
-    protected void not(IntERef  a, IntERef  res) { call(IntOp.not(a, res)); }
-    protected void not(IntEvRef a, IntEvRef res) { call(IntOp.not(a, res)); }
-    protected void not(IntEfRef a, IntEfRef res) { call(IntOp.not(a, res)); }
-    protected void not(IntFRef  a, IntFRef  res) { call(IntOp.not(a, res)); }
-    protected void not(IntFvRef a, IntFvRef res) { call(IntOp.not(a, res)); }
-    protected void not(IntFeRef a, IntFeRef res) { call(IntOp.not(a, res)); }
+    protected void neg(IntV  a, IntV  res) { call(IntOp.neg(a, res)); }
+    protected void neg(IntVe a, IntVe res) { call(IntOp.neg(a, res)); }
+    protected void neg(IntVf a, IntVf res) { call(IntOp.neg(a, res)); }
+    protected void neg(IntE  a, IntE  res) { call(IntOp.neg(a, res)); }
+    protected void neg(IntEv a, IntEv res) { call(IntOp.neg(a, res)); }
+    protected void neg(IntEf a, IntEf res) { call(IntOp.neg(a, res)); }
+    protected void neg(IntF  a, IntF  res) { call(IntOp.neg(a, res)); }
+    protected void neg(IntFv a, IntFv res) { call(IntOp.neg(a, res)); }
+    protected void neg(IntFe a, IntFe res) { call(IntOp.neg(a, res)); }
 
-    protected void neg(IntVRef  a, IntVRef  res) { call(IntOp.neg(a, res)); }
-    protected void neg(IntVeRef a, IntVeRef res) { call(IntOp.neg(a, res)); }
-    protected void neg(IntVfRef a, IntVfRef res) { call(IntOp.neg(a, res)); }
-    protected void neg(IntERef  a, IntERef  res) { call(IntOp.neg(a, res)); }
-    protected void neg(IntEvRef a, IntEvRef res) { call(IntOp.neg(a, res)); }
-    protected void neg(IntEfRef a, IntEfRef res) { call(IntOp.neg(a, res)); }
-    protected void neg(IntFRef  a, IntFRef  res) { call(IntOp.neg(a, res)); }
-    protected void neg(IntFvRef a, IntFvRef res) { call(IntOp.neg(a, res)); }
-    protected void neg(IntFeRef a, IntFeRef res) { call(IntOp.neg(a, res)); }
+    protected void lShift(IntV  a, IntV  res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void lShift(IntVe a, IntVe res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void lShift(IntVf a, IntVf res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void lShift(IntE  a, IntE  res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void lShift(IntEv a, IntEv res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void lShift(IntEf a, IntEf res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void lShift(IntF  a, IntF  res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void lShift(IntFv a, IntFv res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void lShift(IntFe a, IntFe res, int k) { call(IntOp.lShift(a, res, k)); }
 
-    protected void lShift(IntVRef  a, IntVRef  res, int k) { call(IntOp.lShift(a, res, k)); }
-    protected void lShift(IntVeRef a, IntVeRef res, int k) { call(IntOp.lShift(a, res, k)); }
-    protected void lShift(IntVfRef a, IntVfRef res, int k) { call(IntOp.lShift(a, res, k)); }
-    protected void lShift(IntERef  a, IntERef  res, int k) { call(IntOp.lShift(a, res, k)); }
-    protected void lShift(IntEvRef a, IntEvRef res, int k) { call(IntOp.lShift(a, res, k)); }
-    protected void lShift(IntEfRef a, IntEfRef res, int k) { call(IntOp.lShift(a, res, k)); }
-    protected void lShift(IntFRef  a, IntFRef  res, int k) { call(IntOp.lShift(a, res, k)); }
-    protected void lShift(IntFvRef a, IntFvRef res, int k) { call(IntOp.lShift(a, res, k)); }
-    protected void lShift(IntFeRef a, IntFeRef res, int k) { call(IntOp.lShift(a, res, k)); }
+    protected void rShift(IntV  a, IntV  res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void rShift(IntVe a, IntVe res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void rShift(IntVf a, IntVf res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void rShift(IntE  a, IntE  res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void rShift(IntEv a, IntEv res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void rShift(IntEf a, IntEf res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void rShift(IntF  a, IntF  res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void rShift(IntFv a, IntFv res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void rShift(IntFe a, IntFe res, int k) { call(IntOp.rShift(a, res, k)); }
 
-    protected void rShift(IntVRef  a, IntVRef  res, int k) { call(IntOp.rShift(a, res, k)); }
-    protected void rShift(IntVeRef a, IntVeRef res, int k) { call(IntOp.rShift(a, res, k)); }
-    protected void rShift(IntVfRef a, IntVfRef res, int k) { call(IntOp.rShift(a, res, k)); }
-    protected void rShift(IntERef  a, IntERef  res, int k) { call(IntOp.rShift(a, res, k)); }
-    protected void rShift(IntEvRef a, IntEvRef res, int k) { call(IntOp.rShift(a, res, k)); }
-    protected void rShift(IntEfRef a, IntEfRef res, int k) { call(IntOp.rShift(a, res, k)); }
-    protected void rShift(IntFRef  a, IntFRef  res, int k) { call(IntOp.rShift(a, res, k)); }
-    protected void rShift(IntFvRef a, IntFvRef res, int k) { call(IntOp.rShift(a, res, k)); }
-    protected void rShift(IntFeRef a, IntFeRef res, int k) { call(IntOp.rShift(a, res, k)); }
+    protected void fromBool(BoolV  a, IntV  res) { call(IntOp.fromBool(a, res)); }
+    protected void fromBool(BoolVe a, IntVe res) { call(IntOp.fromBool(a, res)); }
+    protected void fromBool(BoolVf a, IntVf res) { call(IntOp.fromBool(a, res)); }
+    protected void fromBool(BoolE  a, IntE  res) { call(IntOp.fromBool(a, res)); }
+    protected void fromBool(BoolEv a, IntEv res) { call(IntOp.fromBool(a, res)); }
+    protected void fromBool(BoolEf a, IntEf res) { call(IntOp.fromBool(a, res)); }
+    protected void fromBool(BoolF  a, IntF  res) { call(IntOp.fromBool(a, res)); }
+    protected void fromBool(BoolFv a, IntFv res) { call(IntOp.fromBool(a, res)); }
+    protected void fromBool(BoolFe a, IntFe res) { call(IntOp.fromBool(a, res)); }
 
-    protected void fromBool(BoolVRef  a, IntVRef  res) { call(IntOp.fromBool(a, res)); }
-    protected void fromBool(BoolVeRef a, IntVeRef res) { call(IntOp.fromBool(a, res)); }
-    protected void fromBool(BoolVfRef a, IntVfRef res) { call(IntOp.fromBool(a, res)); }
-    protected void fromBool(BoolERef  a, IntERef  res) { call(IntOp.fromBool(a, res)); }
-    protected void fromBool(BoolEvRef a, IntEvRef res) { call(IntOp.fromBool(a, res)); }
-    protected void fromBool(BoolEfRef a, IntEfRef res) { call(IntOp.fromBool(a, res)); }
-    protected void fromBool(BoolFRef  a, IntFRef  res) { call(IntOp.fromBool(a, res)); }
-    protected void fromBool(BoolFvRef a, IntFvRef res) { call(IntOp.fromBool(a, res)); }
-    protected void fromBool(BoolFeRef a, IntFeRef res) { call(IntOp.fromBool(a, res)); }
+    protected void and(BoolV  a, BoolV  b, BoolV  res) { call(BoolOp.and(a, b, res)); }
+    protected void and(BoolVe a, BoolVe b, BoolVe res) { call(BoolOp.and(a, b, res)); }
+    protected void and(BoolVf a, BoolVf b, BoolVf res) { call(BoolOp.and(a, b, res)); }
+    protected void and(BoolE  a, BoolE  b, BoolE  res) { call(BoolOp.and(a, b, res)); }
+    protected void and(BoolEv a, BoolEv b, BoolEv res) { call(BoolOp.and(a, b, res)); }
+    protected void and(BoolEf a, BoolEf b, BoolEf res) { call(BoolOp.and(a, b, res)); }
+    protected void and(BoolF  a, BoolF  b, BoolF  res) { call(BoolOp.and(a, b, res)); }
+    protected void and(BoolFv a, BoolFv b, BoolFv res) { call(BoolOp.and(a, b, res)); }
+    protected void and(BoolFe a, BoolFe b, BoolFe res) { call(BoolOp.and(a, b, res)); }
 
-    protected void and(BoolVRef  a, BoolVRef  b, BoolVRef  res) { call(BoolOp.and(a, b, res)); }
-    protected void and(BoolVeRef a, BoolVeRef b, BoolVeRef res) { call(BoolOp.and(a, b, res)); }
-    protected void and(BoolVfRef a, BoolVfRef b, BoolVfRef res) { call(BoolOp.and(a, b, res)); }
-    protected void and(BoolERef  a, BoolERef  b, BoolERef  res) { call(BoolOp.and(a, b, res)); }
-    protected void and(BoolEvRef a, BoolEvRef b, BoolEvRef res) { call(BoolOp.and(a, b, res)); }
-    protected void and(BoolEfRef a, BoolEfRef b, BoolEfRef res) { call(BoolOp.and(a, b, res)); }
-    protected void and(BoolFRef  a, BoolFRef  b, BoolFRef  res) { call(BoolOp.and(a, b, res)); }
-    protected void and(BoolFvRef a, BoolFvRef b, BoolFvRef res) { call(BoolOp.and(a, b, res)); }
-    protected void and(BoolFeRef a, BoolFeRef b, BoolFeRef res) { call(BoolOp.and(a, b, res)); }
+    protected void and(IntV  a, IntV  b, IntV  res) { call(IntOp.and(a, b, res)); }
+    protected void and(IntVe a, IntVe b, IntVe res) { call(IntOp.and(a, b, res)); }
+    protected void and(IntVf a, IntVf b, IntVf res) { call(IntOp.and(a, b, res)); }
+    protected void and(IntE  a, IntE  b, IntE  res) { call(IntOp.and(a, b, res)); }
+    protected void and(IntEv a, IntEv b, IntEv res) { call(IntOp.and(a, b, res)); }
+    protected void and(IntEf a, IntEf b, IntEf res) { call(IntOp.and(a, b, res)); }
+    protected void and(IntF  a, IntF  b, IntF  res) { call(IntOp.and(a, b, res)); }
+    protected void and(IntFv a, IntFv b, IntFv res) { call(IntOp.and(a, b, res)); }
+    protected void and(IntFe a, IntFe b, IntFe res) { call(IntOp.and(a, b, res)); }
 
-    protected void and(IntVRef  a, IntVRef  b, IntVRef  res) { call(IntOp.and(a, b, res)); }
-    protected void and(IntVeRef a, IntVeRef b, IntVeRef res) { call(IntOp.and(a, b, res)); }
-    protected void and(IntVfRef a, IntVfRef b, IntVfRef res) { call(IntOp.and(a, b, res)); }
-    protected void and(IntERef  a, IntERef  b, IntERef  res) { call(IntOp.and(a, b, res)); }
-    protected void and(IntEvRef a, IntEvRef b, IntEvRef res) { call(IntOp.and(a, b, res)); }
-    protected void and(IntEfRef a, IntEfRef b, IntEfRef res) { call(IntOp.and(a, b, res)); }
-    protected void and(IntFRef  a, IntFRef  b, IntFRef  res) { call(IntOp.and(a, b, res)); }
-    protected void and(IntFvRef a, IntFvRef b, IntFvRef res) { call(IntOp.and(a, b, res)); }
-    protected void and(IntFeRef a, IntFeRef b, IntFeRef res) { call(IntOp.and(a, b, res)); }
+    protected void or(BoolV  a, BoolV  b, BoolV  res) { call(BoolOp.or(a, b, res)); }
+    protected void or(BoolVe a, BoolVe b, BoolVe res) { call(BoolOp.or(a, b, res)); }
+    protected void or(BoolVf a, BoolVf b, BoolVf res) { call(BoolOp.or(a, b, res)); }
+    protected void or(BoolE  a, BoolE  b, BoolE  res) { call(BoolOp.or(a, b, res)); }
+    protected void or(BoolEv a, BoolEv b, BoolEv res) { call(BoolOp.or(a, b, res)); }
+    protected void or(BoolEf a, BoolEf b, BoolEf res) { call(BoolOp.or(a, b, res)); }
+    protected void or(BoolF  a, BoolF  b, BoolF  res) { call(BoolOp.or(a, b, res)); }
+    protected void or(BoolFv a, BoolFv b, BoolFv res) { call(BoolOp.or(a, b, res)); }
+    protected void or(BoolFe a, BoolFe b, BoolFe res) { call(BoolOp.or(a, b, res)); }
 
-    protected void or(BoolVRef  a, BoolVRef  b, BoolVRef  res) { call(BoolOp.or(a, b, res)); }
-    protected void or(BoolVeRef a, BoolVeRef b, BoolVeRef res) { call(BoolOp.or(a, b, res)); }
-    protected void or(BoolVfRef a, BoolVfRef b, BoolVfRef res) { call(BoolOp.or(a, b, res)); }
-    protected void or(BoolERef  a, BoolERef  b, BoolERef  res) { call(BoolOp.or(a, b, res)); }
-    protected void or(BoolEvRef a, BoolEvRef b, BoolEvRef res) { call(BoolOp.or(a, b, res)); }
-    protected void or(BoolEfRef a, BoolEfRef b, BoolEfRef res) { call(BoolOp.or(a, b, res)); }
-    protected void or(BoolFRef  a, BoolFRef  b, BoolFRef  res) { call(BoolOp.or(a, b, res)); }
-    protected void or(BoolFvRef a, BoolFvRef b, BoolFvRef res) { call(BoolOp.or(a, b, res)); }
-    protected void or(BoolFeRef a, BoolFeRef b, BoolFeRef res) { call(BoolOp.or(a, b, res)); }
+    protected void or(IntV  a, IntV  b, IntV  res) { call(IntOp.or(a, b, res)); }
+    protected void or(IntVe a, IntVe b, IntVe res) { call(IntOp.or(a, b, res)); }
+    protected void or(IntVf a, IntVf b, IntVf res) { call(IntOp.or(a, b, res)); }
+    protected void or(IntE  a, IntE  b, IntE  res) { call(IntOp.or(a, b, res)); }
+    protected void or(IntEv a, IntEv b, IntEv res) { call(IntOp.or(a, b, res)); }
+    protected void or(IntEf a, IntEf b, IntEf res) { call(IntOp.or(a, b, res)); }
+    protected void or(IntF  a, IntF  b, IntF  res) { call(IntOp.or(a, b, res)); }
+    protected void or(IntFv a, IntFv b, IntFv res) { call(IntOp.or(a, b, res)); }
+    protected void or(IntFe a, IntFe b, IntFe res) { call(IntOp.or(a, b, res)); }
 
-    protected void or(IntVRef  a, IntVRef  b, IntVRef  res) { call(IntOp.or(a, b, res)); }
-    protected void or(IntVeRef a, IntVeRef b, IntVeRef res) { call(IntOp.or(a, b, res)); }
-    protected void or(IntVfRef a, IntVfRef b, IntVfRef res) { call(IntOp.or(a, b, res)); }
-    protected void or(IntERef  a, IntERef  b, IntERef  res) { call(IntOp.or(a, b, res)); }
-    protected void or(IntEvRef a, IntEvRef b, IntEvRef res) { call(IntOp.or(a, b, res)); }
-    protected void or(IntEfRef a, IntEfRef b, IntEfRef res) { call(IntOp.or(a, b, res)); }
-    protected void or(IntFRef  a, IntFRef  b, IntFRef  res) { call(IntOp.or(a, b, res)); }
-    protected void or(IntFvRef a, IntFvRef b, IntFvRef res) { call(IntOp.or(a, b, res)); }
-    protected void or(IntFeRef a, IntFeRef b, IntFeRef res) { call(IntOp.or(a, b, res)); }
+    protected void xor(BoolV  a, BoolV  b, BoolV  res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(BoolVe a, BoolVe b, BoolVe res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(BoolVf a, BoolVf b, BoolVf res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(BoolE  a, BoolE  b, BoolE  res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(BoolEv a, BoolEv b, BoolEv res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(BoolEf a, BoolEf b, BoolEf res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(BoolF  a, BoolF  b, BoolF  res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(BoolFv a, BoolFv b, BoolFv res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(BoolFe a, BoolFe b, BoolFe res) { call(BoolOp.xor(a, b, res)); }
 
-    protected void xor(BoolVRef  a, BoolVRef  b, BoolVRef  res) { call(BoolOp.xor(a, b, res)); }
-    protected void xor(BoolVeRef a, BoolVeRef b, BoolVeRef res) { call(BoolOp.xor(a, b, res)); }
-    protected void xor(BoolVfRef a, BoolVfRef b, BoolVfRef res) { call(BoolOp.xor(a, b, res)); }
-    protected void xor(BoolERef  a, BoolERef  b, BoolERef  res) { call(BoolOp.xor(a, b, res)); }
-    protected void xor(BoolEvRef a, BoolEvRef b, BoolEvRef res) { call(BoolOp.xor(a, b, res)); }
-    protected void xor(BoolEfRef a, BoolEfRef b, BoolEfRef res) { call(BoolOp.xor(a, b, res)); }
-    protected void xor(BoolFRef  a, BoolFRef  b, BoolFRef  res) { call(BoolOp.xor(a, b, res)); }
-    protected void xor(BoolFvRef a, BoolFvRef b, BoolFvRef res) { call(BoolOp.xor(a, b, res)); }
-    protected void xor(BoolFeRef a, BoolFeRef b, BoolFeRef res) { call(BoolOp.xor(a, b, res)); }
+    protected void xor(IntV  a, IntV  b, IntV  res) { call(IntOp.xor(a, b, res)); }
+    protected void xor(IntVe a, IntVe b, IntVe res) { call(IntOp.xor(a, b, res)); }
+    protected void xor(IntVf a, IntVf b, IntVf res) { call(IntOp.xor(a, b, res)); }
+    protected void xor(IntE  a, IntE  b, IntE  res) { call(IntOp.xor(a, b, res)); }
+    protected void xor(IntEv a, IntEv b, IntEv res) { call(IntOp.xor(a, b, res)); }
+    protected void xor(IntEf a, IntEf b, IntEf res) { call(IntOp.xor(a, b, res)); }
+    protected void xor(IntF  a, IntF  b, IntF  res) { call(IntOp.xor(a, b, res)); }
+    protected void xor(IntFv a, IntFv b, IntFv res) { call(IntOp.xor(a, b, res)); }
+    protected void xor(IntFe a, IntFe b, IntFe res) { call(IntOp.xor(a, b, res)); }
 
-    protected void xor(IntVRef  a, IntVRef  b, IntVRef  res) { call(IntOp.xor(a, b, res)); }
-    protected void xor(IntVeRef a, IntVeRef b, IntVeRef res) { call(IntOp.xor(a, b, res)); }
-    protected void xor(IntVfRef a, IntVfRef b, IntVfRef res) { call(IntOp.xor(a, b, res)); }
-    protected void xor(IntERef  a, IntERef  b, IntERef  res) { call(IntOp.xor(a, b, res)); }
-    protected void xor(IntEvRef a, IntEvRef b, IntEvRef res) { call(IntOp.xor(a, b, res)); }
-    protected void xor(IntEfRef a, IntEfRef b, IntEfRef res) { call(IntOp.xor(a, b, res)); }
-    protected void xor(IntFRef  a, IntFRef  b, IntFRef  res) { call(IntOp.xor(a, b, res)); }
-    protected void xor(IntFvRef a, IntFvRef b, IntFvRef res) { call(IntOp.xor(a, b, res)); }
-    protected void xor(IntFeRef a, IntFeRef b, IntFeRef res) { call(IntOp.xor(a, b, res)); }
+    protected void fif(BoolV  cond, BoolV  t, BoolV  f, BoolV  res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolVe cond, BoolVe t, BoolVe f, BoolVe res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolVf cond, BoolVf t, BoolVf f, BoolVf res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolE  cond, BoolE  t, BoolE  f, BoolE  res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolEv cond, BoolEv t, BoolEv f, BoolEv res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolEf cond, BoolEf t, BoolEf f, BoolEf res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolF  cond, BoolF  t, BoolF  f, BoolF  res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFv cond, BoolFv t, BoolFv f, BoolFv res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFe cond, BoolFe t, BoolFe f, BoolFe res) { call(BoolOp.fif(cond, t, f, res)); }
 
-    protected void fif(BoolVRef  cond, BoolVRef  t, BoolVRef  f, BoolVRef  res) { call(BoolOp.fif(cond, t, f, res)); }
-    protected void fif(BoolVeRef cond, BoolVeRef t, BoolVeRef f, BoolVeRef res) { call(BoolOp.fif(cond, t, f, res)); }
-    protected void fif(BoolVfRef cond, BoolVfRef t, BoolVfRef f, BoolVfRef res) { call(BoolOp.fif(cond, t, f, res)); }
-    protected void fif(BoolERef  cond, BoolERef  t, BoolERef  f, BoolERef  res) { call(BoolOp.fif(cond, t, f, res)); }
-    protected void fif(BoolEvRef cond, BoolEvRef t, BoolEvRef f, BoolEvRef res) { call(BoolOp.fif(cond, t, f, res)); }
-    protected void fif(BoolEfRef cond, BoolEfRef t, BoolEfRef f, BoolEfRef res) { call(BoolOp.fif(cond, t, f, res)); }
-    protected void fif(BoolFRef  cond, BoolFRef  t, BoolFRef  f, BoolFRef  res) { call(BoolOp.fif(cond, t, f, res)); }
-    protected void fif(BoolFvRef cond, BoolFvRef t, BoolFvRef f, BoolFvRef res) { call(BoolOp.fif(cond, t, f, res)); }
-    protected void fif(BoolFeRef cond, BoolFeRef t, BoolFeRef f, BoolFeRef res) { call(BoolOp.fif(cond, t, f, res)); }
+    protected void fif(BoolV  cond, IntV  t, IntV  f, IntV  res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolVe cond, IntVe t, IntVe f, IntVe res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolVf cond, IntVf t, IntVf f, IntVf res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolE  cond, IntE  t, IntE  f, IntE  res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolEv cond, IntEv t, IntEv f, IntEv res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolEf cond, IntEf t, IntEf f, IntEf res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolF  cond, IntF  t, IntF  f, IntF  res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFv cond, IntFv t, IntFv f, IntFv res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void fif(BoolFe cond, IntFe t, IntFe f, IntFe res) { call(IntOp.fif(cond, t, f, res)); }
 
-    protected void fif(BoolVRef  cond, IntVRef  t, IntVRef  f, IntVRef  res) { call(IntOp.fif(cond, t, f, res)); }
-    protected void fif(BoolVeRef cond, IntVeRef t, IntVeRef f, IntVeRef res) { call(IntOp.fif(cond, t, f, res)); }
-    protected void fif(BoolVfRef cond, IntVfRef t, IntVfRef f, IntVfRef res) { call(IntOp.fif(cond, t, f, res)); }
-    protected void fif(BoolERef  cond, IntERef  t, IntERef  f, IntERef  res) { call(IntOp.fif(cond, t, f, res)); }
-    protected void fif(BoolEvRef cond, IntEvRef t, IntEvRef f, IntEvRef res) { call(IntOp.fif(cond, t, f, res)); }
-    protected void fif(BoolEfRef cond, IntEfRef t, IntEfRef f, IntEfRef res) { call(IntOp.fif(cond, t, f, res)); }
-    protected void fif(BoolFRef  cond, IntFRef  t, IntFRef  f, IntFRef  res) { call(IntOp.fif(cond, t, f, res)); }
-    protected void fif(BoolFvRef cond, IntFvRef t, IntFvRef f, IntFvRef res) { call(IntOp.fif(cond, t, f, res)); }
-    protected void fif(BoolFeRef cond, IntFeRef t, IntFeRef f, IntFeRef res) { call(IntOp.fif(cond, t, f, res)); }
+    protected void add(IntV  a, IntV  b, IntV  res) { call(IntOp.add(a, b, res)); }
+    protected void add(IntVe a, IntVe b, IntVe res) { call(IntOp.add(a, b, res)); }
+    protected void add(IntVf a, IntVf b, IntVf res) { call(IntOp.add(a, b, res)); }
+    protected void add(IntE  a, IntE  b, IntE  res) { call(IntOp.add(a, b, res)); }
+    protected void add(IntEv a, IntEv b, IntEv res) { call(IntOp.add(a, b, res)); }
+    protected void add(IntEf a, IntEf b, IntEf res) { call(IntOp.add(a, b, res)); }
+    protected void add(IntF  a, IntF  b, IntF  res) { call(IntOp.add(a, b, res)); }
+    protected void add(IntFv a, IntFv b, IntFv res) { call(IntOp.add(a, b, res)); }
+    protected void add(IntFe a, IntFe b, IntFe res) { call(IntOp.add(a, b, res)); }
 
-    protected void add(IntVRef  a, IntVRef  b, IntVRef  res) { call(IntOp.add(a, b, res)); }
-    protected void add(IntVeRef a, IntVeRef b, IntVeRef res) { call(IntOp.add(a, b, res)); }
-    protected void add(IntVfRef a, IntVfRef b, IntVfRef res) { call(IntOp.add(a, b, res)); }
-    protected void add(IntERef  a, IntERef  b, IntERef  res) { call(IntOp.add(a, b, res)); }
-    protected void add(IntEvRef a, IntEvRef b, IntEvRef res) { call(IntOp.add(a, b, res)); }
-    protected void add(IntEfRef a, IntEfRef b, IntEfRef res) { call(IntOp.add(a, b, res)); }
-    protected void add(IntFRef  a, IntFRef  b, IntFRef  res) { call(IntOp.add(a, b, res)); }
-    protected void add(IntFvRef a, IntFvRef b, IntFvRef res) { call(IntOp.add(a, b, res)); }
-    protected void add(IntFeRef a, IntFeRef b, IntFeRef res) { call(IntOp.add(a, b, res)); }
+    protected void sub(IntV  a, IntV  b, IntV  res) { call(IntOp.sub(a, b, res)); }
+    protected void sub(IntVe a, IntVe b, IntVe res) { call(IntOp.sub(a, b, res)); }
+    protected void sub(IntVf a, IntVf b, IntVf res) { call(IntOp.sub(a, b, res)); }
+    protected void sub(IntE  a, IntE  b, IntE  res) { call(IntOp.sub(a, b, res)); }
+    protected void sub(IntEv a, IntEv b, IntEv res) { call(IntOp.sub(a, b, res)); }
+    protected void sub(IntEf a, IntEf b, IntEf res) { call(IntOp.sub(a, b, res)); }
+    protected void sub(IntF  a, IntF  b, IntF  res) { call(IntOp.sub(a, b, res)); }
+    protected void sub(IntFv a, IntFv b, IntFv res) { call(IntOp.sub(a, b, res)); }
+    protected void sub(IntFe a, IntFe b, IntFe res) { call(IntOp.sub(a, b, res)); }
 
-    protected void sub(IntVRef  a, IntVRef  b, IntVRef  res) { call(IntOp.sub(a, b, res)); }
-    protected void sub(IntVeRef a, IntVeRef b, IntVeRef res) { call(IntOp.sub(a, b, res)); }
-    protected void sub(IntVfRef a, IntVfRef b, IntVfRef res) { call(IntOp.sub(a, b, res)); }
-    protected void sub(IntERef  a, IntERef  b, IntERef  res) { call(IntOp.sub(a, b, res)); }
-    protected void sub(IntEvRef a, IntEvRef b, IntEvRef res) { call(IntOp.sub(a, b, res)); }
-    protected void sub(IntEfRef a, IntEfRef b, IntEfRef res) { call(IntOp.sub(a, b, res)); }
-    protected void sub(IntFRef  a, IntFRef  b, IntFRef  res) { call(IntOp.sub(a, b, res)); }
-    protected void sub(IntFvRef a, IntFvRef b, IntFvRef res) { call(IntOp.sub(a, b, res)); }
-    protected void sub(IntFeRef a, IntFeRef b, IntFeRef res) { call(IntOp.sub(a, b, res)); }
+    protected void eq(IntV  a, IntV  b, BoolV  res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntVe a, IntVe b, BoolVe res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntVf a, IntVf b, BoolVf res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntE  a, IntE  b, BoolE  res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntEv a, IntEv b, BoolEv res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntEf a, IntEf b, BoolEf res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntF  a, IntF  b, BoolF  res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntFv a, IntFv b, BoolFv res) { call(IntOp.eq(a, b, res)); }
+    protected void eq(IntFe a, IntFe b, BoolFe res) { call(IntOp.eq(a, b, res)); }
 
-    protected void eq(IntVRef  a, IntVRef  b, BoolVRef  res) { call(IntOp.eq(a, b, res)); }
-    protected void eq(IntVeRef a, IntVeRef b, BoolVeRef res) { call(IntOp.eq(a, b, res)); }
-    protected void eq(IntVfRef a, IntVfRef b, BoolVfRef res) { call(IntOp.eq(a, b, res)); }
-    protected void eq(IntERef  a, IntERef  b, BoolERef  res) { call(IntOp.eq(a, b, res)); }
-    protected void eq(IntEvRef a, IntEvRef b, BoolEvRef res) { call(IntOp.eq(a, b, res)); }
-    protected void eq(IntEfRef a, IntEfRef b, BoolEfRef res) { call(IntOp.eq(a, b, res)); }
-    protected void eq(IntFRef  a, IntFRef  b, BoolFRef  res) { call(IntOp.eq(a, b, res)); }
-    protected void eq(IntFvRef a, IntFvRef b, BoolFvRef res) { call(IntOp.eq(a, b, res)); }
-    protected void eq(IntFeRef a, IntFeRef b, BoolFeRef res) { call(IntOp.eq(a, b, res)); }
+    protected void abs(IntV  a, IntV  res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntVe a, IntVe res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntVf a, IntVf res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntE  a, IntE  res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntEv a, IntEv res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntEf a, IntEf res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntF  a, IntF  res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntFv a, IntFv res) { call(IntOp.abs(a, res)); }
+    protected void abs(IntFe a, IntFe res) { call(IntOp.abs(a, res)); }
 
-    protected void abs(IntVRef  a, IntVRef  res) { call(IntOp.abs(a, res)); }
-    protected void abs(IntVeRef a, IntVeRef res) { call(IntOp.abs(a, res)); }
-    protected void abs(IntVfRef a, IntVfRef res) { call(IntOp.abs(a, res)); }
-    protected void abs(IntERef  a, IntERef  res) { call(IntOp.abs(a, res)); }
-    protected void abs(IntEvRef a, IntEvRef res) { call(IntOp.abs(a, res)); }
-    protected void abs(IntEfRef a, IntEfRef res) { call(IntOp.abs(a, res)); }
-    protected void abs(IntFRef  a, IntFRef  res) { call(IntOp.abs(a, res)); }
-    protected void abs(IntFvRef a, IntFvRef res) { call(IntOp.abs(a, res)); }
-    protected void abs(IntFeRef a, IntFeRef res) { call(IntOp.abs(a, res)); }
+    protected void gt(IntV  a, IntV  b, BoolV  res) { call(IntOp.gt(a, b, res)); }
+    protected void gt(IntVe a, IntVe b, BoolVe res) { call(IntOp.gt(a, b, res)); }
+    protected void gt(IntVf a, IntVf b, BoolVf res) { call(IntOp.gt(a, b, res)); }
+    protected void gt(IntE  a, IntE  b, BoolE  res) { call(IntOp.gt(a, b, res)); }
+    protected void gt(IntEv a, IntEv b, BoolEv res) { call(IntOp.gt(a, b, res)); }
+    protected void gt(IntEf a, IntEf b, BoolEf res) { call(IntOp.gt(a, b, res)); }
+    protected void gt(IntF  a, IntF  b, BoolF  res) { call(IntOp.gt(a, b, res)); }
+    protected void gt(IntFv a, IntFv b, BoolFv res) { call(IntOp.gt(a, b, res)); }
+    protected void gt(IntFe a, IntFe b, BoolFe res) { call(IntOp.gt(a, b, res)); }
 
-    protected void gt(IntVRef  a, IntVRef  b, BoolVRef  res) { call(IntOp.gt(a, b, res)); }
-    protected void gt(IntVeRef a, IntVeRef b, BoolVeRef res) { call(IntOp.gt(a, b, res)); }
-    protected void gt(IntVfRef a, IntVfRef b, BoolVfRef res) { call(IntOp.gt(a, b, res)); }
-    protected void gt(IntERef  a, IntERef  b, BoolERef  res) { call(IntOp.gt(a, b, res)); }
-    protected void gt(IntEvRef a, IntEvRef b, BoolEvRef res) { call(IntOp.gt(a, b, res)); }
-    protected void gt(IntEfRef a, IntEfRef b, BoolEfRef res) { call(IntOp.gt(a, b, res)); }
-    protected void gt(IntFRef  a, IntFRef  b, BoolFRef  res) { call(IntOp.gt(a, b, res)); }
-    protected void gt(IntFvRef a, IntFvRef b, BoolFvRef res) { call(IntOp.gt(a, b, res)); }
-    protected void gt(IntFeRef a, IntFeRef b, BoolFeRef res) { call(IntOp.gt(a, b, res)); }
+    protected void broadcast(IntV orig, IntVe res) { call(IntOp.broadcast(orig, res)); }
+    protected void broadcast(IntV orig, IntVf res) { call(IntOp.broadcast(orig, res)); }
+    protected void broadcast(IntE orig, IntEv res) { call(IntOp.broadcast(orig, res)); }
+    protected void broadcast(IntE orig, IntEf res) { call(IntOp.broadcast(orig, res)); }
+    protected void broadcast(IntF orig, IntFv res) { call(IntOp.broadcast(orig, res)); }
+    protected void broadcast(IntF orig, IntFe res) { call(IntOp.broadcast(orig, res)); }
 
-    protected void broadcast(IntVRef orig, IntVeRef res) { call(IntOp.broadcast(orig, res)); }
-    protected void broadcast(IntVRef orig, IntVfRef res) { call(IntOp.broadcast(orig, res)); }
-    protected void broadcast(IntERef orig, IntEvRef res) { call(IntOp.broadcast(orig, res)); }
-    protected void broadcast(IntERef orig, IntEfRef res) { call(IntOp.broadcast(orig, res)); }
-    protected void broadcast(IntFRef orig, IntFvRef res) { call(IntOp.broadcast(orig, res)); }
-    protected void broadcast(IntFRef orig, IntFeRef res) { call(IntOp.broadcast(orig, res)); }
+    protected void broadcast(BoolV a, BoolVe res) { call(BoolOp.broadcast(a, res)); }
+    protected void broadcast(BoolV a, BoolVf res) { call(BoolOp.broadcast(a, res)); }
+    protected void broadcast(BoolE a, BoolEv res) { call(BoolOp.broadcast(a, res)); }
+    protected void broadcast(BoolE a, BoolEf res) { call(BoolOp.broadcast(a, res)); }
+    protected void broadcast(BoolF a, BoolFv res) { call(BoolOp.broadcast(a, res)); }
+    protected void broadcast(BoolF a, BoolFe res) { call(BoolOp.broadcast(a, res)); }
 
-    protected void broadcast(BoolVRef a, BoolVeRef res) { call(BoolOp.broadcast(a, res)); }
-    protected void broadcast(BoolVRef a, BoolVfRef res) { call(BoolOp.broadcast(a, res)); }
-    protected void broadcast(BoolERef a, BoolEvRef res) { call(BoolOp.broadcast(a, res)); }
-    protected void broadcast(BoolERef a, BoolEfRef res) { call(BoolOp.broadcast(a, res)); }
-    protected void broadcast(BoolFRef a, BoolFvRef res) { call(BoolOp.broadcast(a, res)); }
-    protected void broadcast(BoolFRef a, BoolFeRef res) { call(BoolOp.broadcast(a, res)); }
+    protected void transfer(BoolVe a, BoolEv res) { call(BoolOp.transfer(a, res)); }
+    protected void transfer(BoolVf a, BoolFv res) { call(BoolOp.transfer(a, res)); }
+    protected void transfer(BoolEv a, BoolVe res) { call(BoolOp.transfer(a, res)); }
+    protected void transfer(BoolEf a, BoolFe res) { call(BoolOp.transfer(a, res)); }
+    protected void transfer(BoolFv a, BoolVf res) { call(BoolOp.transfer(a, res)); }
+    protected void transfer(BoolFe a, BoolEf res) { call(BoolOp.transfer(a, res)); }
 
-    protected void transfer(BoolVeRef a, BoolEvRef res) { call(BoolOp.transfer(a, res)); }
-    protected void transfer(BoolVfRef a, BoolFvRef res) { call(BoolOp.transfer(a, res)); }
-    protected void transfer(BoolEvRef a, BoolVeRef res) { call(BoolOp.transfer(a, res)); }
-    protected void transfer(BoolEfRef a, BoolFeRef res) { call(BoolOp.transfer(a, res)); }
-    protected void transfer(BoolFvRef a, BoolVfRef res) { call(BoolOp.transfer(a, res)); }
-    protected void transfer(BoolFeRef a, BoolEfRef res) { call(BoolOp.transfer(a, res)); }
+    protected void transfer(IntVe a, IntEv res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntVf a, IntFv res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntEv a, IntVe res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntEf a, IntFe res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntFv a, IntVf res) { call(IntOp.transfer(a, res)); }
+    protected void transfer(IntFe a, IntEf res) { call(IntOp.transfer(a, res)); }
 
-    protected void transfer(IntVeRef a, IntEvRef res) { call(IntOp.transfer(a, res)); }
-    protected void transfer(IntVfRef a, IntFvRef res) { call(IntOp.transfer(a, res)); }
-    protected void transfer(IntEvRef a, IntVeRef res) { call(IntOp.transfer(a, res)); }
-    protected void transfer(IntEfRef a, IntFeRef res) { call(IntOp.transfer(a, res)); }
-    protected void transfer(IntFvRef a, IntVfRef res) { call(IntOp.transfer(a, res)); }
-    protected void transfer(IntFeRef a, IntEfRef res) { call(IntOp.transfer(a, res)); }
+    protected void redAnd(BoolVe a, BoolV res) { call(BoolOp.redAnd(a, res)); }
+    protected void redAnd(BoolVf a, BoolV res) { call(BoolOp.redAnd(a, res)); }
+    protected void redAnd(BoolEv a, BoolE res) { call(BoolOp.redAnd(a, res)); }
+    protected void redAnd(BoolEf a, BoolE res) { call(BoolOp.redAnd(a, res)); }
+    protected void redAnd(BoolFv a, BoolF res) { call(BoolOp.redAnd(a, res)); }
+    protected void redAnd(BoolFe a, BoolF res) { call(BoolOp.redAnd(a, res)); }
 
-    protected void redAnd(BoolVeRef a, BoolVRef res) { call(BoolOp.redAnd(a, res)); }
-    protected void redAnd(BoolVfRef a, BoolVRef res) { call(BoolOp.redAnd(a, res)); }
-    protected void redAnd(BoolEvRef a, BoolERef res) { call(BoolOp.redAnd(a, res)); }
-    protected void redAnd(BoolEfRef a, BoolERef res) { call(BoolOp.redAnd(a, res)); }
-    protected void redAnd(BoolFvRef a, BoolFRef res) { call(BoolOp.redAnd(a, res)); }
-    protected void redAnd(BoolFeRef a, BoolFRef res) { call(BoolOp.redAnd(a, res)); }
+    protected void redOr(BoolVe a, BoolV res) { call(BoolOp.redOr(a, res)); }
+    protected void redOr(BoolVf a, BoolV res) { call(BoolOp.redOr(a, res)); }
+    protected void redOr(BoolEv a, BoolE res) { call(BoolOp.redOr(a, res)); }
+    protected void redOr(BoolEf a, BoolE res) { call(BoolOp.redOr(a, res)); }
+    protected void redOr(BoolFv a, BoolF res) { call(BoolOp.redOr(a, res)); }
+    protected void redOr(BoolFe a, BoolF res) { call(BoolOp.redOr(a, res)); }
 
-    protected void redOr(BoolVeRef a, BoolVRef res) { call(BoolOp.redOr(a, res)); }
-    protected void redOr(BoolVfRef a, BoolVRef res) { call(BoolOp.redOr(a, res)); }
-    protected void redOr(BoolEvRef a, BoolERef res) { call(BoolOp.redOr(a, res)); }
-    protected void redOr(BoolEfRef a, BoolERef res) { call(BoolOp.redOr(a, res)); }
-    protected void redOr(BoolFvRef a, BoolFRef res) { call(BoolOp.redOr(a, res)); }
-    protected void redOr(BoolFeRef a, BoolFRef res) { call(BoolOp.redOr(a, res)); }
+    protected void redXor(BoolVe a, BoolV res) { call(BoolOp.redXor(a, res)); }
+    protected void redXor(BoolVf a, BoolV res) { call(BoolOp.redXor(a, res)); }
+    protected void redXor(BoolEv a, BoolE res) { call(BoolOp.redXor(a, res)); }
+    protected void redXor(BoolEf a, BoolE res) { call(BoolOp.redXor(a, res)); }
+    protected void redXor(BoolFv a, BoolF res) { call(BoolOp.redXor(a, res)); }
+    protected void redXor(BoolFe a, BoolF res) { call(BoolOp.redXor(a, res)); }
 
-    protected void redXor(BoolVeRef a, BoolVRef res) { call(BoolOp.redXor(a, res)); }
-    protected void redXor(BoolVfRef a, BoolVRef res) { call(BoolOp.redXor(a, res)); }
-    protected void redXor(BoolEvRef a, BoolERef res) { call(BoolOp.redXor(a, res)); }
-    protected void redXor(BoolEfRef a, BoolERef res) { call(BoolOp.redXor(a, res)); }
-    protected void redXor(BoolFvRef a, BoolFRef res) { call(BoolOp.redXor(a, res)); }
-    protected void redXor(BoolFeRef a, BoolFRef res) { call(BoolOp.redXor(a, res)); }
+    protected void redStack0(BoolVe a, BoolV[] res) { call(BoolOp.redStack0(a, res)); }
+    protected void redStack1(BoolVe a, BoolV[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack0(BoolVf a, BoolV[] res) { call(BoolOp.redStack0(a, res)); }
+    protected void redStack1(BoolVf a, BoolV[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack0(BoolEv a, BoolE[] res) { call(BoolOp.redStack0(a, res)); }
+    protected void redStack1(BoolEv a, BoolE[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack0(BoolEf a, BoolE[] res) { call(BoolOp.redStack0(a, res)); }
+    protected void redStack1(BoolEf a, BoolE[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack0(BoolFv a, BoolF[] res) { call(BoolOp.redStack0(a, res)); }
+    protected void redStack1(BoolFv a, BoolF[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack0(BoolFe a, BoolF[] res) { call(BoolOp.redStack0(a, res)); }
+    protected void redStack1(BoolFe a, BoolF[] res) { call(BoolOp.redStack1(a, res)); }
 
-    protected void redStack0(BoolVeRef a, BoolVRef[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolVeRef a, BoolVRef[] res) { call(BoolOp.redStack1(a, res)); }
-    protected void redStack0(BoolVfRef a, BoolVRef[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolVfRef a, BoolVRef[] res) { call(BoolOp.redStack1(a, res)); }
-    protected void redStack0(BoolEvRef a, BoolERef[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolEvRef a, BoolERef[] res) { call(BoolOp.redStack1(a, res)); }
-    protected void redStack0(BoolEfRef a, BoolERef[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolEfRef a, BoolERef[] res) { call(BoolOp.redStack1(a, res)); }
-    protected void redStack0(BoolFvRef a, BoolFRef[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolFvRef a, BoolFRef[] res) { call(BoolOp.redStack1(a, res)); }
-    protected void redStack0(BoolFeRef a, BoolFRef[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolFeRef a, BoolFRef[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack0  (IntVe a, IntV[] res) { call(IntOp.redStack0  (a, res)); }
+    protected void redStack1  (IntVe a, IntV[] res) { call(IntOp.redStack1  (a, res)); }
+    protected void redStackMin(IntVe a, IntV[] res) { call(IntOp.redStackMin(a, res)); }
+    protected void redStackMax(IntVe a, IntV[] res) { call(IntOp.redStackMax(a, res)); }
+    protected void redStack0  (IntVf a, IntV[] res) { call(IntOp.redStack0  (a, res)); }
+    protected void redStack1  (IntVf a, IntV[] res) { call(IntOp.redStack1  (a, res)); }
+    protected void redStackMin(IntVf a, IntV[] res) { call(IntOp.redStackMin(a, res)); }
+    protected void redStackMax(IntVf a, IntV[] res) { call(IntOp.redStackMax(a, res)); }
+    protected void redStack0  (IntEv a, IntE[] res) { call(IntOp.redStack0  (a, res)); }
+    protected void redStack1  (IntEv a, IntE[] res) { call(IntOp.redStack1  (a, res)); }
+    protected void redStackMin(IntEv a, IntE[] res) { call(IntOp.redStackMin(a, res)); }
+    protected void redStackMax(IntEv a, IntE[] res) { call(IntOp.redStackMax(a, res)); }
+    protected void redStack0  (IntEf a, IntE[] res) { call(IntOp.redStack0  (a, res)); }
+    protected void redStack1  (IntEf a, IntE[] res) { call(IntOp.redStack1  (a, res)); }
+    protected void redStackMin(IntEf a, IntE[] res) { call(IntOp.redStackMin(a, res)); }
+    protected void redStackMax(IntEf a, IntE[] res) { call(IntOp.redStackMax(a, res)); }
+    protected void redStack0  (IntFv a, IntF[] res) { call(IntOp.redStack0  (a, res)); }
+    protected void redStack1  (IntFv a, IntF[] res) { call(IntOp.redStack1  (a, res)); }
+    protected void redStackMin(IntFv a, IntF[] res) { call(IntOp.redStackMin(a, res)); }
+    protected void redStackMax(IntFv a, IntF[] res) { call(IntOp.redStackMax(a, res)); }
+    protected void redStack0  (IntFe a, IntF[] res) { call(IntOp.redStack0  (a, res)); }
+    protected void redStack1  (IntFe a, IntF[] res) { call(IntOp.redStack1  (a, res)); }
+    protected void redStackMin(IntFe a, IntF[] res) { call(IntOp.redStackMin(a, res)); }
+    protected void redStackMax(IntFe a, IntF[] res) { call(IntOp.redStackMax(a, res)); }
 
-    protected void redStack0  (IntVeRef a, IntVRef[] res) { call(IntOp.redStack0  (a, res)); }
-    protected void redStack1  (IntVeRef a, IntVRef[] res) { call(IntOp.redStack1  (a, res)); }
-    protected void redStackMin(IntVeRef a, IntVRef[] res) { call(IntOp.redStackMin(a, res)); }
-    protected void redStackMax(IntVeRef a, IntVRef[] res) { call(IntOp.redStackMax(a, res)); }
-    protected void redStack0  (IntVfRef a, IntVRef[] res) { call(IntOp.redStack0  (a, res)); }
-    protected void redStack1  (IntVfRef a, IntVRef[] res) { call(IntOp.redStack1  (a, res)); }
-    protected void redStackMin(IntVfRef a, IntVRef[] res) { call(IntOp.redStackMin(a, res)); }
-    protected void redStackMax(IntVfRef a, IntVRef[] res) { call(IntOp.redStackMax(a, res)); }
-    protected void redStack0  (IntEvRef a, IntERef[] res) { call(IntOp.redStack0  (a, res)); }
-    protected void redStack1  (IntEvRef a, IntERef[] res) { call(IntOp.redStack1  (a, res)); }
-    protected void redStackMin(IntEvRef a, IntERef[] res) { call(IntOp.redStackMin(a, res)); }
-    protected void redStackMax(IntEvRef a, IntERef[] res) { call(IntOp.redStackMax(a, res)); }
-    protected void redStack0  (IntEfRef a, IntERef[] res) { call(IntOp.redStack0  (a, res)); }
-    protected void redStack1  (IntEfRef a, IntERef[] res) { call(IntOp.redStack1  (a, res)); }
-    protected void redStackMin(IntEfRef a, IntERef[] res) { call(IntOp.redStackMin(a, res)); }
-    protected void redStackMax(IntEfRef a, IntERef[] res) { call(IntOp.redStackMax(a, res)); }
-    protected void redStack0  (IntFvRef a, IntFRef[] res) { call(IntOp.redStack0  (a, res)); }
-    protected void redStack1  (IntFvRef a, IntFRef[] res) { call(IntOp.redStack1  (a, res)); }
-    protected void redStackMin(IntFvRef a, IntFRef[] res) { call(IntOp.redStackMin(a, res)); }
-    protected void redStackMax(IntFvRef a, IntFRef[] res) { call(IntOp.redStackMax(a, res)); }
-    protected void redStack0  (IntFeRef a, IntFRef[] res) { call(IntOp.redStack0  (a, res)); }
-    protected void redStack1  (IntFeRef a, IntFRef[] res) { call(IntOp.redStack1  (a, res)); }
-    protected void redStackMin(IntFeRef a, IntFRef[] res) { call(IntOp.redStackMin(a, res)); }
-    protected void redStackMax(IntFeRef a, IntFRef[] res) { call(IntOp.redStackMax(a, res)); }
+    protected void redMin(IntVe a, IntV res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntVe a, IntV res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntVf a, IntV res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntVf a, IntV res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntEv a, IntE res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntEv a, IntE res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntEf a, IntE res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntEf a, IntE res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntFv a, IntF res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntFv a, IntF res) { call(IntOp.redMax(a, res)); }
+    protected void redMin(IntFe a, IntF res) { call(IntOp.redMin(a, res)); }
+    protected void redMax(IntFe a, IntF res) { call(IntOp.redMax(a, res)); }
 
-    protected void redMin(IntVeRef a, IntVRef res) { call(IntOp.redMin(a, res)); }
-    protected void redMax(IntVeRef a, IntVRef res) { call(IntOp.redMax(a, res)); }
-    protected void redMin(IntVfRef a, IntVRef res) { call(IntOp.redMin(a, res)); }
-    protected void redMax(IntVfRef a, IntVRef res) { call(IntOp.redMax(a, res)); }
-    protected void redMin(IntEvRef a, IntERef res) { call(IntOp.redMin(a, res)); }
-    protected void redMax(IntEvRef a, IntERef res) { call(IntOp.redMax(a, res)); }
-    protected void redMin(IntEfRef a, IntERef res) { call(IntOp.redMin(a, res)); }
-    protected void redMax(IntEfRef a, IntERef res) { call(IntOp.redMax(a, res)); }
-    protected void redMin(IntFvRef a, IntFRef res) { call(IntOp.redMin(a, res)); }
-    protected void redMax(IntFvRef a, IntFRef res) { call(IntOp.redMax(a, res)); }
-    protected void redMin(IntFeRef a, IntFRef res) { call(IntOp.redMin(a, res)); }
-    protected void redMax(IntFeRef a, IntFRef res) { call(IntOp.redMax(a, res)); }
+    protected void redAdd(BoolVe a, IntV res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(BoolVf a, IntV res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(BoolEv a, IntE res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(BoolEf a, IntE res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(BoolFv a, IntF res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(BoolFe a, IntF res) { call(IntOp.redAdd(a, res)); }
 
-    protected void redAdd(BoolVeRef a, IntVRef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(BoolVfRef a, IntVRef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(BoolEvRef a, IntERef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(BoolEfRef a, IntERef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(BoolFvRef a, IntFRef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(BoolFeRef a, IntFRef res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(IntVe a, IntV res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(IntVf a, IntV res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(IntEv a, IntE res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(IntEf a, IntE res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(IntFv a, IntF res) { call(IntOp.redAdd(a, res)); }
+    protected void redAdd(IntFe a, IntF res) { call(IntOp.redAdd(a, res)); }
 
-    protected void redAdd(IntVeRef a, IntVRef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(IntVfRef a, IntVRef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(IntEvRef a, IntERef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(IntEfRef a, IntERef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(IntFvRef a, IntFRef res) { call(IntOp.redAdd(a, res)); }
-    protected void redAdd(IntFeRef a, IntFRef res) { call(IntOp.redAdd(a, res)); }
+    protected void rotCW(BoolVe a, BoolVf res) { call(BoolOp.rotCW(a, res)); }
+    protected void rotCW(BoolVf a, BoolVe res) { call(BoolOp.rotCW(a, res)); }
+    protected void rotCW(BoolEv a, BoolEf res) { call(BoolOp.rotCW(a, res)); }
+    protected void rotCW(BoolEf a, BoolEv res) { call(BoolOp.rotCW(a, res)); }
+    protected void rotCW(BoolFv a, BoolFe res) { call(BoolOp.rotCW(a, res)); }
+    protected void rotCW(BoolFe a, BoolFv res) { call(BoolOp.rotCW(a, res)); }
 
-    protected void rotCW(BoolVeRef a, BoolVfRef res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolVfRef a, BoolVeRef res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolEvRef a, BoolEfRef res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolEfRef a, BoolEvRef res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolFvRef a, BoolFeRef res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolFeRef a, BoolFvRef res) { call(BoolOp.rotCW(a, res)); }
+    protected void rotCW(IntVe a, IntVf res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntVf a, IntVe res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntEv a, IntEf res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntEf a, IntEv res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntFv a, IntFe res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntFe a, IntFv res) { call(IntOp.rotCW(a, res)); }
 
-    protected void rotCW(IntVeRef a, IntVfRef res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntVfRef a, IntVeRef res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntEvRef a, IntEfRef res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntEfRef a, IntEvRef res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntFvRef a, IntFeRef res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntFeRef a, IntFvRef res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCCW(BoolVe a, BoolVf res) { call(BoolOp.rotCCW(a, res)); }
+    protected void rotCCW(BoolVf a, BoolVe res) { call(BoolOp.rotCCW(a, res)); }
+    protected void rotCCW(BoolEv a, BoolEf res) { call(BoolOp.rotCCW(a, res)); }
+    protected void rotCCW(BoolEf a, BoolEv res) { call(BoolOp.rotCCW(a, res)); }
+    protected void rotCCW(BoolFv a, BoolFe res) { call(BoolOp.rotCCW(a, res)); }
+    protected void rotCCW(BoolFe a, BoolFv res) { call(BoolOp.rotCCW(a, res)); }
 
-    protected void rotCCW(BoolVeRef a, BoolVfRef res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolVfRef a, BoolVeRef res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolEvRef a, BoolEfRef res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolEfRef a, BoolEvRef res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolFvRef a, BoolFeRef res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolFeRef a, BoolFvRef res) { call(BoolOp.rotCCW(a, res)); }
-
-    protected void rotCCW(IntVeRef a, IntVfRef res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntVfRef a, IntVeRef res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntEvRef a, IntEfRef res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntEfRef a, IntEvRef res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntFvRef a, IntFeRef res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntFeRef a, IntFvRef res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntVe a, IntVf res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntVf a, IntVe res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntEv a, IntEf res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntEf a, IntEv res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntFv a, IntFe res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntFe a, IntFv res) { call(IntOp.rotCCW(a, res)); }
 }

@@ -13,7 +13,7 @@ public class Flies extends Agent {
         super(
             state,
             new Flip()
-                    .addForce(new SlowDown(10, 4).setPriority(2))
+                    .addForce(new SlowDown(2, 2).setPriority(2))
                     .addForce(new All().setPriority(1))
 
                     .addConstraint(new MaintainQuasiParticle(state))
@@ -22,5 +22,5 @@ public class Flies extends Agent {
     }
 
     public static Flies rand() { return rand(0); }
-    public static Flies rand(int sparsity) { return new Flies(QuasiParticle.rand(sparsity)); }
+    public static Flies rand(int sparsity) { return new Flies(QuasiParticle.random(sparsity)); }
 }

@@ -2,7 +2,6 @@ package tests;
 
 import language.field.boolField.*;
 import language.utils.BoolFieldManager;
-import language.utils.Border;
 import medium.Medium;
 import medium.locusS.Edge;
 import medium.locusS.Face;
@@ -15,8 +14,9 @@ public class JunkTests {
     static void main(String[] args) {
         BoolFieldManager.setup(largeMedium());
 
+
         long startTime = System.currentTimeMillis();
-        spatialTestsTransfer();
+        spatialTestsRotate();
         System.out.println("Total time: " + (System.currentTimeMillis() - startTime) + " ms");
     }
 
@@ -28,29 +28,115 @@ public class JunkTests {
         sep();
         for (int i=0; i<50; i++) transferRoundTripEfFe();
     }
-
     private static void transferRoundTripVeEv() {
-        BoolVe orig = BoolVe.rand(Border.MIRROR);
+        BoolVe orig = new BoolVe().rand();
 
-        BoolVe roundTrip = BoolEv.transfer(BoolVe.transfer(orig));
-        printRoundTripResult("Ve <-> Ev", orig, roundTrip);
+        BoolEv roundTrip0 = new BoolEv().transfer(orig);
+        BoolVe roundTrip = new BoolVe().transfer(roundTrip0);
+        printResult("Ve <-> Ev", orig, roundTrip);
     }
-
     private static void transferRoundTripVfFv() {
-        BoolVf orig = BoolVf.rand(Border.MIRROR);
+        BoolVf orig = new BoolVf().rand();
 
-        BoolVf roundTrip = BoolFv.transfer(BoolVf.transfer(orig));
-        printRoundTripResult("Vf <-> Fv", orig, roundTrip);
+        BoolFv roundTrip0 = new BoolFv().transfer(orig);
+        BoolVf roundTrip = new BoolVf().transfer(roundTrip0);
+        printResult("Vf <-> Fv", orig, roundTrip);
     }
-
     private static void transferRoundTripEfFe() {
-        BoolEf orig = BoolEf.rand(Border.MIRROR);
+        BoolEf orig = new BoolEf().rand();
 
-        BoolEf roundTrip = BoolFe.transfer(BoolEf.transfer(orig));
-        printRoundTripResult("Ef <-> Fe", orig, roundTrip);
+        BoolFe roundTrip0 = new BoolFe().transfer(orig);
+        BoolEf roundTrip = new BoolEf().transfer(roundTrip0);
+        printResult("Ef <-> Fe", orig, roundTrip);
     }
 
-    private static void printRoundTripResult(String label, BoolFieldT orig, BoolFieldT roundTrip) {
+    private static void spatialTestsRotate() {
+        for (int i=0; i<50; i++) rotateRoundTripVeVf();
+        sep();
+        for (int i=0; i<50; i++) rotateRoundTripVfVe();
+        sep();
+        for (int i=0; i<50; i++) rotateRoundTripEvEf();
+        sep();
+        for (int i=0; i<50; i++) rotateRoundTripEfEv();
+        sep();
+        for (int i=0; i<50; i++) rotateRoundTripFvFe();
+        sep();
+        for (int i=0; i<50; i++) rotateRoundTripFeFv();
+    }
+    private static void rotateRoundTripVeVf() {
+        BoolVe orig = new BoolVe().rand();
+        BoolVf roundTrip0 = new BoolVf();
+        BoolVe roundTrip = new BoolVe();
+        roundTrip0.clear();
+        roundTrip.clear();
+
+        roundTrip0.rotateCW(orig);
+        roundTrip.rotateCCW(roundTrip0);
+
+        printResult("Ve <-> Vf", orig, roundTrip);
+    }
+    private static void rotateRoundTripVfVe() {
+        BoolVf orig = new BoolVf().rand();
+        BoolVe roundTrip0 = new BoolVe();
+        BoolVf roundTrip = new BoolVf();
+        roundTrip0.clear();
+        roundTrip.clear();
+
+        roundTrip0.rotateCW(orig);
+        roundTrip.rotateCCW(roundTrip0);
+
+        printResult("Vf <-> Ve", orig, roundTrip);
+    }
+    private static void rotateRoundTripEvEf() {
+        BoolEv orig = new BoolEv().rand();
+        BoolEf roundTrip0 = new BoolEf();
+        BoolEv roundTrip = new BoolEv();
+        roundTrip0.clear();
+        roundTrip.clear();
+
+        roundTrip0.rotateCW(orig);
+        roundTrip.rotateCCW(roundTrip0);
+
+        printResult("Ev <-> Ef", orig, roundTrip);
+    }
+    private static void rotateRoundTripEfEv() {
+        BoolEf orig = new BoolEf().rand();
+        BoolEv roundTrip0 = new BoolEv();
+        BoolEf roundTrip = new BoolEf();
+        roundTrip0.clear();
+        roundTrip.clear();
+
+        roundTrip0.rotateCW(orig);
+        roundTrip.rotateCCW(roundTrip0);
+
+        printResult("Ef <-> Ev", orig, roundTrip);
+    }
+    private static void rotateRoundTripFvFe() {
+        BoolFv orig = new BoolFv().rand();
+        BoolFe roundTrip0 = new BoolFe();
+        BoolFv roundTrip = new BoolFv();
+        roundTrip0.clear();
+        roundTrip.clear();
+
+        roundTrip0.rotateCW(orig);
+        roundTrip.rotateCCW(roundTrip0);
+
+        printResult("Fv <-> Fe", orig, roundTrip);
+    }
+    private static void rotateRoundTripFeFv() {
+        BoolFe orig = new BoolFe().rand();
+        BoolFv roundTrip0 = new BoolFv();
+        BoolFe roundTrip = new BoolFe();
+        roundTrip0.clear();
+        roundTrip.clear();
+
+        roundTrip0.rotateCW(orig);
+        roundTrip.rotateCCW(roundTrip0);
+
+        printResult("Fe <-> Fv", orig, roundTrip);
+    }
+
+    private static void printResult(String label, BoolFieldT<?> orig, BoolFieldT<?> roundTrip) {
         boolean ok = orig.equals(roundTrip);
         System.out.println(label + " round-trip: " + (ok ? "PASS" : "FAIL"));
     }

@@ -1,56 +1,57 @@
 package language.field.intField;
 
 import language.field.boolField.BoolVf;
-import language.fieldRef.boolField.BoolVfRef;
-import language.utils.Border;
 import medium.Medium;
 import medium.locusT.Vf;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 /** IntVf represents an integer language.field on Vf loci. */
-public non-sealed class IntVf extends IntField<BoolVf> {
+public non-sealed class IntVf extends IntField<BoolVf, IntVf> {
+    private static final Supplier<BoolVf> zeroes = () -> new BoolVf().zeroes();
+    private static final Supplier<BoolVf> ones = () -> new BoolVf().ones();
+    private static final Supplier<BoolVf> rand = () -> new BoolVf().rand();
+
     public IntVf(int n) {
-        super(n, new BoolVfRef[n + 1]);
-        for (int i = 0; i <= n; i++) this.bits[i] = new BoolVfRef();
+        super(n, new BoolVf[n + 1]);
+        for (int i = 0; i <= n; i++) this.bits[i] = new BoolVf();
     }
-    public IntVf(int n, BoolVfRef[] bits) {
+    public IntVf(int n, BoolVf[] bits) {
         super(n, bits);
     }
 
+    @Override
+    public BoolVf[] getBits() { return bits; }
+
     public static IntVf of(int value, int n) {
         IntVf intVf = new IntVf(n);
-        of(intVf, value, BoolVf::zeroes, BoolVf::ones);
+        of(intVf, value, zeroes, ones);
         return intVf;
     }
 
     public static IntVf maxValue(int n) {
         IntVf intVf = new IntVf(n);
-        maxValue(intVf, BoolVf::zeroes, BoolVf::ones);
+        maxValue(intVf, zeroes, ones);
         return intVf;
     }
 
     public static IntVf minValue(int n) {
         IntVf intVf = new IntVf(n);
-        minValue(intVf, BoolVf::zeroes, BoolVf::ones);
+        minValue(intVf, zeroes, ones);
         return intVf;
     }
 
     public static IntVf rand(int n) {
-        IntVf rand = new IntVf(n);
-        IntField.rand(rand, BoolVf::rand);
-        return rand;
+        IntVf res = new IntVf(n);
+        IntField.rand(res, rand);
+        return res;
     }
     public static IntVf randNonNegative(int n) {
-        IntVf rand = new IntVf(n);
-        IntField.randNonNegative(rand, BoolVf::rand);
-        return rand;
-    }
-
-    @Override
-    public BoolVfRef[] getBits() {
-        return (BoolVfRef[]) bits;
+        IntVf res = new IntVf(n);
+        IntField.randNonNegative(res, rand);
+        return res;
     }
 
     /** Indicates that this IntVf should be decoded as an unsigned integer */
@@ -62,7 +63,7 @@ public non-sealed class IntVf extends IntField<BoolVf> {
     /** Converts this IntVf to a HashMap<Vf, Integer>. */
     public HashMap<Vf, Integer> decode(Medium m) {
         HashMap<Vf, Integer> res = new HashMap<>();
-        decode(this, res, m.vfs, BoolVf::decode, decodeAsSigned);
+        decode(this, res, m.vfs, (loci, field) -> field.decode(loci), decodeAsSigned);
         return res;
     }
 
@@ -71,10 +72,5 @@ public non-sealed class IntVf extends IntField<BoolVf> {
         IntVf copy = new IntVf(n);
         copy(this, copy);
         return copy;
-    }
-    
-    @Override
-    public IntVf cache() {
-        return new IntVf(n, (BoolVfRef[]) Arrays.copyOf(this.bits, n+1));
     }
 }

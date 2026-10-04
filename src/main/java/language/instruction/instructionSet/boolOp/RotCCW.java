@@ -1,119 +1,118 @@
 package language.instruction.instructionSet.boolOp;
 
-import language.instruction.BasicInstruction;
 import language.field.boolField.*;
-import language.fieldRef.boolField.*;
+import language.instruction.BasicInstruction;
 
 /** Rotates a BoolVe counterclockwise into a BoolVf. */
 class RotVeCCW implements BasicInstruction {
-    private final BoolVeRef orig;
-    private final BoolVfRef res;
+    private final BoolVe orig;
+    private final BoolVf dest;
 
     /** Creates a new RotVeCCW. */
-    public RotVeCCW(BoolVeRef orig, BoolVfRef res) {
+    public RotVeCCW(BoolVe orig, BoolVf dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVe.rotateCCW(orig.get()));
+        dest.rotateCCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolVf counterclockwise into a BoolVe. */
 class RotVfCCW implements BasicInstruction {
-    private final BoolVfRef orig;
-    private final BoolVeRef res;
+    private final BoolVf orig;
+    private final BoolVe dest;
 
     /** Creates a new RotVfCCW. */
-    public RotVfCCW(BoolVfRef orig, BoolVeRef res) {
+    public RotVfCCW(BoolVf orig, BoolVe dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVf.rotateCCW(orig.get()));
+        dest.rotateCCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolEv counterclockwise into a BoolEf. */
 class RotEvCCW implements BasicInstruction {
-    private final BoolEvRef orig;
-    private final BoolEfRef res;
+    private final BoolEv orig;
+    private final BoolEf dest;
 
     /** Creates a new RotEvCCW. */
-    public RotEvCCW(BoolEvRef orig, BoolEfRef res) {
+    public RotEvCCW(BoolEv orig, BoolEf dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEv.rotateCCW(orig.get()));
+        dest.rotateCCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolEf counterclockwise into a BoolEv. */
 class RotEfCCW implements BasicInstruction {
-    private final BoolEfRef orig;
-    private final BoolEvRef res;
+    private final BoolEf orig;
+    private final BoolEv dest;
 
     /** Creates a new RotEfCCW. */
-    public RotEfCCW(BoolEfRef orig, BoolEvRef res) {
+    public RotEfCCW(BoolEf orig, BoolEv dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEf.rotateCCW(orig.get()));
+        dest.rotateCCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolFv counterclockwise into a BoolFe. */
 class RotFvCCW implements BasicInstruction {
-    private final BoolFvRef orig;
-    private final BoolFeRef res;
+    private final BoolFv orig;
+    private final BoolFe dest;
 
     /** Creates a new RotFvCCW. */
-    public RotFvCCW(BoolFvRef orig, BoolFeRef res) {
+    public RotFvCCW(BoolFv orig, BoolFe dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFv.rotateCCW(orig.get()));
+        dest.rotateCCW(orig);
         return true;
     }
 }
 
 /** Rotates a BoolFe counterclockwise into a BoolFv. */
 class RotFeCCW implements BasicInstruction {
-    private final BoolFeRef orig;
-    private final BoolFvRef res;
+    private final BoolFe orig;
+    private final BoolFv dest;
 
     /** Creates a new RotFeCCW. */
-    public RotFeCCW(BoolFeRef orig, BoolFvRef res) {
+    public RotFeCCW(BoolFe orig, BoolFv dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFe.rotateCCW(orig.get()));
+        dest.rotateCCW(orig);
         return true;
     }
 }

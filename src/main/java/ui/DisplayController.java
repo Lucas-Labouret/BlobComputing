@@ -3,32 +3,15 @@ package ui;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
-
-import language.fieldRef.Ref;
-import language.fieldRef.intField.IntERef;
-import language.fieldRef.intField.IntEvRef;
-import language.fieldRef.intField.IntEfRef;
-import language.fieldRef.intField.IntFRef;
-import language.fieldRef.intField.IntFeRef;
-import language.fieldRef.intField.IntFvRef;
+import language.field.Field;
+import language.field.boolField.*;
+import language.field.intField.*;
 import language.instruction.instructionSet.Show;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.IntVRef;
-import language.fieldRef.intField.IntVeRef;
-import language.fieldRef.intField.IntVfRef;
 import ui.display.MediumDrawer;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;
 import ui.display.displayable.boolFieldDisplay.*;
-import ui.display.displayable.intFieldDisplay.IntEDisplay;
-import ui.display.displayable.intFieldDisplay.IntEvDisplay;
-import ui.display.displayable.intFieldDisplay.IntEfDisplay;
-import ui.display.displayable.intFieldDisplay.IntFDisplay;
-import ui.display.displayable.intFieldDisplay.IntFeDisplay;
-import ui.display.displayable.intFieldDisplay.IntFvDisplay;
-import ui.display.displayable.intFieldDisplay.IntVDisplay;
-import ui.display.displayable.intFieldDisplay.IntVeDisplay;
-import ui.display.displayable.intFieldDisplay.IntVfDisplay;
+import ui.display.displayable.intFieldDisplay.*;
 import ui.utils.DisplayBox;
 import ui.utils.OrderableDisplayPanel;
 
@@ -55,38 +38,38 @@ public class DisplayController {
         Platform.runLater(drawer::draw);
     }
 
-    public void bind(Show show) {
+    public void bind(Show<?> show) {
         Platform.runLater(() -> _bind(show));
     }
 
-    private final HashSet<Show> bound = new HashSet<>();
-    private void _bind(Show show) {
+    private final HashSet<Show<?>> bound = new HashSet<>();
+    private void _bind(Show<?> show) {
         String name = show.name;
-        Ref<?> ref = show.ref;
+        Field<?> field = show.field;
         Optional<Styles.Style> style = show.style;
 
-        if (!bound.contains(show)) switch (ref) {
-            case BoolVRef boolVRef   -> createDisplay(name, new BoolVDisplay(boolVRef, style.orElse(Styles.DEFAULT)));
-            case BoolVeRef boolVeRef -> createDisplay(name, new BoolVeDisplay(boolVeRef, style.orElse(Styles.DEFAULT)));
-            case BoolVfRef boolVfRef -> createDisplay(name, new BoolVfDisplay(boolVfRef, style.orElse(Styles.DEFAULT)));
-            case BoolERef boolERef   -> createDisplay(name, new BoolEDisplay(boolERef, style.orElse(Styles.DEFAULT)));
-            case BoolEvRef boolEvRef -> createDisplay(name, new BoolEvDisplay(boolEvRef, style.orElse(Styles.DEFAULT)));
-            case BoolEfRef boolEfRef -> createDisplay(name, new BoolEfDisplay(boolEfRef, style.orElse(Styles.DEFAULT)));
-            case BoolFRef boolFRef   -> createDisplay(name, new BoolFDisplay(boolFRef, style.orElse(Styles.DEFAULT)));
-            case BoolFvRef boolFvRef -> createDisplay(name, new BoolFvDisplay(boolFvRef, style.orElse(Styles.DEFAULT)));
-            case BoolFeRef boolFeRef -> createDisplay(name, new BoolFeDisplay(boolFeRef, style.orElse(Styles.DEFAULT)));
+        if (!bound.contains(show)) switch (field) {
+            case BoolV boolV   -> createDisplay(name, new BoolVDisplay(boolV, style.orElse(Styles.DEFAULT)));
+            case BoolVe boolVe -> createDisplay(name, new BoolVeDisplay(boolVe, style.orElse(Styles.DEFAULT)));
+            case BoolVf boolVf -> createDisplay(name, new BoolVfDisplay(boolVf, style.orElse(Styles.DEFAULT)));
+            case BoolE boolE   -> createDisplay(name, new BoolEDisplay(boolE, style.orElse(Styles.DEFAULT)));
+            case BoolEv boolEv -> createDisplay(name, new BoolEvDisplay(boolEv, style.orElse(Styles.DEFAULT)));
+            case BoolEf boolEf -> createDisplay(name, new BoolEfDisplay(boolEf, style.orElse(Styles.DEFAULT)));
+            case BoolF boolF   -> createDisplay(name, new BoolFDisplay(boolF, style.orElse(Styles.DEFAULT)));
+            case BoolFv boolFv -> createDisplay(name, new BoolFvDisplay(boolFv, style.orElse(Styles.DEFAULT)));
+            case BoolFe boolFe -> createDisplay(name, new BoolFeDisplay(boolFe, style.orElse(Styles.DEFAULT)));
 
-            case IntVRef intVRef     -> createDisplay(name, new IntVDisplay(intVRef, style.orElse(Styles.DEFAULT_INT)));
-            case IntVeRef intVeRef   -> createDisplay(name, new IntVeDisplay(intVeRef, style.orElse(Styles.DEFAULT_INT)));
-            case IntVfRef intVfRef   -> createDisplay(name, new IntVfDisplay(intVfRef, style.orElse(Styles.DEFAULT_INT)));
-            case IntERef intERef     -> createDisplay(name, new IntEDisplay(intERef, style.orElse(Styles.DEFAULT_INT)));
-            case IntEvRef intEvRef   -> createDisplay(name, new IntEvDisplay(intEvRef, style.orElse(Styles.DEFAULT_INT)));
-            case IntEfRef intEfRef   -> createDisplay(name, new IntEfDisplay(intEfRef, style.orElse(Styles.DEFAULT_INT)));
-            case IntFRef intFRef     -> createDisplay(name, new IntFDisplay(intFRef, style.orElse(Styles.DEFAULT_INT)));
-            case IntFvRef intFvRef   -> createDisplay(name, new IntFvDisplay(intFvRef, style.orElse(Styles.DEFAULT_INT)));
-            case IntFeRef intFeRef   -> createDisplay(name, new IntFeDisplay(intFeRef, style.orElse(Styles.DEFAULT_INT)));
+            case IntV intV     -> createDisplay(name, new IntVDisplay(intV, style.orElse(Styles.DEFAULT_INT)));
+            case IntVe intVe   -> createDisplay(name, new IntVeDisplay(intVe, style.orElse(Styles.DEFAULT_INT)));
+            case IntVf intVf   -> createDisplay(name, new IntVfDisplay(intVf, style.orElse(Styles.DEFAULT_INT)));
+            case IntE intE     -> createDisplay(name, new IntEDisplay(intE, style.orElse(Styles.DEFAULT_INT)));
+            case IntEv intEv   -> createDisplay(name, new IntEvDisplay(intEv, style.orElse(Styles.DEFAULT_INT)));
+            case IntEf intEf   -> createDisplay(name, new IntEfDisplay(intEf, style.orElse(Styles.DEFAULT_INT)));
+            case IntF intF     -> createDisplay(name, new IntFDisplay(intF, style.orElse(Styles.DEFAULT_INT)));
+            case IntFv intFv   -> createDisplay(name, new IntFvDisplay(intFv, style.orElse(Styles.DEFAULT_INT)));
+            case IntFe intFe   -> createDisplay(name, new IntFeDisplay(intFe, style.orElse(Styles.DEFAULT_INT)));
 
-            default -> throw new IllegalArgumentException("Unsupported type for display: " + ref.getClass().getName());
+            default -> throw new IllegalArgumentException("Unsupported type for display: " + field.getClass().getName());
         }
 
         bound.add(show);

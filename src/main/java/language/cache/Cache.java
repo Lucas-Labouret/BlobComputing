@@ -1,24 +1,37 @@
 package language.cache;
 
-import language.field.Field;
-import language.fieldRef.Ref;
+import language.field.boolField.BoolField;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * Stores the states of an execution at any given step count as CacheEntry objects,
+ * and allows for retrieving and restoring those states later.
+ * <p>
+ * Entries are stored in a linked list, sorted by step count in descending order.
+ */
 public class Cache {
+    /**
+     * Represents a single cache entry,
+     * storing the state of all registered fields and procedures at a given step count.
+     */
     public static class CacheEntry {
+        /** The step count at which this cache entry was created. */
         public final long stepCount;
+        /** The next cache entry in the linked list, or null if this is the last entry. */
         private CacheEntry next;
-        private final HashMap<Ref<?>, ? extends Field> valueCache;
+        /** A mapping of registered fields to their cached values at this step count. */
+        private final HashMap<BoolField<?>, BoolField<?>> valueCache;
+        /** A mapping of registered procedures to their instruction pointers at this step count. */
         private final HashMap<Procedure, Integer> instrPtrCache;
 
         private CacheEntry(
                 long stepCount,
                 CacheEntry next,
-                HashMap<Ref<?>, ? extends Field> valueCache,
+                HashMap<BoolField<?>, BoolField<?>> valueCache,
                 HashMap<Procedure, Integer> instrPtrCache
         ){
             this.stepCount = stepCount;
@@ -28,20 +41,37 @@ public class Cache {
         }
     }
 
-    private static final HashSet<Ref<?>> refs = new HashSet<>();
+    /** A set of all registered fields to be cached. */
+    private static final HashSet<BoolField<?>> fields = new HashSet<>();
+    /** A set of all registered procedures to be cached. */
     private static final HashSet<Procedure> instrPtrs = new HashSet<>();
 
-    public static void register(Ref<?> ref) { Cache.refs.add(ref); }
+    /** @param field The field to register for caching. */
+    public static void register(BoolField<?> field) {
+        new Throwable("registration stack").printStackTrace();
+        fields.add(field);
+    }
+    /** @param procedure The procedure to register for caching. */
     public static void register(Procedure procedure) { instrPtrs.add(procedure); }
 
+    /** The top of the cache linked list, representing the most recent cache entry. */
     private CacheEntry top = null;
 
+    /**
+     * Creates a new cache entry and adds it to the cache, sorted by step count.
+     *
+     * @param stepCount The step count for the new cache entry.
+     *                  If an entry with the same step count already exists, it will be overridden.
+     * @return The new cache entry.
+     */
+    static boolean caching = false;
     public CacheEntry push(long stepCount) {
-        HashMap<Ref<?>, Field> valueCache = new HashMap<>();
-        for (Ref<?> ref : Cache.refs) valueCache.put(ref, ref.get() == null ? null : ref.get().cache());
+        System.out.println(fields.size());
+        HashMap<BoolField<?>, BoolField<?>> valueCache = new HashMap<>();
+        for (BoolField<?> field : fields) valueCache.put(field, field.cache());
 
         HashMap<Procedure, Integer> instrPtrCache = new HashMap<>();
-        for (Procedure procedure : Cache.instrPtrs) instrPtrCache.put(procedure, procedure.getInstrPtr());
+        for (Procedure procedure : instrPtrs) instrPtrCache.put(procedure, procedure.getInstrPtr());
 
         // Find the cache entries s.t. current.stepCount <= stepCount < previous.stepCount (if they exist)
         CacheEntry previous = null;
@@ -71,9 +101,13 @@ public class Cache {
         return newEntry;
     }
 
+    /**
+     * Restores the state of all registered fields and procedures from the given cache entry.
+     * @param entry The cache entry to restore from.
+     */
     private void applyCacheEntry(CacheEntry entry) {
-        for (Ref ref : entry.valueCache.keySet()) {
-            ref.set(entry.valueCache.get(ref));
+        for (BoolField field : entry.valueCache.keySet()) {
+            field.set(entry.valueCache.get(field));
         }
 
         for (Procedure procedure : entry.instrPtrCache.keySet()) {
@@ -81,7 +115,14 @@ public class Cache {
         }
     }
 
+    /** A flag to avoid concurrent retrievals, which could lead to inconsistent states. */
     private static boolean retrieving = false;
+    /**
+     * Restores the state of all registered fields and procedures to the state at the given step count.
+     * <p>
+     * To avoid storing every single step, this method retrieves the closest cached state,
+     * then executes the main instruction until the desired step count is reached.
+     */
     public void retrieve(long stepCount, Instruction main) {
         if (retrieving) { return; }
         retrieving = true;
@@ -103,6 +144,11 @@ public class Cache {
         retrieving = false;
     }
 
+    /**
+     * Restores the state of all registered fields and procedures to the state at the given cache entry.
+     * @param entry The cache entry to restore from.
+     * @return The step count of the restored cache entry.
+     */
     public long retrieve(CacheEntry entry) {
         applyCacheEntry(entry);
         return entry.stepCount;

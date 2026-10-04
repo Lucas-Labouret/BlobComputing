@@ -1,9 +1,8 @@
 package blobProgram.agent;
 
 import blobProgram.BlobV;
+import language.field.boolField.*;
 import language.field.intField.*;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.*;
 import language.instruction.Procedure;
 
 public abstract class Constraint {
@@ -13,37 +12,37 @@ public abstract class Constraint {
         this.state = state;
     }
 
-    public abstract Procedure verify(BoolVRef flip, IntVRef priority, IntVRef prioRand);
+    public abstract Procedure verify(BoolV flip, IntV priority, IntV prioRand);
 
     private static class Mutex extends Procedure {
-        public Mutex(BoolERef mutex, IntVRef priority, IntVRef prioRand, BoolVRef cancel) {
-            IntERef minPriorityE = tmp(new IntERef(new IntE(priority.get().n)));
-            IntVeRef priorityVe = tmp(new IntVeRef(new IntVe(priority.get().n)));
-            IntEvRef priorityEv = tmp(new IntEvRef(new IntEv(priority.get().n)));
+        public Mutex(BoolE mutex, IntV priority, IntV prioRand, BoolV cancel) {
+            IntE minPriorityE = tmp(new IntE(priority.n));
+            IntVe priorityVe = tmp(new IntVe(priority.n));
+            IntEv priorityEv = tmp(new IntEv(priority.n));
             broadcast(priority, priorityVe);
             transfer(priorityVe, priorityEv);
             redMin(priorityEv, minPriorityE);
 
-            BoolEvRef isMinPriorityEv = tmp(new BoolEvRef());
-            IntEvRef minPriorityEv = tmp(new IntEvRef(new IntEv(priority.get().n)));
+            BoolEv isMinPriorityEv = tmp(new BoolEv());
+            IntEv minPriorityEv = tmp(new IntEv(priority.n));
             broadcast(minPriorityE, minPriorityEv);
             eq(priorityEv, minPriorityEv, isMinPriorityEv);
 
-            IntERef minPrioRandE = tmp(new IntERef(new IntE(prioRand.get().n)));
-            IntVeRef prioRandVe = tmp(new IntVeRef(new IntVe(prioRand.get().n)));
-            IntEvRef prioRandEv = tmp(new IntEvRef(new IntEv(prioRand.get().n)));
+            IntE minPrioRandE = tmp(new IntE(prioRand.n));
+            IntVe prioRandVe = tmp(new IntVe(prioRand.n));
+            IntEv prioRandEv = tmp(new IntEv(prioRand.n));
             broadcast(prioRand, prioRandVe);
             transfer(prioRandVe, prioRandEv);
-            fif(isMinPriorityEv, prioRandEv, new IntEvRef(IntEv.maxValue(prioRand.get().n)), prioRandEv);
+            fif(isMinPriorityEv, prioRandEv, IntEv.maxValue(prioRand.n), prioRandEv);
             redMin(prioRandEv, minPrioRandE);
 
-            BoolEvRef isMinPrioRandEv = tmp(new BoolEvRef());
-            IntEvRef minPrioRandEv = tmp(new IntEvRef(new IntEv(prioRand.get().n)));
+            BoolEv isMinPrioRandEv = tmp(new BoolEv());
+            IntEv minPrioRandEv = tmp(new IntEv(prioRand.n));
             broadcast(minPrioRandE, minPrioRandEv);
             eq(prioRandEv, minPrioRandEv, isMinPrioRandEv);
 
-            BoolVeRef ve = tmp(new BoolVeRef());
-            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolVe ve = tmp(new BoolVe());
+            BoolEv ev = tmp(new BoolEv());
             and(isMinPriorityEv, isMinPrioRandEv, isMinPriorityEv);
             broadcast(mutex, ev);
             and(ev, isMinPriorityEv, isMinPriorityEv);
@@ -51,20 +50,20 @@ public abstract class Constraint {
             redOr(ve, cancel);
         }
     }
-    protected Procedure mutex(BoolERef mutexE, IntVRef priority, IntVRef prioRand, BoolVRef cancel) {
+    protected Procedure mutex(BoolE mutexE, IntV priority, IntV prioRand, BoolV cancel) {
         return new Mutex(mutexE, priority, prioRand, cancel);
     }
 
     private static class MutApex extends Procedure {
-        public MutApex(BoolERef mutApex, IntVRef priority, IntVRef prioRand, BoolVRef cancel) {
+        public MutApex(BoolE mutApex, IntV priority, IntV prioRand, BoolV cancel) {
             // Find the lowest priority apex
-            IntVfRef priorityVf = tmp(new IntVfRef(new IntVf(Force.priorityBits)));
-            IntFvRef priorityFv = tmp(new IntFvRef(new IntFv(Force.priorityBits)));
-            IntFeRef priorityFe = tmp(new IntFeRef(new IntFe(Force.priorityBits)));
-            IntEfRef priorityEf = tmp(new IntEfRef(new IntEf(Force.priorityBits)));
-            IntERef minPriority = tmp(new IntERef(new IntE(Force.priorityBits)));
-            IntEfRef minPriorityEf = tmp(new IntEfRef(new IntEf(Force.priorityBits)));
-            BoolEfRef hasMinPriorityEf = new BoolEfRef();
+            IntVf priorityVf = tmp(new IntVf(Force.priorityBits));
+            IntFv priorityFv = tmp(new IntFv(Force.priorityBits));
+            IntFe priorityFe = tmp(new IntFe(Force.priorityBits));
+            IntEf priorityEf = tmp(new IntEf(Force.priorityBits));
+            IntE minPriority = tmp(new IntE(Force.priorityBits));
+            IntEf minPriorityEf = tmp(new IntEf(Force.priorityBits));
+            BoolEf hasMinPriorityEf = new BoolEf();
 
             broadcast(priority, priorityVf);
             transfer(priorityVf, priorityFv);
@@ -75,16 +74,15 @@ public abstract class Constraint {
             redMin(priorityEf, minPriority);
             broadcast(minPriority, minPriorityEf);
             eq(priorityEf, minPriorityEf, hasMinPriorityEf);
-            show("hasMinPriority", hasMinPriorityEf);
 
             // Find the lowest prioRand apex among the lowest priority apexes
-            IntVfRef prioRandVf = tmp(new IntVfRef(new IntVf(Force.prioRandBits)));
-            IntFvRef prioRandFv = tmp(new IntFvRef(new IntFv(Force.prioRandBits)));
-            IntFeRef prioRandFe = tmp(new IntFeRef(new IntFe(Force.prioRandBits)));
-            IntEfRef prioRandEf = tmp(new IntEfRef(new IntEf(Force.prioRandBits)));
-            IntERef minPrioRand = tmp(new IntERef(new IntE(Force.prioRandBits)));
-            IntEfRef minPrioRandEf = tmp(new IntEfRef(new IntEf(Force.prioRandBits)));
-            BoolEfRef hasMinPrioRandEf = new BoolEfRef();
+            IntVf prioRandVf = tmp(new IntVf(Force.prioRandBits));
+            IntFv prioRandFv = tmp(new IntFv(Force.prioRandBits));
+            IntFe prioRandFe = tmp(new IntFe(Force.prioRandBits));
+            IntEf prioRandEf = tmp(new IntEf(Force.prioRandBits));
+            IntE minPrioRand = tmp(new IntE(Force.prioRandBits));
+            IntEf minPrioRandEf = tmp(new IntEf(Force.prioRandBits));
+            BoolEf hasMinPrioRandEf = new BoolEf();
 
             broadcast(prioRand, prioRandVf);
             transfer(prioRandVf, prioRandFv);
@@ -92,20 +90,16 @@ public abstract class Constraint {
             rotCW(prioRandFe, prioRandFv);
             rotCW(prioRandFv, prioRandFe);
             transfer(prioRandFe, prioRandEf);
-            show("prioRandEf", prioRandEf);
-            fif(hasMinPriorityEf, prioRandEf, new IntEfRef(IntEf.maxValue(Force.prioRandBits)), prioRandEf);
-            show("maxvalue Ef", new IntEfRef(IntEf.maxValue(Force.prioRandBits)));
-            show("prioRandEf after fif", prioRandEf);
+            fif(hasMinPriorityEf, prioRandEf, IntEf.maxValue(Force.prioRandBits), prioRandEf);
             redMin(prioRandEf, minPrioRand);
             broadcast(minPrioRand, minPrioRandEf);
             eq(prioRandEf, minPrioRandEf, hasMinPrioRandEf);
-            show("hasMinPrioRand", hasMinPrioRandEf);
 
             // Cancel the flip of the minimum priority and minimum prioRand apex
-            BoolEfRef ef = tmp(new BoolEfRef());
-            BoolFeRef fe = tmp(new BoolFeRef());
-            BoolFvRef fv = tmp(new BoolFvRef());
-            BoolVfRef vf = tmp(new BoolVfRef());
+            BoolEf ef = tmp(new BoolEf());
+            BoolFe fe = tmp(new BoolFe());
+            BoolFv fv = tmp(new BoolFv());
+            BoolVf vf = tmp(new BoolVf());
 
             and(hasMinPriorityEf, hasMinPrioRandEf, hasMinPriorityEf);
             broadcast(mutApex, ef);
@@ -118,18 +112,18 @@ public abstract class Constraint {
             redOr(vf, cancel);
         }
     }
-    protected Procedure mutApex(BoolERef mutexE, IntVRef priority, IntVRef prioRand, BoolVRef cancel) {
+    protected Procedure mutApex(BoolE mutexE, IntV priority, IntV prioRand, BoolV cancel) {
         return new MutApex(mutexE, priority, prioRand, cancel);
     }
 
     private static class Tritex extends Procedure {
-        public Tritex(BoolFRef tritex, IntVRef priority, IntVRef prioRand, BoolVRef cancel) {
+        public Tritex(BoolF tritex, IntV priority, IntV prioRand, BoolV cancel) {
             // Identify the minimum priority vertices of the three-particles
-            IntVfRef priorityVf = tmp(new IntVfRef(new IntVf(Force.priorityBits)));
-            IntFvRef priorityFv = tmp(new IntFvRef(new IntFv(Force.priorityBits)));
-            IntFRef minPriority = tmp(new IntFRef(new IntF(Force.priorityBits)));
-            IntFvRef minPriorityFv = tmp(new IntFvRef(new IntFv(Force.priorityBits)));
-            BoolFvRef hasMinPriorityFv = tmp(new BoolFvRef());
+            IntVf priorityVf = tmp(new IntVf(Force.priorityBits));
+            IntFv priorityFv = tmp(new IntFv(Force.priorityBits));
+            IntF minPriority = tmp(new IntF(Force.priorityBits));
+            IntFv minPriorityFv = tmp(new IntFv(Force.priorityBits));
+            BoolFv hasMinPriorityFv = tmp(new BoolFv());
 
             broadcast(priority, priorityVf);
             transfer(priorityVf, priorityFv);
@@ -138,22 +132,22 @@ public abstract class Constraint {
             eq(priorityFv, minPriorityFv, hasMinPriorityFv);
 
             // Identify the minimum prioRand vertices among the three particles that have the minimum priority
-            IntVfRef prioRandVf = tmp(new IntVfRef(new IntVf(Force.prioRandBits)));
-            IntFvRef prioRandFv = tmp(new IntFvRef(new IntFv(Force.prioRandBits)));
-            IntFRef minPrioRand = tmp(new IntFRef(new IntF(Force.prioRandBits)));
-            IntFvRef minPrioRandFv = tmp(new IntFvRef(new IntFv(Force.prioRandBits)));
-            BoolFvRef hasMinPrioRandFv = tmp(new BoolFvRef());
+            IntVf prioRandVf = tmp(new IntVf(Force.prioRandBits));
+            IntFv prioRandFv = tmp(new IntFv(Force.prioRandBits));
+            IntF minPrioRand = tmp(new IntF(Force.prioRandBits));
+            IntFv minPrioRandFv = tmp(new IntFv(Force.prioRandBits));
+            BoolFv hasMinPrioRandFv = tmp(new BoolFv());
 
             broadcast(prioRand, prioRandVf);
             transfer(prioRandVf, prioRandFv);
-            fif(hasMinPriorityFv, prioRandFv, new IntFvRef(IntFv.maxValue(Force.prioRandBits)), prioRandFv);
+            fif(hasMinPriorityFv, prioRandFv, IntFv.maxValue(Force.prioRandBits), prioRandFv);
             redMin(prioRandFv, minPrioRand);
             broadcast(minPrioRand, minPrioRandFv);
             eq(prioRandFv, minPrioRandFv, hasMinPrioRandFv);
 
             // Identify the vertex that has the minimum priority and minimum prioRand and cancel its flip
-            BoolFvRef tritexFv = tmp(new BoolFvRef());
-            BoolVfRef vf = tmp(new BoolVfRef());
+            BoolFv tritexFv = tmp(new BoolFv());
+            BoolVf vf = tmp(new BoolVf());
             and(hasMinPriorityFv, hasMinPrioRandFv, hasMinPriorityFv);
             broadcast(tritex, tritexFv);
             and(tritexFv, hasMinPriorityFv, hasMinPriorityFv);
@@ -161,7 +155,7 @@ public abstract class Constraint {
             redOr(vf, cancel);
         }
     }
-    protected Procedure tritex(BoolFRef tritex, IntVRef priority, IntVRef prioRand, BoolVRef cancel) {
+    protected Procedure tritex(BoolF tritex, IntV priority, IntV prioRand, BoolV cancel) {
         return new Tritex(tritex, priority, prioRand, cancel);
     }
 }

@@ -1,159 +1,158 @@
 package language.instruction.instructionSet.intOp;
 
 import language.field.boolField.*;
+import language.field.intField.*;
 import language.instruction.BasicInstruction;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.*;
 
 class BoolToIntV implements BasicInstruction {
-    private final BoolVRef orig;
-    private final IntVRef res;
+    private final BoolV orig;
+    private final IntV res;
 
-    public BoolToIntV(BoolVRef orig, IntVRef res) {
+    public BoolToIntV(BoolV orig, IntV res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolV.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }
 
 class BoolToIntVe implements BasicInstruction {
-    private final BoolVeRef orig;
-    private final IntVeRef res;
+    private final BoolVe orig;
+    private final IntVe res;
 
-    public BoolToIntVe(BoolVeRef orig, IntVeRef res) {
+    public BoolToIntVe(BoolVe orig, IntVe res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolVe.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }
 
 class BoolToIntVf implements BasicInstruction {
-    private final BoolVfRef orig;
-    private final IntVfRef res;
+    private final BoolVf orig;
+    private final IntVf res;
 
-    public BoolToIntVf(BoolVfRef orig, IntVfRef res) {
+    public BoolToIntVf(BoolVf orig, IntVf res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolVf.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }
 
 class BoolToIntE implements BasicInstruction {
-    private final BoolERef orig;
-    private final IntERef res;
+    private final BoolE orig;
+    private final IntE res;
 
-    public BoolToIntE(BoolERef orig, IntERef res) {
+    public BoolToIntE(BoolE orig, IntE res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolE.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }
 
 class BoolToIntEv implements BasicInstruction {
-    private final BoolEvRef orig;
-    private final IntEvRef res;
+    private final BoolEv orig;
+    private final IntEv res;
 
-    public BoolToIntEv(BoolEvRef orig, IntEvRef res) {
+    public BoolToIntEv(BoolEv orig, IntEv res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolEv.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }
 
 class BoolToIntEf implements BasicInstruction {
-    private final BoolEfRef orig;
-    private final IntEfRef res;
+    private final BoolEf orig;
+    private final IntEf res;
 
-    public BoolToIntEf(BoolEfRef orig, IntEfRef res) {
+    public BoolToIntEf(BoolEf orig, IntEf res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolEf.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }
 
 class BoolToIntF implements BasicInstruction {
-    private final BoolFRef orig;
-    private final IntFRef res;
+    private final BoolF orig;
+    private final IntF res;
 
-    public BoolToIntF(BoolFRef orig, IntFRef res) {
+    public BoolToIntF(BoolF orig, IntF res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolF.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }
 
 class BoolToIntFv implements BasicInstruction {
-    private final BoolFvRef orig;
-    private final IntFvRef res;
+    private final BoolFv orig;
+    private final IntFv res;
 
-    public BoolToIntFv(BoolFvRef orig, IntFvRef res) {
+    public BoolToIntFv(BoolFv orig, IntFv res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolFv.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }
 
 class BoolToIntFe implements BasicInstruction {
-    private final BoolFeRef orig;
-    private final IntFeRef res;
+    private final BoolFe orig;
+    private final IntFe res;
 
-    public BoolToIntFe(BoolFeRef orig, IntFeRef res) {
+    public BoolToIntFe(BoolFe orig, IntFe res) {
         this.orig = orig;
         this.res = res;
     }
 
     @Override
     public boolean exec() {
-        for (int i=0; i < res.get().n; i++) res.get().getBits()[i].set(BoolFe.zeroes());
-        res.get().getBits()[res.get().n].set(orig.get());
+        for (int i=0; i < res.n; i++) res.getBits()[i].zeroes();
+        res.getBits()[res.n].set(orig);
         return true;
     }
 }

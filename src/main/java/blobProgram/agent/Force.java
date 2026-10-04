@@ -1,28 +1,27 @@
 package blobProgram.agent;
 
-import language.instruction.Procedure;
 import blobProgram.Rand;
+import language.field.boolField.BoolV;
 import language.field.intField.IntV;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.intField.IntVRef;
+import language.instruction.Procedure;
 
 public abstract class Force {
     public static final int priorityBits = 2;
     public static final int prioRandBits = 2;
 
-    public final IntVRef priority;
-    public final IntVRef prioRand;
+    public final IntV priority;
+    public final IntV prioRand;
 
     protected final Rand rand = new Rand();
 
     protected Force() {
-        this.priority = new IntVRef(IntV.of(0, priorityBits));
-        this.prioRand = new IntVRef(new IntV(prioRandBits));
+        this.priority = IntV.of(0, priorityBits);
+        this.prioRand = new IntV(prioRandBits);
     }
 
-    protected Force(IntVRef priority) {
+    protected Force(IntV priority) {
         this.priority = priority;
-        this.prioRand = new IntVRef(new IntV(prioRandBits));
+        this.prioRand = new IntV(prioRandBits);
     }
 
     public Force setPriority(int p) {
@@ -31,13 +30,13 @@ public abstract class Force {
     }
 
     private class Apply extends Procedure {
-        public Apply(BoolVRef yes, BoolVRef no) {
+        public Apply(BoolV yes, BoolV no) {
             call(rand.next(prioRand));
             call(compute(yes, no));
         }
     }
-    public Procedure apply(BoolVRef yes, BoolVRef no) {
+    public Procedure apply(BoolV yes, BoolV no) {
         return new Apply(yes, no);
     }
-    protected abstract Procedure compute(BoolVRef yes, BoolVRef no);
+    protected abstract Procedure compute(BoolV yes, BoolV no);
 }

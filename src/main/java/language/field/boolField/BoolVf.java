@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /** Represents a boolean transfer language.field from vertex to face orientation. */
-public non-sealed class BoolVf extends BoolFieldT {
+public non-sealed class BoolVf extends BoolFieldT<BoolVf> {
     static int HEIGHT = -1;
     static final int SPAN = 1;
     static int BREADTH = -1;
@@ -27,7 +27,13 @@ public non-sealed class BoolVf extends BoolFieldT {
 
     /** Creates a new BoolVf. */
     public BoolVf() { this(BoolFieldManager.DEFAULT_BORDER()); }
-    public BoolVf(Border border) { super(HEIGHT, SPAN, BREADTH, border); }
+    public BoolVf(Border border) { this(border, true); }
+    public BoolVf(boolean register) { this(BoolFieldManager.DEFAULT_BORDER(), register); }
+    public BoolVf(Border border, boolean register) { super(HEIGHT, SPAN, BREADTH, border, register); }
+    public BoolVf(BoolVf other) {
+        super(HEIGHT, SPAN, BREADTH, other.border);
+        for (int i = 0; i < lines.length; i++) lines[i] = other.lines[i] == null ? null : other.lines[i].copy();
+    }
 
     private static BoolVf DATA_POS;
     private static BoolVf DATA_END;
@@ -54,176 +60,140 @@ public non-sealed class BoolVf extends BoolFieldT {
     }
 
     /** @return a new BoolVf from the given broadcast language.field. */
-    public static BoolVf fromBroadcast(BoolV orig){
-        BoolVf res = new BoolVf(orig.border);
-        fromBroadcastGeneric(HEIGHT, SPAN, BREADTH, orig, res);
-        return res;
+    public BoolVf broadcast(BoolV orig){
+        broadcastGeneric(HEIGHT, SPAN, BREADTH, orig, this);
+        return this;
     }
 
     /** @return a new zero-filled BoolVf. */
-    public static BoolVf zeroes(Border border){
-        BoolVf res = new BoolVf(border);
-        zeroesGeneric(HEIGHT, SPAN, BREADTH, res);
-        return res;
-    }
+    public BoolVf zeroes(){ zeroesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
-    /** @return a new zero-filled BoolVf using the default border. */
-    public static BoolVf zeroes(){ return zeroes(BoolFieldManager.DEFAULT_BORDER()); }
+    public BoolVf ones(){ onesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
-    /** @return a new one-filled BoolVf. */
-    public static BoolVf ones(Border border){
-        BoolVf res = new BoolVf(border);
-        onesGeneric(HEIGHT, SPAN, BREADTH, res);
-        return res;
-    }
-
-    /** @return a new one-filled BoolVf using the default border. */
-    public static BoolVf ones(){ return ones(BoolFieldManager.DEFAULT_BORDER()); }
-
-    /** @return a new randomly initialized BoolVf. */
-    public static BoolVf rand(Border border){
-        BoolVf res = new BoolVf(border);
-        randGeneric(HEIGHT, SPAN, BREADTH, res);
-        return res;
-    }
-
-    /** @return a new randomly initialized BoolVf using the default border. */
-    public static BoolVf rand(){ return rand(BoolFieldManager.DEFAULT_BORDER()); }
+    public BoolVf rand(){ randGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
     /** Sets a bit in the given BoolVf. */
-    public static void setBit(BoolVf target, int y, int x, int s, boolean bit){
-        setBitGeneric(HEIGHT, SPAN, BREADTH, target, y, x, 0, s, bit);
+    public void setBit(int y, int x, int s, boolean bit){
+        setBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, 0, s, bit);
     }
 
     /** Sets a bit in the given BoolVf. */
-    public static void setBit(BoolVf target, Vf locus, boolean bit){
-        setBit(target, locus.y, locus.x, locus.s, bit);
+    public void setBit(Vf locus, boolean bit){
+        setBit(locus.y, locus.x, locus.s, bit);
     }
 
     /** Gets a bit in the given BoolVf */
-    public static boolean getBit(BoolVf target, int y, int x, int s){
-        return getBitGeneric(HEIGHT, SPAN, BREADTH, target, y, x, 0, s);
+    public boolean getBit(int y, int x, int s){
+        return getBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, 0, s);
     }
 
     /** Gets a bit in the given BoolVf */
-    public static boolean getBit(BoolVf target, Vf locus){
-        return getBit(target, locus.y, locus.x, locus.s);
+    public boolean getBit(Vf locus){
+        return getBit(locus.y, locus.x, locus.s);
     }
 
     /** Decode the given BoolVf into a HashMap mapping each Vf locus in the given set to its corresponding bit value in the BoolVf. */
-    public static HashMap<Vf, Boolean> decode(HashSet<Vf> loci, BoolVf field) {
+    public HashMap<Vf, Boolean> decode(HashSet<Vf> loci) {
         HashMap<Vf, Boolean> res = new HashMap<>();
         for (Vf v : loci)
-            res.put(v, getBit(field, v));
+            res.put(v, getBit(v));
         return res;
     }
 
     /** @return the bitwise NOT of the given BoolVf. */
-    public static BoolVf not(BoolVf orig){
-        BoolVf res = new BoolVf(orig.border);
-        notGeneric(HEIGHT, SPAN, BREADTH, orig, res);
-        return res;
+    public BoolVf not(BoolVf orig){
+        notGeneric(HEIGHT, SPAN, BREADTH, orig, this);
+        return this;
     }
 
     /** @return the bitwise AND of the given BoolVf values. */
-    public static BoolVf and(BoolVf a, BoolVf b){
-        BoolVf res = new BoolVf(a.border);
-        andGeneric(HEIGHT, SPAN, BREADTH, a, b, res);
-        return res;
+    public BoolVf and(BoolVf a, BoolVf b){
+        andGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        return this;
     }
 
     /** @return the bitwise OR of the given BoolVf values. */
-    public static BoolVf or(BoolVf a, BoolVf b){
-        BoolVf res = new BoolVf(a.border);
-        orGeneric(HEIGHT, SPAN, BREADTH, a, b, res);
-        return res;
+    public BoolVf or(BoolVf a, BoolVf b){
+        orGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        return this;
     }
 
     /** @return the bitwise XOR of the given BoolVf values. */
-    public static BoolVf xor(BoolVf a, BoolVf b){
-        BoolVf res = new BoolVf(a.border);
-        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, res);
-        return res;
+    public BoolVf xor(BoolVf a, BoolVf b){
+        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        return this;
     }
 
     /** @return a left-shifted BoolVf. */
-    public static BoolVf lShift(BoolVf orig, int n){
-        BoolVf res = new BoolVf(orig.border);
-        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);
-        return res;
+    public BoolVf lShift(BoolVf orig, int n){
+        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        return this;
     }
 
     /** @return a right-shifted BoolVf. */
-    public static BoolVf rShift(BoolVf orig, int n){
-        BoolVf res = new BoolVf(orig.border);
-        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);
-        return res;
+    public BoolVf rShift(BoolVf orig, int n){
+        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        return this;
     }
 
     /** @return a up-shifted BoolVf. */
-    public static BoolVf uShift(BoolVf orig, int n){
-        BoolVf res = new BoolVf(orig.border);
-        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);
-        return res;
+    public BoolVf uShift(BoolVf orig, int n){
+        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        return this;
     }
 
     /** @return a down-shifted BoolVf. */
-    public static BoolVf dShift(BoolVf orig, int n){
-        BoolVf res = new BoolVf(orig.border);
-        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);
-        return res;
+    public BoolVf dShift(BoolVf orig, int n){
+        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        return this;
     }
 
     private static BoolVf maskData(BoolVf mask, BoolVf data, BoolVf neutral){
-        return BoolVf.or(
-                BoolVf.and(mask, data),
-                BoolVf.and(BoolVf.not(mask), neutral)
+        return new BoolVf(false).or(
+                new BoolVf(false).and(mask, data),
+                new BoolVf(false).and(new BoolVf(false).not(mask), neutral)
         );
     }
 
     /** @return the OR reduction of the given transfer language.field. */
-    public static BoolV redOrV(BoolVf orig){
-        BoolVf maskedData = maskData(DATA_POS, orig, BoolVf.zeroes(orig.border));
-        BoolV target = BoolV.zeroes(orig.border);
+    public void redOr(BoolV target){
+        target.zeroes();
+        BoolVf maskedData = maskData(DATA_POS, this, new BoolVf(false).zeroes());
         redOrGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
-        return target;
     }
 
     /** @return the AND reduction of the given transfer language.field. */
-    public static BoolV redAndV(BoolVf orig){
-        BoolVf maskedData = maskData(DATA_POS, orig, BoolVf.ones(orig.border));
-        BoolV target = BoolV.ones(orig.border);
+    public void redAnd(BoolV target){
+        target.ones();
+        BoolVf maskedData = maskData(DATA_POS, this, new BoolVf(false).ones());
         redAndGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
-        return target;
     }
 
     /** @return the XOR reduction of the given transfer language.field. */
-    public static BoolV redXorV(BoolVf orig){
-        BoolVf maskedData = maskData(DATA_POS, orig, BoolVf.zeroes(orig.border));
-        BoolV target = BoolV.zeroes(orig.border);
+    public void redXor(BoolV target){
+        target.zeroes();
+        BoolVf maskedData = maskData(DATA_POS, this, new BoolVf(false).zeroes());
         redXorGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
 
-        if (orig.border == Border.MIRROR) for (Vf m: MIRROR.keySet())
-            BoolV.setBit(target, m.y, m.x, BoolV.getBit(target, m.y, m.x) ^ BoolVf.getBit(orig, m));
-
-        return target;
+        if (this.border == Border.MIRROR) for (Vf m: MIRROR.keySet())
+            target.setBit(m.y, m.x, target.getBit(m.y, m.x) ^ this.getBit(m));
     }
 
-    private static BoolV[] redStackV(BoolVf orig, boolean neutral) {
-        BoolVf neutrals = neutral ? BoolVf.ones(orig.border) : BoolVf.zeroes(orig.border);
-        BoolVf maskedData = maskData(DATA_POS, orig, neutrals);
+    private BoolV[] redStack(boolean neutral) {
+        BoolVf neutrals = neutral ? new BoolVf(false).ones() : new BoolVf(false).zeroes();
+        BoolVf maskedData = maskData(DATA_POS, this, neutrals);
         BoolV[] target = new BoolV[BREADTH];
-        for (int i = 0; i < BREADTH; i++) target[i] = BoolV.zeroes(orig.border);
+        for (int i = 0; i < BREADTH; i++) target[i] = new BoolV(false).zeroes();
         redStackGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
 
-        if (orig.border == Border.MIRROR) redStackMirror(orig, target, neutral);
+        if (this.border == Border.MIRROR) this.redStackMirror(target, neutral);
 
         return target;
     }
-    private static void redStackMirror(BoolVf orig, BoolV[] target, boolean neutral) {
+    private void redStackMirror(BoolV[] target, boolean neutral) {
         for (Vf m: MIRROR.keySet()) {
             int s = MIRROR.get(m);
-            try { BoolV.setBit(target[s], m.y, m.x, getBit(orig, m)); }
+            try { target[s].setBit(m.y, m.x, this.getBit(m)); }
             catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Mirror locus (" + m.y + "," + m.x +")" + " with Vf s=" + s + " is out of bounds for target array of length " + target.length);
                 throw e;
@@ -231,90 +201,90 @@ public non-sealed class BoolVf extends BoolFieldT {
         }
     }
 
-
     /** @return an array of BoolV s.t. the n-th BoolV contains the bits of Vfs (*, *, n), or a 0 if it doesn't exist */
-    public static BoolV[] redStackV0(BoolVf orig){
-        return redStackV(orig, false);
+    public BoolV[] redStack0(){
+        return redStack(false);
     }
 
     /** @return an array of BoolV s.t. the n-th BoolV contains the bits of Vfs (*, *, n), or a 1 if it doesn't exist */
-    public static BoolV[] redStackV1(BoolVf orig){
-        return redStackV(orig, true);
+    public BoolV[] redStack1(){
+        return redStack(true);
     }
 
     /** @return the clockwise rotation of the given BoolVf. */
-    public static BoolVe rotateCW(BoolVf orig) {
-        BoolVe res = new BoolVe(orig.border);
-
+    public void _rotateCW(BoolVe res) {
         for (int i = 0; i < HEIGHT; i++) {
             res.lines[i * BREADTH] = BoolFieldLine.zeroes();
             for (int j = 0; j < BREADTH - 1; j++) {
                 int pos = i * BREADTH + j;
-                res.lines[pos + 1] = orig.lines[pos];
+                res.lines[pos + 1] = this.lines[pos].copy();
                 res.lines[i * BREADTH] = BoolFieldLine.or(
                         res.lines[i * BREADTH],
-                        BoolFieldLine.and(orig.lines[pos], DATA_END.lines[pos])
+                        BoolFieldLine.and(this.lines[pos], DATA_END.lines[pos])
                 );
             }
         }
 
-        if (orig.border == Border.MIRROR) for (Vf m: MIRROR_CW.keySet()) {
+        if (this.border == Border.MIRROR) for (Vf m: MIRROR_CW.keySet()) {
             Ve mirrorVe = MIRROR_CW.get(m);
-            BoolVe.setBit(res, mirrorVe, BoolVf.getBit(orig, m));
+            res.setBit(mirrorVe, this.getBit(m));
         }
-
-        return res;
     }
+    public BoolVf rotateCW(BoolVe orig) { orig._rotateCW(this); return this; }
 
     /** @return the counterclockwise rotation of the given BoolVf. */
-    public static BoolVe rotateCCW(BoolVf orig){
-        BoolVe res = new BoolVe(orig.border);
-        System.arraycopy(orig.lines, 0, res.lines, 0, orig.lines.length);
+    public void _rotateCCW(BoolVe res){
+        for (int i = 0; i<lines.length; i++) { res.lines[i] = this.lines[i].copy(); }
 
-         if (orig.border == Border.MIRROR) for (Vf m: MIRROR_CCW.keySet()) {
+        if (this.border == Border.MIRROR) for (Vf m: MIRROR_CCW.keySet()) {
             Ve mirrorVe = MIRROR_CCW.get(m);
-            BoolVe.setBit(res, mirrorVe, BoolVf.getBit(orig, m));
+            res.setBit(mirrorVe, this.getBit(m));
         }
-
-        return res;
     }
+    public BoolVf rotateCCW(BoolVe orig) { orig._rotateCCW(this); return this; }
 
 
     /** @return the transfer result for the given BoolVf. */
-    public static BoolFv transfer(BoolVf orig){
-        BoolFv res = BoolFv.zeroes(orig.border);
-        transferGeneric(orig, res, MASKS);
-        return res;
+    public void _transfer(BoolFv res){
+        res.zeroes();
+        transferGeneric(this, res, MASKS);
     }
-
-    /** @return a deep copy of this BoolVf. */
-    @Override
-    public BoolVf copy(){
-        BoolVf newBoolVf = new BoolVf(border);
-        for (int i = 0; i < lines.length; i++)
-            newBoolVf.lines[i] = this.lines[i].copy();
-        return newBoolVf;
-    }
+    public BoolVf transfer(BoolFv orig) { orig._transfer(this); return this; }
 
     /** @return whether this BoolVf is equal to the given object. */
     @Override
     public boolean equals(Object o){
         if (!(o instanceof BoolVf other)) return false;
 
-        BoolVf thisClean = BoolVf.and(this, DATA_POS);
-        BoolVf otherClean = BoolVf.and(other, DATA_POS);
         for (int i = 0; i < HEIGHT * SPAN * BREADTH; i++) {
-            if (!thisClean.lines[i].equals(otherClean.lines[i])) return false;
+            if (this.lines[i] == null && other.lines[i] == null) continue;
+            if (this.lines[i] == null && other.lines[i] != null) return false;
+            if (this.lines[i] != null && other.lines[i] == null) return false;
+
+            BoolFieldLine thisLine = BoolFieldLine.and(this.lines[i], DATA_POS.lines[i]);
+            BoolFieldLine otherLine = BoolFieldLine.and(other.lines[i], DATA_POS.lines[i]);
+            if (!thisLine.equals(otherLine)) return false;
         }
+
         return true;
     }
 
     @Override
     public String toString() {
-        BoolVf clean = BoolVf.and(this, DATA_POS);
+        BoolVf clean = new BoolVf(false).and(this, DATA_POS);
         return toString(clean);
     }
 
+    private BoolVf copy(Boolean register) {
+        BoolVf newBoolVf = new BoolVf(border, register);
+        for (int i = 0; i < lines.length; i++)
+            newBoolVf.lines[i] = this.lines[i] == null ? null : this.lines[i].copy();
+        return newBoolVf;
+    }
+
     @Override
-    public  BoolVf cache() { return copy(); }
+    public BoolVf copy(){ return copy(true); }
+
+    @Override
+    public  BoolVf cache() { return copy(false); }
 }

@@ -1,17 +1,16 @@
 package language.instruction.instructionSet.boolOp;
 
-import language.instruction.BasicInstruction;
 import language.field.boolField.*;
-import language.fieldRef.boolField.*;
+import language.instruction.BasicInstruction;
 
 /** Performs an OR operation on two BoolV. */
 class OrV implements BasicInstruction {
-    private final BoolVRef a;
-    private final BoolVRef b;
-    private final BoolVRef res;
+    private final BoolV a;
+    private final BoolV b;
+    private final BoolV res;
 
     /** Creates a new OrV. */
-    public OrV(BoolVRef a, BoolVRef b, BoolVRef res) {
+    public OrV(BoolV a, BoolV b, BoolV res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -20,19 +19,19 @@ class OrV implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolV.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }
 
 /** Performs an OR operation on two BoolVe. */
 class OrVe implements BasicInstruction {
-    private final BoolVeRef a;
-    private final BoolVeRef b;
-    private final BoolVeRef res;
+    private final BoolVe a;
+    private final BoolVe b;
+    private final BoolVe res;
 
     /** Creates a new OrVe. */
-    public OrVe(BoolVeRef a, BoolVeRef b, BoolVeRef res) {
+    public OrVe(BoolVe a, BoolVe b, BoolVe res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -41,19 +40,19 @@ class OrVe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVe.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }
 
 /** Performs an OR operation on two BoolVf. */
 class OrVf implements BasicInstruction {
-    private final BoolVfRef a;
-    private final BoolVfRef b;
-    private final BoolVfRef res;
+    private final BoolVf a;
+    private final BoolVf b;
+    private final BoolVf res;
 
     /** Creates a new OrVf. */
-    public OrVf(BoolVfRef a, BoolVfRef b, BoolVfRef res) {
+    public OrVf(BoolVf a, BoolVf b, BoolVf res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -62,19 +61,19 @@ class OrVf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVf.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }
 
 /** Performs an OR operation on two BoolE. */
 class OrE implements BasicInstruction {
-    private final BoolERef a;
-    private final BoolERef b;
-    private final BoolERef res;
+    private final BoolE a;
+    private final BoolE b;
+    private final BoolE res;
 
     /** Creates a new OrE. */
-    public OrE(BoolERef a, BoolERef b, BoolERef res) {
+    public OrE(BoolE a, BoolE b, BoolE res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -83,19 +82,19 @@ class OrE implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolE.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }
 
 /** Performs an OR operation on two BoolEv. */
 class OrEv implements BasicInstruction {
-    private final BoolEvRef a;
-    private final BoolEvRef b;
-    private final BoolEvRef res;
+    private final BoolEv a;
+    private final BoolEv b;
+    private final BoolEv res;
 
     /** Creates a new OrEv. */
-    public OrEv(BoolEvRef a, BoolEvRef b, BoolEvRef res) {
+    public OrEv(BoolEv a, BoolEv b, BoolEv res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -104,19 +103,19 @@ class OrEv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEv.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }
 
 /** Performs an OR operation on two BoolEf. */
 class OrEf implements BasicInstruction {
-    private final BoolEfRef a;
-    private final BoolEfRef b;
-    private final BoolEfRef res;
+    private final BoolEf a;
+    private final BoolEf b;
+    private final BoolEf res;
 
     /** Creates a new OrEf. */
-    public OrEf(BoolEfRef a, BoolEfRef b, BoolEfRef res) {
+    public OrEf(BoolEf a, BoolEf b, BoolEf res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -125,19 +124,19 @@ class OrEf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEf.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }
 
 /** Performs an OR operation on two BoolF. */
 class OrF implements BasicInstruction {
-    private final BoolFRef a;
-    private final BoolFRef b;
-    private final BoolFRef res;
+    private final BoolF a;
+    private final BoolF b;
+    private final BoolF res;
 
     /** Creates a new OrF. */
-    public OrF(BoolFRef a, BoolFRef b, BoolFRef res) {
+    public OrF(BoolF a, BoolF b, BoolF res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -146,19 +145,19 @@ class OrF implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolF.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }
 
 /** Performs an OR operation on two BoolFv. */
 class OrFv implements BasicInstruction {
-    private final BoolFvRef a;
-    private final BoolFvRef b;
-    private final BoolFvRef res;
+    private final BoolFv a;
+    private final BoolFv b;
+    private final BoolFv res;
 
     /** Creates a new OrFv. */
-    public OrFv(BoolFvRef a, BoolFvRef b, BoolFvRef res) {
+    public OrFv(BoolFv a, BoolFv b, BoolFv res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -167,19 +166,19 @@ class OrFv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFv.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }
 
 /** Performs an OR operation on two BoolFe. */
 class OrFe implements BasicInstruction {
-    private final BoolFeRef a;
-    private final BoolFeRef b;
-    private final BoolFeRef res;
+    private final BoolFe a;
+    private final BoolFe b;
+    private final BoolFe res;
 
     /** Creates a new OrFe. */
-    public OrFe(BoolFeRef a, BoolFeRef b, BoolFeRef res) {
+    public OrFe(BoolFe a, BoolFe b, BoolFe res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -188,7 +187,7 @@ class OrFe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFe.or(a.get(), b.get()));
+        res.or(a, b);
         return true;
     }
 }

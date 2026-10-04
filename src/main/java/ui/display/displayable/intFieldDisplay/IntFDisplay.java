@@ -1,7 +1,7 @@
 package ui.display.displayable.intFieldDisplay;
 
 import javafx.scene.paint.Color;
-import language.fieldRef.intField.IntFRef;
+import language.field.intField.IntF;
 import medium.Medium;
 import medium.locusS.Face;
 import ui.display.Styles;
@@ -10,10 +10,10 @@ import ui.display.displayable.Displayable;
 import java.util.HashMap;
 
 public class IntFDisplay implements Displayable {
-    private final IntFRef ref;
+    private final IntF ref;
     private final Styles.Style style;
 
-    public IntFDisplay(IntFRef ref, Styles.Style style) {
+    public IntFDisplay(IntF ref, Styles.Style style) {
         this.ref = ref;
         this.style = style;
     }
@@ -22,7 +22,7 @@ public class IntFDisplay implements Displayable {
 
     @Override
     public HashMap<Face, Color> displayColorF(Medium medium) {
-        HashMap<Face, Integer> mem = ref.get().decode(medium);
+        HashMap<Face, Integer> mem = ref.decode(medium);
         HashMap<Face, Color> colors = new HashMap<>();
 
         int absMax = 0;
@@ -56,7 +56,7 @@ public class IntFDisplay implements Displayable {
 
     @Override
     public HashMap<Face, String> displayStringF(Medium medium) {
-        HashMap<Face, Integer> mem = ref.get().decode(medium);
+        HashMap<Face, Integer> mem = ref.decode(medium);
         HashMap<Face, String> strings = new HashMap<>();
         for (Face face : mem.keySet()) strings.put(face, Integer.toString(mem.get(face)));
         return strings;

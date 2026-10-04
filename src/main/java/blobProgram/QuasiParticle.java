@@ -1,27 +1,25 @@
 package blobProgram;
 
-import language.field.boolField.BoolV;
+import language.field.boolField.*;
 import language.field.intField.IntV;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.IntVRef;
 import language.instruction.Procedure;
 
 public class QuasiParticle extends BlobV {
     public QuasiParticle() { super(); }
     public QuasiParticle(BoolV state) { super(state); }
 
-    public static QuasiParticle rand() {return rand(0); }
-    public static QuasiParticle rand(int sparsity) {
-        BoolV cells = BoolV.rand();
+    public static QuasiParticle random() {return random(0); }
+    public static QuasiParticle random(int sparsity) {
+        BoolV cells = new BoolV().rand();
         for (int i = 0; i < sparsity; i++) {
-            cells = BoolV.and(cells, BoolV.rand());
+            cells.and(cells, new BoolV().rand());
         }
         return new QuasiParticle(cells);
     }
 
     private static class OneParticle extends Procedure {
         public OneParticle(QuasiParticle in, QuasiParticle out) {
-            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolVe ve = tmp(new BoolVe());
             broadcast(in, ve);
             call(send(ve, ve));
 
@@ -35,13 +33,13 @@ public class QuasiParticle extends BlobV {
 
     private static class TwoParticle extends Procedure {
         public TwoParticle(QuasiParticle in, QuasiParticle out) {
-            BoolVeRef ve = tmp(new BoolVeRef());
+            BoolVe ve = tmp(new BoolVe());
             broadcast(in, ve);
             call(send(ve, ve));
 
-            IntVRef nbNeighbors = tmp(new IntVRef(new IntV(2)));
+            IntV nbNeighbors = tmp(new IntV(2));
             redAdd(ve, nbNeighbors);
-            eq(nbNeighbors, new IntVRef(IntV.of(1, 2)), out);
+            eq(nbNeighbors, IntV.of(1, 2), out);
             and(in, out, out);
         }
     }
@@ -50,9 +48,9 @@ public class QuasiParticle extends BlobV {
 
     public static class ThreeParticle extends Procedure {
         public <I extends QuasiParticle, O extends QuasiParticle> ThreeParticle(QuasiParticle in, QuasiParticle out) {
-            BoolVfRef vf = tmp(new BoolVfRef());
-            BoolFvRef fv = tmp(new BoolFvRef());
-            BoolFRef f = tmp(new BoolFRef());
+            BoolVf vf = tmp(new BoolVf());
+            BoolFv fv = tmp(new BoolFv());
+            BoolF f = tmp(new BoolF());
 
             broadcast(in, vf);
             transfer(vf, fv);

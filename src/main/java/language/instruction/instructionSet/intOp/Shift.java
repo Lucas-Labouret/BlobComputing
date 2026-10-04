@@ -1,19 +1,17 @@
 package language.instruction.instructionSet.intOp;
 
-import language.field.boolField.*;
-import language.instruction.BasicInstruction;
 import language.field.intField.*;
-import language.fieldRef.intField.*;
+import language.instruction.BasicInstruction;
 
 class LShiftV implements BasicInstruction {
-    private final IntVRef orig;
-    private final IntVRef res;
+    private final IntV orig;
+    private final IntV res;
     private final int k;
 
-    public LShiftV(IntVRef orig, IntVRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftV(IntV orig, IntV res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntV to an IntV of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -22,21 +20,21 @@ class LShiftV implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolV.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftV implements BasicInstruction {
-    private final IntVRef orig;
-    private final IntVRef res;
+    private final IntV orig;
+    private final IntV res;
     private final int k;
 
-    public RShiftV(IntVRef orig, IntVRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftV(IntV orig, IntV res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntV to an IntV of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -45,21 +43,21 @@ class RShiftV implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolV.zeroes());
+        for (int i = orig.n; i >= k ; i--) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class LShiftVe implements BasicInstruction {
-    private final IntVeRef orig;
-    private final IntVeRef res;
+    private final IntVe orig;
+    private final IntVe res;
     private final int k;
 
-    public LShiftVe(IntVeRef orig, IntVeRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftVe(IntVe orig, IntVe res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntVe to an IntVe of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -68,21 +66,21 @@ class LShiftVe implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolVe.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftVe implements BasicInstruction {
-    private final IntVeRef orig;
-    private final IntVeRef res;
+    private final IntVe orig;
+    private final IntVe res;
     private final int k;
 
-    public RShiftVe(IntVeRef orig, IntVeRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftVe(IntVe orig, IntVe res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntVe to an IntVe of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -91,21 +89,21 @@ class RShiftVe implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolVe.zeroes());
+        for (int i = orig.n; i >= k ; i--) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class LShiftVf implements BasicInstruction {
-    private final IntVfRef orig;
-    private final IntVfRef res;
+    private final IntVf orig;
+    private final IntVf res;
     private final int k;
 
-    public LShiftVf(IntVfRef orig, IntVfRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftVf(IntVf orig, IntVf res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntVf to an IntVf of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -114,21 +112,21 @@ class LShiftVf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolVf.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftVf implements BasicInstruction {
-    private final IntVfRef orig;
-    private final IntVfRef res;
+    private final IntVf orig;
+    private final IntVf res;
     private final int k;
 
-    public RShiftVf(IntVfRef orig, IntVfRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftVf(IntVf orig, IntVf res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntVf to an IntVf of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -137,21 +135,21 @@ class RShiftVf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolVf.zeroes());
+        for (int i = orig.n; i >= k ; i--) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class LShiftE implements BasicInstruction {
-    private final IntERef orig;
-    private final IntERef res;
+    private final IntE orig;
+    private final IntE res;
     private final int k;
 
-    public LShiftE(IntERef orig, IntERef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftE(IntE orig, IntE res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntE to an IntE of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -160,21 +158,21 @@ class LShiftE implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolE.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftE implements BasicInstruction {
-    private final IntERef orig;
-    private final IntERef res;
+    private final IntE orig;
+    private final IntE res;
     private final int k;
 
-    public RShiftE(IntERef orig, IntERef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftE(IntE orig, IntE res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntE to an IntE of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -183,21 +181,21 @@ class RShiftE implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolE.zeroes());
+        for (int i = orig.n; i >= k ; i--) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class LShiftEv implements BasicInstruction {
-    private final IntEvRef orig;
-    private final IntEvRef res;
+    private final IntEv orig;
+    private final IntEv res;
     private final int k;
 
-    public LShiftEv(IntEvRef orig, IntEvRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftEv(IntEv orig, IntEv res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntEv to an IntEv of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -206,21 +204,21 @@ class LShiftEv implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolEv.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftEv implements BasicInstruction {
-    private final IntEvRef orig;
-    private final IntEvRef res;
+    private final IntEv orig;
+    private final IntEv res;
     private final int k;
 
-    public RShiftEv(IntEvRef orig, IntEvRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftEv(IntEv orig, IntEv res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntEv to an IntEv of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -229,21 +227,21 @@ class RShiftEv implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolEv.zeroes());
+        for (int i = orig.n; i >= k ; i--) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class LShiftEf implements BasicInstruction {
-    private final IntEfRef orig;
-    private final IntEfRef res;
+    private final IntEf orig;
+    private final IntEf res;
     private final int k;
 
-    public LShiftEf(IntEfRef orig, IntEfRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftEf(IntEf orig, IntEf res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntEf to an IntEf of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -252,21 +250,21 @@ class LShiftEf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolEf.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftEf implements BasicInstruction {
-    private final IntEfRef orig;
-    private final IntEfRef res;
+    private final IntEf orig;
+    private final IntEf res;
     private final int k;
 
-    public RShiftEf(IntEfRef orig, IntEfRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftEf(IntEf orig, IntEf res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntEf to an IntEf of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -275,21 +273,21 @@ class RShiftEf implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = k; i <= orig.get().n; i++) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolEf.zeroes());
+        for (int i = k; i <= orig.n; i++) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class LShiftF implements BasicInstruction {
-    private final IntFRef orig;
-    private final IntFRef res;
+    private final IntF orig;
+    private final IntF res;
     private final int k;
 
-    public LShiftF(IntFRef orig, IntFRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftF(IntF orig, IntF res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntF to an IntF of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -298,21 +296,21 @@ class LShiftF implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolF.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftF implements BasicInstruction {
-    private final IntFRef orig;
-    private final IntFRef res;
+    private final IntF orig;
+    private final IntF res;
     private final int k;
 
-    public RShiftF(IntFRef orig, IntFRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftF(IntF orig, IntF res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntF to an IntF of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -321,21 +319,21 @@ class RShiftF implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolF.zeroes());
+        for (int i = orig.n; i >= k ; i--) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class LShiftFv implements BasicInstruction {
-    private final IntFvRef orig;
-    private final IntFvRef res;
+    private final IntFv orig;
+    private final IntFv res;
     private final int k;
 
-    public LShiftFv(IntFvRef orig, IntFvRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftFv(IntFv orig, IntFv res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntFv to an IntFv of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -344,21 +342,21 @@ class LShiftFv implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolFv.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftFv implements BasicInstruction {
-    private final IntFvRef orig;
-    private final IntFvRef res;
+    private final IntFv orig;
+    private final IntFv res;
     private final int k;
 
-    public RShiftFv(IntFvRef orig, IntFvRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftFv(IntFv orig, IntFv res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntFv to an IntFv of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -367,21 +365,21 @@ class RShiftFv implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolFv.zeroes());
+        for (int i = orig.n; i >= k ; i--) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class LShiftFe implements BasicInstruction {
-    private final IntFeRef orig;
-    private final IntFeRef res;
+    private final IntFe orig;
+    private final IntFe res;
     private final int k;
 
-    public LShiftFe(IntFeRef orig, IntFeRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public LShiftFe(IntFe orig, IntFe res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntFe to an IntFe of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot left shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -390,21 +388,21 @@ class LShiftFe implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = 0; i <= orig.get().n - k; i++) res.get().getBits()[i].set(orig.get().getBits()[i + k].get().copy());
-        for (int i = orig.get().n - k + 1; i <= orig.get().n; i++) res.get().getBits()[i].set(BoolFe.zeroes());
+        for (int i = 0; i <= orig.n - k; i++) res.getBits()[i].set(orig.getBits()[i + k]);
+        for (int i = orig.n - k + 1; i <= orig.n; i++) res.getBits()[i].zeroes();
         return true;
     }
 }
 
 class RShiftFe implements BasicInstruction {
-    private final IntFeRef orig;
-    private final IntFeRef res;
+    private final IntFe orig;
+    private final IntFe res;
     private final int k;
 
-    public RShiftFe(IntFeRef orig, IntFeRef res, int k) {
-        if (orig.get().n != res.get().n)
+    public RShiftFe(IntFe orig, IntFe res, int k) {
+        if (orig.n != res.n)
             throw new IllegalArgumentException("Cannot shift an IntFe to an IntFe of different size.");
-        if (k > orig.get().n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
+        if (k > orig.n) throw new IllegalArgumentException("Cannot right shift by more than n bits.");
 
         this.orig = orig;
         this.res = res;
@@ -413,8 +411,8 @@ class RShiftFe implements BasicInstruction {
 
     @Override
     public boolean exec() {
-        for (int i = orig.get().n; i >= k ; i--) res.get().getBits()[i].set(orig.get().getBits()[i - k].get().copy());
-        for (int i = 0; i < k; i++) res.get().getBits()[i].set(BoolFe.zeroes());
+        for (int i = orig.n; i >= k ; i--) res.getBits()[i].set(orig.getBits()[i - k]);
+        for (int i = 0; i < k; i++) res.getBits()[i].zeroes();
         return true;
     }
 }

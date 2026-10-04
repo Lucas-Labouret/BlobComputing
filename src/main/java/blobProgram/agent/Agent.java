@@ -1,8 +1,8 @@
 package blobProgram.agent;
 
 import blobProgram.BlobV;
+import language.field.boolField.BoolV;
 import language.instruction.Procedure;
-import language.fieldRef.boolField.BoolVRef;
 
 public abstract class Agent {
     public final BlobV state;
@@ -23,10 +23,10 @@ public abstract class Agent {
         public ApplyFlip() {
             call(precompute());
 
-            BoolVRef flipped = tmp(new BoolVRef());
+            BoolV flipped = tmp(new BoolV());
             not(state, flipped);
 
-            BoolVRef where = tmp(new BoolVRef());
+            BoolV where = tmp(new BoolV());
             call(flip.where(where));
 
             fif(where, flipped, state, state);

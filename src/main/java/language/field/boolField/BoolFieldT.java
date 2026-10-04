@@ -7,15 +7,19 @@ import language.utils.Coord2D;
 import java.util.HashMap;
 
 /** Represents the abstract base type for transfer boolean fields. */
-public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf, BoolEv, BoolEf, BoolFv, BoolFe {
+public sealed abstract class BoolFieldT<F extends BoolFieldT<F>> extends BoolField<F> permits BoolVe, BoolVf, BoolEv, BoolEf, BoolFv, BoolFe {
     /** Creates a new transfer boolean language.field base instance. */
+    protected BoolFieldT(int HEIGHT, int SPAN, int BREADTH, Border border, boolean register) {
+        super(HEIGHT, SPAN, BREADTH, border, register);
+    }
+
     protected BoolFieldT(int HEIGHT, int SPAN, int BREADTH, Border border) {
-        super(HEIGHT, SPAN, BREADTH, border);
+        this(HEIGHT, SPAN, BREADTH, border, true);
     }
 
     /** Computes the end index of the data region. */
-    protected static void computeDataEnd(int HEIGHT, int SPAN, int BREADTH,
-                                         BoolFieldT pos, BoolFieldT target){
+    protected static <T extends BoolFieldT<T>>
+    void computeDataEnd(int HEIGHT, int SPAN, int BREADTH, T pos, T target){
         for (int i = 0; i < HEIGHT * SPAN; i++) {
             for (int j = 0; j < BREADTH-1; j++) {
                 int index = i * BREADTH + j;
@@ -26,15 +30,15 @@ public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf
     }
 
     /** Copies broadcast data into the corresponding transfer language.field. */
-    protected static void fromBroadcastGeneric(int HEIGHT, int SPAN, int BREADTH,
-                                               BoolFieldS orig, BoolFieldT target) {
+    protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
+    void broadcastGeneric(int HEIGHT, int SPAN, int BREADTH, S orig, T target) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) for (int k = 0; k < BREADTH; k++)
             target.lines[(i * SPAN + j) * BREADTH + k] = new BoolFieldLine(orig.lines[i * SPAN + j]);
     }
 
     /** Computes the OR reduction for the target simplicial language.field. */
-    protected static void redOrGeneric(int HEIGHT, int SPAN, int BREADTH,
-                                       BoolFieldS target, BoolFieldT orig) {
+    protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
+    void redOrGeneric(int HEIGHT, int SPAN, int BREADTH, S target, T orig) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int targetIndex = i * SPAN + j;
             for (int k = 0; k < BREADTH; k++) {
@@ -47,8 +51,8 @@ public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf
     }
 
     /** Computes the AND reduction for the target simplicial language.field. */
-    protected static void redAndGeneric(int HEIGHT, int SPAN, int BREADTH,
-                                       BoolFieldS target, BoolFieldT orig) {
+    protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
+    void redAndGeneric(int HEIGHT, int SPAN, int BREADTH, S target, T orig) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int targetIndex = i * SPAN + j;
             for (int k = 0; k < BREADTH; k++) {
@@ -61,8 +65,8 @@ public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf
     }
 
     /** Computes the XOR reduction for the target simplicial language.field. */
-    protected static void redXorGeneric(int HEIGHT, int SPAN, int BREADTH,
-                                        BoolFieldS target, BoolFieldT orig) {
+    protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
+    void redXorGeneric(int HEIGHT, int SPAN, int BREADTH, S target, T orig) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int targetIndex = i * SPAN + j;
             for (int k = 0; k < BREADTH; k++) {
@@ -74,8 +78,8 @@ public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf
         }
     }
 
-    protected static void redStackGeneric(int HEIGHT, int SPAN, int BREADTH,
-                                          BoolFieldS[] target, BoolFieldT orig) {
+    protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
+    void redStackGeneric(int HEIGHT, int SPAN, int BREADTH, S[] target, T orig) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int targetIndex = i * SPAN + j;
             for (int k = 0; k < BREADTH; k++) {
@@ -87,8 +91,8 @@ public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf
         }
     }
 
-    protected static void transferGeneric(BoolFieldT orig, BoolFieldT target,
-                                          HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks) {
+    protected static <T1 extends BoolFieldT<T1>, T2 extends BoolFieldT<T2>>
+    void transferGeneric(T1 orig, T2 target, HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks) {
         for (Coord2D start: masks.keySet()) for (Coord2D end: masks.get(start).keySet()) for (Integer shift: masks.get(start).get(end).keySet()) {
             int startInt = orig.getInt(start);
             int mask = masks.get(start).get(end).get(shift);
@@ -101,5 +105,5 @@ public sealed abstract class BoolFieldT extends BoolField permits BoolVe, BoolVf
         }
     }
 
-    public abstract BoolFieldT copy();
+    public abstract F copy();
 }

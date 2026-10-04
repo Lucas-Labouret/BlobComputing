@@ -1,55 +1,57 @@
 package language.field.intField;
 
 import language.field.boolField.BoolEv;
-import language.fieldRef.boolField.BoolEvRef;
 import medium.Medium;
 import medium.locusT.Ev;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 /** IntEv represents an integer language.field on Ev loci. */
-public non-sealed class IntEv extends IntField<BoolEv> {
+public non-sealed class IntEv extends IntField<BoolEv, IntEv> {
+    private static final Supplier<BoolEv> zeroes = () -> new BoolEv().zeroes();
+    private static final Supplier<BoolEv> ones = () -> new BoolEv().ones();
+    private static final Supplier<BoolEv> rand = () -> new BoolEv().rand();
+    
     public IntEv(int n) {
-        super(n, new BoolEvRef[n + 1]);
-        for (int i = 0; i <= n; i++) this.bits[i] = new BoolEvRef();
+        super(n, new BoolEv[n + 1]);
+        for (int i = 0; i <= n; i++) this.bits[i] = new BoolEv();
     }
-    public IntEv(int n, BoolEvRef[] bits) {
+    public IntEv(int n, BoolEv[] bits) {
         super(n, bits);
     }
 
+    @Override
+    public BoolEv[] getBits() { return bits; }
+
     public static IntEv of(int value, int n) {
         IntEv intEv = new IntEv(n);
-        of(intEv, value, BoolEv::zeroes, BoolEv::ones);
+        of(intEv, value, zeroes, ones);
         return intEv;
     }
 
     public static IntEv maxValue(int n) {
         IntEv intEv = new IntEv(n);
-        maxValue(intEv, BoolEv::zeroes, BoolEv::ones);
+        maxValue(intEv, zeroes, ones);
         return intEv;
     }
 
     public static IntEv minValue(int n) {
         IntEv intEv = new IntEv(n);
-        minValue(intEv, BoolEv::zeroes, BoolEv::ones);
+        minValue(intEv, zeroes, ones);
         return intEv;
     }
 
     public static IntEv rand(int n) {
-        IntEv rand = new IntEv(n);
-        IntField.rand(rand, BoolEv::rand);
-        return rand;
+        IntEv res = new IntEv(n);
+        IntField.rand(res, rand);
+        return res;
     }
     public static IntEv randNonNegative(int n) {
-        IntEv rand = new IntEv(n);
-        IntField.randNonNegative(rand, BoolEv::rand);
-        return rand;
-    }
-
-    @Override
-    public BoolEvRef[] getBits() {
-        return (BoolEvRef[]) bits;
+        IntEv res = new IntEv(n);
+        IntField.randNonNegative(res, rand);
+        return res;
     }
 
     /** Indicates that this IntEv should be decoded as an unsigned integer */
@@ -61,7 +63,7 @@ public non-sealed class IntEv extends IntField<BoolEv> {
     /** Converts this IntEv to a HashMap<Ev, Integer>. */
     public HashMap<Ev, Integer> decode(Medium m) {
         HashMap<Ev, Integer> res = new HashMap<>();
-        decode(this, res, m.evs, BoolEv::decode, decodeAsSigned);
+        decode(this, res, m.evs, (loci, field) -> field.decode(loci), decodeAsSigned);
         return res;
     }
 
@@ -70,10 +72,5 @@ public non-sealed class IntEv extends IntField<BoolEv> {
         IntEv copy = new IntEv(n);
         copy(this, copy);
         return copy;
-    }
-
-    @Override
-    public IntEv cache() {
-        return new IntEv(n, (BoolEvRef[]) Arrays.copyOf(this.bits, n+1));
     }
 }

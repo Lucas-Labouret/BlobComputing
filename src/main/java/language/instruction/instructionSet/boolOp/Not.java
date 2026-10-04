@@ -1,176 +1,175 @@
 package language.instruction.instructionSet.boolOp;
 
-import language.instruction.BasicInstruction;
 import language.field.boolField.*;
-import language.fieldRef.boolField.*;
+import language.instruction.BasicInstruction;
 
 /** Performs a NOT operation on a BoolV. */
 class NotV implements BasicInstruction {
-    private final BoolVRef a;
-    private final BoolVRef res;
+    private final BoolV orig;
+    private final BoolV dest;
 
     /** Creates a new NotV. */
-    public NotV(BoolVRef a, BoolVRef res) {
-        this.a = a;
-        this.res = res;
+    public NotV(BoolV orig, BoolV dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolV.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }
 
 /** Performs a NOT operation on a BoolVe. */
 class NotVe implements BasicInstruction {
-    private final BoolVeRef a;
-    private final BoolVeRef res;
+    private final BoolVe orig;
+    private final BoolVe dest;
 
-    /** Creates a new NotVe. */
-    public NotVe(BoolVeRef a, BoolVeRef res) {
-        this.a = a;
-        this.res = res;
+    /** Creates orig new NotVe. */
+    public NotVe(BoolVe orig, BoolVe dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVe.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }
 
 /** Performs a NOT operation on a BoolVf. */
 class NotVf implements BasicInstruction {
-    private final BoolVfRef a;
-    private final BoolVfRef res;
+    private final BoolVf orig;
+    private final BoolVf dest;
 
     /** Creates a new NotVf. */
-    public NotVf(BoolVfRef a, BoolVfRef res) {
-        this.a = a;
-        this.res = res;
+    public NotVf(BoolVf orig, BoolVf dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVf.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }
 
 /** Performs a NOT operation on a BoolE. */
 class NotE implements BasicInstruction {
-    private final BoolERef a;
-    private final BoolERef res;
+    private final BoolE orig;
+    private final BoolE dest;
 
     /** Creates a new NotE. */
-    public NotE(BoolERef a, BoolERef res) {
-        this.a = a;
-        this.res = res;
+    public NotE(BoolE orig, BoolE dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolE.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }
 
 /** Performs a NOT operation on a BoolEv. */
 class NotEv implements BasicInstruction {
-    private final BoolEvRef a;
-    private final BoolEvRef res;
+    private final BoolEv orig;
+    private final BoolEv dest;
 
     /** Creates a new NotEv. */
-    public NotEv(BoolEvRef a, BoolEvRef res) {
-        this.a = a;
-        this.res = res;
+    public NotEv(BoolEv orig, BoolEv dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEv.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }
 
 /** Performs a NOT operation on a BoolEf. */
 class NotEf implements BasicInstruction {
-    private final BoolEfRef a;
-    private final BoolEfRef res;
+    private final BoolEf orig;
+    private final BoolEf dest;
 
     /** Creates a new NotEf. */
-    public NotEf(BoolEfRef a, BoolEfRef res) {
-        this.a = a;
-        this.res = res;
+    public NotEf(BoolEf orig, BoolEf dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEf.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }
 
 /** Performs a NOT operation on a BoolF. */
 class NotF implements BasicInstruction {
-    private final BoolFRef a;
-    private final BoolFRef res;
+    private final BoolF orig;
+    private final BoolF dest;
 
     /** Creates a new NotF. */
-    public NotF(BoolFRef a, BoolFRef res) {
-        this.a = a;
-        this.res = res;
+    public NotF(BoolF orig, BoolF dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolF.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }
 
 /** Performs a NOT operation on a BoolFv. */
 class NotFv implements BasicInstruction {
-    private final BoolFvRef a;
-    private final BoolFvRef res;
+    private final BoolFv orig;
+    private final BoolFv dest;
 
     /** Creates a new NotFv. */
-    public NotFv(BoolFvRef a, BoolFvRef res) {
-        this.a = a;
-        this.res = res;
+    public NotFv(BoolFv orig, BoolFv dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFv.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }
 
 /** Performs a NOT operation on a BoolFe. */
 class NotFe implements BasicInstruction {
-    private final BoolFeRef a;
-    private final BoolFeRef res;
+    private final BoolFe orig;
+    private final BoolFe dest;
 
     /** Creates a new NotFe. */
-    public NotFe(BoolFeRef a, BoolFeRef res) {
-        this.a = a;
-        this.res = res;
+    public NotFe(BoolFe orig, BoolFe dest) {
+        this.orig = orig;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFe.not(a.get()));
+        dest.not(orig);
         return true;
     }
 }

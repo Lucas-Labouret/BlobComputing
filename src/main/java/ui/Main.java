@@ -10,9 +10,6 @@ import javafx.stage.Stage;
 import language.field.boolField.BoolV;
 import language.field.intField.IntV;
 import language.field.intField.IntVe;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.intField.IntVRef;
-import language.fieldRef.intField.IntVeRef;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
 import language.utils.BoolFieldManager;
@@ -65,10 +62,17 @@ public class Main extends Application {
     }
 }
 
+/**
+ * MainInstructions class holds the main instructions for the Blob application.
+ * It initializes various procedures that can be executed in the application.
+ *
+ * The procedures are held in Lazy objects to ensure that only the necessary procedure is created.
+ * This allows all procedures to call Rand.init() as needed without conflicting with each other.
+ * This also reduces the memory footprint of the application, as only the necessary procedures are created.
+ */
 class MainInstructions {
     public final Lazy<Instruction> grow;
-    public final Lazy<Instruction> staticVoronoi1;
-    public final Lazy<Instruction> staticVoronoi2;
+    public final Lazy<Instruction> staticVoronoi;
     public final Lazy<Instruction> random;
     public final Lazy<Instruction> distance;
     public final Lazy<Instruction> gabriel;
@@ -77,18 +81,16 @@ class MainInstructions {
     
     public MainInstructions(Medium medium) {
         grow = new Lazy<>(() -> new Procedure() {{
-            BlobV blob = BlobV.rand(6);
+            BlobV blob = BlobV.random(6);
             show("Blob", blob);
             call(blob.grow());
         }});
 
-        staticVoronoi1 = new Lazy<>(() -> new Procedure() {{
-            BlobV blob = BlobV.rand(6);
+        staticVoronoi = new Lazy<>(() -> new Procedure() {{
+            BlobV blob = BlobV.random(6);
             show("Blob", blob);
             call(blob.voronoi());
         }});
-
-        staticVoronoi2 = new Lazy<>(() -> new BlobV().voronoi());
 
         random = new Lazy<>(() -> new Procedure() {{
             Rand.init();
@@ -97,15 +99,15 @@ class MainInstructions {
 
         distance = new Lazy<>(() -> new Procedure() {{
             Rand.init();
-            QuasiParticle seed = new QuasiParticle(BoolV.zeroes());
-            BoolV.setBit(seed.get(), 18, 5, true);
-            BoolV.setBit(seed.get(), 18, 14, true);
+            QuasiParticle seed = new QuasiParticle(new BoolV().zeroes());
+            seed.setBit(18, 5, true);
+            seed.setBit(18, 14, true);
             Flies flies = new Flies(seed);
             show("Flies", seed);
             call(flies.flip());
 
-            IntVRef dist = new IntVRef(new IntV(3));
-            IntVeRef gradient = new IntVeRef(new IntVe(3));
+            IntV dist = new IntV(3);
+            IntVe gradient = new IntVe(3);
             DistField distField = new DistField(seed, 3);
             call(distField.getDist(dist));
             call(distField.getGradient(gradient));
@@ -116,24 +118,24 @@ class MainInstructions {
 
         gabriel = new Lazy<>(() -> new Procedure() {{
             Rand.init();
-            QuasiParticle seed = new QuasiParticle(BoolV.zeroes());
+            QuasiParticle seed = new QuasiParticle(new BoolV().zeroes());
             for (int i = 0; i < 5; i++){
                 int rand = (int) (Math.random() * medium.vertices.size());
                 Vertex v = (Vertex) medium.vertices.toArray()[rand];
-                BoolV.setBit(seed.get(), v, true);
+                seed.setBit(v, true);
             }
-//            BoolV.setBit(seed.get(), 0, 0, true);
-//            BoolV.setBit(seed.get(), 21, 21, true);
-//            BoolV.setBit(seed.get(), 18, 5, true);
-//            BoolV.setBit(seed.get(), 18, 14, true);
+//            seed.setBit(0, 0, true);
+//            seed.setBit(21, 21, true);
+//            seed.setBit(18, 5, true);
+//            seed.setBit(18, 14, true);
             Flies flies = new Flies(seed);
             call(flies.flip());
             show("Sources", flies.state);
 
             GabrielCenter gabrielCenter = new GabrielCenter(flies.state);
-            IntVRef dist = new IntVRef(new IntV(3));
-            IntVeRef gradient = new IntVeRef(new IntVe(3));
-            BoolVRef center = new BoolVRef();
+            IntV dist = new IntV(3);
+            IntVe gradient = new IntVe(3);
+            BoolV center = new BoolV();
             call(gabrielCenter.update());
             call(gabrielCenter.distField.getDist(dist));
             call(gabrielCenter.distField.getGradient(gradient));
@@ -145,11 +147,11 @@ class MainInstructions {
 
         flies = new Lazy<>(() -> new Procedure() {{
             Rand.init();
-            QuasiParticle seed = new QuasiParticle(BoolV.zeroes());
+            QuasiParticle seed = new QuasiParticle(new BoolV().zeroes());
             for (int i = 0; i < 10; i++){
                 int rand = (int) (Math.random() * medium.vertices.size());
                 Vertex v = (Vertex) medium.vertices.toArray()[rand];
-                BoolV.setBit(seed.get(), v, true);
+                seed.setBit(v, true);
             }
             Flies flies = new Flies(seed);
             show("Sources", flies.state, Styles.PARTICLE);
@@ -158,18 +160,18 @@ class MainInstructions {
 
         homogenize = new Lazy<>(() -> new Procedure() {{
             Rand.init();
-            QuasiParticle particle = new QuasiParticle(BoolV.zeroes());
+            QuasiParticle particle = new QuasiParticle(new BoolV().zeroes());
 //            for (int i = 0; i < 20; i++){
 //                int rand = (int) (Math.random() * medium.vertices.size());
 //                Vertex v = (Vertex) medium.vertices.toArray()[rand];
-//                BoolV.setBit(particle.get(), v, true);
+//                particle.setBit(v, true);
 //            }
             for (int y = 0; y < 6; y++) for (int x = 0; x < 6; x++) {
-                BoolV.setBit(particle.get(), 4*y+1, 4*x+1, true);
+                particle.setBit(4*y+1, 4*x+1, true);
             }
-//            BoolV.setBit(particle.get(), 3, 2, true);
-//            BoolV.setBit(particle.get(), 3, 5, true);
-//            BoolV.setBit(particle.get(), 5, 2, true);
+            particle.setBit(3, 2, true);
+            particle.setBit(3, 5, true);
+            particle.setBit(5, 2, true);
             Homogenize homogenize = Homogenize.make(particle);
 
             show("Particles", particle, Styles.PARTICLE);

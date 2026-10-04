@@ -2,11 +2,11 @@ package blobProgram.agent.common.constraints;
 
 import blobProgram.BlobV;
 import blobProgram.agent.Constraint;
-import language.fieldRef.boolField.BoolERef;
-import language.fieldRef.boolField.BoolEvRef;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.boolField.BoolVeRef;
-import language.fieldRef.intField.IntVRef;
+import language.field.boolField.BoolE;
+import language.field.boolField.BoolEv;
+import language.field.boolField.BoolV;
+import language.field.boolField.BoolVe;
+import language.field.intField.IntV;
 import language.instruction.Procedure;
 import ui.display.Styles;
 
@@ -16,7 +16,7 @@ public class MaintainBlob extends Constraint {
     }
 
     private class Verify extends Procedure {
-        public Verify(BoolVRef flip, IntVRef priority, IntVRef prioRand) {
+        public Verify(BoolV flip, IntV priority, IntV prioRand) {
             show("Blob / flip before", flip, Styles.FLIP);
 
             BlobV notState = tmp(new BlobV());
@@ -27,12 +27,12 @@ public class MaintainBlob extends Constraint {
             and(state, flip, emptying);
             and(notState, flip, filling);
 
-            BoolVeRef ve = tmp(new BoolVeRef());
-            BoolEvRef ev = tmp(new BoolEvRef());
+            BoolVe ve = tmp(new BoolVe());
+            BoolEv ev = tmp(new BoolEv());
 
             // A blob can only evolve on its frontier and border
             BlobV frontierOrBorder = tmp(new BlobV());
-            BoolERef frontierE = tmp(new BoolERef());
+            BoolE frontierE = tmp(new BoolE());
             call(state.frontierE(frontierE));
             broadcast(frontierE, ev);
             transfer(ev, ve);
@@ -46,30 +46,30 @@ public class MaintainBlob extends Constraint {
 
             // Disallow merging and splitting blobs
             BlobV mergeV = tmp(new BlobV());
-            BoolERef mergeE = tmp(new BoolERef());
+            BoolE mergeE = tmp(new BoolE());
             BlobV splitV = tmp(new BlobV());
-            BoolERef splitE = tmp(new BoolERef());
+            BoolE splitE = tmp(new BoolE());
             call(state.meetV(mergeV));
             call(state.meetE(mergeE));
             call(notState.meetV(splitV));
             call(notState.meetE(splitE));
 
-            BoolERef bothFilling = tmp(new BoolERef());
+            BoolE bothFilling = tmp(new BoolE());
             broadcast(filling, ve);
             transfer(ve, ev);
             redAnd(ev, bothFilling);
             and(bothFilling, mergeE, bothFilling);
 
-            BoolERef bothEmptying = tmp(new BoolERef());
+            BoolE bothEmptying = tmp(new BoolE());
             broadcast(emptying, ve);
             transfer(ve, ev);
             redAnd(ev, bothEmptying);
             and(bothEmptying, splitE, bothEmptying);
 
-            BoolERef toInspect = tmp(new BoolERef());
+            BoolE toInspect = tmp(new BoolE());
             or(bothFilling, bothEmptying, toInspect);
 
-            BoolVRef noMergeSplit = tmp(new BoolVRef());
+            BoolV noMergeSplit = tmp(new BoolV());
             call(mutex(toInspect, priority, prioRand, noMergeSplit));
             or(noMergeSplit, splitV, noMergeSplit);
             or(noMergeSplit, mergeV, noMergeSplit);
@@ -136,7 +136,7 @@ public class MaintainBlob extends Constraint {
     }
 
     @Override
-    public Procedure verify(BoolVRef flip, IntVRef priority, IntVRef prioRand) {
+    public Procedure verify(BoolV flip, IntV priority, IntV prioRand) {
         return new Verify(flip, priority, prioRand);
     }
 }

@@ -1,17 +1,16 @@
 package language.instruction.instructionSet.boolOp;
 
-import language.instruction.BasicInstruction;
 import language.field.boolField.*;
-import language.fieldRef.boolField.*;
+import language.instruction.BasicInstruction;
 
 /** Performs an AND operation on two BoolV. */
 class AndV implements BasicInstruction {
-    private final BoolVRef a;
-    private final BoolVRef b;
-    private final BoolVRef res;
+    private final BoolV a;
+    private final BoolV b;
+    private final BoolV res;
 
     /** Creates a new AndV. */
-    public AndV(BoolVRef a, BoolVRef b, BoolVRef res) {
+    public AndV(BoolV a, BoolV b, BoolV res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -20,19 +19,19 @@ class AndV implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolV.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }
 
 /** Performs an AND operation on two BoolVe. */
 class AndVe implements BasicInstruction {
-    private final BoolVeRef a;
-    private final BoolVeRef b;
-    private final BoolVeRef res;
+    private final BoolVe a;
+    private final BoolVe b;
+    private final BoolVe res;
 
     /** Creates a new AndVe. */
-    public AndVe(BoolVeRef a, BoolVeRef b, BoolVeRef res) {
+    public AndVe(BoolVe a, BoolVe b, BoolVe res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -41,19 +40,19 @@ class AndVe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVe.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }
 
 /** Performs an AND operation on two BoolVf. */
 class AndVf implements BasicInstruction {
-    private final BoolVfRef a;
-    private final BoolVfRef b;
-    private final BoolVfRef res;
+    private final BoolVf a;
+    private final BoolVf b;
+    private final BoolVf res;
 
     /** Creates a new AndVf. */
-    public AndVf(BoolVfRef a, BoolVfRef b, BoolVfRef res) {
+    public AndVf(BoolVf a, BoolVf b, BoolVf res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -62,19 +61,19 @@ class AndVf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolVf.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }
 
 /** Performs an AND operation on two BoolE. */
 class AndE implements BasicInstruction {
-    private final BoolERef a;
-    private final BoolERef b;
-    private final BoolERef res;
+    private final BoolE a;
+    private final BoolE b;
+    private final BoolE res;
 
     /** Creates a new AndE. */
-    public AndE(BoolERef a, BoolERef b, BoolERef res) {
+    public AndE(BoolE a, BoolE b, BoolE res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -83,19 +82,19 @@ class AndE implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolE.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }
 
 /** Performs an AND operation on two BoolEv. */
 class AndEv implements BasicInstruction {
-    private final BoolEvRef a;
-    private final BoolEvRef b;
-    private final BoolEvRef res;
+    private final BoolEv a;
+    private final BoolEv b;
+    private final BoolEv res;
 
     /** Creates a new AndEv. */
-    public AndEv(BoolEvRef a, BoolEvRef b, BoolEvRef res) {
+    public AndEv(BoolEv a, BoolEv b, BoolEv res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -104,19 +103,19 @@ class AndEv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEv.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }
 
 /** Performs an AND operation on two BoolEf. */
 class AndEf implements BasicInstruction {
-    private final BoolEfRef a;
-    private final BoolEfRef b;
-    private final BoolEfRef res;
+    private final BoolEf a;
+    private final BoolEf b;
+    private final BoolEf res;
 
     /** Creates a new AndEf. */
-    public AndEf(BoolEfRef a, BoolEfRef b, BoolEfRef res) {
+    public AndEf(BoolEf a, BoolEf b, BoolEf res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -125,19 +124,19 @@ class AndEf implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolEf.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }
 
 /** Performs an AND operation on two BoolF. */
 class AndF implements BasicInstruction {
-    private final BoolFRef a;
-    private final BoolFRef b;
-    private final BoolFRef res;
+    private final BoolF a;
+    private final BoolF b;
+    private final BoolF res;
 
     /** Creates a new AndF. */
-    public AndF(BoolFRef a, BoolFRef b, BoolFRef res) {
+    public AndF(BoolF a, BoolF b, BoolF res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -146,19 +145,19 @@ class AndF implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolF.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }
 
 /** Performs an AND operation on two BoolFv. */
 class AndFv implements BasicInstruction {
-    private final BoolFvRef a;
-    private final BoolFvRef b;
-    private final BoolFvRef res;
+    private final BoolFv a;
+    private final BoolFv b;
+    private final BoolFv res;
 
     /** Creates a new AndFv. */
-    public AndFv(BoolFvRef a, BoolFvRef b, BoolFvRef res) {
+    public AndFv(BoolFv a, BoolFv b, BoolFv res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -167,19 +166,19 @@ class AndFv implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFv.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }
 
 /** Performs an AND operation on two BoolFe. */
 class AndFe implements BasicInstruction {
-    private final BoolFeRef a;
-    private final BoolFeRef b;
-    private final BoolFeRef res;
+    private final BoolFe a;
+    private final BoolFe b;
+    private final BoolFe res;
 
     /** Creates a new AndFe. */
-    public AndFe(BoolFeRef a, BoolFeRef b, BoolFeRef res) {
+    public AndFe(BoolFe a, BoolFe b, BoolFe res) {
         this.a = a;
         this.b = b;
         this.res = res;
@@ -188,7 +187,7 @@ class AndFe implements BasicInstruction {
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolFe.and(a.get(), b.get()));
+        res.and(a, b);
         return true;
     }
 }

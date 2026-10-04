@@ -1,132 +1,131 @@
 package language.instruction.instructionSet.intOp;
 
+import language.field.boolField.*;
 import language.field.intField.*;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.*;
 import language.instruction.Procedure;
 
 class AbsV extends Procedure {
-    public AbsV(IntVRef a, IntVRef res) {
-        if (a.get().n != res.get().n)
+    public AbsV(IntV a, IntV res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntVs of different sizes.");
 
-        IntVRef negA = tmp(new IntVRef(new IntV(a.get().n)));
+        IntV negA = tmp(new IntV(a.n));
         neg(a, negA);
 
-        BoolVRef sign = new BoolVRef();
-        set(a.get().getBits()[0], sign);
+        BoolV sign = new BoolV();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }
 
 class AbsVe extends Procedure {
-    public AbsVe(IntVeRef a, IntVeRef res) {
-        if (a.get().n != res.get().n)
+    public AbsVe(IntVe a, IntVe res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntVes of different sizes.");
 
-        IntVeRef negA = tmp(new IntVeRef(new IntVe(a.get().n)));
+        IntVe negA = tmp(new IntVe(a.n));
         neg(a, negA);
 
-        BoolVeRef sign = new BoolVeRef();
-        set(a.get().getBits()[0], sign);
+        BoolVe sign = new BoolVe();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }
 
 class AbsVf extends Procedure {
-    public AbsVf(IntVfRef a, IntVfRef res) {
-        if (a.get().n != res.get().n)
+    public AbsVf(IntVf a, IntVf res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntVfs of different sizes.");
 
-        IntVfRef negA = tmp(new IntVfRef(new IntVf(a.get().n)));
+        IntVf negA = tmp(new IntVf(a.n));
         neg(a, negA);
 
-        BoolVfRef sign = new BoolVfRef();
-        set(a.get().getBits()[0], sign);
+        BoolVf sign = new BoolVf();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }
 
 class AbsE extends Procedure {
-    public AbsE(IntERef a, IntERef res) {
-        if (a.get().n != res.get().n)
+    public AbsE(IntE a, IntE res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntEs of different sizes.");
 
-        IntERef negA = tmp(new IntERef(new IntE(a.get().n)));
+        IntE negA = tmp(new IntE(a.n));
         neg(a, negA);
 
-        BoolERef sign = new BoolERef();
-        set(a.get().getBits()[0], sign);
+        BoolE sign = new BoolE();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }
 
 class AbsEv extends Procedure {
-    public AbsEv(IntEvRef a, IntEvRef res) {
-        if (a.get().n != res.get().n)
+    public AbsEv(IntEv a, IntEv res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntEvs of different sizes.");
 
-        IntEvRef negA = tmp(new IntEvRef(new IntEv(a.get().n)));
+        IntEv negA = tmp(new IntEv(a.n));
         neg(a, negA);
 
-        BoolEvRef sign = new BoolEvRef();
-        set(a.get().getBits()[0], sign);
+        BoolEv sign = new BoolEv();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }
 
 class AbsEf extends Procedure {
-    public AbsEf(IntEfRef a, IntEfRef res) {
-        if (a.get().n != res.get().n)
+    public AbsEf(IntEf a, IntEf res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntEfs of different sizes.");
 
-        IntEfRef negA = tmp(new IntEfRef(new IntEf(a.get().n)));
+        IntEf negA = tmp(new IntEf(a.n));
         neg(a, negA);
 
-        BoolEfRef sign = new BoolEfRef();
-        set(a.get().getBits()[0], sign);
+        BoolEf sign = new BoolEf();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }
 
 class AbsF extends Procedure {
-    public AbsF(IntFRef a, IntFRef res) {
-        if (a.get().n != res.get().n)
+    public AbsF(IntF a, IntF res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntFs of different sizes.");
 
-        IntFRef negA = tmp(new IntFRef(new IntF(a.get().n)));
+        IntF negA = tmp(new IntF(a.n));
         neg(a, negA);
 
-        BoolFRef sign = new BoolFRef();
-        set(a.get().getBits()[0], sign);
+        BoolF sign = new BoolF();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }
 
 class AbsFv extends Procedure {
-    public AbsFv(IntFvRef a, IntFvRef res) {
-        if (a.get().n != res.get().n)
+    public AbsFv(IntFv a, IntFv res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntFvs of different sizes.");
 
-        IntFvRef negA = tmp(new IntFvRef(new IntFv(a.get().n)));
+        IntFv negA = tmp(new IntFv(a.n));
         neg(a, negA);
 
-        BoolFvRef sign = new BoolFvRef();
-        set(a.get().getBits()[0], sign);
+        BoolFv sign = new BoolFv();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }
 
 class AbsFe extends Procedure {
-    public AbsFe(IntFeRef a, IntFeRef res) {
-        if (a.get().n != res.get().n)
+    public AbsFe(IntFe a, IntFe res) {
+        if (a.n != res.n)
             throw new IllegalArgumentException("Cannot compute absolute value of IntFes of different sizes.");
 
-        IntFeRef negA = tmp(new IntFeRef(new IntFe(a.get().n)));
+        IntFe negA = tmp(new IntFe(a.n));
         neg(a, negA);
 
-        BoolFeRef sign = new BoolFeRef();
-        set(a.get().getBits()[0], sign);
+        BoolFe sign = new BoolFe();
+        set(a.bits[0], sign);
         fif(sign, negA, a, res);
     }
 }

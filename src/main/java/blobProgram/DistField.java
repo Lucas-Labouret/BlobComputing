@@ -4,121 +4,114 @@ import language.field.boolField.BoolV;
 import language.field.boolField.BoolVe;
 import language.field.intField.IntV;
 import language.field.intField.IntVe;
-import language.fieldRef.boolField.*;
-import language.fieldRef.intField.IntVRef;
-import language.fieldRef.intField.IntVeRef;
 import language.instruction.Procedure;
 
 public class DistField {
     int nbits;
 
-    private final BoolVRef sources_t1;
-    private final BoolVRef sources_t0;
+    private final BoolV sources_t1;
+    private final BoolV sources_t0;
 
-    private final IntVRef distField;
+    private final IntV distField;
 
-    private final IntVeRef gradient;
+    private final IntVe gradient;
 
-    private final IntVRef min;
-    private final IntVRef delta;
+    private final IntV min;
+    private final IntV delta;
 
-    private final IntVeRef minVe;
-    private final IntVeRef deltaVe;
-    private final IntVeRef negDeltaVe;
+    private final IntVe minVe;
+    private final IntVe deltaVe;
+    private final IntVe negDeltaVe;
 
-    public DistField(BoolVRef sources, int nbits) {
+    public DistField(BoolV sources, int nbits) {
         this.nbits = nbits;
 
         this.sources_t0 = sources;
         this.sources_t1 = sources.copy();
 
-        this.distField = new IntVRef(IntV.of(0,  nbits));
-        this.gradient = new IntVeRef(IntVe.of(0,  nbits));
+        this.distField = IntV.of(0,  nbits);
+        this.gradient = IntVe.of(0,  nbits);
 
-        this.min = new IntVRef(IntV.minValue(nbits));
-        this.delta = new IntVRef(IntV.of(0,  nbits));
-        this.delta.get().getBits()[1].set(BoolV.ones());
+        this.min = IntV.minValue(nbits);
+        this.delta = IntV.of(0,  nbits);
+        this.delta.getBits()[1].ones();
 
-        this.minVe = new IntVeRef(IntVe.minValue(nbits));
-        this.deltaVe = new IntVeRef(IntVe.of(0,  nbits));
-        this.deltaVe.get().getBits()[1].set(BoolVe.ones());
-        this.negDeltaVe = new IntVeRef(IntVe.of(0,  nbits));
-        this.negDeltaVe.get().getBits()[0].set(BoolVe.ones());
-        this.negDeltaVe.get().getBits()[1].set(BoolVe.ones());
+        this.minVe = IntVe.minValue(nbits);
+        this.deltaVe = IntVe.of(0,  nbits);
+        this.deltaVe.getBits()[1].ones();
+        this.negDeltaVe = IntVe.of(0,  nbits);
+        this.negDeltaVe.getBits()[0].ones();
+        this.negDeltaVe.getBits()[1].ones();
     }
 
     private class Update extends Procedure {
         public Update() {
-            BoolVRef oldSources = tmp(new BoolVRef());
-            BoolVRef newSources = tmp(new BoolVRef());
-            BoolVRef notSources = tmp(new BoolVRef());
+            BoolV oldSources = tmp(new BoolV());
+            BoolV newSources = tmp(new BoolV());
 
             and(sources_t0, sources_t1, oldSources);
 
             not(oldSources, newSources);
             and(newSources, sources_t0, newSources);
 
-            or(oldSources, newSources, notSources);
-            not(notSources, notSources);
-
             // Compute N+(i)
-            BoolVeRef nPlus = tmp(new BoolVeRef());
-            IntVRef deltaDist =  tmp(new IntVRef(new IntV(nbits)));
+            BoolVe nPlus = tmp(new BoolVe());
+            IntV deltaDist =  tmp(new IntV(nbits));
             sub(distField, delta, deltaDist);
-            set(new BoolVRef(BoolV.zeroes()), deltaDist.get().getBits()[0]); // Does modulo 2^nbits
+            set(new BoolV().zeroes(), deltaDist.getBits()[0]); // Does modulo 2^nbits
 
-            IntVeRef deltaDistVe = tmp(new IntVeRef(new IntVe(nbits)));
+            IntVe deltaDistVe = tmp(new IntVe(nbits));
             broadcast(deltaDist, deltaDistVe);
 
-            IntVeRef neighborDist = tmp(new IntVeRef(new IntVe(nbits)));
+            IntVe neighborDist = tmp(new IntVe(nbits));
             broadcast(distField, neighborDist);
             call(BlobV.send(neighborDist, neighborDist));
             gt(neighborDist, deltaDistVe, nPlus);
 
             // Compute updated distance, disregarding sources
-            BoolVRef nPlusNonEmpty = tmp(new BoolVRef());
-            BoolVeRef nPlusNonEmptyVe = tmp(new BoolVeRef());
+            BoolV nPlusNonEmpty = tmp(new BoolV());
+            BoolVe nPlusNonEmptyVe = tmp(new BoolVe());
             redOr(nPlus, nPlusNonEmpty);
             broadcast(nPlusNonEmpty, nPlusNonEmptyVe);
 
-            BoolVeRef notNPlus = tmp(new BoolVeRef());
+            BoolVe notNPlus = tmp(new BoolVe());
             not(nPlus, notNPlus);
 
-            BoolVeRef shouldBeMax = tmp(new BoolVeRef());
+            BoolVe shouldBeMax = tmp(new BoolVe());
             and(notNPlus, nPlusNonEmptyVe,  shouldBeMax);
 
-            fif(shouldBeMax, new IntVeRef(IntVe.maxValue(nbits)), neighborDist, neighborDist);
+            fif(shouldBeMax, IntVe.maxValue(nbits), neighborDist, neighborDist);
             redMin(neighborDist, distField);
 
-            add(distField, new IntVRef(IntV.of(2, nbits)), distField);
-            set(new BoolVRef(BoolV.zeroes()), deltaDist.get().getBits()[0]);
+            add(distField, IntV.of(2, nbits), distField);
+            set(new BoolV().zeroes(), deltaDist.getBits()[0]);
 
-            IntVRef distFieldBis = new IntVRef(new IntV(nbits));
+            IntV distFieldBis = new IntV(nbits);
             add(distField, min, distFieldBis);
 
-            BoolVRef posDist = new BoolVRef();
-            gt(distField, new IntVRef(IntV.of(0, nbits)), posDist);
+            BoolV posDist = new BoolV();
+            gt(distField, IntV.of(0, nbits), posDist);
             fif(posDist, distField, distFieldBis, distField);
 
             // Combine with sources
-            fif(oldSources, new IntVRef(IntV.of(0, nbits)), distField, distField);
-            fif(newSources, new IntVRef(IntV.of(1, nbits)), distField, distField);
+            fif(oldSources, IntV.of(0, nbits), distField, distField);
+            fif(newSources, IntV.of(1, nbits), distField, distField);
 
             // Compute the gradient
-            IntVeRef fi = tmp(new IntVeRef(new IntVe(nbits)));
-            IntVeRef fj = tmp(new IntVeRef(new IntVe(nbits)));
+            IntVe fi = tmp(new IntVe(nbits));
+            IntVe fj = tmp(new IntVe(nbits));
 
             broadcast(distField, fi);
             call(BlobV.send(fi, fj));
             sub(fj, fi, gradient);
 
-            BoolVeRef gradientBugPos =  tmp(new BoolVeRef());
-            BoolVeRef gradientBugNeg = tmp(new BoolVeRef());
+            BoolVe gradientBugPos =  tmp(new BoolVe());
+            BoolVe gradientBugNeg = tmp(new BoolVe());
             gt(gradient, deltaVe, gradientBugPos);
             gt(negDeltaVe, gradient, gradientBugNeg);
 
-            IntVeRef correctedGradientPos = tmp(new IntVeRef(new IntVe(nbits)));
-            IntVeRef correctedGradientNeg = tmp(new IntVeRef(new IntVe(nbits)));
+            IntVe correctedGradientPos = tmp(new IntVe(nbits));
+            IntVe correctedGradientNeg = tmp(new IntVe(nbits));
             sub(gradient, minVe, correctedGradientPos);
             add(gradient, minVe, correctedGradientNeg);
 
@@ -132,12 +125,12 @@ public class DistField {
     public Procedure update() { return new Update(); }
 
     private class GetDist extends Procedure {
-        public GetDist(IntVRef distField) { set(DistField.this.distField, distField); }
+        public GetDist(IntV distField) { set(DistField.this.distField, distField); }
     }
-    public Procedure getDist(IntVRef distField) { return new GetDist(distField); }
+    public Procedure getDist(IntV distField) { return new GetDist(distField); }
 
     private class GetGradient extends Procedure {
-        public GetGradient(IntVeRef grad) { set(gradient, grad); }
+        public GetGradient(IntVe grad) { set(gradient, grad); }
     }
-    public Procedure getGradient(IntVeRef grad) { return new GetGradient(grad); }
+    public Procedure getGradient(IntVe grad) { return new GetGradient(grad); }
 }

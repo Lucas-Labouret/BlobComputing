@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /** Represents a boolean transfer language.field from vertex to edge orientation. */
-public non-sealed class BoolVe extends BoolFieldT {
+public non-sealed class BoolVe extends BoolFieldT<BoolVe> {
     static int HEIGHT = -1;
     static final int SPAN = 1;
     static int BREADTH = -1;
@@ -27,7 +27,13 @@ public non-sealed class BoolVe extends BoolFieldT {
 
     /** Creates a new BoolVe. */
     public BoolVe() { this(BoolFieldManager.DEFAULT_BORDER()); }
-    public BoolVe(Border border) { super(HEIGHT, SPAN, BREADTH, border); }
+    public BoolVe(Border border) { this(border, true); }
+    public BoolVe(boolean register) { this(BoolFieldManager.DEFAULT_BORDER(), register); }
+    public BoolVe(Border border, boolean register) { super(HEIGHT, SPAN, BREADTH, border, register); }
+    public BoolVe(BoolVe other) {
+        super(HEIGHT, SPAN, BREADTH, other.border);
+        for (int i = 0; i < lines.length; i++) lines[i] = new BoolFieldLine(other.lines[i]);
+    }
 
     private static BoolVe DATA_POS;
     private static BoolVe DATA_END;
@@ -54,265 +60,229 @@ public non-sealed class BoolVe extends BoolFieldT {
     }
 
     /** @return a new BoolVe from the given broadcast language.field. */
-    public static BoolVe fromBroadcast(BoolV orig){
-        BoolVe res = new BoolVe(orig.border);
-        fromBroadcastGeneric(HEIGHT, SPAN, BREADTH, orig, res);
-        return res;
+    public BoolVe broadcast(BoolV orig){
+        broadcastGeneric(HEIGHT, SPAN, BREADTH, orig, this);
+        return this;
     }
 
     /** @return a new zero-filled BoolVe. */
-    public static BoolVe zeroes(Border border){
-        BoolVe res = new BoolVe(border);
-        zeroesGeneric(HEIGHT, SPAN, BREADTH, res);
-        return res;
-    }
+    public BoolVe zeroes(){ zeroesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
-    /** @return a new zero-filled BoolVe using the default border. */
-    public static BoolVe zeroes(){ return zeroes(BoolFieldManager.DEFAULT_BORDER()); }
+    public BoolVe ones(){ onesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
-    /** @return a new one-filled BoolVe. */
-    public static BoolVe ones(Border border){
-        BoolVe res = new BoolVe(border);
-        onesGeneric(HEIGHT, SPAN, BREADTH, res);
-        return res;
-    }
-
-    /** @return a new one-filled BoolVe using the default border. */
-    public static BoolVe ones(){ return ones(BoolFieldManager.DEFAULT_BORDER()); }
-
-    /** @return a new randomly initialized BoolVe. */
-    public static BoolVe rand(Border border){
-        BoolVe res = new BoolVe(border);
-        randGeneric(HEIGHT, SPAN, BREADTH, res);
+    public BoolVe rand(){
+        randGeneric(HEIGHT, SPAN, BREADTH, this);
 
         if (border == Border.TORUS) for (Ve ve : TORUS_BORDER.keySet()) {
             Ve torus = TORUS_BORDER.get(ve);
-            setBit(res, torus, getBit(res, ve));
+            setBit(torus, getBit(ve));
         }
 
-        return res;
+        return this;
     }
 
-    /** @return a new randomly initialized BoolVe using the default border. */
-    public static BoolVe rand(){ return rand(BoolFieldManager.DEFAULT_BORDER()); }
-
     /** Sets a bit in the given BoolVe. */
-    public static void setBit(BoolVe target, int y, int x, int s, boolean bit){
-        setBitGeneric(HEIGHT, SPAN, BREADTH, target, y, x, 0, s, bit);
+    public void setBit(int y, int x, int s, boolean bit){
+        setBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, 0, s, bit);
 
-        if (target.border == Border.TORUS) for (Ve ve : TORUS_BORDER.keySet()) {
+        if (border == Border.TORUS) for (Ve ve : TORUS_BORDER.keySet()) {
             Ve torus = TORUS_BORDER.get(ve);
             if (ve.y == y && ve.x == x && ve.s == s) {
-                setBitGeneric(HEIGHT, SPAN, BREADTH, target, torus.y, torus.x, 0, torus.s, bit);
+                setBitGeneric(HEIGHT, SPAN, BREADTH, this, torus.y, torus.x, 0, torus.s, bit);
             } else if (torus.y == y && torus.x == x && torus.s == s) {
-                setBitGeneric(HEIGHT, SPAN, BREADTH, target, ve.y, ve.x, 0, ve.s, bit);
+                setBitGeneric(HEIGHT, SPAN, BREADTH, this, ve.y, ve.x, 0, ve.s, bit);
             }
         }
     }
 
     /** Sets a bit in the given BoolVe. */
-    public static void setBit(BoolVe target, Ve locus, boolean bit){
-        setBit(target, locus.y, locus.x, locus.s, bit);
+    public void setBit(Ve locus, boolean bit){
+        setBit(locus.y, locus.x, locus.s, bit);
     }
 
     /** Gets a bit in the given BoolVe */
-    public static boolean getBit(BoolVe target, int y, int x, int s){
-        return getBitGeneric(HEIGHT, SPAN, BREADTH, target, y, x, 0, s);
+    public boolean getBit(int y, int x, int s){
+        return getBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, 0, s);
     }
 
     /** Gets a bit in the given BoolVe */
-    public static boolean getBit(BoolVe target, Ve locus){
-        return getBit(target, locus.y, locus.x, locus.s);
+    public boolean getBit(Ve locus){
+        return getBit(locus.y, locus.x, locus.s);
     }
 
     /** Decode the given BoolVe into a HashMap mapping each Ve locus in the given set to its corresponding bit value in the BoolVe. */
-    public static HashMap<Ve, Boolean> decode(HashSet<Ve> loci, BoolVe field) {
+    public HashMap<Ve, Boolean> decode(HashSet<Ve> loci) {
         HashMap<Ve, Boolean> res = new HashMap<>();
         for (Ve v : loci)
-            res.put(v, getBit(field, v));
+            res.put(v, getBit(v));
         return res;
     }
 
     /** @return the bitwise NOT of the given BoolVe. */
-    public static BoolVe not(BoolVe orig){
-        BoolVe res = new BoolVe(orig.border);
-        notGeneric(HEIGHT, SPAN, BREADTH, orig, res);
-        return res;
+    public BoolVe not(BoolVe orig){
+        notGeneric(HEIGHT, SPAN, BREADTH, orig, this);
+        return this;
     }
 
     /** @return the bitwise AND of the given BoolVe values. */
-    public static BoolVe and(BoolVe a, BoolVe b){
-        BoolVe res = new BoolVe(a.border);
-        andGeneric(HEIGHT, SPAN, BREADTH, a, b, res);
-        return res;
+    public BoolVe and(BoolVe a, BoolVe b){
+        andGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        return this;
     }
 
     /** @return the bitwise OR of the given BoolVe values. */
-    public static BoolVe or(BoolVe a, BoolVe b){
-        BoolVe res = new BoolVe(a.border);
-        orGeneric(HEIGHT, SPAN, BREADTH, a, b, res);
-        return res;
+    public BoolVe or(BoolVe a, BoolVe b){
+        orGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        return this;
     }
 
     /** @return the bitwise XOR of the given BoolVe values. */
-    public static BoolVe xor(BoolVe a, BoolVe b){
-        BoolVe res = new BoolVe(a.border);
-        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, res);
-        return res;
+    public BoolVe xor(BoolVe a, BoolVe b){
+        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        return this;
     }
 
     /** @return a left-shifted BoolVe. */
-    public static BoolVe lShift(BoolVe orig, int n){
-        BoolVe res = new BoolVe(orig.border);
-        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);
-        return res;
+    public BoolVe lShift(BoolVe orig, int n){
+        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        return this;
     }
 
     /** @return a right-shifted BoolVe. */
-    public static BoolVe rShift(BoolVe orig, int n){
-        BoolVe res = new BoolVe(orig.border);
-        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);
-        return res;
+    public BoolVe rShift(BoolVe orig, int n){
+        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        return this;
     }
 
     /** @return a up-shifted BoolVe. */
-    public static BoolVe uShift(BoolVe orig, int n){
-        BoolVe res = new BoolVe(orig.border);
-        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);
-        return res;
+    public BoolVe uShift(BoolVe orig, int n){
+        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        return this;
     }
 
     /** @return a down-shifted BoolVe. */
-    public static BoolVe dShift(BoolVe orig, int n){
-        BoolVe res = new BoolVe(orig.border);
-        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, res);
-        return res;
+    public BoolVe dShift(BoolVe orig, int n){
+        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        return this;
     }
 
     private static BoolVe maskData(BoolVe mask, BoolVe data, BoolVe neutral){
-        return BoolVe.or(
-                BoolVe.and(mask, data),
-                BoolVe.and(BoolVe.not(mask), neutral)
-        );
+        return new BoolVe(false).or(
+                new BoolVe(false).and(mask, data),
+                new BoolVe(false).and(new BoolVe(false).not(mask), neutral)        );
     }
 
     /** @return the OR reduction of the given transfer language.field. */
-    public static BoolV redOrV(BoolVe orig){
-        BoolVe maskedData = maskData(DATA_POS, orig, BoolVe.zeroes(orig.border));
-        BoolV target = BoolV.zeroes(orig.border);
+    public void redOr(BoolV target){
+        target.zeroes();
+        BoolVe maskedData = maskData(DATA_POS, this, new BoolVe(false).zeroes());
         redOrGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
-        return target;
     }
 
     /** @return the AND reduction of the given transfer language.field. */
-    public static BoolV redAndV(BoolVe orig){
-        BoolVe maskedData = maskData(DATA_POS, orig, BoolVe.ones(orig.border));
-        BoolV target = BoolV.ones(orig.border);
+    public void redAnd(BoolV target){
+        target.ones();
+        BoolVe maskedData = maskData(DATA_POS, this, new BoolVe(false).ones());
         redAndGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
-        return target;
     }
 
     /** @return the XOR reduction of the given transfer language.field. */
-    public static BoolV redXorV(BoolVe orig){
-        BoolVe maskedData = maskData(DATA_POS, orig, BoolVe.zeroes(orig.border));
-        BoolV target = BoolV.zeroes(orig.border);
+    public void redXor(BoolV target){
+        target.zeroes();
+        BoolVe maskedData = maskData(DATA_POS, this, new BoolVe(false).zeroes());
         redXorGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
 
-        if (orig.border == Border.MIRROR) for (Ve m: MIRROR.keySet())
-            BoolV.setBit(target, m.y, m.x, BoolV.getBit(target, m.y, m.x) ^ BoolVe.getBit(orig, m));
-
-        return target;
+        if (this.border == Border.MIRROR) for (Ve m: MIRROR.keySet())
+            target.setBit(m.y, m.x, target.getBit(m.y, m.x) ^ this.getBit(m));
     }
 
-    private static BoolV[] redStackV(BoolVe orig, boolean neutral) {
-        BoolVe neutrals = neutral ? BoolVe.ones(orig.border) : BoolVe.zeroes(orig.border);
-        BoolVe maskedData = maskData(DATA_POS, orig, neutrals);
+    private BoolV[] redStack(boolean neutral) {
+        BoolVe neutrals = neutral ? new BoolVe(false).ones() : new BoolVe(false).zeroes();
+        BoolVe maskedData = maskData(DATA_POS, this, neutrals);
         BoolV[] target = new BoolV[BREADTH];
-        for (int i = 0; i < BREADTH; i++) target[i] = BoolV.zeroes(orig.border);
+        for (int i = 0; i < BREADTH; i++) target[i] = new BoolV(false).zeroes();
         redStackGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
 
-        if (orig.border == Border.MIRROR) redStackMirror(orig, target, neutral);
+        if (this.border == Border.MIRROR) redStackMirror(target);
 
         return target;
     }
 
-    private static void redStackMirror(BoolVe orig, BoolV[] target, boolean neutral) {
+    private void redStackMirror(BoolV[] target) {
         for (Ve m: MIRROR.keySet()) {
             int s = MIRROR.get(m);
-            BoolV.setBit(target[s], m.y, m.x, getBit(orig, m));
+            target[s].setBit(m.y, m.x, this.getBit(m));
         }
     }
 
     /** @return an array of BoolV s.t. the n-th BoolV contains the bits of Ves (*, *, n), or a 0 if it doesn't exist */
-    public static BoolV[] redStackV0(BoolVe orig){
-        return redStackV(orig, false);
+    public BoolV[] redStack0(){
+        return this.redStack(false);
     }
 
     /** @return an array of BoolV s.t. the n-th BoolV contains the bits of Ves (*, *, n), or a 1 if it doesn't exist */
-    public static BoolV[] redStackV1(BoolVe orig){
-        return redStackV(orig, true);
+    public BoolV[] redStack1(){
+        return this.redStack(true);
     }
 
     /** @return the clockwise rotation of the given BoolVe. */
-    public static BoolVf rotateCW(BoolVe orig) {
-        BoolVf res = new BoolVf(orig.border);
-        System.arraycopy(orig.lines, 0, res.lines, 0, orig.lines.length);
-        return res;
+    public void _rotateCW(BoolVf res) {
+        for (int i=0; i< lines.length; i++) { res.lines[i] = this.lines[i].copy(); }
     }
+    public BoolVe rotateCW(BoolVf orig) { orig._rotateCW(this); return this; }
 
     /** @return the counterclockwise rotation of the given BoolVe. */
-    public static BoolVf rotateCCW(BoolVe orig){
-        BoolVf res = BoolVf.zeroes(orig.border);
-
+    public void _rotateCCW(BoolVf res){
         for (int i = 0; i < HEIGHT; i++) {
-            res.lines[(i+1) * BREADTH - 1] = orig.lines[i * BREADTH];
+            res.lines[(i+1) * BREADTH - 1] = this.lines[i * BREADTH].copy();
             for (int j = 1; j < BREADTH; j++) {
                 int pos = i * BREADTH + j;
-                res.lines[pos - 1] = orig.lines[pos];
+                res.lines[pos - 1] = this.lines[pos].copy();
                 res.lines[pos - 1] = BoolFieldLine.or(
                         BoolFieldLine.and(res.lines[pos - 1], BoolFieldLine.not(DATA_END.lines[pos - 1])),
-                        BoolFieldLine.and(orig.lines[i * BREADTH], DATA_END.lines[pos - 1])
+                        BoolFieldLine.and(this.lines[i * BREADTH], DATA_END.lines[pos - 1])
                 );
             }
         }
-
-        return res;
     }
+    public BoolVe rotateCCW(BoolVf orig) { orig._rotateCCW(this); return this; }
 
     /** @return the transfer result for the given BoolVe. */
-    public static BoolEv transfer(BoolVe orig){
-        BoolEv res = BoolEv.zeroes(orig.border);
-        transferGeneric(orig, res,  MASKS);
-        return res;
+    public void _transfer(BoolEv res){
+        res.zeroes();
+        transferGeneric(this, res,  MASKS);
     }
-
-    /** @return a deep copy of this BoolVe. */
-    public BoolVe copy(){
-        BoolVe newBoolVe = new BoolVe(border);
-        for (int i = 0; i < lines.length; i++)
-            newBoolVe.lines[i] = this.lines[i].copy();
-        return newBoolVe;
-    }
+    public BoolVe transfer(BoolEv orig) { orig._transfer(this); return this; }
 
     /** @return whether this BoolVe is equal to the given object. */
     @Override
     public boolean equals(Object o){
         if (!(o instanceof BoolVe other)) return false;
 
-        BoolVe thisClean = BoolVe.and(this, DATA_POS);
-        BoolVe otherClean = BoolVe.and(other, DATA_POS);
         for (int i = 0; i < HEIGHT * SPAN * BREADTH; i++) {
-            if (!thisClean.lines[i].equals(otherClean.lines[i])) return false;
+            if (this.lines[i] == null && other.lines[i] == null) continue;
+            if (this.lines[i] == null && other.lines[i] != null) return false;
+            if (this.lines[i] != null && other.lines[i] == null) return false;
+
+            BoolFieldLine thisLine = BoolFieldLine.and(this.lines[i], DATA_POS.lines[i]);
+            BoolFieldLine otherLine = BoolFieldLine.and(other.lines[i], DATA_POS.lines[i]);
+            if (!thisLine.equals(otherLine)) return false;
         }
+
         return true;
     }
 
-    @Override
-    public String toString() {
-        BoolVe clean = BoolVe.and(this, DATA_POS);
-        return toString(clean);
+    private BoolVe copy(boolean register) {
+        BoolVe newBoolVe = new BoolVe(border, register);
+        for (int i = 0; i < lines.length; i++)
+            newBoolVe.lines[i] = this.lines[i] == null ? null : this.lines[i].copy();
+        return newBoolVe;
     }
 
+    /** @return a deep copy of this BoolVe. */
     @Override
-    public BoolVe cache() { return copy(); }
+    public BoolVe copy(){ return copy(true); }
+
+    @Override
+    public BoolVe cache() { return copy(false); }
 }

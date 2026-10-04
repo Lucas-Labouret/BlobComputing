@@ -2,18 +2,16 @@ package blobProgram.agent;
 
 import language.field.boolField.BoolV;
 import language.field.intField.IntV;
-import language.fieldRef.boolField.BoolVRef;
-import language.fieldRef.intField.IntVRef;
 import language.instruction.Procedure;
 
 import java.util.ArrayList;
 
 public class Flip {
-    private static final BoolVRef zero = new BoolVRef(BoolV.zeroes());
-    private static final BoolVRef one = new BoolVRef(BoolV.ones());
+    private static final BoolV zero = new BoolV().zeroes();
+    private static final BoolV one = new BoolV().ones();
 
-    private static final IntVRef minPrio = new IntVRef(IntV.minValue(Force.priorityBits));
-    private static final IntVRef minRand = new IntVRef(IntV.minValue(Force.prioRandBits));
+    private static final IntV minPrio = IntV.minValue(Force.priorityBits);
+    private static final IntV minRand = IntV.minValue(Force.prioRandBits);
 
     private final ArrayList<Force> forces = new ArrayList<>();
     private final ArrayList<Constraint> constraints = new ArrayList<>();
@@ -23,54 +21,54 @@ public class Flip {
 
     private static class ApplyForce extends Procedure {
         public ApplyForce(Force force,
-                          IntVRef currentPrio, IntVRef currentPrioRand,
-                          BoolVRef where) {
-            BoolVRef whereYes = tmp(new BoolVRef());
-            BoolVRef whereNo = tmp(new BoolVRef());
+                          IntV currentPrio, IntV currentPrioRand,
+                          BoolV where) {
+            BoolV whereYes = tmp(new BoolV());
+            BoolV whereNo = tmp(new BoolV());
             call(force.apply(whereYes, whereNo));
 
-            BoolVRef priorityEq = tmp(new BoolVRef());
+            BoolV priorityEq = tmp(new BoolV());
             eq(force.priority, currentPrio, priorityEq);
 
-            BoolVRef priorityNotEq = tmp(new BoolVRef());
+            BoolV priorityNotEq = tmp(new BoolV());
             not(priorityEq, priorityNotEq);
 
-            BoolVRef priorityGt = tmp(new BoolVRef());
-            BoolVRef prioRandGte = tmp(new BoolVRef());
+            BoolV priorityGt = tmp(new BoolV());
+            BoolV prioRandGte = tmp(new BoolV());
             gt(force.priority, currentPrio, priorityGt);
             and(priorityGt, priorityNotEq, priorityGt);
             gt(force.prioRand, currentPrioRand, prioRandGte);
 
-            BoolVRef apply = tmp(new BoolVRef());
+            BoolV apply = tmp(new BoolV());
             and(priorityEq, prioRandGte, apply);
             or(priorityGt, apply, apply);
 
-            BoolVRef applyYes = tmp(new BoolVRef());
+            BoolV applyYes = tmp(new BoolV());
             and(apply, whereYes, applyYes);
-            BoolVRef applyNo = tmp(new BoolVRef());
+            BoolV applyNo = tmp(new BoolV());
             and(apply, whereNo, applyNo);
 
             fif(applyYes, one, where, where);
             fif(applyNo, zero, where, where);
 
-            BoolVRef affected = tmp(new BoolVRef());
+            BoolV affected = tmp(new BoolV());
             or(applyYes, applyNo, affected);
             fif(affected, force.priority, currentPrio, currentPrio);
             fif(affected, force.prioRand, currentPrioRand, currentPrioRand);
         }
     }
     private static Procedure applyForce(Force force,
-                                        IntVRef currentPriority, IntVRef currentPrioRand,
-                                        BoolVRef where) {
+                                        IntV currentPriority, IntV currentPrioRand,
+                                        BoolV where) {
         return new ApplyForce(force, currentPriority, currentPrioRand, where);
     }
 
     private class Where extends Procedure {
-        public Where(BoolVRef flip) {
+        public Where(BoolV flip) {
             set(zero, flip);
             
-            IntVRef currentPriority = new IntVRef(new IntV(Force.priorityBits));
-            IntVRef currentPrioRand = new IntVRef(new IntV(Force.prioRandBits));
+            IntV currentPriority = new IntV(Force.priorityBits);
+            IntV currentPrioRand = new IntV(Force.prioRandBits);
             set(minPrio, currentPriority);
             set(minRand, currentPrioRand);
             
@@ -82,5 +80,5 @@ public class Flip {
             for (Constraint c : constraints) { call(c.verify(flip, currentPriority, currentPrioRand)); }
         }
     }
-    public Procedure where(BoolVRef where) { return new Where(where); }
+    public Procedure where(BoolV where) { return new Where(where); }
 }

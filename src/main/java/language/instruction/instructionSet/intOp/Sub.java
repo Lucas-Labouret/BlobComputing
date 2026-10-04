@@ -1,103 +1,102 @@
 package language.instruction.instructionSet.intOp;
 
-import language.instruction.Procedure;
 import language.field.intField.*;
-import language.fieldRef.intField.*;
+import language.instruction.Procedure;
 
 class SubV extends Procedure {
-    public SubV(IntVRef a, IntVRef b, IntVRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubV(IntV a, IntV b, IntV res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntVs of different sizes.");
 
-        IntVRef negB = tmp(new IntVRef(new IntV(a.get().n)));
+        IntV negB = tmp(new IntV(b.n));
         neg(b, negB);
         add(a, negB, res);
     }
 }
 
 class SubVe extends Procedure {
-    public SubVe(IntVeRef a, IntVeRef b, IntVeRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubVe(IntVe a, IntVe b, IntVe res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntVs of different sizes.");
 
-        IntVeRef negB = tmp(new IntVeRef(new IntVe(b.get().n)));
+        IntVe negB = tmp(new IntVe(b.n));
         neg(b, negB);
         add(a, negB, res);
     }
 }
 
 class SubVf extends Procedure {
-    public SubVf(IntVfRef a, IntVfRef b, IntVfRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubVf(IntVf a, IntVf b, IntVf res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntVs of different sizes.");
 
-        IntVfRef negB = tmp(new IntVfRef(new IntVf(b.get().n)));
+        IntVf negB = tmp(new IntVf(b.n));
         neg(b, negB);
         add(a, negB, res);
     }
 }
 
 class SubE extends Procedure {
-    public SubE(IntERef a, IntERef b, IntERef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubE(IntE a, IntE b, IntE res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntEs of different sizes.");
 
-        IntERef negB = tmp(new IntERef(new IntE(b.get().n)));
+        IntE negB = tmp(new IntE(b.n));
         neg(b, negB);
         add(a, negB, res);
     }
 }
 
 class SubEv extends Procedure {
-    public SubEv(IntEvRef a, IntEvRef b, IntEvRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubEv(IntEv a, IntEv b, IntEv res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntEs of different sizes.");
 
-        IntEvRef negB = tmp(new IntEvRef(new IntEv(b.get().n)));
+        IntEv negB = tmp(new IntEv(b.n));
         neg(b, negB);
         add(a, negB, res);
     }
 }
 
 class SubEf extends Procedure {
-    public SubEf(IntEfRef a, IntEfRef b, IntEfRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubEf(IntEf a, IntEf b, IntEf res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntEs of different sizes.");
 
-        IntEfRef negB = tmp(new IntEfRef(new IntEf(b.get().n)));
+        IntEf negB = tmp(new IntEf(b.n));
         neg(b, negB);
         add(a, negB, res);
     }
 }
 
 class SubF extends Procedure {
-    public SubF(IntFRef a, IntFRef b, IntFRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubF(IntF a, IntF b, IntF res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntFs of different sizes.");
 
-        IntFRef negB = tmp(new IntFRef(new IntF(b.get().n)));
+        IntF negB = tmp(new IntF(b.n));
         neg(b, negB);
         add(a, negB, res);
     }
 }
 
 class SubFv extends Procedure {
-    public SubFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubFv(IntFv a, IntFv b, IntFv res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntFs of different sizes.");
 
-        IntFvRef negB = tmp(new IntFvRef(new IntFv(b.get().n)));
+        IntFv negB = tmp(new IntFv(b.n));
         neg(b, negB);
         add(a, negB, res);
     }
 }
 
 class SubFe extends Procedure {
-    public SubFe(IntFeRef a, IntFeRef b, IntFeRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public SubFe(IntFe a, IntFe b, IntFe res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot subtract IntEs of different sizes.");
 
-        IntFeRef negB = tmp(new IntFeRef(new IntFe(b.get().n)));
+        IntFe negB = tmp(new IntFe(b.n));
         neg(b, negB);
         add(a, negB, res);
     }

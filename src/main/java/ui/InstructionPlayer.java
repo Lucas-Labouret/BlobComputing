@@ -1,9 +1,9 @@
 package ui;
 
 import language.cache.Cache;
+import language.instruction.BasicInstruction;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
-import language.instruction.BasicInstruction;
 import language.instruction.instructionSet.Show;
 import language.instruction.instructionSet.Snapshot;
 

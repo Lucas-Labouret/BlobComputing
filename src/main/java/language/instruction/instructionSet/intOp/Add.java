@@ -2,19 +2,18 @@ package language.instruction.instructionSet.intOp;
 
 import language.field.intField.*;
 import language.instruction.Procedure;
-import language.fieldRef.intField.*;
 
 class AddV extends Procedure {
-    public AddV(IntVRef a, IntVRef b, IntVRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddV(IntV a, IntV b, IntV res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntVs of different sizes.");
 
-        IntVRef carry = tmp(new IntVRef(new IntV(a.get().n)));
-        IntVRef tmp = tmp(new IntVRef(new IntV(a.get().n)));
+        IntV carry = tmp(new IntV(a.n));
+        IntV tmp = tmp(new IntV(a.n));
         set(a, res);
         set(b, tmp);
 
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);
@@ -23,16 +22,16 @@ class AddV extends Procedure {
 }
 
 class AddVe extends Procedure {
-    public AddVe(IntVeRef a, IntVeRef b, IntVeRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddVe(IntVe a, IntVe b, IntVe res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntVes of different sizes.");
 
-        IntVeRef carry = tmp(new IntVeRef(new IntVe(a.get().n)));
-        IntVeRef tmp = tmp(new IntVeRef(new IntVe(a.get().n)));
+        IntVe carry = tmp(new IntVe(a.n));
+        IntVe tmp = tmp(new IntVe(a.n));
         set(a, res);
         set(b, tmp);
 
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);
@@ -41,16 +40,16 @@ class AddVe extends Procedure {
 }
 
 class AddVf extends Procedure {
-    public AddVf(IntVfRef a, IntVfRef b, IntVfRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddVf(IntVf a, IntVf b, IntVf res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntVfs of different sizes.");
 
-        IntVfRef carry = tmp(new IntVfRef(new IntVf(a.get().n)));
-        IntVfRef tmp = tmp(new IntVfRef(new IntVf(a.get().n)));
+        IntVf carry = tmp(new IntVf(a.n));
+        IntVf tmp = tmp(new IntVf(a.n));
 
         set(a, res);
         set(b, tmp);
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);
@@ -59,16 +58,16 @@ class AddVf extends Procedure {
 }
 
 class AddE extends Procedure {
-    public AddE(IntERef a, IntERef b, IntERef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddE(IntE a, IntE b, IntE res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntEs of different sizes.");
 
-        IntERef carry = tmp(new IntERef(new IntE(a.get().n)));
-        IntERef tmp = tmp(new IntERef(new IntE(a.get().n)));
+        IntE carry = tmp(new IntE(a.n));
+        IntE tmp = tmp(new IntE(a.n));
         set(a, res);
         set(b, tmp);
 
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);
@@ -77,16 +76,16 @@ class AddE extends Procedure {
 }
 
 class AddEv extends Procedure {
-    public AddEv(IntEvRef a, IntEvRef b, IntEvRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddEv(IntEv a, IntEv b, IntEv res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntEvs of different sizes.");
 
-        IntEvRef carry = tmp(new IntEvRef(new IntEv(a.get().n)));
-        IntEvRef tmp = tmp(new IntEvRef(new IntEv(a.get().n)));
+        IntEv carry = tmp(new IntEv(a.n));
+        IntEv tmp = tmp(new IntEv(a.n));
         set(a, res);
         set(b, tmp);
 
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);
@@ -95,16 +94,16 @@ class AddEv extends Procedure {
 }
 
 class AddEf extends Procedure {
-    public AddEf(IntEfRef a, IntEfRef b, IntEfRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddEf(IntEf a, IntEf b, IntEf res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntEfs of different sizes.");
 
-        IntEfRef carry = tmp(new IntEfRef(new IntEf(a.get().n)));
-        IntEfRef tmp = tmp(new IntEfRef(new IntEf(a.get().n)));
+        IntEf carry = tmp(new IntEf(a.n));
+        IntEf tmp = tmp(new IntEf(a.n));
         set(a, res);
         set(b, tmp);
 
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);
@@ -113,16 +112,16 @@ class AddEf extends Procedure {
 }
 
 class AddF extends Procedure {
-    public AddF(IntFRef a, IntFRef b, IntFRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddF(IntF a, IntF b, IntF res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntFs of different sizes.");
 
-        IntFRef carry = tmp(new IntFRef(new IntF(a.get().n)));
-        IntFRef tmp = tmp(new IntFRef(new IntF(a.get().n)));
+        IntF carry = tmp(new IntF(a.n));
+        IntF tmp = tmp(new IntF(a.n));
         set(a, res);
         set(b, tmp);
 
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);
@@ -131,16 +130,16 @@ class AddF extends Procedure {
 }
 
 class AddFv extends Procedure {
-    public AddFv(IntFvRef a, IntFvRef b, IntFvRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddFv(IntFv a, IntFv b, IntFv res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntFvs of different sizes.");
 
-        IntFvRef carry = tmp(new IntFvRef(new IntFv(a.get().n)));
-        IntFvRef tmp = tmp(new IntFvRef(new IntFv(a.get().n)));
+        IntFv carry = tmp(new IntFv(a.n));
+        IntFv tmp = tmp(new IntFv(a.n));
         set(a, res);
         set(b, tmp);
 
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);
@@ -149,16 +148,16 @@ class AddFv extends Procedure {
 }
 
 class AddFe extends Procedure {
-    public AddFe(IntFeRef a, IntFeRef b, IntFeRef res) {
-        if (a.get().n != b.get().n || a.get().n != res.get().n)
+    public AddFe(IntFe a, IntFe b, IntFe res) {
+        if (a.n != b.n || a.n != res.n)
             throw new IllegalArgumentException("Cannot add IntFes of different sizes.");
 
-        IntFeRef carry = tmp(new IntFeRef(new IntFe(a.get().n)));
-        IntFeRef tmp = tmp(new IntFeRef(new IntFe(a.get().n)));
+        IntFe carry = tmp(new IntFe(a.n));
+        IntFe tmp = tmp(new IntFe(a.n));
         set(a, res);
         set(b, tmp);
 
-        for (int i = 0; i <= a.get().n; i++){
+        for (int i = 0; i <= a.n; i++){
             and(res, tmp, carry);
             xor(res, tmp, res);
             lShift(carry, tmp, 1);

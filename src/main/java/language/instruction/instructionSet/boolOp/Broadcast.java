@@ -1,121 +1,118 @@
 package language.instruction.instructionSet.boolOp;
 
+import language.field.boolField.*;
 import language.instruction.BasicInstruction;
-import language.field.boolField.BoolE;
-import language.field.boolField.BoolF;
-import language.field.boolField.BoolV;
-import language.fieldRef.boolField.*;
 
 /** Broadcasts a BoolV into a BoolVe. */
 class BroadcastVe implements BasicInstruction {
-	private final BoolVRef orig;
-	private final BoolVeRef res;
+	private final BoolV orig;
+	private final BoolVe dest;
 
 	/** Creates a new BroadcastVe. */
-	public BroadcastVe(BoolVRef orig, BoolVeRef res) {
+	public BroadcastVe(BoolV orig, BoolVe dest) {
 		this.orig = orig;
-		this.res = res;
+		this.dest = dest;
 	}
 
 	/** @return true. */
 	@Override
 	public boolean exec() {
-		res.set(BoolV.broadcastVe(orig.get()));
+		dest.broadcast(orig);
 		return true;
 	}
 }
 
 /** Broadcasts a BoolV into a BoolVf. */
 class BroadcastVf implements BasicInstruction {
-    private final BoolVRef orig;
-    private final BoolVfRef res;
+    private final BoolV orig;
+    private final BoolVf dest;
 
     /** Creates a new BroadcastVf. */
-    public BroadcastVf(BoolVRef orig, BoolVfRef res) {
+    public BroadcastVf(BoolV orig, BoolVf dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolV.broadcastVf(orig.get()));
+        dest.broadcast(orig);
         return true;
     }
 }
 
 /** Broadcasts a BoolE into a BoolEv. */
 class BroadcastEv implements BasicInstruction {
-    private final BoolERef orig;
-    private final BoolEvRef res;
+    private final BoolE orig;
+    private final BoolEv dest;
 
     /** Creates a new BroadcastEv. */
-    public BroadcastEv(BoolERef orig, BoolEvRef res) {
+    public BroadcastEv(BoolE orig, BoolEv dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolE.broadcastEv(orig.get()));
+        dest.broadcast(orig);
         return true;
     }
 }
 
 /** Broadcasts a BoolE into a BoolEf. */
 class BroadcastEf implements BasicInstruction {
-    private final BoolERef orig;
-    private final BoolEfRef res;
+    private final BoolE orig;
+    private final BoolEf dest;
 
     /** Creates a new BroadcastEf. */
-    public BroadcastEf(BoolERef orig, BoolEfRef res) {
+    public BroadcastEf(BoolE orig, BoolEf dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolE.broadcastEf(orig.get()));
+        dest.broadcast(orig);
         return true;
     }
 }
 
 /** Broadcasts a BoolF into a BoolFv. */
 class BroadcastFv implements BasicInstruction {
-    private final BoolFRef orig;
-    private final BoolFvRef res;
+    private final BoolF orig;
+    private final BoolFv dest;
 
     /** Creates a new BroadcastFv. */
-    public BroadcastFv(BoolFRef orig, BoolFvRef res) {
+    public BroadcastFv(BoolF orig, BoolFv dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolF.broadcastFv(orig.get()));
+        dest.broadcast(orig);
         return true;
     }
 }
 
 /** Broadcasts a BoolF into a BoolFe. */
 class BroadcastFe implements BasicInstruction {
-    private final BoolFRef orig;
-    private final BoolFeRef res;
+    private final BoolF orig;
+    private final BoolFe dest;
 
     /** Creates a new BroadcastFe. */
-    public BroadcastFe(BoolFRef orig, BoolFeRef res) {
+    public BroadcastFe(BoolF orig, BoolFe dest) {
         this.orig = orig;
-        this.res = res;
+        this.dest = dest;
     }
 
     /** @return true. */
     @Override
     public boolean exec() {
-        res.set(BoolF.broadcastFe(orig.get()));
+        dest.broadcast(orig);
         return true;
     }
 }

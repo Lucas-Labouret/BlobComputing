@@ -2,7 +2,6 @@ package ui.display.displayable.boolFieldDisplay;
 
 import javafx.scene.paint.Color;
 import language.field.boolField.BoolFv;
-import language.fieldRef.boolField.BoolFvRef;
 import medium.Medium;
 import medium.locusT.Fv;
 import ui.display.Styles;
@@ -11,11 +10,11 @@ import ui.display.displayable.Displayable;
 import java.util.HashMap;
 
 public class BoolFvDisplay implements Displayable {
-    private final BoolFvRef ref;
+    private final BoolFv field;
     private final Styles.Style style;
 
-    public BoolFvDisplay(BoolFvRef ref, Styles.Style style){
-        this.ref = ref;
+    public BoolFvDisplay(BoolFv field, Styles.Style style){
+        this.field = field;
         this.style = style;
     }
 
@@ -23,7 +22,7 @@ public class BoolFvDisplay implements Displayable {
 
     @Override
     public HashMap<Fv, Color> displayColorFv(Medium medium) {
-        HashMap<Fv, Boolean> mem = BoolFv.decode(medium.fvs, ref.get());
+        HashMap<Fv, Boolean> mem = field.decode(medium.fvs);
         HashMap<Fv, Color> colors = new HashMap<>();
         for (Fv fv : mem.keySet())
             if (mem.get(fv)) colors.put(fv, style.FV_TRUE());
@@ -33,7 +32,7 @@ public class BoolFvDisplay implements Displayable {
 
     @Override
     public HashMap<Fv, String> displayStringFv(Medium medium) {
-        HashMap<Fv, Boolean> mem = BoolFv.decode(medium.fvs, ref.get());
+        HashMap<Fv, Boolean> mem = field.decode(medium.fvs);
         HashMap<Fv, String> strings = new HashMap<>();
         for (Fv fv : mem.keySet())
             strings.put(fv, mem.get(fv).toString());
