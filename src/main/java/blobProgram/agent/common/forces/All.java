@@ -4,6 +4,9 @@ import blobProgram.agent.Force;
 import language.field.boolField.BoolV;
 import language.instruction.Procedure;
 
+/**
+ * Causes movement everywhere.
+ */
 public class All extends Force {
     private class Compute extends Procedure {
         public Compute(BoolV yes, BoolV no) {

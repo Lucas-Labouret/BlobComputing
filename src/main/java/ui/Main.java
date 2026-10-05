@@ -33,7 +33,7 @@ public class Main extends Application {
         blobStaging(stage);
     
         Medium medium;
-        try { medium = Medium.read("large"); }
+        try { medium = Medium.read("medium"); }
         catch (Exception e) { throw new RuntimeException(e); }
         BoolFieldManager.setup(medium);
 
@@ -43,13 +43,10 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.show();
-
     }
 
     @Override
-    public void stop() {
-        ms.stop();
-    }
+    public void stop() { ms.stop(); }
 
     private void blobStaging(Stage stage) {
         stage.setTitle("Blob");
@@ -65,7 +62,7 @@ public class Main extends Application {
 /**
  * MainInstructions class holds the main instructions for the Blob application.
  * It initializes various procedures that can be executed in the application.
- *
+ * <p>
  * The procedures are held in Lazy objects to ensure that only the necessary procedure is created.
  * This allows all procedures to call Rand.init() as needed without conflicting with each other.
  * This also reduces the memory footprint of the application, as only the necessary procedures are created.
@@ -108,7 +105,7 @@ class MainInstructions {
 
             IntV dist = new IntV(3);
             IntVe gradient = new IntVe(3);
-            DistField distField = new DistField(seed, 3);
+            DistanceField distField = new DistanceField(seed, 3);
             call(distField.getDist(dist));
             call(distField.getGradient(gradient));
             show("DistField", dist);
@@ -167,11 +164,11 @@ class MainInstructions {
 //                particle.setBit(v, true);
 //            }
             for (int y = 0; y < 6; y++) for (int x = 0; x < 6; x++) {
-                particle.setBit(4*y+1, 4*x+1, true);
+                particle.setBit(3*y+1, 3*x+1, true);
             }
-            particle.setBit(3, 2, true);
-            particle.setBit(3, 5, true);
-            particle.setBit(5, 2, true);
+//            particle.setBit(3, 2, true);
+//            particle.setBit(3, 5, true);
+//            particle.setBit(5, 2, true);
             Homogenize homogenize = Homogenize.make(particle);
 
             show("Particles", particle, Styles.PARTICLE);

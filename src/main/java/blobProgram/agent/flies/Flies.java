@@ -6,16 +6,19 @@ import blobProgram.agent.Flip;
 import blobProgram.agent.common.constraints.MaintainBlob;
 import blobProgram.agent.common.constraints.MaintainQuasiParticle;
 import blobProgram.agent.common.forces.All;
-import blobProgram.agent.common.forces.SlowDown;
+import blobProgram.agent.common.constraints.SlowDown;
 
+/**
+ * Randomly moves quasi-particles around the medium.
+ */
 public class Flies extends Agent {
     public Flies(QuasiParticle state) {
         super(
             state,
             new Flip()
-                    .addForce(new SlowDown(2, 2).setPriority(2))
                     .addForce(new All().setPriority(1))
 
+                    .addConstraint(new SlowDown(2, 2))
                     .addConstraint(new MaintainQuasiParticle(state))
                     .addConstraint(new MaintainBlob(state))
         );

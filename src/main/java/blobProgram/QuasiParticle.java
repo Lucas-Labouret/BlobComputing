@@ -4,6 +4,10 @@ import language.field.boolField.*;
 import language.field.intField.IntV;
 import language.instruction.Procedure;
 
+/**
+ * A QuasiParticle is a BlobV in which blobs have size 1, 2, or 3.
+ * 3-particles share a common face, 2-particles share a common edge, and 1-particles are isolated.
+ */
 public class QuasiParticle extends BlobV {
     public QuasiParticle() { super(); }
     public QuasiParticle(BoolV state) { super(state); }

@@ -9,6 +9,9 @@ import language.instruction.Procedure;
 import medium.Medium;
 import medium.locusS.Vertex;
 
+/**
+ * A BlobV is simply a BoolV augmented with several useful procedures for manipulating blobs in a medium.
+ */
 public class BlobV extends BoolV {
     protected final BoolV init;
 

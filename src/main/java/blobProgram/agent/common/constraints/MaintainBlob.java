@@ -10,9 +10,17 @@ import language.field.intField.IntV;
 import language.instruction.Procedure;
 import ui.display.Styles;
 
+/**
+ * Constraint that maintains the integrity of a blob.
+ * Blobs do not merge, split, or disappear entirely,
+ * only change on their frontier and border,
+ * and have a constant number of holes.
+ */
 public class MaintainBlob extends Constraint {
-    public MaintainBlob(BlobV blob) {
-        super(blob);
+    private final BlobV state;
+
+    public MaintainBlob(BlobV state) {
+        this.state = state;
     }
 
     private class Verify extends Procedure {

@@ -9,7 +9,7 @@ import language.instruction.Procedure;
 
 public class GabrielCenter {
     private final int nbits;
-    public final DistField distField;
+    public final DistanceField distField;
 
     private final BoolV center = new BoolV();
     private class GetCenter extends Procedure { public GetCenter(BoolV out) { set(center, out); } }
@@ -17,10 +17,10 @@ public class GabrielCenter {
 
     public GabrielCenter(BoolV seeds) {
         this.nbits = 3;
-        this.distField = new DistField(seeds, nbits);
+        this.distField = new DistanceField(seeds, nbits);
     }
 
-    public GabrielCenter(DistField distField) {
+    public GabrielCenter(DistanceField distField) {
         this.nbits = distField.nbits;
         this.distField = distField;
     }

@@ -8,6 +8,9 @@ import language.field.boolField.BoolV;
 import language.instruction.Procedure;
 import ui.display.Styles;
 
+/**
+ * Includes adjacent Gabriel Centers into the blob, and blocks removal of Gabriel Centers that are already in the blob.
+ */
 public class IncludeGCenters extends Force {
     private final BlobV state;
     private final GabrielCenter gCenters;

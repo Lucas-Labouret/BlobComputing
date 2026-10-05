@@ -10,11 +10,21 @@ import language.field.intField.IntVe;
 import language.instruction.Procedure;
 import ui.display.Styles;
 
+/**
+ * Constraint that maintains the integrity of a quasi-particle.
+ * A quasi-particle can have 1, 2 or 3 particles.
+ * <p>
+ * If a quasi-particle has 2 particles, those are connected by a single edge,
+ * and if it has 3 particles, those are connected by a single face.
+ * <p>
+ * A 1-particle can only evolve into a 2-particle,
+ * a 2-particle can only evolve into a 1-, 2- or 3-particle,
+ * a 3-particle can only evolve into a 2-particle.
+ */
 public class MaintainQuasiParticle extends Constraint {
     private final QuasiParticle state;
 
     public MaintainQuasiParticle(QuasiParticle qp) {
-        super(qp);
         this.state = qp;
     }
 

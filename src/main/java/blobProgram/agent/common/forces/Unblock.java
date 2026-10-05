@@ -7,6 +7,9 @@ import language.field.boolField.BoolVe;
 import language.field.intField.IntVe;
 import language.instruction.Procedure;
 
+/**
+ * Causes a movement of the blob in the neutral direction given by the gradient where dead ends are found.
+ */
 public class Unblock extends Force {
     private final BlobV state;
     private final IntVe gradient;

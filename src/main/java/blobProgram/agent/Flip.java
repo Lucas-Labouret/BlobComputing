@@ -6,6 +6,12 @@ import language.instruction.Procedure;
 
 import java.util.ArrayList;
 
+/**
+ * A flip determines where the state of an agent will be changed.
+ * It is determined by set of forces and constraints.
+ * The forces determine where the flip will be applied,
+ * and the constraints determine whether the flip is allowed to be applied.
+ */
 public class Flip {
     private static final BoolV zero = new BoolV().zeroes();
     private static final BoolV one = new BoolV().ones();
@@ -16,9 +22,20 @@ public class Flip {
     private final ArrayList<Force> forces = new ArrayList<>();
     private final ArrayList<Constraint> constraints = new ArrayList<>();
 
+    /** Adds a force to the flip. */
     public Flip addForce(Force f) { forces.add(f); return this; }
+    /** Adds a constraint to the flip. */
     public Flip addConstraint(Constraint c) { constraints.add(c); return this; }
 
+    /**
+     * Applies a force to the pre-constraint raw flip.
+     * <p>
+     * The force is applied if it has a higher priority than the current priority,
+     * or if it has the same priority but a higher random priority.
+     * The current priority and random priority are updated if a force is applied.
+     * <p>
+     * The resulting flip is stored in the where parameter.
+     */
     private static class ApplyForce extends Procedure {
         public ApplyForce(Force force,
                           IntV currentPrio, IntV currentPrioRand,
@@ -63,6 +80,7 @@ public class Flip {
         return new ApplyForce(force, currentPriority, currentPrioRand, where);
     }
 
+    /** Applies all forces to the flip and verifies all constraints. */
     private class Where extends Procedure {
         public Where(BoolV flip) {
             set(zero, flip);

@@ -7,6 +7,9 @@ import language.field.boolField.BoolVe;
 import language.field.intField.IntV;
 import language.instruction.Procedure;
 
+/**
+ * Fill a vertex if most of its neighbors are filled, or empty it if most of its neighbors are empty.
+ */
 public class Vote extends Force {
     private final BlobV state;
 

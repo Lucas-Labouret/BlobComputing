@@ -6,7 +6,15 @@ import language.field.intField.IntV;
 import language.field.intField.IntVe;
 import language.instruction.Procedure;
 
-public class DistField {
+/**
+ * A distance field computes the distance to the nearest moving source modulo 2^nbits.
+ * <p>
+ * The distance field has two components :<br>
+ * - The distance field itself, which is an IntV of size nbits and stores the distance directly.<br>
+ * - The gradient of the distance field, which is an IntVe of size nbits
+ * and stores the difference between the distance of a cell and its neighbors.
+ */
+public class DistanceField {
     int nbits;
 
     private final BoolV sources_t1;
@@ -23,7 +31,7 @@ public class DistField {
     private final IntVe deltaVe;
     private final IntVe negDeltaVe;
 
-    public DistField(BoolV sources, int nbits) {
+    public DistanceField(BoolV sources, int nbits) {
         this.nbits = nbits;
 
         this.sources_t0 = sources;
@@ -125,7 +133,7 @@ public class DistField {
     public Procedure update() { return new Update(); }
 
     private class GetDist extends Procedure {
-        public GetDist(IntV distField) { set(DistField.this.distField, distField); }
+        public GetDist(IntV distField) { set(DistanceField.this.distField, distField); }
     }
     public Procedure getDist(IntV distField) { return new GetDist(distField); }
 

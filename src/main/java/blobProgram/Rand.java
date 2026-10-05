@@ -4,6 +4,10 @@ import language.field.boolField.*;
 import language.field.intField.*;
 import language.instruction.Procedure;
 
+/**
+ * A pseudorandom number generator using successive XOR reduction to generate a new state from the previous state.
+ * It uses an initial seed to start the random number generation, then generates new pseudorandom states deterministically.
+ */
 public class Rand {
     private final static BoolV state = new BoolV();
     private final NextState nextState = new NextState();

@@ -1,19 +1,25 @@
 package blobProgram.agent;
 
-import blobProgram.BlobV;
 import language.field.boolField.*;
 import language.field.intField.*;
 import language.instruction.Procedure;
 
+/**
+ * A constraint verify whether a flip is allowed to happen or not.
+ * It cancels the flip where it is not allowed to happen,
+ * and resolves conflicts where only a limited number of flips are allowed to happen at the same time,
+ * according to the specified priorities.
+ */
 public abstract class Constraint {
-    protected final BlobV state;
-
-    protected Constraint(BlobV state) {
-        this.state = state;
-    }
-
+    /**
+     * Cancel the flip to resolve conflicts and maintain properties.
+     * @param flip the flip to verify. In/Out parameter.
+     * @param priority The priority of the flip. Higher priority flips are more likely to be allowed to happen.
+     * @param prioRand A random number to break ties between flips with the same priority. Higher prioRand flips are more likely to be allowed to happen.
+     */
     public abstract Procedure verify(BoolV flip, IntV priority, IntV prioRand);
 
+    /** A mutex resolves conflicts between flips situated on the two ends of an edge. */
     private static class Mutex extends Procedure {
         public Mutex(BoolE mutex, IntV priority, IntV prioRand, BoolV cancel) {
             IntE minPriorityE = tmp(new IntE(priority.n));
@@ -54,6 +60,7 @@ public abstract class Constraint {
         return new Mutex(mutexE, priority, prioRand, cancel);
     }
 
+    /** A mutApex resolves conflicts between flips situated on the two apexes of an edge. */
     private static class MutApex extends Procedure {
         public MutApex(BoolE mutApex, IntV priority, IntV prioRand, BoolV cancel) {
             // Find the lowest priority apex
@@ -116,6 +123,7 @@ public abstract class Constraint {
         return new MutApex(mutexE, priority, prioRand, cancel);
     }
 
+    /** A tritex resolves conflicts between flips situated on the three ends of a face. */
     private static class Tritex extends Procedure {
         public Tritex(BoolF tritex, IntV priority, IntV prioRand, BoolV cancel) {
             // Identify the minimum priority vertices of the three-particles

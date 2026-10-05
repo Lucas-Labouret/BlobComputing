@@ -7,6 +7,9 @@ import language.field.boolField.BoolVe;
 import language.field.intField.IntVe;
 import language.instruction.Procedure;
 
+/**
+ * Causes a movement of the blob in the positive direction given by the gradient.
+ */
 public class Repulse extends Force {
     private final BlobV state;
     private final IntVe gradient;
