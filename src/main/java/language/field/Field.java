@@ -5,6 +5,6 @@ import language.field.intField.IntField;
 
 public abstract sealed class Field<F extends Field<F>> permits BoolField, IntField {
     public abstract F copy();
-    public abstract void clear();
     public abstract void set(F other);
+    public abstract void clear();
 }

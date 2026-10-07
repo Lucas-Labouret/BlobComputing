@@ -8,14 +8,16 @@ import language.instruction.instructionSet.Print;
 import language.instruction.instructionSet.SetField;
 import language.instruction.instructionSet.Show;
 import language.instruction.instructionSet.Snapshot;
-import language.instruction.instructionSet.boolOp.BoolOp;
-import language.instruction.instructionSet.intOp.IntOp;
+import language.instruction.instructionSet.BoolOp;
+import language.instruction.instructionSet.IntOp;
 import ui.display.Styles;
+import utils.TriFunction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 /** Represents an instruction composed of a sequence of sub-instructions. */
+@SuppressWarnings("unused")
 public abstract non-sealed class Procedure implements Instruction {
     private int instrPtr = 0;
     private final ArrayList<Instruction> instr;
@@ -33,7 +35,7 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void call(Instruction i) {
         instr.add(i);
     }
-
+    
     @Override
     public int leafCount() {
         int count = 0;
@@ -64,9 +66,9 @@ public abstract non-sealed class Procedure implements Instruction {
      * The variable will be automatically cleaned up (set to null) when this procedure finishes executing.
      * This avoids expensive long term storage of fields that are no longer useful
      */
-    public <F extends Field> F tmp(F field) { tmpVars.add(field); return field; }
-    private final HashSet<Field> tmpVars = new HashSet<>();
-    private void cleanup() { for (Field field : tmpVars) field.clear(); }
+    public <F extends Field<?>> F tmp(F field) { tmpVars.add(field); return field; }
+    private final HashSet<Field<?>> tmpVars = new HashSet<>();
+    private void cleanup() { for (Field<?> field : tmpVars) field.clear(); }
 
     /** @return false if there are more instructions to execute, true if the loop is finished. */
     @Override
@@ -96,6 +98,7 @@ public abstract non-sealed class Procedure implements Instruction {
 
     // Wrapper functions to make writing procedures easier. These functions simply add the corresponding instruction to this procedure.
 
+    @SuppressWarnings("UnusedReturnValue")
     protected void print(@SuppressWarnings("SameParameterValue") String message) { call(new Print(message)); }
     protected <F extends Field<F>> void show(String name, F field) { call(new Show<>(name, field)); }
     protected <F extends Field<F>> void show(String name, F field, Styles.Style style) { call(new Show<>(name, field, style)); }
@@ -343,16 +346,17 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void redXor(BoolFe a, BoolF res) { call(BoolOp.redXor(a, res)); }
 
     protected void redStack0(BoolVe a, BoolV[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolVe a, BoolV[] res) { call(BoolOp.redStack1(a, res)); }
     protected void redStack0(BoolVf a, BoolV[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolVf a, BoolV[] res) { call(BoolOp.redStack1(a, res)); }
     protected void redStack0(BoolEv a, BoolE[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolEv a, BoolE[] res) { call(BoolOp.redStack1(a, res)); }
     protected void redStack0(BoolEf a, BoolE[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolEf a, BoolE[] res) { call(BoolOp.redStack1(a, res)); }
     protected void redStack0(BoolFv a, BoolF[] res) { call(BoolOp.redStack0(a, res)); }
-    protected void redStack1(BoolFv a, BoolF[] res) { call(BoolOp.redStack1(a, res)); }
     protected void redStack0(BoolFe a, BoolF[] res) { call(BoolOp.redStack0(a, res)); }
+
+    protected void redStack1(BoolVe a, BoolV[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack1(BoolVf a, BoolV[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack1(BoolEv a, BoolE[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack1(BoolEf a, BoolE[] res) { call(BoolOp.redStack1(a, res)); }
+    protected void redStack1(BoolFv a, BoolF[] res) { call(BoolOp.redStack1(a, res)); }
     protected void redStack1(BoolFe a, BoolF[] res) { call(BoolOp.redStack1(a, res)); }
 
     protected void redStack0  (IntVe a, IntV[] res) { call(IntOp.redStack0  (a, res)); }
@@ -407,31 +411,51 @@ public abstract non-sealed class Procedure implements Instruction {
     protected void redAdd(IntFv a, IntF res) { call(IntOp.redAdd(a, res)); }
     protected void redAdd(IntFe a, IntF res) { call(IntOp.redAdd(a, res)); }
 
-    protected void rotCW(BoolVe a, BoolVf res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolVf a, BoolVe res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolEv a, BoolEf res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolEf a, BoolEv res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolFv a, BoolFe res) { call(BoolOp.rotCW(a, res)); }
-    protected void rotCW(BoolFe a, BoolFv res) { call(BoolOp.rotCW(a, res)); }
+    protected void rotCW(BoolVe a, BoolVf res) { call(BoolOp.rotCw(a, res)); }
+    protected void rotCW(BoolVf a, BoolVe res) { call(BoolOp.rotCw(a, res)); }
+    protected void rotCW(BoolEv a, BoolEf res) { call(BoolOp.rotCw(a, res)); }
+    protected void rotCW(BoolEf a, BoolEv res) { call(BoolOp.rotCw(a, res)); }
+    protected void rotCW(BoolFv a, BoolFe res) { call(BoolOp.rotCw(a, res)); }
+    protected void rotCW(BoolFe a, BoolFv res) { call(BoolOp.rotCw(a, res)); }
 
-    protected void rotCW(IntVe a, IntVf res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntVf a, IntVe res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntEv a, IntEf res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntEf a, IntEv res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntFv a, IntFe res) { call(IntOp.rotCW(a, res)); }
-    protected void rotCW(IntFe a, IntFv res) { call(IntOp.rotCW(a, res)); }
+    protected void rotCW(IntVe a, IntVf res) { call(IntOp.rotCw(a, res)); }
+    protected void rotCW(IntVf a, IntVe res) { call(IntOp.rotCw(a, res)); }
+    protected void rotCW(IntEv a, IntEf res) { call(IntOp.rotCw(a, res)); }
+    protected void rotCW(IntEf a, IntEv res) { call(IntOp.rotCw(a, res)); }
+    protected void rotCW(IntFv a, IntFe res) { call(IntOp.rotCw(a, res)); }
+    protected void rotCW(IntFe a, IntFv res) { call(IntOp.rotCw(a, res)); }
 
-    protected void rotCCW(BoolVe a, BoolVf res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolVf a, BoolVe res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolEv a, BoolEf res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolEf a, BoolEv res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolFv a, BoolFe res) { call(BoolOp.rotCCW(a, res)); }
-    protected void rotCCW(BoolFe a, BoolFv res) { call(BoolOp.rotCCW(a, res)); }
+    protected void rotCCW(BoolVe a, BoolVf res) { call(BoolOp.rotCcw(a, res)); }
+    protected void rotCCW(BoolVf a, BoolVe res) { call(BoolOp.rotCcw(a, res)); }
+    protected void rotCCW(BoolEv a, BoolEf res) { call(BoolOp.rotCcw(a, res)); }
+    protected void rotCCW(BoolEf a, BoolEv res) { call(BoolOp.rotCcw(a, res)); }
+    protected void rotCCW(BoolFv a, BoolFe res) { call(BoolOp.rotCcw(a, res)); }
+    protected void rotCCW(BoolFe a, BoolFv res) { call(BoolOp.rotCcw(a, res)); }
 
-    protected void rotCCW(IntVe a, IntVf res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntVf a, IntVe res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntEv a, IntEf res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntEf a, IntEv res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntFv a, IntFe res) { call(IntOp.rotCCW(a, res)); }
-    protected void rotCCW(IntFe a, IntFv res) { call(IntOp.rotCCW(a, res)); }
+    protected void rotCCW(IntVe a, IntVf res) { call(IntOp.rotCcw(a, res)); }
+    protected void rotCCW(IntVf a, IntVe res) { call(IntOp.rotCcw(a, res)); }
+    protected void rotCCW(IntEv a, IntEf res) { call(IntOp.rotCcw(a, res)); }
+    protected void rotCCW(IntEf a, IntEv res) { call(IntOp.rotCcw(a, res)); }
+    protected void rotCCW(IntFv a, IntFe res) { call(IntOp.rotCcw(a, res)); }
+    protected void rotCCW(IntFe a, IntFv res) { call(IntOp.rotCcw(a, res)); }
+
+    protected void scanLeft(IntV  a, BoolV  res, TriFunction<BoolV,  BoolV,  BoolV,  Instruction> operation) { call(IntOp.scanLeft(a, res, operation)); }
+    protected void scanLeft(IntVe a, BoolVe res, TriFunction<BoolVe, BoolVe, BoolVe, Instruction> operation) { call(IntOp.scanLeft(a, res, operation)); }
+    protected void scanLeft(IntVf a, BoolVf res, TriFunction<BoolVf, BoolVf, BoolVf, Instruction> operation) { call(IntOp.scanLeft(a, res, operation)); }
+    protected void scanLeft(IntE  a, BoolE  res, TriFunction<BoolE,  BoolE,  BoolE,  Instruction> operation) { call(IntOp.scanLeft(a, res, operation)); }
+    protected void scanLeft(IntEv a, BoolEv res, TriFunction<BoolEv, BoolEv, BoolEv, Instruction> operation) { call(IntOp.scanLeft(a, res, operation));  }
+    protected void scanLeft(IntEf a, BoolEf res, TriFunction<BoolEf, BoolEf, BoolEf, Instruction> operation) { call(IntOp.scanLeft(a, res, operation));  }
+    protected void scanLeft(IntF  a, BoolF  res, TriFunction<BoolF,  BoolF,  BoolF,  Instruction> operation) { call(IntOp.scanLeft(a, res, operation));  }
+    protected void scanLeft(IntFv a, BoolFv res, TriFunction<BoolFv, BoolFv, BoolFv, Instruction> operation) { call(IntOp.scanLeft(a, res, operation));  }
+    protected void scanLeft(IntFe a, BoolFe res, TriFunction<BoolFe, BoolFe, BoolFe, Instruction> operation) { call(IntOp.scanLeft(a, res, operation));  }
+
+    protected void scanRight(IntV  a, BoolV  res, TriFunction<BoolV,  BoolV,  BoolV,  Instruction> operation) { call(IntOp.scanRight(a, res, operation)); }
+    protected void scanRight(IntVe a, BoolVe res, TriFunction<BoolVe, BoolVe, BoolVe, Instruction> operation) { call(IntOp.scanRight(a, res, operation)); }
+    protected void scanRight(IntVf a, BoolVf res, TriFunction<BoolVf, BoolVf, BoolVf, Instruction> operation) { call(IntOp.scanRight(a, res, operation)); }
+    protected void scanRight(IntE  a, BoolE  res, TriFunction<BoolE,  BoolE,  BoolE,  Instruction> operation) { call(IntOp.scanRight(a, res, operation)); }
+    protected void scanRight(IntEv a, BoolEv res, TriFunction<BoolEv, BoolEv, BoolEv, Instruction> operation) { call(IntOp.scanRight(a, res, operation));  }
+    protected void scanRight(IntEf a, BoolEf res, TriFunction<BoolEf, BoolEf, BoolEf, Instruction> operation) { call(IntOp.scanRight(a, res, operation));  }
+    protected void scanRight(IntF  a, BoolF  res, TriFunction<BoolF,  BoolF,  BoolF,  Instruction> operation) { call(IntOp.scanRight(a, res, operation));  }
+    protected void scanRight(IntFv a, BoolFv res, TriFunction<BoolFv, BoolFv, BoolFv, Instruction> operation) { call(IntOp.scanRight(a, res, operation));  }
+    protected void scanRight(IntFe a, BoolFe res, TriFunction<BoolFe, BoolFe, BoolFe, Instruction> operation) { call(IntOp.scanRight(a, res, operation));  }
 }

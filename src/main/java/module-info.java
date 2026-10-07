@@ -9,6 +9,8 @@ module com.github.lucaslabouret.blobcomputing {
     opens ui.display.displayable to javafx.fxml;
     opens ui.display.displayable.boolFieldDisplay to javafx.fxml;
 
+    exports utils;
+
     exports ui;
     exports ui.display;
     exports ui.display.displayable;
