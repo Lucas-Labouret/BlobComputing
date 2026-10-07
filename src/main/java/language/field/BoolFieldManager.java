@@ -1,4 +1,4 @@
-package language.utils;
+package language.field;
 
 import language.field.boolField.*;
 import medium.Medium;
@@ -12,7 +12,15 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/** Stores the global language.field-dimension configuration shared by language.field types. */
+/**
+ * A helper class that configures the field data structures based on the given medium.
+ * <p>
+ * This class is responsible for setting up the boolean field representations into 2D arrays of integers,
+ * which are to efficiently store and manipulate them.
+ * All boolean fields except BoolV exist in at leat 3 dimensions, and are flattened into 2D arrays for storage.
+ * <p>
+ * It also sets up the border conditions and torus mappings for the boolean fields.
+ */
 public final class BoolFieldManager {
     // Block instantiation
     private BoolFieldManager(){}
@@ -20,23 +28,23 @@ public final class BoolFieldManager {
     // Medium
     private static Medium medium;
 
-    // Max nb of vertices in a column
+    /** Max nb of vertices in a column */
     private static int height;
-    // Max nb of vertices in a line
+    /** Max nb of vertices in a line */
     private static int width;
-    // Max number of Edges belonging to a single vertex
+    /** Max number of Edges belonging to a single vertex */
     private static int spanE;
-    // Max number of Faces belonging to a single vertex
+    /** Max number of Faces belonging to a single vertex */
     private static int spanF;
-    // Max nb of Ve/Vf around a vertex
+    /** Max nb of Ve/Vf around a vertex */
     private static int breadthV;
-    // Max nb of Ev/Ef around an edge
+    /** Max nb of Ev/Ef around an edge */
     private static final int breadthE = 2;
-    // Max nb of Fv/Fe around a face
+    /** Max nb of Fv/Fe around a face */
     private static final int breadthF = 3;
 
     private static Boolean SETUP_DONE = false;
-    /** Initializes the global language.field configuration from the given medium. */
+    /** Initializes the global field configuration from the given medium. */
     public static void setup(Medium m) {
         if (SETUP_DONE) throw new IllegalStateException("Setup has already been done.");
         SETUP_DONE = true;
@@ -63,6 +71,7 @@ public final class BoolFieldManager {
         }
         spanF++;
 
+        // Set array sizes for boolean fields based on the medium's dimensions
         BoolFieldLine.SET_PARAMS(width);
         BoolV.SET_PARAMS(height);
         BoolE.SET_PARAMS(height, spanE);
@@ -74,6 +83,7 @@ public final class BoolFieldManager {
         BoolFv.SET_PARAMS(height, spanF);
         BoolFe.SET_PARAMS(height, spanF);
 
+        // Set up data positions and masks for boolean fields
         setDataPosV();
         setDataPosE();
         setDataPosF();
@@ -85,17 +95,26 @@ public final class BoolFieldManager {
         setMasksFv();
         setMasksFe();
 
+        // Set up border conditions
         setBorders();
     }
 
-    public static int getWidth(){ return width; }
+    /** @return the max nb of vertices in a column */
     public static int getHeight(){ return height; }
+    /** @return the max nb of vertices in a line */
+    public static int getWidth(){ return width; }
+    /** @return the max number of Edges belonging to a single vertex */
     public static int getSpanE(){ return spanE; }
+    /** @return the max number of Faces belonging to a single vertex */
     public static int getSpanF(){ return spanF; }
+    /** @return the max nb of Ve/Vf around a vertex */
     public static int getBreadthV(){ return breadthV; }
+    /** @return the max nb of Ev/Ef around a vertex */
     public static int getBreadthE(){ return breadthE; }
+    /** @return the max nb of Fv/Fe around a vertex */
     public static int getBreadthF(){ return breadthF; }
 
+    /** Sets up a BoolV with bits set to true if the corresponding vertex exists in the medium. */
     private static void setDataPosV() {
         BoolV dataPos = new BoolV(Border.MIRROR).zeroes();
         for (Vertex v: medium.vertices)
@@ -103,6 +122,7 @@ public final class BoolFieldManager {
         BoolV.setDataPos(dataPos);
     }
 
+    /** Sets up a BoolE with bits set to true if the corresponding edge exists in the medium. */
     private static void setDataPosE() {
         BoolE dataPos = new BoolE(Border.MIRROR).zeroes();
         for (Edge e: medium.edges)
@@ -110,6 +130,7 @@ public final class BoolFieldManager {
         BoolE.setDataPos(dataPos);
     }
 
+    /** Sets up a BoolF with bits set to true if the corresponding face exists in the medium. */
     private static void setDataPosF() {
         BoolF dataPos = new BoolF(Border.MIRROR).zeroes();
         for (Face f: medium.faces)
@@ -117,6 +138,7 @@ public final class BoolFieldManager {
         BoolF.setDataPos(dataPos);
     }
 
+    // Flattening functions for 3 and 4D boolean fields into 2D arrays
     private static int veFlat(int y, int s){ return y * breadthV + s; }
     private static int vfFlat(int y, int s){ return y * breadthV + s; }
     private static int evFlat(int y, int t, int s){ return (y * spanE + t) * breadthE + s; }
@@ -124,6 +146,10 @@ public final class BoolFieldManager {
     private static int fvFlat(int y, int t, int s){ return (y * spanF + t) * breadthF + s; }
     private static int feFlat(int y, int t, int s){ return (y * spanF + t) * breadthF + s; }
 
+    /**
+     * Sets up a BoolVe with bits set to true if the corresponding Ve exists in the medium.<br>
+     * Also sets up masks for efficient transfer operations from Ve to Ev.
+     */
     private static void setMasksVe(){
         BoolVe pos = new BoolVe(Border.MIRROR).zeroes();
         HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
@@ -149,6 +175,10 @@ public final class BoolFieldManager {
         BoolVe.SET_MASKS(pos, masks);
     }
 
+    /**
+     * Sets up a BoolVf with bits set to true if the corresponding Vf exists in the medium.<br>
+     * Also sets up masks for efficient transfer operations from Vf to Fv.
+     */
     private static void setMasksVf(){
         BoolVf pos = new BoolVf(Border.MIRROR).zeroes();
         HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
@@ -174,6 +204,10 @@ public final class BoolFieldManager {
         BoolVf.SET_MASKS(pos, masks);
     }
 
+    /**
+     * Sets up a BoolEv with bits set to true if the corresponding Ev exists in the medium.<br>
+     * Also sets up masks for efficient transfer operations from Ev to Ve.
+     */
     private static void setMasksEv(){
         BoolEv pos = new BoolEv(Border.MIRROR).zeroes();
         HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
@@ -199,6 +233,10 @@ public final class BoolFieldManager {
         BoolEv.SET_MASKS(pos, masks);
     }
 
+    /**
+     * Sets up a BoolEf with bits set to true if the corresponding Ef exists in the medium.<br>
+     * Also sets up masks for efficient transfer operations from Ef to Fe.
+     */
     private static void setMasksEf(){
         BoolEf pos = new BoolEf(Border.MIRROR).zeroes();
         HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
@@ -224,6 +262,10 @@ public final class BoolFieldManager {
         BoolEf.SET_MASKS(pos, masks);
     }
 
+    /**
+     * Sets up a BoolFv with bits set to true if the corresponding Fv exists in the medium.<br>
+     * Also sets up masks for efficient transfer operations from Fv to Vf.
+     */
     private static void setMasksFv(){
         BoolFv pos = new BoolFv(Border.MIRROR).zeroes();
         HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
@@ -249,6 +291,10 @@ public final class BoolFieldManager {
         BoolFv.SET_MASKS(pos, masks);
     }
 
+    /**
+     * Sets up a BoolFe with bits set to true if the corresponding Fe exists in the medium.<br>
+     * Also sets up masks for efficient transfer operations from Fe to Ef.
+     */
     private static void setMasksFe(){
         BoolFe pos = new BoolFe(Border.MIRROR).zeroes();
         HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks = new HashMap<>();
@@ -274,6 +320,7 @@ public final class BoolFieldManager {
         BoolFe.SET_MASKS(pos, masks);
     }
 
+    // Border configuration
     private static Border DEFAULT_BORDER = Border.MIRROR;
     public static Border DEFAULT_BORDER() { return DEFAULT_BORDER; }
     public static void setDefaultBorder(Border b) {
@@ -281,6 +328,10 @@ public final class BoolFieldManager {
         DEFAULT_BORDER = b;
     }
 
+    /**
+     * Sets up the border conditions.
+     * For example, stores which vertices are linked to which in a torus, which Ev are reflected across a border, etc.
+     */
     private static void setBorders() {
         // Initialize data structures for borders
         HashSet<Vertex> corners = new HashSet<>();

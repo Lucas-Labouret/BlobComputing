@@ -9,9 +9,7 @@ import medium.locusT.*;
 
 import java.util.HashMap;
 
-/**
- * Implemented by classes that contain loci and can be drawn on a MediumDrawer.
- */
+/** Interface for objects that can be displayed on a MediumDrawer. */
 public interface Displayable {
     // These methods should be overridden to return true by Displayables that want to display the corresponding loci.
     default boolean updatesV()  { return false; }

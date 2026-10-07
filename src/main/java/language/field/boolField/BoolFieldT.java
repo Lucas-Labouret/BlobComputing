@@ -1,23 +1,47 @@
 package language.field.boolField;
 
-import language.utils.BoolFieldLine;
-import language.utils.Border;
-import language.utils.Coord2D;
+import language.field.BoolFieldLine;
+import language.field.Border;
+import language.field.Coord2D;
 
 import java.util.HashMap;
+import java.util.function.BiFunction;
 
-/** Represents the abstract base type for transfer boolean fields. */
+/**
+ * Represents the abstract base type for transfer boolean fields.
+ * A transfer field is a field over the Ve, Vf, Ev, Ef, Fv, or Fe loci.
+ */
 public sealed abstract class BoolFieldT<F extends BoolFieldT<F>> extends BoolField<F> permits BoolVe, BoolVf, BoolEv, BoolEf, BoolFv, BoolFe {
-    /** Creates a new transfer boolean language.field base instance. */
+    /**
+     * Creates a new boolean transfer field base instance.
+     * @param HEIGHT the height of the field
+     * @param SPAN the span of the field
+     * @param BREADTH the breadth of the field
+     * @param border the border type of the field
+     * @param register whether to register the field with the cache
+     */
     protected BoolFieldT(int HEIGHT, int SPAN, int BREADTH, Border border, boolean register) {
         super(HEIGHT, SPAN, BREADTH, border, register);
     }
 
+    /**
+     * Creates a new boolean transfer field base instance. This constructor will register the field with the cache.
+     * @param HEIGHT the height of the field
+     * @param SPAN the span of the field
+     * @param BREADTH the breadth of the field
+     * @param border the border type of the field
+     */
     protected BoolFieldT(int HEIGHT, int SPAN, int BREADTH, Border border) {
         this(HEIGHT, SPAN, BREADTH, border, true);
     }
 
-    /** Computes the end index of the data region. */
+    /**
+     * Valid data (i.e. data that corresponds to an existing locus)
+     * is stored in contiguous blocks of size BREADTH on the vertical axis of the data array.
+     * <p>
+     * This method computes a field that contains TRUE for the last valid data point in each block of each column,
+     * and FALSE for all other points.
+     */
     protected static <T extends BoolFieldT<T>>
     void computeDataEnd(int HEIGHT, int SPAN, int BREADTH, T pos, T target){
         for (int i = 0; i < HEIGHT * SPAN; i++) {
@@ -29,20 +53,24 @@ public sealed abstract class BoolFieldT<F extends BoolFieldT<F>> extends BoolFie
         }
     }
 
-    /** Copies broadcast data into the corresponding transfer language.field. */
+    /**
+     * Perform a broadcast from a simplicial field to a child transfer field.
+     * This corresponds to copying the data at y line in the simplicial field
+     * to every line of the y-th contiguous block of size BREADTH in the transfer field.
+     */
     protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
     void broadcastGeneric(int HEIGHT, int SPAN, int BREADTH, S orig, T target) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) for (int k = 0; k < BREADTH; k++)
             target.lines[(i * SPAN + j) * BREADTH + k] = new BoolFieldLine(orig.lines[i * SPAN + j]);
     }
 
-    /** Computes the OR reduction for the target simplicial language.field. */
+    /** Computes the reduction for the target simplicial field. */
     protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
-    void redOrGeneric(int HEIGHT, int SPAN, int BREADTH, S target, T orig) {
+    void redGeneric(int HEIGHT, int SPAN, int BREADTH, S target, T orig, BiFunction<BoolFieldLine, BoolFieldLine, BoolFieldLine> reduction) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int targetIndex = i * SPAN + j;
             for (int k = 0; k < BREADTH; k++) {
-                target.lines[targetIndex] = BoolFieldLine.or(
+                target.lines[targetIndex] = reduction.apply(
                         target.lines[targetIndex],
                         orig.lines[targetIndex * BREADTH + k]
                 );
@@ -50,47 +78,21 @@ public sealed abstract class BoolFieldT<F extends BoolFieldT<F>> extends BoolFie
         }
     }
 
-    /** Computes the AND reduction for the target simplicial language.field. */
-    protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
-    void redAndGeneric(int HEIGHT, int SPAN, int BREADTH, S target, T orig) {
-        for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
-            int targetIndex = i * SPAN + j;
-            for (int k = 0; k < BREADTH; k++) {
-                target.lines[targetIndex] = BoolFieldLine.and(
-                        target.lines[targetIndex],
-                        orig.lines[targetIndex * BREADTH + k]
-                );
-            }
-        }
-    }
-
-    /** Computes the XOR reduction for the target simplicial language.field. */
-    protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
-    void redXorGeneric(int HEIGHT, int SPAN, int BREADTH, S target, T orig) {
-        for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
-            int targetIndex = i * SPAN + j;
-            for (int k = 0; k < BREADTH; k++) {
-                target.lines[targetIndex] = BoolFieldLine.xor(
-                        target.lines[targetIndex],
-                        orig.lines[targetIndex * BREADTH + k]
-                );
-            }
-        }
-    }
-
+    /** Computes the stack reduction for the target simplicial field. */
     protected static <S extends BoolFieldS<S>, T extends BoolFieldT<T>>
     void redStackGeneric(int HEIGHT, int SPAN, int BREADTH, S[] target, T orig) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int targetIndex = i * SPAN + j;
             for (int k = 0; k < BREADTH; k++) {
-                target[k].lines[targetIndex] = BoolFieldLine.or(
-                        target[k].lines[targetIndex],
-                        orig.lines[targetIndex * BREADTH + k]
-                );
+                target[k].lines[targetIndex] = orig.lines[targetIndex * BREADTH + k].copy();
             }
         }
     }
 
+    /**
+     * Transfers data from one transfer field to a companion transfer field.
+     * Masks are used to which bits should be transferred to each integer in the target field, and how much they should be shifted.
+     */
     protected static <T1 extends BoolFieldT<T1>, T2 extends BoolFieldT<T2>>
     void transferGeneric(T1 orig, T2 target, HashMap<Coord2D, HashMap<Coord2D, HashMap<Integer, Integer>>> masks) {
         for (Coord2D start: masks.keySet()) for (Coord2D end: masks.get(start).keySet()) for (Integer shift: masks.get(start).get(end).keySet()) {

@@ -1,15 +1,15 @@
 package language.field.boolField;
 
-import language.utils.BoolFieldLine;
-import language.utils.BoolFieldManager;
-import language.utils.Border;
-import language.utils.Coord2D;
+import language.field.BoolFieldLine;
+import language.field.BoolFieldManager;
+import language.field.Border;
+import language.field.Coord2D;
 import medium.locusT.Ef;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-/** Represents a boolean transfer language.field from edge to face orientation. */
+/** Represents a boolean transfer field from edge to face orientation. */
 public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
     static int HEIGHT = -1;
     static int SPAN = -1;
@@ -51,40 +51,42 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
         TORUS = torus;
     }
 
-    /** @return a new BoolEf from the given broadcast language.field. */
+    /** @return a new BoolEf from the given broadcast field. */
     public BoolEf broadcast(BoolE orig){
         broadcastGeneric(HEIGHT, SPAN, BREADTH, orig, this);
         return this;
     }
 
-    /** @return a new zero-filled BoolEf. */
+    /** Fills this BoolEf with zeroes. */
     public BoolEf zeroes(){ zeroesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
+    /** Fills this BoolEf with ones. */
     public BoolEf ones(){ onesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
+    /** Randomly fills this BoolEf. */
     public BoolEf rand(){ randGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
-    /** Sets a bit in the given BoolEf. */
+    /** Sets a bit in this BoolEf. */
     public void setBit(int y, int x, int t, int s, boolean bit){
         setBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, t, s, bit);
     }
 
-    /** Sets a bit in the given BoolEf. */
+    /** Sets a bit in this BoolEf. */
     public void setBit(Ef locus, boolean bit){
         setBit(locus.y, locus.x, locus.t, locus.s, bit);
     }
 
-    /** Gets a bit in the given BoolEf */
+    /** Gets a bit in this BoolEf */
     public boolean getBit(int y, int x, int t, int s){
         return getBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, t, s);
     }
 
-    /** Gets a bit in the given BoolEf */
+    /** Gets a bit in this BoolEf */
     public boolean getBit(Ef locus){
         return getBit(locus.y, locus.x, locus.t, locus.s);
     }
 
-    /** Decode the given BoolEf into a HashMap mapping each Ef locus in the given set to its corresponding bit value in the BoolEf. */
+    /** Decode this BoolEf into a HashMap mapping each Ef locus in the given set to its corresponding bit value in the BoolEf. */
     public HashMap<Ef, Boolean> decode(HashSet<Ef> loci) {
         HashMap<Ef, Boolean> res = new HashMap<>();
         for (Ef e : loci)
@@ -92,51 +94,27 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
         return res;
     }
 
-    /** @return the bitwise NOT of the given BoolEf. */
+    /** Set this BoolEf to the bitwise not of orig. */
     public BoolEf not(BoolEf orig){
         notGeneric(HEIGHT, SPAN, BREADTH, orig, this);
         return this;
     }
 
-    /** @return the bitwise AND of the given BoolEf values. */
+    /** Set this BoolEf to the bitwise AND of a and b. */
     public BoolEf and(BoolEf a, BoolEf b){
-        andGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::and);
         return this;
     }
 
-    /** @return the bitwise OR of the given BoolEf values. */
+    /** Set this BoolEf to the bitwise OR of a and b. */
     public BoolEf or(BoolEf a, BoolEf b){
-        orGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::or);
         return this;
     }
 
-    /** @return the bitwise XOR of the given BoolEf values. */
+    /** Set this BoolEf to the bitwise XOR of a and b. */
     public BoolEf xor(BoolEf a, BoolEf b){
-        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
-        return this;
-    }
-
-    /** @return a left-shifted BoolEf. */
-    public BoolEf lShift(BoolEf orig, int n){
-        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a right-shifted BoolEf. */
-    public BoolEf rShift(BoolEf orig, int n){
-        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a up-shifted BoolEf. */
-    public BoolEf uShift(BoolEf orig, int n){
-        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a down-shifted BoolEf. */
-    public BoolEf dShift(BoolEf orig, int n){
-        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::xor);
         return this;
     }
 
@@ -147,11 +125,11 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
         );
     }
 
-    /** @return the AND reduction of the given transfer language.field. */
+    /** Set this BoolEf to the AND reduction of the given transfer field. */
     public void redAnd(BoolE target){
         target.ones();
         BoolEf maskedData = maskData(DATA_POS, this, new BoolEf(false).ones());
-        redAndGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::and);
 
         if (this.border == Border.TORUS) for (Ef ef: TORUS.keySet()) {
             Ef torus = TORUS.get(ef);
@@ -162,11 +140,11 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
         }
     }
 
-    /** @return the OR reduction of the given transfer language.field. */
+    /** Set this BoolEf to the OR reduction of the given transfer field. */
     public void redOr(BoolE target){
         target.zeroes();
         BoolEf maskedData = maskData(DATA_POS, this, new BoolEf(false).zeroes());
-        redOrGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::or);
 
         if (this.border == Border.TORUS) for (Ef ef: TORUS.keySet()) {
             Ef torus = TORUS.get(ef);
@@ -176,11 +154,11 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
         }
     }
 
-    /** @return the XOR reduction of the given transfer language.field. */
+    /** Set this BoolEf to the XOR reduction of the given transfer field. */
     public void redXor(BoolE target){
         target.zeroes();
         BoolEf maskedData = maskData(DATA_POS, this, new BoolEf(false).zeroes());
-        redXorGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::xor);
 
         if (this.border == Border.MIRROR) for (Ef m: MIRROR) target.setBit(m.y, m.x, m.t, false);
         if (this.border == Border.TORUS) for (Ef ef: TORUS.keySet()) {
@@ -194,7 +172,7 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
     private BoolE[] redStack(BoolEf neutrals) {
         BoolEf maskedData = maskData(DATA_POS, this, neutrals);
         BoolE[] target = new BoolE[BREADTH];
-        for (int i = 0; i < BREADTH; i++) target[i] = new BoolE(false).zeroes();
+        for (int i = 0; i < BREADTH; i++) target[i] = new BoolE(false);
         redStackGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
 
         if (this.border == Border.MIRROR) applyMirrorStack(target);
@@ -228,7 +206,7 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
         return redStack(new BoolEf(false).ones());
     }
 
-    /** @return the clockwise rotation of the given BoolEf. */
+    /** Sets target to the clockwise rotation of this BoolEf. */
     public void _rotateCW(BoolEv target) {
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int blockIndex = (i * SPAN + j) * BREADTH;
@@ -237,9 +215,10 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
             }
         }
     }
+    /** Sets this BoolEf to the clockwise rotation of orig. */
     public BoolEf rotateCW(BoolEv orig){ orig._rotateCW(this); return this; }
 
-    /** @return the counterclockwise rotation of the given BoolEf. */
+    /** Sets target to the counterclockwise rotation of this BoolEf. */
     public void _rotateCCW(BoolEv target){
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int blockIndex = (i * SPAN + j) * BREADTH;
@@ -248,6 +227,7 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
             }
         }
     }
+    /** Sets this BoolEf to the counterclockwise rotation of orig. */
     public BoolEf rotateCCW(BoolEv orig){ orig._rotateCCW(this); return this; }
 
     /** Simulates a mirrored border for rotations , both CW and CCW*/
@@ -259,14 +239,18 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
         }
     }
 
-    /** @return the transfer result for the given BoolEf. */
+    /** Sets res to the transfer of this BoolEf. */
     public void _transfer(BoolFe res){
         res.zeroes();
         transferGeneric(this, res,  MASKS);
     }
+    /** Sets this BoolEf to the transfer of orig. */
     public BoolEf transfer(BoolFe orig){ orig._transfer(this); return this; }
 
-    /** @return whether this BoolEf is equal to the given object. */
+    /**
+     * Two BoolEf objects are equal if their existing bits are equal, or they are both empty.
+     * @return whether this BoolEf is equal to the given object.
+     */
     @Override
     public boolean equals(Object o){
         if (!(o instanceof BoolEf other)) return false;

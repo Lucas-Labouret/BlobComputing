@@ -1,14 +1,14 @@
 package language.field.boolField;
 
-import language.utils.BoolFieldLine;
-import language.utils.BoolFieldManager;
-import language.utils.Border;
+import language.field.BoolFieldLine;
+import language.field.BoolFieldManager;
+import language.field.Border;
 import medium.locusS.Vertex;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-/** Represents a boolean language.field over vertex loci. */
+/** Represents a boolean field over the vertices. */
 public non-sealed class BoolV extends BoolFieldS<BoolV> {
     private static int HEIGHT = -1;
     private static final int SPAN = 1;
@@ -48,13 +48,12 @@ public non-sealed class BoolV extends BoolFieldS<BoolV> {
     }
 
     /** Fills this BoolV with zeros. */
-    public BoolV zeroes(){
-        zeroesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
+    public BoolV zeroes(){ zeroesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
     /** Fills this BoolV with ones. */
     public BoolV ones(){ onesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
-    /** Randomly fill this BoolV. */
+    /** Randomly fills this BoolV. */
     public BoolV rand(){
         randGeneric(HEIGHT, SPAN, BREADTH, this);
 
@@ -74,7 +73,7 @@ public non-sealed class BoolV extends BoolFieldS<BoolV> {
         return this;
     }
 
-    /** Sets a bit in the given BoolV. */
+    /** Sets a bit in this BoolV. */
     public void setBit(int y, int x, boolean bit){
         setBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, 0, 0, bit);
 
@@ -95,20 +94,20 @@ public non-sealed class BoolV extends BoolFieldS<BoolV> {
         }
     }
 
-    /** Sets a bit in the given BoolV. */
+    /** Sets a bit in this BoolV. */
     public void setBit(Vertex vertex, boolean bit){ setBit(vertex.y, vertex.x, bit); }
 
-    /** Gets a bit in the given BoolV */
+    /** Gets a bit in this BoolV */
     public boolean getBit(int y, int x){
         return getBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, 0, 0);
     }
 
-    /** Gets a bit in the given BoolV */
+    /** Gets a bit in this BoolV */
     public boolean getBit(Vertex vertex){
         return getBit(vertex.y, vertex.x);
     }
 
-    /** Decode the given BoolV into a HashMap mapping each vertex in the given set to its corresponding bit value in the BoolV. */
+    /** Decode this BoolV into a HashMap mapping each vertex in the given set to its corresponding bit value in the BoolV. */
     public HashMap<Vertex, Boolean> decode(HashSet<Vertex> vertices) {
         HashMap<Vertex, Boolean> res = new HashMap<>();
         for (Vertex v : vertices)
@@ -124,43 +123,19 @@ public non-sealed class BoolV extends BoolFieldS<BoolV> {
 
     /** Set this BoolV to the bitwise AND of a and b. */
     public BoolV and(BoolV a, BoolV b){
-        andGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::and);
         return this;
     }
 
     /** Set this BoolV to the bitwise OR of a and b. */
     public BoolV or(BoolV a, BoolV b){
-        orGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::or);
         return this;
     }
 
     /** Set this BoolV to the bitwise XOR of a and b. */
     public BoolV xor(BoolV a, BoolV b){
-        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
-        return this;
-    }
-
-    /** Set this BoolV to the left-shift of orig by n. */
-    public BoolV lShift(BoolV orig, int n){
-        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** Set this BoolV to the right-shift of orig by n. */
-    public BoolV rShift(BoolV orig, int n){
-        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** Set this BoolV to the up-shift of orig by n. */
-    public BoolV uShift(BoolV orig, int n){
-        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** Set this BoolV to the down-shift of orig by n. */
-    public BoolV dShift(BoolV orig, int n){
-        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::xor);
         return this;
     }
 
@@ -188,7 +163,10 @@ public non-sealed class BoolV extends BoolFieldS<BoolV> {
     /** @return the stack reduction 1 of the given transfer language.field */
     public BoolV[] redStack1(BoolVf orig) { return orig.redStack1(); }
 
-    /** @return whether this BoolV is equal to the given object. */
+    /**
+     * Two BoolV objects are equal if their existing bits are equal, or they are both empty.
+     * @return whether this BoolV is equal to the given object.
+     */
     @Override
     public boolean equals(Object o){
         if (!(o instanceof BoolV other)) return false;

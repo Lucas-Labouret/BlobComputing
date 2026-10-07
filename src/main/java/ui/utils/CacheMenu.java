@@ -4,6 +4,7 @@ import javafx.scene.control.ComboBox;
 import language.cache.Cache;
 import ui.InstructionPlayer;
 
+/** A dropdown menu that allows the user to select a cache entry to load or create a new entry from the current state. */
 public class CacheMenu extends ComboBox<CacheMenu.CacheItem> {
     public static class CacheItem {
         public final String name;

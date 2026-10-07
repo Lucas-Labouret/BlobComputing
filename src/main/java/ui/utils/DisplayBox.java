@@ -7,7 +7,11 @@ import javafx.scene.layout.HBox;
 import ui.DisplayController;
 import ui.display.displayable.Displayable;
 
-
+/**
+ * A DisplayBox is a UI component that represents a displayable object in the user interface.
+ * It consists of a checkbox for color display, a multi-toggle button for string display,
+ * and a label displaying the name of the displayable object.
+ */
 public class DisplayBox extends HBox {
     private static final double SPACING = 10;
 

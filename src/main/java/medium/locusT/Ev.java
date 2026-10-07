@@ -2,8 +2,10 @@ package medium.locusT;
 
 import medium.Locus;
 
-public class Ev extends Locus {
+public final class Ev extends Locus {
+    // Canning coordinates of this Ev in the medium.
     public final int y, x, t, s;
+    // The companion Ve of this Ev.
     private Ve pair;
 
     public Ev(int y, int x, int t, int s){

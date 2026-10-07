@@ -2,8 +2,10 @@ package medium.locusS;
 
 import medium.Locus;
 
-public class Edge extends Locus {
+public final class Edge extends Locus {
+    // Canning coordinates of the edge in the medium.
     public final int y, x, t;
+    // Whether the edge is on the top, left, right, or bottom border of the medium.
     public final boolean top, left, right, bot;
 
     public Edge(int y, int x, int t){

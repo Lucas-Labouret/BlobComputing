@@ -12,9 +12,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * A medium is a collection of interconnected loci. It is built from a triangulated planar graph.
+ * <p>
+ * There are nine types of loci in a medium.<br>
+ * The Vertices, Edges, and Faces are called the "simplicial loci".<br>
+ * They are connected to each other by the "transfer loci".
+ * A transfer type is an ordered pair of simplicial types.
+ * For example, the Ve type is a transfer type that connects Vertices to Edges.
+ * The other transfer types are Vf, Ev, Ef, Fv, and Fe.
+ * <p>
+ * A transfer locus is child of a simplicial locus if it connects that simplicial locus to another transfer locus.
+ * Symmetrically a simplicial locus is the parent od its children.<br>
+ * Two transfer loci are companion if they connect the same pair of simplicial loci in opposite directions.<br>
+ * Finally, two transfer loci are siblings if they placed consecutively around the same simplicial locus.
+ * <p>
+ * Here, a medium is always "canned", i.e. each locus in the medium is uniquely assigned a set of integer coordinates.
+ * These coordinates are used to parallelize many of the operations performed on the medium.
+ */
 public class Medium {
+    // The dimensions of the medium.
     public final double height, width;
 
+    //The sets of loci in the medium.
     public final HashSet<Vertex> vertices;
     public final HashSet<Edge> edges;
     public final HashSet<Face> faces;
@@ -63,9 +83,67 @@ public class Medium {
         this.fvs = new HashSet<>(fvs);
         this.fes = new HashSet<>(fes);
     }
+    // The default location and extension for medium savefiles.
     private static final String DEFAULT_LOCATION = "medium/";
     private static final String DEFAULT_EXTENSION = ".can";
 
+    /** Reads a medium from a file. The file should be in the default location and have the default extension. The format of the file is as follows:
+     * <pre>
+     * -- Dimensions --
+     * height width
+     *
+     * -- Vertices --
+     * id h w y x borders
+     * ...
+     *
+     * -- Ve --
+     * id h w y x t
+     * ...
+     *
+     * -- Vf --
+     * id h w y x t
+     * ...
+     *
+     * -- Edges --
+     * id h w y x t borders
+     * ...
+     *
+     * -- Ev --
+     * id h w y x t s
+     * ...
+     *
+     * -- Ef --
+     * id h w y x t s
+     * ...
+     *
+     * -- Faces --
+     * id h w y x t
+     * ...
+     *
+     * -- Fv --
+     * id h w y x t s
+     * ...
+     *
+     * -- Fe --
+     * id h w y x t s
+     * ...
+     *
+     * -- Ve <-> Ev --
+     * veIndex evIndex
+     * ...
+     *
+     * -- Vf <-> Fv --
+     * vfIndex fvIndex
+     * ...
+     *
+     * -- Ef <-> Fe --
+     * efIndex feIndex
+     * ...
+     * </pre>
+     * @param fileName The name of the file to read from, without the default location and extension.
+     * @return The medium read from the file.
+     * @throws IOException If there is an error reading the file.
+     */
     public static Medium read(String fileName) throws IOException {
         String fullName = DEFAULT_LOCATION + fileName + DEFAULT_EXTENSION;
         BufferedReader reader = new BufferedReader(new FileReader(fullName));
@@ -89,6 +167,7 @@ public class Medium {
 
         int lineCount = 0;
 
+        // Parse the dimensions section
         String line = reader.readLine();
         if (line == null) throw new IOException("Empty file");
         if (!line.equals("-- Dimensions --"))
@@ -114,6 +193,7 @@ public class Medium {
         if (!line.isEmpty())
             throw new IOException("Expected empty line after dimensions at line " + lineCount);
 
+        // Parse the vertices section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after dimensions section");
@@ -141,6 +221,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Ve section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -168,6 +249,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Vf section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -195,6 +277,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Edges section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -223,6 +306,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Ev section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -257,6 +341,7 @@ public class Medium {
         if (!line.equals("-- Ef --"))
             throw new IOException("Expected Ef section header at line " + lineCount);
 
+        // Parse the Ef section
         while (!(line = reader.readLine()).isEmpty()){
             lineCount++;
 
@@ -279,6 +364,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Faces section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -304,6 +390,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Fv section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -332,6 +419,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Fe section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -360,6 +448,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Ve <-> Ev link section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -384,6 +473,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Vf <-> Fv link section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");
@@ -408,6 +498,7 @@ public class Medium {
         }
         lineCount++;
 
+        // Parse the Ef <-> Fe link section
         line = reader.readLine(); lineCount++;
         if (line == null)
             throw new IOException("Unexpected end of file after vertices section");

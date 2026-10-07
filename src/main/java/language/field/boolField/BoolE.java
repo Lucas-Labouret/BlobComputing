@@ -1,14 +1,14 @@
 package language.field.boolField;
 
-import language.utils.BoolFieldLine;
-import language.utils.BoolFieldManager;
-import language.utils.Border;
+import language.field.BoolFieldLine;
+import language.field.BoolFieldManager;
+import language.field.Border;
 import medium.locusS.Edge;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-/** Represents a boolean language.field over edge loci. */
+/** Represents a boolean field over the edges. */
 public non-sealed class BoolE extends BoolFieldS<BoolE> {
     private static int HEIGHT = -1;
     private static int SPAN = -1;
@@ -66,7 +66,7 @@ public non-sealed class BoolE extends BoolFieldS<BoolE> {
         return this;
     }
 
-    /** Sets a bit in the given BoolE. */
+    /** Sets a bit in this BoolE. */
     public void setBit(int y, int x, int t, boolean bit){
         setBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, t, 0, bit);
 
@@ -80,23 +80,23 @@ public non-sealed class BoolE extends BoolFieldS<BoolE> {
         }
     }
 
-    /** Sets a bit in the given BoolE. */
+    /** Sets a bit in this BoolE. */
     public void setBit(Edge edge, boolean bit){
         setBit(edge.y, edge.x, edge.t, bit);
     }
 
-    /** Gets a bit in the given BoolE */
+    /** Gets a bit in this BoolE */
     public boolean getBit(int[] coord){
         if (coord == null || coord.length != 3) throw new IllegalArgumentException("Coordinates must have three elements.");
         return getBitGeneric(HEIGHT, SPAN, BREADTH, this, coord[0], coord[1], coord[2], 0);
     }
 
-    /** Gets a bit in the given BoolE */
+    /** Gets a bit in this BoolE */
     public boolean getBit(Edge edge){
         return getBit(new int[]{edge.y, edge.x, edge.t});
     }
 
-    /** Decode the given BoolE into a HashMap mapping each edge in the given set to its corresponding bit value in the BoolE. */
+    /** Decode this BoolE into a HashMap mapping each edge in the given set to its corresponding bit value in the BoolE. */
     public HashMap<Edge, Boolean> decode(HashSet<Edge> edges) {
         HashMap<Edge, Boolean> res = new HashMap<>();
         for (Edge e : edges)
@@ -104,51 +104,27 @@ public non-sealed class BoolE extends BoolFieldS<BoolE> {
         return res;
     }
 
-    /** @return the bitwise NOT of the given BoolE. */
+    /** Set this BoolE to the bitwise not of orig. */
     public BoolE not(BoolE orig){
         notGeneric(HEIGHT, SPAN, BREADTH, orig, this);
         return this;
     }
 
-    /** @return the bitwise AND of the given BoolE values. */
+    /** Set this BoolE to the bitwise AND of a and b. */
     public BoolE and(BoolE a, BoolE b){
-        andGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::and);
         return this;
     }
 
-    /** @return the bitwise OR of the given BoolE values. */
+    /** Set this BoolE to the bitwise OR of a and b. */
     public BoolE or(BoolE a, BoolE b){
-        orGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::or);
         return this;
     }
 
-    /** @return the bitwise XOR of the given BoolE values. */
+    /** Set this BoolE to the bitwise XOR of a and b. */
     public BoolE xor(BoolE a, BoolE b){
-        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
-        return this;
-    }
-
-    /** @return a left-shifted BoolE. */
-    public BoolE lShift(BoolE orig, int n){
-        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a right-shifted BoolE. */
-    public BoolE rShift(BoolE orig, int n){
-        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return an up-shifted BoolE. */
-    public BoolE uShift(BoolE orig, int n){
-        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a down-shifted BoolE. */
-    public BoolE dShift(BoolE orig, int n){
-        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::xor);
         return this;
     }
 
@@ -176,7 +152,10 @@ public non-sealed class BoolE extends BoolFieldS<BoolE> {
     /** @return the stack reduction 1 of the given transfer language.field */
     public BoolE[] redStack1(BoolEf orig) { return orig.redStack1(); }
 
-    /** @return whether this BoolE is equal to the given object. */
+    /**
+     * Two BoolE objects are equal if their existing bits are equal, or they are both empty.
+     * @return whether this BoolE is equal to the given object.
+     */
     @Override
     public boolean equals(Object o){
         if (!(o instanceof BoolE other)) return false;

@@ -17,7 +17,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * Draws a medium on a canvas.
+ * Uses the displayables to determine which loci to draw and what color/label to use.
+ */
 public class MediumDrawer extends Canvas {
+    private final GraphicsContext gc = getGraphicsContext2D();
+
     // Scale of the drawing relative to the medium
     private static final double SCALE_TARGET = 10000;
     private final double scale;
@@ -52,6 +58,7 @@ public class MediumDrawer extends Canvas {
     private final HashSet<Displayable> colorDisplayables = new HashSet<>();
     private final HashSet<Displayable> stringDisplayables = new HashSet<>();
 
+    // Maps each locus to its color
     private final HashMap<Vertex, Color> vColors  = new HashMap<>();
     private final HashMap<Ve,     Color> veColors = new HashMap<>();
     private final HashMap<Vf,     Color> vfColors = new HashMap<>();
@@ -62,12 +69,11 @@ public class MediumDrawer extends Canvas {
     private final HashMap<Fv,     Color> fvColors = new HashMap<>();
     private final HashMap<Fe,     Color> feColors = new HashMap<>();
 
+    // Maps each locus to its string representation
     private HashMap<Locus, String> strings;
 
     // The size of circle representing a locus
     private double circleSize;
-
-    private final GraphicsContext gc = getGraphicsContext2D();
 
     public MediumDrawer(Medium medium) {
         this.medium = medium;
@@ -86,17 +92,22 @@ public class MediumDrawer extends Canvas {
         draw();
     }
 
+    /** Draws the medium on the canvas. */
     public void draw() {
+        // Clear the canvas
         gc.clearRect(0, 0, getWidth(), getHeight());
 
+        // Compute colors and strings for loci
         computeColors();
         computeStrings();
 
+        // Update circle size if the loci shown changed
         if (lastv != v || lastve != ve || lastvf != vf || laste != e || lastev != ev || lastef != ef || lastf != f || lastfv != fv || lastfe != fe) {
             updateCircleSize();
             lastv = v; lastve = ve; lastvf = vf; laste = e; lastev = ev; lastef = ef; lastf = f; lastfv = fv; lastfe = fe;
         }
 
+        // Draw loci
         if (v ) for (Vertex l : medium.vertices) drawV(l);
         if (ve) for (Ve     l : medium.ves)      drawTransfer(l);
         if (vf) for (Vf     l : medium.vfs)      drawTransfer(l);
@@ -107,6 +118,7 @@ public class MediumDrawer extends Canvas {
         if (fv) for (Fv     l : medium.fvs)      drawTransfer(l);
         if (fe) for (Fe     l : medium.fes)      drawTransfer(l);
 
+        // Draw strings
         for (Locus l: strings.keySet()) {
             if (l instanceof Vertex && v ||
                 l instanceof Ve && ve    ||
@@ -126,35 +138,42 @@ public class MediumDrawer extends Canvas {
         }
     }
 
+    /** Draws a vertex on the canvas. */
     private void drawV(Vertex l){
         gc.setFill(getColor(l));
         gc.fillOval((l.w+offSet)*scale - circleSize/2, (l.h+offSet)*scale - circleSize/2, circleSize, circleSize);
     }
 
+    /** Draws an edge on the canvas. */
     private void drawE(Edge l){
         gc.setFill(getColor(l));
         gc.fillRect((l.w+offSet)*scale - circleSize/2, (l.h+offSet)*scale - circleSize/2, circleSize, circleSize);
     }
 
     // equilateral triangle inscribed in unit circle
+    /** Moves a point in the triangle to the correct position on the canvas. */
+    private double moveTriangle(double ct, double cl) { return ct * circleSize/2 + (cl + offSet) * scale; }
     private static final double ax = -0.866;
     private static final double ay = -0.5;
     private static final double bx = 0.866;
     private static final double by = -0.5;
     private static final double cx = 0.0;
     private static final double cy = 1.0;
-    private double moveTriangle(double ct, double cl) { return ct * circleSize/2 + (cl + offSet) * scale; }
+
+    /** Draws a face on the canvas. */
     private void drawF(Face l){
         gc.setFill(getColor(l));
         gc.fillPolygon(new double[]{moveTriangle(ax, l.w), moveTriangle(bx, l.w), moveTriangle(cx, l.w)},
                        new double[]{moveTriangle(ay, l.h), moveTriangle(by, l.h), moveTriangle(cy, l.h)}, 3);
     }
 
+    /** Draws a transfer locus on the canvas. */
     private void drawTransfer(Locus l){
         gc.setFill(getColor(l));
         gc.fillRect((l.w+offSet)*scale - circleSize/4, (l.h+offSet)*scale - circleSize/4, circleSize/2, circleSize/2);
     }
 
+    /** Returns the color of a locus. */
     private Color getColor(Locus l) {
         switch (l) {
             case Vertex vl -> { return vColors .getOrDefault(vl,  Styles.DEFAULT.DEFAULT()); }
@@ -170,11 +189,13 @@ public class MediumDrawer extends Canvas {
         }
     }
 
+    // Methods to add and remove displayables
     public void addColorDisplay(Displayable d) { colorDisplayables.add(d); }
     public void removeColorDisplay(Displayable d) { colorDisplayables.remove(d); }
     public void addStringDisplay(Displayable d) { stringDisplayables.add(d); }
     public void removeStringDisplay(Displayable d) { stringDisplayables.remove(d); }
 
+    /** Computes the colors of all loci based on the displayables. */
     private void computeColors() {
         HashSet<HashMap<Vertex, Color>> vColorsPrimary  = new HashSet<>();
         HashSet<HashMap<Ve,     Color>> veColorsPrimary = new HashSet<>();
@@ -210,6 +231,7 @@ public class MediumDrawer extends Canvas {
         if (fe) computeColor(medium.fes,      feColorsPrimary, feColors);
     }
 
+    /** Computes the color of a locus by averaging the colors of all displayables that update it. */
     private <L extends Locus> void computeColor(HashSet<L> loci, HashSet<HashMap<L, Color>> colorsPrimary, HashMap<L, Color> colors) {
         for (L l: loci) {
             int size = 0;
@@ -229,6 +251,7 @@ public class MediumDrawer extends Canvas {
         }
     }
 
+    /** Computes the strings of all loci based on the displayables. */
     private void computeStrings() {
         strings = new HashMap<>();
         for (Displayable d: stringDisplayables) {
@@ -244,6 +267,7 @@ public class MediumDrawer extends Canvas {
         }
     }
 
+    /** Updates the size of the circle representing a locus based on the closest pair of loci currently drawn. */
     private void updateCircleSize(){
         ArrayList<Locus> drawnLoci = new ArrayList<>();
         if (v)  drawnLoci.addAll(medium.vertices);

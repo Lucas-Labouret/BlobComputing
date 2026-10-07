@@ -2,8 +2,10 @@ package medium.locusT;
 
 import medium.Locus;
 
-public class Fe extends Locus {
+public final class Fe extends Locus {
+    // Canning coordinates of this Fe in the medium.
     public final int y, x, t, s;
+    // The companion Ef of this Fe.
     private Ef pair;
 
     public Fe(int y, int x, int t, int s) {

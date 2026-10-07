@@ -8,6 +8,10 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * A ScrollPane that allows zooming in and out of its content using the mouse scroll wheel.
+ * The zooming is centered around the mouse cursor position.
+ */
 public class ZoomableScrollPane extends ScrollPane {
     private static final double zoomIntensity = 0.005;
     private double scaleValue = 0.7;

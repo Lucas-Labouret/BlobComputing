@@ -2,7 +2,8 @@ package medium.locusS;
 
 import medium.Locus;
 
-public class Face extends Locus {
+public final class Face extends Locus {
+    // Canning coordinates of the face in the medium.
     public final int y, x, t;
 
     public Face(int y, int x, int t){

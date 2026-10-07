@@ -1,11 +1,11 @@
-package language.utils;
+package language.field;
 
 import java.util.Random;
 
-/** Represents a fixed-width line of bits with bitwise line operations. */
+/** Represent a line of locus in the medium as a 1D array of 32 bits integers. */
 public class BoolFieldLine {
     private static int SIZE = -1;
-    /** Configures the bit width used by newly created language.field lines. */
+    /** Configures the bit width used by newly created field lines. */
     public static void SET_PARAMS(int maxVerticesPerLine) {
         if (SIZE != -1) throw new IllegalStateException("Size has already been set.");
         if (maxVerticesPerLine <= 0) throw new IllegalArgumentException("There must exist at least one vertex.");
@@ -14,19 +14,19 @@ public class BoolFieldLine {
 
     private final int[] line;
 
-    /** Creates a new language.field line. */
+    /** Creates a new field line. */
     public BoolFieldLine(){
         if (SIZE == -1) throw new IllegalStateException("Size must be > 0.");
         line = new int[SIZE];
     }
 
-    /** Creates a new language.field line. */
+    /** Creates a new field line. */
     public BoolFieldLine(BoolFieldLine o){
         this();
         System.arraycopy(o.line, 0, this.line, 0, SIZE);
     }
 
-    /** @return a new zero-filled language.field line. */
+    /** @return a new zero-filled field line. */
     public static BoolFieldLine zeroes(){
         if (SIZE == -1) throw new IllegalStateException("Size not set.");
         BoolFieldLine res = new BoolFieldLine();
@@ -34,7 +34,7 @@ public class BoolFieldLine {
         return res;
     }
 
-    /** @return a new one-filled language.field line. */
+    /** @return a new one-filled field line. */
     public static BoolFieldLine ones(){
         if (SIZE == -1) throw new IllegalStateException("Size not set.");
         BoolFieldLine res = new BoolFieldLine();
@@ -42,7 +42,7 @@ public class BoolFieldLine {
         return res;
     }
 
-    /** @return a new randomly initialized language.field line. */
+    /** @return a new randomly initialized field line. */
     private static Random rand = new Random(0);
     public static BoolFieldLine rand(){
         if (SIZE == -1) throw new IllegalStateException("Size not set.");
@@ -51,7 +51,7 @@ public class BoolFieldLine {
         return res;
     }
 
-    /** Sets the bit at the given position in the given language.field line. */
+    /** Sets the bit at the given position in the given field line. */
     public static void setBit(BoolFieldLine line, int x, boolean bit){
         if (x >= SIZE * 32) throw new IllegalArgumentException("Bit index out of bounds.");
         int blockIndex = x / 32;
@@ -61,7 +61,7 @@ public class BoolFieldLine {
         line.line[blockIndex] = (bitIndex & bitValue) | (~bitIndex & line.line[blockIndex]);
     }
 
-    /** @return the value of the bit at the given position in the given language.field line. */
+    /** @return the value of the bit at the given position in the given field line. */
     public static boolean getBit(BoolFieldLine line, int x){
         if (x >= SIZE * 32) throw new IllegalArgumentException("Bit index out of bounds.");
         int blockIndex = x / 32;
@@ -69,35 +69,35 @@ public class BoolFieldLine {
         return (line.line[blockIndex] & bitIndex) != 0;
     }
 
-    /** @return the bitwise NOT of the given language.field line. */
+    /** @return the bitwise NOT of the given field line. */
     public static BoolFieldLine not(BoolFieldLine a){
         BoolFieldLine res = new BoolFieldLine();
         for (int i = 0; i < SIZE; i++) res.line[i] = ~a.line[i];
         return res;
     }
 
-    /** @return the bitwise AND of the given language.field lines. */
+    /** @return the bitwise AND of the given field lines. */
     public static BoolFieldLine and(BoolFieldLine a, BoolFieldLine b){
         BoolFieldLine res = new BoolFieldLine();
         for (int i = 0; i < SIZE; i++) res.line[i] = a.line[i] & b.line[i];
         return res;
     }
 
-    /** @return the bitwise OR of the given language.field lines. */
+    /** @return the bitwise OR of the given field lines. */
     public static BoolFieldLine or(BoolFieldLine a, BoolFieldLine b){
         BoolFieldLine res = new BoolFieldLine();
         for (int i = 0; i < SIZE; i++) res.line[i] = a.line[i] | b.line[i];
         return res;
     }
 
-    /** @return the bitwise XOR of the given language.field lines. */
+    /** @return the bitwise XOR of the given field lines. */
     public static BoolFieldLine xor(BoolFieldLine a, BoolFieldLine b){
         BoolFieldLine res = new BoolFieldLine();
         for (int i = 0; i < SIZE; i++) res.line[i] = a.line[i] ^ b.line[i];
         return res;
     }
 
-    /** @return a left-shifted language.field line. */
+    /** @return a left-shifted field line. */
     public static BoolFieldLine lShift(BoolFieldLine a, int n){
         if(n < 1 || n > 31) throw new IllegalArgumentException("Shift must be between 1 and 31.");
 
@@ -111,7 +111,7 @@ public class BoolFieldLine {
         return res;
     }
 
-    /** @return a right-shifted language.field line. */
+    /** @return a right-shifted field line. */
     public static BoolFieldLine rShift(BoolFieldLine a, int n){
         if(n < 1 || n > 31) throw new IllegalArgumentException("Shift must be between 1 and 31.");
 

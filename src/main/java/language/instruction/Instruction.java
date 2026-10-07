@@ -1,6 +1,6 @@
 package language.instruction;
 
-/** Instruction are the basic building blocks of programs. <br>
+/** Instruction are the basic building blocks of blob programs. <br>
  * They are executed one at a time, and can be either <br>
  * - BasicInstructions (which perform a single action) or <br>
  * - Procedures (which execute a sequence of instructions). */

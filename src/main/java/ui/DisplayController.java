@@ -23,10 +23,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 
-
+/**
+ * The DisplayController class is responsible for managing the display of various fields in the UI.
+ * It binds Show instructions to their corresponding displays and handles refreshing and snapshotting of the display.
+ */
 public class DisplayController {
     private final OrderableDisplayPanel displays;
 
+    /** The MediumDrawer is responsible for rendering the displays on the screen. */
     private final MediumDrawer drawer;
 
     public DisplayController(MediumDrawer drawer, OrderableDisplayPanel displays) {
@@ -34,10 +38,12 @@ public class DisplayController {
         this.drawer = drawer;
     }
 
+    /** Refreshes the display by redrawing the drawer. */
     public void refresh() {
         Platform.runLater(drawer::draw);
     }
 
+    /** Binds a Show instruction to its corresponding display. This method ensures that the binding is done on the JavaFX Application Thread. */
     public void bind(Show<?> show) {
         Platform.runLater(() -> _bind(show));
     }
@@ -96,26 +102,31 @@ public class DisplayController {
         }
     }
 
+    /** Creates a display box for the given name and displayable object, and adds it to the displays panel. */
     private void createDisplay(String name, Displayable d) {
         DisplayBox box = new DisplayBox(name, d, this);
         displays.add(box);
     }
 
+    /** Adds a color display to the drawer. */
     public void addColorDisplay(Displayable d) {
         drawer.addColorDisplay(d);
         drawer.draw();
     }
 
+    /** Removes a color display from the drawer. */
     public void removeColorDisplay(Displayable d) {
         drawer.removeColorDisplay(d);
         drawer.draw();
     }
 
+    /** Adds a string display to the drawer. */
     public void addStringDisplay(Displayable d) {
         drawer.addStringDisplay(d);
         drawer.draw();
     }
 
+    /** Removes a string display from the drawer. */
     public void removeStringDisplay(Displayable d) {
         drawer.removeStringDisplay(d);
         drawer.draw();

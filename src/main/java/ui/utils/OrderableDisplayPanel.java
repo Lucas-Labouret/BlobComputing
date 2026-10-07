@@ -3,6 +3,7 @@ package ui.utils;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
+/** A custom JavaFX VBox that allows its child nodes to be reordered via drag-and-drop. */
 public class OrderableDisplayPanel extends VBox {
     private static final double SPACING = 5;
     private static final double PADDING = 10;

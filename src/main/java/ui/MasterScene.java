@@ -15,6 +15,10 @@ import ui.utils.OrderableDisplayPanel;
 import ui.utils.TBIntInput;
 import ui.utils.ZoomableScrollPane;
 
+/**
+ * The MasterScene class represents the main scene of the application, providing a user interface for interacting with a Medium and executing Instructions.
+ * It includes a toolbar with controls for stepping through instructions, looping, playing, and adjusting speed, as well as a display area for visualizing the Medium.
+ */
 public class MasterScene extends BorderPane {
     private final ToolBar toolBar;
     private final OrderableDisplayPanel displays;

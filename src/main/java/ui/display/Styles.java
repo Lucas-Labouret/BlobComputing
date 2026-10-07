@@ -8,6 +8,7 @@ public class Styles {
     // It is not meant to be instantiated.
     private Styles() {}
 
+    /** Factory for creating Style objects. */
     public static class Factory {
         private Color VERTEX_FALSE = null;
         private Color VERTEX_TRUE = null;
@@ -41,6 +42,7 @@ public class Styles {
         public Factory setDefault(Color color) { this.DEFAULT = color; return this; }
     }
 
+    /** A Style defines the colors used to display a Displayable. */
     public record Style(
             Color VERTEX_FALSE, Color VERTEX_TRUE,
             Color EDGE_FALSE,   Color EDGE_TRUE,

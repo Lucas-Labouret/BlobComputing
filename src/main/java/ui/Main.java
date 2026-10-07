@@ -12,7 +12,7 @@ import language.field.intField.IntV;
 import language.field.intField.IntVe;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
-import language.utils.BoolFieldManager;
+import language.field.BoolFieldManager;
 import medium.Medium;
 import medium.locusS.Vertex;
 import ui.display.Styles;
@@ -33,7 +33,7 @@ public class Main extends Application {
         blobStaging(stage);
     
         Medium medium;
-        try { medium = Medium.read("medium"); }
+        try { medium = Medium.read("large"); }
         catch (Exception e) { throw new RuntimeException(e); }
         BoolFieldManager.setup(medium);
 

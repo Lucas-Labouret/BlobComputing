@@ -2,8 +2,10 @@ package medium.locusS;
 
 import medium.Locus;
 
-public class Vertex extends Locus {
+public final class Vertex extends Locus {
+    // Canning coordinates of the vertex in the medium.
     public final int y, x;
+    // Whether the vertex is on the top, left, right, or bottom border of the medium.
     public final boolean top, left, right, bot;
 
     public Vertex(int y, int x){

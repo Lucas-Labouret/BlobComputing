@@ -1,15 +1,15 @@
 package language.field.boolField;
 
-import language.utils.BoolFieldLine;
-import language.utils.BoolFieldManager;
-import language.utils.Border;
-import language.utils.Coord2D;
+import language.field.BoolFieldLine;
+import language.field.BoolFieldManager;
+import language.field.Border;
+import language.field.Coord2D;
 import medium.locusT.Ev;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-/** Represents a boolean transfer language.field from edge to vertex orientation. */
+/** Represents a boolean transfer field from edge to vertex orientation. */
 public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
     static int HEIGHT = -1;
     static int SPAN = -1;
@@ -49,17 +49,19 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
         TORUS = torus;
     }
 
-    /** @return a new BoolEv from the given broadcast language.field. */
+    /** @return a new BoolEv from the given broadcast field. */
     public BoolEv broadcast(BoolE orig){
         broadcastGeneric(HEIGHT, SPAN, BREADTH, orig, this);
         return this;
     }
 
-    /** @return a new zero-filled BoolEv. */
+    /** Fills this BoolEv with zeroes. */
     public BoolEv zeroes(){ zeroesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
+    /** Fills this BoolEv with ones. */
     public BoolEv ones(){ onesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
+    /** Randomly fills this BoolEv. */
     public BoolEv rand(){
         randGeneric(HEIGHT, SPAN, BREADTH, this);
 
@@ -71,7 +73,7 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
         return this;
     }
 
-    /** Sets a bit in the given BoolEv. */
+    /** Sets a bit in this BoolEv. */
     public void setBit(int y, int x, int t, int s, boolean bit){
         setBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, t, s, bit);
 
@@ -85,22 +87,22 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
         }
     }
 
-    /** Sets a bit in the given BoolEv. */
+    /** Sets a bit in this BoolEv. */
     public void setBit(Ev locus, boolean bit){
         setBit(locus.y, locus.x, locus.t, locus.s, bit);
     }
 
-    /** Gets a bit in the given BoolEv */
+    /** Gets a bit in this BoolEv */
     public boolean getBit(int y, int x, int t, int s){
         return getBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, t, s);
     }
 
-    /** Gets a bit in the given BoolEv */
+    /** Gets a bit in this BoolEv */
     public boolean getBit(Ev locus){
         return getBit(locus.y, locus.x, locus.t, locus.s);
     }
 
-    /** Decode the given BoolEv into a HashMap mapping each Ev locus in the given set to its corresponding bit value in the BoolEv. */
+    /** Decode this BoolEv into a HashMap mapping each Ev locus in the given set to its corresponding bit value in the BoolEv. */
     public HashMap<Ev, Boolean> decode(HashSet<Ev> loci) {
         HashMap<Ev, Boolean> res = new HashMap<>();
         for (Ev e : loci)
@@ -108,51 +110,27 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
         return res;
     }
 
-    /** @return the bitwise NOT of the given BoolEv. */
+    /** Set this BoolEv to the bitwise not of orig. */
     public BoolEv not(BoolEv orig){
         notGeneric(HEIGHT, SPAN, BREADTH, orig, this);
         return this;
     }
 
-    /** @return the bitwise AND of the given BoolEv values. */
+    /** Set this BoolEv to the bitwise AND of a and b. */
     public BoolEv and(BoolEv a, BoolEv b){
-        andGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::and);
         return this;
     }
 
-    /** @return the bitwise OR of the given BoolEv values. */
+    /** Set this BoolEv to the bitwise OR of a and b. */
     public BoolEv or(BoolEv a, BoolEv b){
-        orGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::or);
         return this;
     }
 
-    /** @return the bitwise XOR of the given BoolEv values. */
+    /** Set this BoolEv to the bitwise XOR of a and b. */
     public BoolEv xor(BoolEv a, BoolEv b){
-        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
-        return this;
-    }
-
-    /** @return a left-shifted BoolEv. */
-    public BoolEv lShift(BoolEv orig, int n){
-        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a right-shifted BoolEv. */
-    public BoolEv rShift(BoolEv orig, int n){
-        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a up-shifted BoolEv. */
-    public BoolEv uShift(BoolEv orig, int n){
-        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a down-shifted BoolEv. */
-    public BoolEv dShift(BoolEv orig, int n){
-        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::xor);
         return this;
     }
 
@@ -163,31 +141,31 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
         );
     }
 
-    /** @return the OR reduction of the given transfer language.field. */
+    /** Set this BoolEv to the OR reduction of the given transfer field. */
     public void redOr(BoolE target){
         target.zeroes();
         BoolEv maskedData = maskData(DATA_POS, this, new BoolEv(false).zeroes());
-        redOrGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::or);
     }
 
-    /** @return the AND reduction of the given transfer language.field. */
+    /** Set this BoolEv to the AND reduction of the given transfer field. */
     public void redAnd(BoolE target){
         target.ones();
         BoolEv maskedData = maskData(DATA_POS, this, new BoolEv(false).ones());
-        redAndGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::and);
     }
 
-    /** @return the XOR reduction of the given transfer language.field. */
+    /** Set this BoolEv to the XOR reduction of the given transfer field. */
     public void redXor(BoolE target){
         target.zeroes();
         BoolEv maskedData = maskData(DATA_POS, this, new BoolEv(false).zeroes());
-        redXorGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::xor);
     }
 
     private BoolE[] redStack(BoolEv neutrals) {
         BoolEv maskedData = maskData(DATA_POS, this, neutrals);
         BoolE[] target = new BoolE[BREADTH];
-        for (int i = 0; i < BREADTH; i++) target[i] = new BoolE(false).zeroes();
+        for (int i = 0; i < BREADTH; i++) target[i] = new BoolE(false);
         redStackGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
         return target;
     }
@@ -202,16 +180,17 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
         return redStack(new BoolEv(false).ones());
     }
 
-    /** @return the clockwise rotation of the given BoolEv. */
+    /** Sets target to the clockwise rotation of this BoolEv. */
     public void _rotateCW(BoolEf target){
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) for (int k = 0; k < BREADTH; k++) {
             int index = (i * SPAN + j) * BREADTH + k;
             target.lines[index] = this.lines[index].copy();
         }
     }
+    /** Sets this BoolEv to the clockwise rotation of orig. */
     public BoolEv rotateCW(BoolEf orig){ orig._rotateCW(this); return this; }
 
-    /** @return the counterclockwise rotation of the given BoolEv. */
+    /** Sets target to the counterclockwise rotation of this BoolEv. */
     public void _rotateCCW(BoolEf target){
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int blockIndex = (i * SPAN + j) * BREADTH;
@@ -220,16 +199,21 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
             }
         }
     }
+    /** Sets this BoolEv to the counterclockwise rotation of orig. */
     public BoolEv rotateCCW(BoolEf orig){ orig._rotateCCW(this); return this; }
 
-    /** @return the transfer result for the given BoolEv. */
+    /** Sets res to the transfer of this BoolEv. */
     public void _transfer(BoolVe res){
         res.zeroes();
         transferGeneric(this, res,  MASKS);
     }
+    /** Sets this BoolEv to the transfer of orig. */
     public BoolEv transfer(BoolVe orig){ orig._transfer(this); return this; }
 
-    /** @return whether this BoolEv is equal to the given object. */
+    /**
+     * Two BoolEv objects are equal if their existing bits are equal, or they are both empty.
+     * @return whether this BoolEv is equal to the given object.
+     */
     @Override
     public boolean equals(Object o){
         if (!(o instanceof BoolEv other)) return false;

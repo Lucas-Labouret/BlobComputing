@@ -1,14 +1,14 @@
 package language.field.boolField;
 
-import language.utils.BoolFieldLine;
-import language.utils.BoolFieldManager;
-import language.utils.Border;
+import language.field.BoolFieldLine;
+import language.field.BoolFieldManager;
+import language.field.Border;
 import medium.locusS.Face;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-/** Represents a boolean language.field over face loci. */
+/** Represents a boolean field over the faces. */
 public non-sealed class BoolF extends BoolFieldS<BoolF> {
     private static int HEIGHT = -1;
     private static int SPAN = -1;
@@ -40,36 +40,38 @@ public non-sealed class BoolF extends BoolFieldS<BoolF> {
         for (int i = 0; i < lines.length; i++) lines[i] = new BoolFieldLine(other.lines[i]);
     }
 
-    /** @return a new zero-filled BoolF. */
+    /** Fills this BoolF with zeroes. */
     public BoolF zeroes(){ zeroesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
+    /** Fills this BoolF with ones. */
     public BoolF ones(){ onesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
+    /** Randomly fills this BoolF. */
     public BoolF rand(){ randGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
-    /** Sets a bit in the given BoolF. */
+    /** Sets a bit in this BoolF. */
     public void setBit(int[] coord, boolean bit){
         if (coord == null || coord.length != 3) throw new IllegalArgumentException("Coordinates must have three elements.");
         setBitGeneric(HEIGHT, SPAN, BREADTH, this, coord[0], coord[1], coord[2], 0, bit);
     }
 
-    /** Sets a bit in the given BoolF. */
+    /** Sets a bit in this BoolF. */
     public void setBit(Face face, boolean bit){
         setBit(new int[]{face.y, face.x, face.t}, bit);
     }
 
-    /** Gets a bit in the given BoolF */
+    /** Gets a bit in this BoolF */
     public boolean getBit(int[] coord){
         if (coord == null || coord.length != 3) throw new IllegalArgumentException("Coordinates must have three elements.");
         return getBitGeneric(HEIGHT, SPAN, BREADTH, this, coord[0], coord[1], coord[2], 0);
     }
 
-    /** Gets a bit in the given BoolF */
+    /** Gets a bit in this BoolF */
     public boolean getBit(Face face){
         return getBit(new int[]{face.y, face.x, face.t});
     }
 
-    /** Decode the given BoolF into a HashMap mapping each face in the given set to its corresponding bit value in the BoolF. */
+    /** Decode this BoolF into a HashMap mapping each face in the given set to its corresponding bit value in the BoolF. */
     public HashMap<Face, Boolean> decode(HashSet<Face> faces) {
         HashMap<Face, Boolean> res = new HashMap<>();
         for (Face f : faces)
@@ -77,51 +79,27 @@ public non-sealed class BoolF extends BoolFieldS<BoolF> {
         return res;
     }
 
-    /** @return the bitwise NOT of the given BoolF. */
+    /** Set this BoolF to the bitwise not of orig. */
     public BoolF not(BoolF orig){
         notGeneric(HEIGHT, SPAN, BREADTH, orig, this);
         return this;
     }
 
-    /** @return the bitwise AND of the given BoolF values. */
+    /** Set this BoolF to the bitwise AND of a and b. */
     public BoolF and(BoolF a, BoolF b){
-        andGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::and);
         return this;
     }
 
-    /** @return the bitwise OR of the given BoolF values. */
+    /** Set this BoolF to the bitwise OR of a and b. */
     public BoolF or(BoolF a, BoolF b){
-        orGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::or);
         return this;
     }
 
-    /** @return the bitwise XOR of the given BoolF values. */
+    /** Set this BoolF to the bitwise XOR of a and b. */
     public BoolF xor(BoolF a, BoolF b){
-        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
-        return this;
-    }
-
-    /** @return a left-shifted BoolF. */
-    public BoolF lShift(BoolF orig, int n){
-        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a right-shifted BoolF. */
-    public BoolF rShift(BoolF orig, int n){
-        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a up-shifted BoolF. */
-    public BoolF uShift(BoolF orig, int n){
-        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a down-shifted BoolF. */
-    public BoolF dShift(BoolF orig, int n){
-        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::xor);
         return this;
     }
 
@@ -149,7 +127,10 @@ public non-sealed class BoolF extends BoolFieldS<BoolF> {
     /** @return the stack reduction 1 of the given transfer language.field */
     public static BoolF[] redStack1(BoolFe orig) { return orig.redStack1(); }
 
-    /** @return whether this BoolF is equal to the given object. */
+    /**
+     * Two BoolF objects are equal if their existing bits are equal, or they are both empty.
+     * @return whether this BoolF is equal to the given object.
+     */
     @Override
     public boolean equals(Object o){
         if (!(o instanceof BoolF other)) return false;

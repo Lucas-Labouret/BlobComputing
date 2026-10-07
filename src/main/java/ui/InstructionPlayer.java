@@ -7,6 +7,15 @@ import language.instruction.Procedure;
 import language.instruction.instructionSet.Show;
 import language.instruction.instructionSet.Snapshot;
 
+/**
+ * The InstructionPlayer class is responsible for executing a given Instruction,
+ * managing its execution state, and requesting updates to the display accordingly.
+ * It provides methods to step through the instruction, start and stop execution,
+ * loop through the instruction, and manage playback speed.
+ * <p>
+ * The class also maintains caches for automatic and user-defined states,
+ * allowing for state saving and restoration.
+ */
 public class InstructionPlayer {
     private final Instruction instruction;
     private final int leafCount;
@@ -37,6 +46,7 @@ public class InstructionPlayer {
         });
     }
 
+    /** Quickly check if n = 2^k - 1 for some k >= 0. */
     boolean isPowerOf2minus1(long n) {
         if (n < 0) throw new IllegalArgumentException("n must be >= 0");
 
@@ -54,6 +64,10 @@ public class InstructionPlayer {
 
     long stepCounter = 0;
     long loopCounter = 0;
+    /**
+     * Executes the current instruction, requests display updates,
+     * and automatically saves the state with logarithmic frequency.
+     */
     private boolean exec() {
         BasicInstruction current = switch (instruction) {
             case Procedure p -> p.currentBasicInstruction();
@@ -70,6 +84,11 @@ public class InstructionPlayer {
         return done;
     }
 
+    /**
+     * Creates a new thread for executing the instruction in a loop.
+     * The thread waits for the specified speed between executions and checks for interruptions.
+     * If the instruction is done and pauseAfterLoop is true, it stops playing.
+     */
     @SuppressWarnings("BusyWait")
     private void createPlayerThread() {
         playerThread = new Thread(() -> {
@@ -86,6 +105,7 @@ public class InstructionPlayer {
         });
     }
 
+    /** Request the display controller to update the display based on the current instruction. */
     private void updateDisplay(BasicInstruction instruction) {
         switch (instruction) {
             case Show<?> show -> displayController.bind(show);
@@ -94,20 +114,24 @@ public class InstructionPlayer {
         }
     }
 
+    /** Executes a single step of the instruction. */
     public void step() {
         if (playing) return;
         exec();
     }
+    /** Executes the instruction in a loop until it is interrupted. */
     public void start() {
         playing = true;
         pauseAfterLoop = false;
         createPlayerThread();
         playerThread.start();
     }
+    /** Stops the execution of the instruction. */
     public void stop() {
         playing = false;
         playerThread.interrupt();
     }
+    /** Executes the instruction until it completes one full loop, then pauses. */
     public void loop() {
         if (playing) return;
         playing = true;
@@ -116,10 +140,13 @@ public class InstructionPlayer {
         playerThread.start();
     }
 
+    /** Returns true if the instruction is currently playing. */
     public boolean isPlaying() { return playing; }
 
+    /** Sets the speed of execution in milliseconds (higher is slower). */
     public void setSpeed(int ms) { speed = ms; }
 
+    /** Return the current state to the previous loop state, if possible. */
     public void loopBack() {
         if (playing) return;
         if (loopCounter == 0) return; // Can't loop back if we're at the beginning
@@ -129,10 +156,12 @@ public class InstructionPlayer {
         displayController.refresh();
     }
 
+    /** Saves the current state of the execution to the cache. */
     public Cache.CacheEntry saveState() {
         return userCache.push(stepCounter);
     }
 
+    /** Restores the state of the execution from the cache. */
     public void restoreState(Cache.CacheEntry entry) {
         if (playing) return;
         stepCounter = userCache.retrieve(entry);

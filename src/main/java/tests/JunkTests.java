@@ -1,7 +1,7 @@
 package tests;
 
 import language.field.boolField.*;
-import language.utils.BoolFieldManager;
+import language.field.BoolFieldManager;
 import medium.Medium;
 import medium.locusS.Edge;
 import medium.locusS.Face;

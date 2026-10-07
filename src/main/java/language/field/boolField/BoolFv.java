@@ -1,15 +1,15 @@
 package language.field.boolField;
 
-import language.utils.BoolFieldLine;
-import language.utils.BoolFieldManager;
-import language.utils.Border;
-import language.utils.Coord2D;
+import language.field.BoolFieldLine;
+import language.field.BoolFieldManager;
+import language.field.Border;
+import language.field.Coord2D;
 import medium.locusT.Fv;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-/** Represents a boolean transfer language.field from face to vertex orientation. */
+/** Represents a boolean transfer field from face to vertex orientation. */
 public non-sealed class BoolFv extends BoolFieldT<BoolFv> {
     static int HEIGHT = -1;
     static int SPAN = -1;
@@ -43,40 +43,42 @@ public non-sealed class BoolFv extends BoolFieldT<BoolFv> {
         MASKS = masks;
     }
 
-    /** @return a new BoolFv from the given broadcast language.field. */
+    /** @return a new BoolFv from the given broadcast field. */
     public BoolFv broadcast(BoolF orig){
         broadcastGeneric(HEIGHT, SPAN, BREADTH, orig, this);
         return this;
     }
 
-    /** @return a new zero-filled BoolFv. */
+    /** Fills this BoolFv with zeroes. */
     public BoolFv zeroes(){ zeroesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
+    /** Fills this BoolFv with ones. */
     public BoolFv ones(){ onesGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
+    /** Randomly fills this BoolFv. */
     public BoolFv rand(){ randGeneric(HEIGHT, SPAN, BREADTH, this); return this; }
 
-    /** Sets a bit in the given BoolFv. */
+    /** Sets a bit in this BoolFv. */
     public void setBit(int y, int x, int t, int s, boolean bit){
         setBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, t, s, bit);
     }
 
-    /** Sets a bit in the given BoolFv. */
+    /** Sets a bit in this BoolFv. */
     public void setBit(Fv locus, boolean bit){
         setBit(locus.y, locus.x, locus.t, locus.s, bit);
     }
 
-    /** Gets a bit in the given BoolFv */
+    /** Gets a bit in this BoolFv */
     public boolean getBit(int y, int x, int t, int s){
         return getBitGeneric(HEIGHT, SPAN, BREADTH, this, y, x, t, s);
     }
 
-    /** Gets a bit in the given BoolFv */
+    /** Gets a bit in this BoolFv */
     public boolean getBit(Fv locus){
         return getBit(locus.y, locus.x, locus.t, locus.s);
     }
 
-    /** Decode the given BoolFv into a HashMap mapping each Fv locus in the given set to its corresponding bit value in the BoolFv. */
+    /** Decode this BoolFv into a HashMap mapping each Fv locus in the given set to its corresponding bit value in the BoolFv. */
     public HashMap<Fv, Boolean> decode(HashSet<Fv> loci) {
         HashMap<Fv, Boolean> res = new HashMap<>();
         for (Fv f : loci)
@@ -84,51 +86,27 @@ public non-sealed class BoolFv extends BoolFieldT<BoolFv> {
         return res;
     }
 
-    /** @return the bitwise NOT of the given BoolFv. */
+    /** Set this BoolFv to the bitwise not of orig. */
     public BoolFv not(BoolFv orig){
         notGeneric(HEIGHT, SPAN, BREADTH, orig, this);
         return this;
     }
 
-    /** @return the bitwise AND of the given BoolFv values. */
+    /** Set this BoolFv to the bitwise AND of a and b. */
     public BoolFv and(BoolFv a, BoolFv b){
-        andGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::and);
         return this;
     }
 
-    /** @return the bitwise OR of the given BoolFv values. */
+    /** Set this BoolFv to the bitwise OR of a and b. */
     public BoolFv or(BoolFv a, BoolFv b){
-        orGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::or);
         return this;
     }
 
-    /** @return the bitwise XOR of the given BoolFv values. */
+    /** Set this BoolFv to the bitwise XOR of a and b. */
     public BoolFv xor(BoolFv a, BoolFv b){
-        xorGeneric(HEIGHT, SPAN, BREADTH, a, b, this);
-        return this;
-    }
-
-    /** @return a left-shifted BoolFv. */
-    public BoolFv lShift(BoolFv orig, int n){
-        lShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a right-shifted BoolFv. */
-    public BoolFv rShift(BoolFv orig, int n){
-        rShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a up-shifted BoolFv. */
-    public BoolFv uShift(BoolFv orig, int n){
-        uShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
-        return this;
-    }
-
-    /** @return a down-shifted BoolFv. */
-    public BoolFv dShift(BoolFv orig, int n){
-        dShiftGeneric(HEIGHT, SPAN, BREADTH, orig, n, this);
+        binopGeneric(HEIGHT, SPAN, BREADTH, a, b, this, BoolFieldLine::xor);
         return this;
     }
 
@@ -139,31 +117,31 @@ public non-sealed class BoolFv extends BoolFieldT<BoolFv> {
         );
     }
 
-    /** @return the OR reduction of the given transfer language.field. */
+    /** Set this BoolFv to the OR reduction of the given transfer field. */
     public void redOr(BoolF target){
         target.zeroes();
         BoolFv maskedData = maskData(DATA_POS, this, new BoolFv(false).zeroes());
-        redOrGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::or);
     }
 
-    /** @return the AND reduction of the given transfer language.field. */
+    /** Set this BoolFv to the AND reduction of the given transfer field. */
     public void redAnd(BoolF target){
         target.ones();
         BoolFv maskedData = maskData(DATA_POS, this, new BoolFv(false).ones());
-        redAndGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::and);
     }
 
-    /** @return the XOR reduction of the given transfer language.field. */
+    /** Set this BoolFv to the XOR reduction of the given transfer field. */
     public void redXor(BoolF target){
         target.zeroes();
         BoolFv maskedData = maskData(DATA_POS, this, new BoolFv(false).zeroes());
-        redXorGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
+        redGeneric(HEIGHT, SPAN, BREADTH, target, maskedData, BoolFieldLine::xor);
     }
 
     private BoolF[] redStack(BoolFv neutral) {
         BoolFv maskedData = maskData(DATA_POS, this, neutral);
         BoolF[] target = new BoolF[BREADTH];
-        for (int i = 0; i < BREADTH; i++) target[i] = new BoolF(false).zeroes();
+        for (int i = 0; i < BREADTH; i++) target[i] = new BoolF(false);
         redStackGeneric(HEIGHT, SPAN, BREADTH, target, maskedData);
         return target;
     }
@@ -178,16 +156,17 @@ public non-sealed class BoolFv extends BoolFieldT<BoolFv> {
         return redStack(new BoolFv(false).ones());
     }
 
-    /** @return the clockwise rotation of the given BoolFv. */
+    /** Sets target to the clockwise rotation of this BoolFv. */
     public void _rotateCW(BoolFe target){
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) for (int k = 0; k < BREADTH; k++) {
             int index = (i * SPAN + j) * BREADTH + k;
             target.lines[index] = this.lines[index].copy();
         }
     }
+    /** Sets this BoolFv to the clockwise rotation of orig. */
     public BoolFv rotateCW(BoolFe orig) { orig._rotateCW(this); return this; }
 
-    /** @return the counterclockwise rotation of the given BoolFv. */
+    /** Sets target to the counterclockwise rotation of this BoolFv. */
     public void _rotateCCW(BoolFe target){
         for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < SPAN; j++) {
             int blockIndex = (i * SPAN + j) * BREADTH;
@@ -196,16 +175,21 @@ public non-sealed class BoolFv extends BoolFieldT<BoolFv> {
             }
         }
     }
+    /** Sets this BoolFv to the counterclockwise rotation of orig. */
     public BoolFv rotateCCW(BoolFe orig) { orig._rotateCCW(this); return this; }
 
-    /** @return the transfer result for the given BoolFv. */
+    /** Sets res to the transfer of this BoolFv. */
     public void _transfer(BoolVf res){
         res.zeroes();
         transferGeneric(this, res,  MASKS);
     }
+    /** Sets this BoolFv to the transfer of orig. */
     public BoolFv transfer(BoolVf orig){ orig._transfer(this); return this; }
 
-    /** @return whether this BoolFv is equal to the given object. */
+    /**
+     * Two BoolFv objects are equal if their existing bits are equal, or they are both empty.
+     * @return whether this BoolFv is equal to the given object.
+     */
     @Override
     public boolean equals(Object o){
         if (!(o instanceof BoolFv other)) return false;

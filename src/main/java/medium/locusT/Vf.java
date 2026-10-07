@@ -2,8 +2,10 @@ package medium.locusT;
 
 import medium.Locus;
 
-public class Vf extends Locus {
+public final class Vf extends Locus {
+    // Canning coordinates of this Vf in the medium.
     public final int y, x, s;
+    // The companion Fv of this Vf.
     private Fv pair;
 
     public Vf(int y, int x, int s){

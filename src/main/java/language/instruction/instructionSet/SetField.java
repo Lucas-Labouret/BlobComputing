@@ -3,6 +3,10 @@ package language.instruction.instructionSet;
 import language.field.Field;
 import language.instruction.BasicInstruction;
 
+/**
+ * Set the value of one field to another.
+ * @param <F> The type of the field.
+ */
 public class SetField<F extends Field<F>> implements BasicInstruction {
     private final F in;
     private final F out;
