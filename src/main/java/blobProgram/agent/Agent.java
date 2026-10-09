@@ -22,9 +22,7 @@ public abstract class Agent {
      * For example, compute a gradient once if it is needed by multiple forces.
      */
     protected Procedure precompute() {
-        return new Procedure(){{
-            print(""); // Temporary hack until I handle empty procedures better
-        }};
+        return new Procedure(){};
     }
 
     /** Computes and applies the flip to the state of the agent. */

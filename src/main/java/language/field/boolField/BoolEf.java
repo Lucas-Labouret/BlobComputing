@@ -87,9 +87,9 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
     }
 
     /** Decode this BoolEf into a HashMap mapping each Ef locus in the given set to its corresponding bit value in the BoolEf. */
-    public HashMap<Ef, Boolean> decode(HashSet<Ef> loci) {
+    public HashMap<Ef, Boolean> decode() {
         HashMap<Ef, Boolean> res = new HashMap<>();
-        for (Ef e : loci)
+        for (Ef e : medium.efs)
             res.put(e, getBit(e));
         return res;
     }

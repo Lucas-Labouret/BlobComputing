@@ -15,7 +15,7 @@ import language.instruction.Procedure;
  * and stores the difference between the distance of a cell and its neighbors.
  */
 public class DistanceField {
-    int nbits;
+    public final int nbits;
 
     private final BoolV sources_t1;
     private final BoolV sources_t0;

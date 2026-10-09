@@ -67,9 +67,9 @@ public non-sealed class IntVf extends IntField<BoolVf, IntVf> {
     }
 
     /** Converts this IntVf to a map from Vf loci to integers. */
-    public HashMap<Vf, Integer> decode(Medium m) {
+    public HashMap<Vf, Integer> decode() {
         HashMap<Vf, Integer> res = new HashMap<>();
-        decode(this, res, m.vfs, (loci, field) -> field.decode(loci), decodeAsSigned);
+        decode(this, res, medium.vfs, BoolVf::decode, decodeAsSigned);
         return res;
     }
 

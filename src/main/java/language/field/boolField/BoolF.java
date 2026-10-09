@@ -72,9 +72,9 @@ public non-sealed class BoolF extends BoolFieldS<BoolF> {
     }
 
     /** Decode this BoolF into a HashMap mapping each face in the given set to its corresponding bit value in the BoolF. */
-    public HashMap<Face, Boolean> decode(HashSet<Face> faces) {
+    public HashMap<Face, Boolean> decode() {
         HashMap<Face, Boolean> res = new HashMap<>();
-        for (Face f : faces)
+        for (Face f : medium.faces)
             res.put(f, getBit(f));
         return res;
     }

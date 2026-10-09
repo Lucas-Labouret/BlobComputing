@@ -108,9 +108,9 @@ public non-sealed class BoolV extends BoolFieldS<BoolV> {
     }
 
     /** Decode this BoolV into a HashMap mapping each vertex in the given set to its corresponding bit value in the BoolV. */
-    public HashMap<Vertex, Boolean> decode(HashSet<Vertex> vertices) {
+    public HashMap<Vertex, Boolean> decode() {
         HashMap<Vertex, Boolean> res = new HashMap<>();
-        for (Vertex v : vertices)
+        for (Vertex v : medium.vertices)
             res.put(v, getBit(v));
         return res;
     }

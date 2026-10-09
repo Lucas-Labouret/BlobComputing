@@ -15,6 +15,7 @@ import language.field.intField.IntV;
 import language.field.intField.IntVe;
 import language.instruction.Procedure;
 import ui.display.Styles;
+import validation.NotHomogenized;
 
 /**
  * Homogenizes a set of quasi-particles by repeatedly moving them towards the center of their Voronoi cell.
@@ -62,6 +63,9 @@ public class Homogenize extends Agent {
             call(distToVoronoi.getDist(distance));
             show("Distance from Voronoi", distance);
             show("Gradient from Voronoi", gradient);
+
+//            NotHomogenized validator = new NotHomogenized(state, distance);
+//            run(validator::validate);
         }
     }
     @Override

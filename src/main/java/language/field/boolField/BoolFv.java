@@ -79,9 +79,9 @@ public non-sealed class BoolFv extends BoolFieldT<BoolFv> {
     }
 
     /** Decode this BoolFv into a HashMap mapping each Fv locus in the given set to its corresponding bit value in the BoolFv. */
-    public HashMap<Fv, Boolean> decode(HashSet<Fv> loci) {
+    public HashMap<Fv, Boolean> decode() {
         HashMap<Fv, Boolean> res = new HashMap<>();
-        for (Fv f : loci)
+        for (Fv f : medium.fvs)
             res.put(f, getBit(f));
         return res;
     }

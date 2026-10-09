@@ -4,12 +4,7 @@ import language.cache.Cache;
 import language.field.Field;
 import language.field.boolField.*;
 import language.field.intField.*;
-import language.instruction.instructionSet.Print;
-import language.instruction.instructionSet.SetField;
-import language.instruction.instructionSet.Show;
-import language.instruction.instructionSet.Snapshot;
-import language.instruction.instructionSet.BoolOp;
-import language.instruction.instructionSet.IntOp;
+import language.instruction.instructionSet.*;
 import ui.display.Styles;
 import utils.TriFunction;
 
@@ -104,9 +99,9 @@ public abstract non-sealed class Procedure implements Instruction {
 
     // Wrapper functions to make writing procedures easier. These functions simply add the corresponding instruction to this procedure.
 
-    /** Prints the given message to the console. */
-    @SuppressWarnings("UnusedReturnValue")
-    protected void print(@SuppressWarnings("SameParameterValue") String message) { call(new Print(message)); }
+    /** Executes an arbitrary Java function. */
+    protected void run(Runnable r) { call(new ArbitrarySysInstr(r)); }
+
     /** Indicates that the given field should be displayed in the UI. */
     protected <F extends Field<F>> void show(String name, F field) { call(new Show<>(name, field)); }
     /** Indicates that the given field should be displayed in the UI with the given style. */

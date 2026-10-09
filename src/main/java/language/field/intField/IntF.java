@@ -67,9 +67,9 @@ public non-sealed class IntF extends IntField<BoolF, IntF> {
     }
 
     /** Converts this IntF to a map from faces to integers. */
-    public HashMap<Face, Integer> decode(Medium m) {
+    public HashMap<Face, Integer> decode() {
         HashMap<Face, Integer> res = new HashMap<>();
-        decode(this, res, m.faces, (loci, field) -> field.decode(loci), decodeAsSigned);
+        decode(this, res, medium.faces, BoolF::decode, decodeAsSigned);
         return res;
     }
 

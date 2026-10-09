@@ -98,9 +98,7 @@ public class MasterScene extends BorderPane {
         });
         speedInput.setOnChange(player::setSpeed);
 
-        quickloadButton.setOnAction(_ -> {
-            player.restoreState(quicksaveMenu.getValue().entry);
-        });
+        quickloadButton.setOnAction(_ -> player.restoreState(quicksaveMenu.getValue().entry));
 
         snapButton.setOnAction(_ -> displayController.snapshot());
     }

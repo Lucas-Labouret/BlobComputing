@@ -21,8 +21,8 @@ public class IntEvDisplay implements Displayable {
     @Override public boolean updatesEv() { return true; }
 
     @Override
-    public HashMap<Ev, Color> displayColorEv(Medium medium) {
-        HashMap<Ev, Integer> mem = ref.decode(medium);
+    public HashMap<Ev, Color> displayColorEv() {
+        HashMap<Ev, Integer> mem = ref.decode();
         HashMap<Ev, Color> colors = new HashMap<>();
 
         int absMax = 0;
@@ -56,8 +56,8 @@ public class IntEvDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Ev, String> displayStringEv(Medium medium) {
-        HashMap<Ev, Integer> mem = ref.decode(medium);
+    public HashMap<Ev, String> displayStringEv() {
+        HashMap<Ev, Integer> mem = ref.decode();
         HashMap<Ev, String> strings = new HashMap<>();
         for (Ev v: mem.keySet()) {
             strings.put(v, Integer.toString(mem.get(v)));

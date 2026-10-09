@@ -64,7 +64,6 @@ public class Cache {
      *                  If an entry with the same step count already exists, it will be overridden.
      * @return The new cache entry.
      */
-    static boolean caching = false;
     public CacheEntry push(long stepCount) {
         System.out.println(fields.size());
         HashMap<BoolField<?>, BoolField<?>> valueCache = new HashMap<>();

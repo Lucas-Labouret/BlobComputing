@@ -79,9 +79,9 @@ public non-sealed class BoolFe extends BoolFieldT<BoolFe> {
     }
 
     /** Decode this BoolFe into a HashMap mapping each Fe locus in the given set to its corresponding bit value in the BoolFe. */
-    public HashMap<Fe, Boolean> decode(HashSet<Fe> loci) {
+    public HashMap<Fe, Boolean> decode() {
         HashMap<Fe, Boolean> res = new HashMap<>();
-        for (Fe f : loci)
+        for (Fe f : medium.fes)
             res.put(f, getBit(f));
         return res;
     }

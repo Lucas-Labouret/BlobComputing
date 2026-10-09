@@ -2,6 +2,7 @@ package language.field;
 
 import language.field.boolField.BoolField;
 import language.field.intField.IntField;
+import medium.Medium;
 
 /**
  * The base class for all fields.
@@ -10,6 +11,11 @@ import language.field.intField.IntField;
  * @param <F> the type of the field.
  */
 public abstract sealed class Field<F extends Field<F>> permits BoolField, IntField {
+    protected static Medium medium;
+    public static void setMedium(Medium medium) {
+        if (Field.medium != null) throw new IllegalStateException("Medium has already been set.");
+        Field.medium = medium;
+    }
     /** @return a deep copy of this field. */
     public abstract F copy();
     /** Copies the state of the given field into this field. */

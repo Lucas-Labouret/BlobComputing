@@ -21,8 +21,8 @@ public class IntFeDisplay implements Displayable {
     @Override public boolean updatesFe() { return true; }
 
     @Override
-    public HashMap<Fe, Color> displayColorFe(Medium medium) {
-        HashMap<Fe, Integer> mem = ref.decode(medium);
+    public HashMap<Fe, Color> displayColorFe() {
+        HashMap<Fe, Integer> mem = ref.decode();
         HashMap<Fe, Color> colors = new HashMap<>();
 
         int absMax = 0;
@@ -55,8 +55,8 @@ public class IntFeDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Fe, String> displayStringFe(Medium medium) {
-        HashMap<Fe, Integer> mem = ref.decode(medium);
+    public HashMap<Fe, String> displayStringFe() {
+        HashMap<Fe, Integer> mem = ref.decode();
         HashMap<Fe, String> strings = new HashMap<>();
         for (Fe fe : mem.keySet()) strings.put(fe, Integer.toString(mem.get(fe)));
         return strings;

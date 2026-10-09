@@ -21,8 +21,8 @@ public class BoolEDisplay implements Displayable {
     @Override public boolean updatesE() { return true; }
 
     @Override
-    public HashMap<Edge, Color> displayColorE(Medium medium) {
-        HashMap<Edge, Boolean> mem = field.decode(medium.edges);
+    public HashMap<Edge, Color> displayColorE() {
+        HashMap<Edge, Boolean> mem = field.decode();
         HashMap<Edge, Color> colors = new HashMap<>();
         for (Edge e : mem.keySet())
             if (mem.get(e)) colors.put(e, style.EDGE_TRUE());
@@ -31,8 +31,8 @@ public class BoolEDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Edge, String> displayStringE(Medium medium) {
-        HashMap<Edge, Boolean> mem = field.decode(medium.edges);
+    public HashMap<Edge, String> displayStringE() {
+        HashMap<Edge, Boolean> mem = field.decode();
         HashMap<Edge, String> texts = new HashMap<>();
         for (Edge e : mem.keySet())
             texts.put(e, mem.get(e).toString());

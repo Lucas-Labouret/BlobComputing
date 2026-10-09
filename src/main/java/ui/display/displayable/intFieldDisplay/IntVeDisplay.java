@@ -21,8 +21,8 @@ public class IntVeDisplay implements Displayable {
     @Override public boolean updatesVe() { return true; }
 
     @Override
-    public HashMap<Ve, Color> displayColorVe(Medium medium) {
-        HashMap<Ve, Integer> mem = field.decode(medium);
+    public HashMap<Ve, Color> displayColorVe() {
+        HashMap<Ve, Integer> mem = field.decode();
         HashMap<Ve, Color> colors = new HashMap<>();
 
         int absMax = 0;
@@ -56,8 +56,8 @@ public class IntVeDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Ve, String> displayStringVe(Medium medium) {
-        HashMap<Ve, Integer> mem = field.decode(medium);
+    public HashMap<Ve, String> displayStringVe() {
+        HashMap<Ve, Integer> mem = field.decode();
         HashMap<Ve, String> strings = new HashMap<>();
         for (Ve ve: mem.keySet()) {
             strings.put(ve, Integer.toString(mem.get(ve)));

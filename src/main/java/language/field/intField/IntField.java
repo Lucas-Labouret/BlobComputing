@@ -7,6 +7,7 @@ import medium.Locus;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -87,11 +88,11 @@ public sealed abstract class IntField<B extends BoolField<B>, I extends IntField
     protected boolean decodeAsSigned = true;
     /** Decode the integer field into a Hashmap of loci to integer values. */
     protected static <L extends Locus, B extends BoolField<B>, I extends IntField<B, I>>
-    void decode(IntField<B, I> field, Map<L, Integer> res, HashSet<L> loci, BiFunction<HashSet<L>, B, Map<L, Boolean>> bitDecoder, boolean asSigned) {
+    void decode(IntField<B, I> field, Map<L, Integer> res, HashSet<L> loci, Function<B, Map<L, Boolean>> bitDecoder, boolean asSigned) {
         if (field.n > 31) throw new RuntimeException("Cannot represent a >31 bits IntV as a Java int");
         for (L locus: loci) res.put(locus, 0);
         for (int i = 1; i <= field.n; i++) {
-            Map<L, Boolean> bitMap = bitDecoder.apply(loci, field.bits[i]);
+            Map<L, Boolean> bitMap = bitDecoder.apply(field.bits[i]);
             final int pos = field.n - i;
             res.replaceAll((v, val) -> {
                 if (bitMap.get(v)) return val | (1 << (pos));
@@ -99,7 +100,7 @@ public sealed abstract class IntField<B extends BoolField<B>, I extends IntField
             });
         }
 
-        Map<L, Boolean> bitMap = bitDecoder.apply(loci, field.bits[0]);
+        Map<L, Boolean> bitMap = bitDecoder.apply(field.bits[0]);
 
         if (asSigned) res.replaceAll((v, val) -> {
             if (bitMap.get(v))

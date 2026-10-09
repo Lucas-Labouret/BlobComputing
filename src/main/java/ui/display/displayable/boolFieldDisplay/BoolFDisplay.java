@@ -21,8 +21,8 @@ public class BoolFDisplay implements Displayable {
     @Override public boolean updatesF() { return true; }
 
     @Override
-    public HashMap<Face, Color> displayColorF(Medium medium) {
-        HashMap<Face, Boolean> mem = field.decode(medium.faces);
+    public HashMap<Face, Color> displayColorF() {
+        HashMap<Face, Boolean> mem = field.decode();
         HashMap<Face, Color> colors = new HashMap<>();
         for (Face f : mem.keySet())
             if (mem.get(f)) colors.put(f, style.FACE_TRUE());
@@ -31,8 +31,8 @@ public class BoolFDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Face, String> displayStringF(Medium medium) {
-        HashMap<Face, Boolean> mem = field.decode(medium.faces);
+    public HashMap<Face, String> displayStringF() {
+        HashMap<Face, Boolean> mem = field.decode();
         HashMap<Face, String> strings = new HashMap<>();
         for (Face f : mem.keySet())
             strings.put(f, mem.get(f).toString());

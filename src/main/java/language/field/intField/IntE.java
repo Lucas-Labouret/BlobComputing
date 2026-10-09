@@ -67,9 +67,9 @@ public non-sealed class IntE extends IntField<BoolE, IntE> {
     }
 
     /** Converts this IntE to a map from edges to integers. */
-    public HashMap<Edge, Integer> decode(Medium m) {
+    public HashMap<Edge, Integer> decode() {
         HashMap<Edge, Integer> res = new HashMap<>();
-        decode(this, res, m.edges, (loci, field) -> field.decode(loci), decodeAsSigned);
+        decode(this, res, medium.edges, BoolE::decode, decodeAsSigned);
         return res;
     }
 

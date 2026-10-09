@@ -209,15 +209,15 @@ public class MediumDrawer extends Canvas {
 
         v = ve = vf = e = ev = ef = f = fv = fe = false;
         for (Displayable d: colorDisplayables) {
-            if (d.updatesV ()) { v  = true; vColorsPrimary .add(d.displayColorV(medium)); }
-            if (d.updatesVe()) { ve = true; veColorsPrimary.add(d.displayColorVe(medium)); }
-            if (d.updatesVf()) { vf = true; vfColorsPrimary.add(d.displayColorVf(medium)); }
-            if (d.updatesE ()) { e  = true; eColorsPrimary .add(d.displayColorE(medium)); }
-            if (d.updatesEv()) { ev = true; evColorsPrimary.add(d.displayColorEv(medium)); }
-            if (d.updatesEf()) { ef = true; efColorsPrimary.add(d.displayColorEf(medium)); }
-            if (d.updatesF ()) { f  = true; fColorsPrimary .add(d.displayColorF(medium)); }
-            if (d.updatesFv()) { fv = true; fvColorsPrimary.add(d.displayColorFv(medium)); }
-            if (d.updatesFe()) { fe = true; feColorsPrimary.add(d.displayColorFe(medium)); }
+            if (d.updatesV ()) { v  = true; vColorsPrimary .add(d.displayColorV()); }
+            if (d.updatesVe()) { ve = true; veColorsPrimary.add(d.displayColorVe()); }
+            if (d.updatesVf()) { vf = true; vfColorsPrimary.add(d.displayColorVf()); }
+            if (d.updatesE ()) { e  = true; eColorsPrimary .add(d.displayColorE()); }
+            if (d.updatesEv()) { ev = true; evColorsPrimary.add(d.displayColorEv()); }
+            if (d.updatesEf()) { ef = true; efColorsPrimary.add(d.displayColorEf()); }
+            if (d.updatesF ()) { f  = true; fColorsPrimary .add(d.displayColorF()); }
+            if (d.updatesFv()) { fv = true; fvColorsPrimary.add(d.displayColorFv()); }
+            if (d.updatesFe()) { fe = true; feColorsPrimary.add(d.displayColorFe()); }
         }
 
         if (v)  computeColor(medium.vertices, vColorsPrimary,  vColors );
@@ -255,15 +255,15 @@ public class MediumDrawer extends Canvas {
     private void computeStrings() {
         strings = new HashMap<>();
         for (Displayable d: stringDisplayables) {
-            if (d.updatesV ()) { strings.putAll(d.displayStringV (medium)); }
-            if (d.updatesVe()) { strings.putAll(d.displayStringVe(medium)); }
-            if (d.updatesVf()) { strings.putAll(d.displayStringVf(medium)); }
-            if (d.updatesE ()) { strings.putAll(d.displayStringE (medium)); }
-            if (d.updatesEv()) { strings.putAll(d.displayStringEv(medium)); }
-            if (d.updatesEf()) { strings.putAll(d.displayStringEf(medium)); }
-            if (d.updatesF ()) { strings.putAll(d.displayStringF (medium)); }
-            if (d.updatesFv()) { strings.putAll(d.displayStringFv(medium)); }
-            if (d.updatesFe()) { strings.putAll(d.displayStringFe(medium)); }
+            if (d.updatesV ()) { strings.putAll(d.displayStringV ()); }
+            if (d.updatesVe()) { strings.putAll(d.displayStringVe()); }
+            if (d.updatesVf()) { strings.putAll(d.displayStringVf()); }
+            if (d.updatesE ()) { strings.putAll(d.displayStringE ()); }
+            if (d.updatesEv()) { strings.putAll(d.displayStringEv()); }
+            if (d.updatesEf()) { strings.putAll(d.displayStringEf()); }
+            if (d.updatesF ()) { strings.putAll(d.displayStringF ()); }
+            if (d.updatesFv()) { strings.putAll(d.displayStringFv()); }
+            if (d.updatesFe()) { strings.putAll(d.displayStringFe()); }
         }
     }
 

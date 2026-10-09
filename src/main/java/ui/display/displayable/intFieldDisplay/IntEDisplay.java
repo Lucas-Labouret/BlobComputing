@@ -21,8 +21,8 @@ public class IntEDisplay implements Displayable {
     @Override public boolean updatesE() { return true; }
 
     @Override
-    public HashMap<Edge, Color> displayColorE(Medium medium) {
-        HashMap<Edge, Integer> mem = ref.decode(medium);
+    public HashMap<Edge, Color> displayColorE() {
+        HashMap<Edge, Integer> mem = ref.decode();
         HashMap<Edge, Color> colors = new HashMap<>();
 
         int absMax = 0;
@@ -56,8 +56,8 @@ public class IntEDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Edge, String> displayStringE(Medium medium) {
-        HashMap<Edge, Integer> mem = ref.decode(medium);
+    public HashMap<Edge, String> displayStringE() {
+        HashMap<Edge, Integer> mem = ref.decode();
         HashMap<Edge, String> strings = new HashMap<>();
         for (Edge v: mem.keySet()) {
             strings.put(v, Integer.toString(mem.get(v)));

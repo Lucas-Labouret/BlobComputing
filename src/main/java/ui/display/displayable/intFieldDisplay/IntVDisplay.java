@@ -21,8 +21,8 @@ public class IntVDisplay implements Displayable {
     @Override public boolean updatesV() { return true; }
 
     @Override
-    public HashMap<Vertex, Color> displayColorV(Medium medium) {
-        HashMap<Vertex, Integer> mem = ref.decode(medium);
+    public HashMap<Vertex, Color> displayColorV() {
+        HashMap<Vertex, Integer> mem = ref.decode();
         HashMap<Vertex, Color> colors = new HashMap<>();
 
         int absMax = 0;
@@ -56,8 +56,8 @@ public class IntVDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Vertex, String> displayStringV(Medium medium) {
-        HashMap<Vertex, Integer> mem = ref.decode(medium);
+    public HashMap<Vertex, String> displayStringV() {
+        HashMap<Vertex, Integer> mem = ref.decode();
         HashMap<Vertex, String> strings = new HashMap<>();
         for (Vertex v: mem.keySet()) {
             strings.put(v, Integer.toString(mem.get(v)));

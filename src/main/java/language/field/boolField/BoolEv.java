@@ -103,9 +103,9 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
     }
 
     /** Decode this BoolEv into a HashMap mapping each Ev locus in the given set to its corresponding bit value in the BoolEv. */
-    public HashMap<Ev, Boolean> decode(HashSet<Ev> loci) {
+    public HashMap<Ev, Boolean> decode() {
         HashMap<Ev, Boolean> res = new HashMap<>();
-        for (Ev e : loci)
+        for (Ev e : medium.evs)
             res.put(e, getBit(e));
         return res;
     }

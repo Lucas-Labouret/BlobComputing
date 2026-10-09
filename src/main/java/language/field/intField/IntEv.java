@@ -67,9 +67,9 @@ public non-sealed class IntEv extends IntField<BoolEv, IntEv> {
     }
 
     /** Converts this IntEv to a map from Ev loci to integers. */
-    public HashMap<Ev, Integer> decode(Medium m) {
+    public HashMap<Ev, Integer> decode() {
         HashMap<Ev, Integer> res = new HashMap<>();
-        decode(this, res, m.evs, (loci, field) -> field.decode(loci), decodeAsSigned);
+        decode(this, res, medium.evs, BoolEv::decode, decodeAsSigned);
         return res;
     }
 

@@ -6,6 +6,7 @@ import language.instruction.Instruction;
 import language.instruction.Procedure;
 import language.instruction.instructionSet.Show;
 import language.instruction.instructionSet.Snapshot;
+import validation.GlobalValidator;
 
 /**
  * The InstructionPlayer class is responsible for executing a given Instruction,
@@ -97,7 +98,7 @@ public class InstructionPlayer {
                 catch (InterruptedException _) { break; }
 
                 boolean done = exec();
-                if (done && pauseAfterLoop) {
+                if ((done && pauseAfterLoop) || GlobalValidator.shouldBlock()) {
                     playing = false;
                     return;
                 }

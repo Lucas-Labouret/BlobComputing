@@ -21,8 +21,8 @@ public class IntFDisplay implements Displayable {
     @Override public boolean updatesF() { return true; }
 
     @Override
-    public HashMap<Face, Color> displayColorF(Medium medium) {
-        HashMap<Face, Integer> mem = ref.decode(medium);
+    public HashMap<Face, Color> displayColorF() {
+        HashMap<Face, Integer> mem = ref.decode();
         HashMap<Face, Color> colors = new HashMap<>();
 
         int absMax = 0;
@@ -55,8 +55,8 @@ public class IntFDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Face, String> displayStringF(Medium medium) {
-        HashMap<Face, Integer> mem = ref.decode(medium);
+    public HashMap<Face, String> displayStringF() {
+        HashMap<Face, Integer> mem = ref.decode();
         HashMap<Face, String> strings = new HashMap<>();
         for (Face face : mem.keySet()) strings.put(face, Integer.toString(mem.get(face)));
         return strings;

@@ -21,8 +21,8 @@ public class IntFvDisplay implements Displayable {
     @Override public boolean updatesFv() { return true; }
 
     @Override
-    public HashMap<Fv, Color> displayColorFv(Medium medium) {
-        HashMap<Fv, Integer> mem = ref.decode(medium);
+    public HashMap<Fv, Color> displayColorFv() {
+        HashMap<Fv, Integer> mem = ref.decode();
         HashMap<Fv, Color> colors = new HashMap<>();
 
         int absMax = 0;
@@ -55,8 +55,8 @@ public class IntFvDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Fv, String> displayStringFv(Medium medium) {
-        HashMap<Fv, Integer> mem = ref.decode(medium);
+    public HashMap<Fv, String> displayStringFv() {
+        HashMap<Fv, Integer> mem = ref.decode();
         HashMap<Fv, String> strings = new HashMap<>();
         for (Fv fv : mem.keySet()) strings.put(fv, Integer.toString(mem.get(fv)));
         return strings;

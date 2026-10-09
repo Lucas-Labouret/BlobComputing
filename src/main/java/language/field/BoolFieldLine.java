@@ -42,8 +42,8 @@ public class BoolFieldLine {
         return res;
     }
 
+    private static final Random rand = new Random(0);
     /** @return a new randomly initialized field line. */
-    private static Random rand = new Random(0);
     public static BoolFieldLine rand(){
         if (SIZE == -1) throw new IllegalStateException("Size not set.");
         BoolFieldLine res = new BoolFieldLine();
@@ -105,7 +105,7 @@ public class BoolFieldLine {
         int ninv = 32-n;
         res.line[0] = a.line[0] << n;
         for (int i = 1; i < SIZE; i++){
-            res.line[i-1] += (a.line[i] & (~((1 << ninv) - 1))) >>> ninv; //Set the bits that move the previous int
+            res.line[i-1] += (a.line[i] & (-(1 << ninv))) >>> ninv; //Set the bits that move the previous int
             res.line[i] = a.line[i] << n;
         }
         return res;

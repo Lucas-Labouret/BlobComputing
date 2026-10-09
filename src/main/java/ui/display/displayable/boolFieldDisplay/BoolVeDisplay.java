@@ -21,8 +21,8 @@ public class BoolVeDisplay implements Displayable {
     @Override public boolean updatesVe() { return true; }
 
     @Override
-    public HashMap<Ve, Color> displayColorVe(Medium medium) {
-        HashMap<Ve, Boolean> mem = field.decode(medium.ves);
+    public HashMap<Ve, Color> displayColorVe() {
+        HashMap<Ve, Boolean> mem = field.decode();
         HashMap<Ve, Color> colors = new HashMap<>();
         for (Ve ve : mem.keySet())
             if (mem.get(ve)) colors.put(ve, style.VE_TRUE());
@@ -31,8 +31,8 @@ public class BoolVeDisplay implements Displayable {
     }
 
     @Override
-    public HashMap<Ve, String> displayStringVe(Medium medium) {
-        HashMap<Ve, Boolean> mem = field.decode(medium.ves);
+    public HashMap<Ve, String> displayStringVe() {
+        HashMap<Ve, Boolean> mem = field.decode();
         HashMap<Ve, String> strings = new HashMap<>();
         for (Ve ve : mem.keySet())
             strings.put(ve, mem.get(ve).toString());

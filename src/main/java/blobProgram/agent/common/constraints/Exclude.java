@@ -10,7 +10,7 @@ import language.instruction.Procedure;
  * Exclude movement from a specific BlobV.
  */
 public class Exclude extends Constraint {
-    BlobV from;
+    private final BlobV from;
 
     public Exclude(BlobV from) {
         this.from = from;

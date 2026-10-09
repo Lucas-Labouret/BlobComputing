@@ -51,6 +51,8 @@ public final class BoolFieldManager {
 
         medium = m;
 
+        Field.setMedium(medium);
+
         width = height = breadthV = 0;
         for (Ve ve: medium.ves){
             if (ve.y > height) height = ve.y;

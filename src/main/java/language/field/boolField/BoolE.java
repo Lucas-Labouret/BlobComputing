@@ -97,9 +97,9 @@ public non-sealed class BoolE extends BoolFieldS<BoolE> {
     }
 
     /** Decode this BoolE into a HashMap mapping each edge in the given set to its corresponding bit value in the BoolE. */
-    public HashMap<Edge, Boolean> decode(HashSet<Edge> edges) {
+    public HashMap<Edge, Boolean> decode() {
         HashMap<Edge, Boolean> res = new HashMap<>();
-        for (Edge e : edges)
+        for (Edge e : medium.edges)
             res.put(e, getBit(e));
         return res;
     }

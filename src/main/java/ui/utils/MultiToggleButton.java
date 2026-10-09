@@ -14,9 +14,7 @@ public class MultiToggleButton extends ToggleButton {
 
     public void addToggleGroup(ToggleGroup group) {
         group.getToggles().add(this);
-        group.selectedToggleProperty().addListener((_, _, newValue) ->{
-            setSelected(newValue == this);
-        });
+        group.selectedToggleProperty().addListener((_, _, newValue) -> setSelected(newValue == this));
     }
 
     public MultiToggleButton() {
@@ -26,8 +24,6 @@ public class MultiToggleButton extends ToggleButton {
         setBackground(Background.EMPTY);
         setGraphic(graphic);
         graphic.setOnAction(_ -> setSelected(graphic.isSelected()));
-        this.selectedProperty().addListener((_, _, isSelected) -> {
-            graphic.setSelected(isSelected);
-        });
+        this.selectedProperty().addListener((_, _, isSelected) -> graphic.setSelected(isSelected));
     }
 }

@@ -31,9 +31,6 @@ public class Show<F extends Field<F>> implements BasicInstruction {
         this(name, in, Optional.of(style));
     }
 
-    /**
-     * @return true.
-     */
     @Override
     public boolean exec() {
         field.set(in);

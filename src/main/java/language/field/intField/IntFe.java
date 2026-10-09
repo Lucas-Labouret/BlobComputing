@@ -67,9 +67,9 @@ public non-sealed class IntFe extends IntField<BoolFe, IntFe> {
     }
 
     /** Converts this IntFe to a map from Fe loci to integers. */
-    public HashMap<Fe, Integer> decode(Medium m) {
+    public HashMap<Fe, Integer> decode() {
         HashMap<Fe, Integer> res = new HashMap<>();
-        decode(this, res, m.fes, (loci, field) -> field.decode(loci), decodeAsSigned);
+        decode(this, res, medium.fes, BoolFe::decode, decodeAsSigned);
         return res;
     }
 

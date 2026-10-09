@@ -67,9 +67,9 @@ public non-sealed class IntV extends IntField<BoolV, IntV> {
     }
 
     /** Converts this IntV to map a from vertices to integers. */
-    public HashMap<Vertex, Integer> decode(Medium m) {
+    public HashMap<Vertex, Integer> decode() {
         HashMap<Vertex, Integer> res = new HashMap<>();
-        decode(this, res, m.vertices, (loci, field) -> field.decode(loci), decodeAsSigned);
+        decode(this, res, medium.vertices, BoolV::decode, decodeAsSigned);
         return res;
     }
 

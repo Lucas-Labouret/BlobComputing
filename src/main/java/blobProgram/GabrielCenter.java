@@ -200,7 +200,7 @@ public class GabrielCenter {
     }
     private Procedure floodOnce(BoolV in, BoolV out) { return new FloodOnce(in, out); }
 
-    private class ForAll extends Procedure {
+    private static class ForAll extends Procedure {
         public ForAll(BoolV in, BoolVe ve, BoolV out) {
             broadcast(in, ve);
             call(BlobV.send(ve, ve));
