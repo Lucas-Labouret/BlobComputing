@@ -51,7 +51,7 @@ public class DisplayController {
     private final HashSet<Show<?>> bound = new HashSet<>();
     private void _bind(Show<?> show) {
         String name = show.name;
-        Field<?> field = show.field;
+        Field<?> field = show.out;
         Optional<Styles.Style> style = show.style;
 
         if (!bound.contains(show)) switch (field) {

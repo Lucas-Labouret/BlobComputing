@@ -2,9 +2,9 @@ package blobProgram;
 
 import language.field.boolField.*;
 import language.field.intField.IntEf;
-import language.field.intField.IntEv;
 import language.field.intField.IntV;
 import language.field.intField.IntVe;
+import language.field.intField.IntVf;
 import language.instruction.Procedure;
 import medium.Medium;
 import medium.locusS.Vertex;
@@ -13,16 +13,11 @@ import medium.locusS.Vertex;
  * A BlobV is simply a BoolV augmented with several useful procedures for manipulating blobs in a medium.
  */
 public class BlobV extends BoolV {
-    protected final BoolV init;
-
     public BlobV() {
         this(new BoolV().zeroes());
     }
 
-    public BlobV(BoolV state) {
-        super(state);
-        this.init = new BoolV(state.copy());
-    }
+    public BlobV(BoolV state) { super(state); }
 
     public static BlobV randOne(Medium medium) {
         Vertex randomVertex = medium.vertices.toArray(new Vertex[0])[(int)(Math.random() * medium.vertices.size())];
@@ -40,276 +35,180 @@ public class BlobV extends BoolV {
         return new BlobV(cells);
     }
 
-    private static class Send extends Procedure {
-        public Send(BoolVe in, BoolVe out) {
-            BoolEv ev = tmp(new BoolEv());
-            BoolEf ef = tmp(new BoolEf());
-
-            transfer(in, ev);
-            rotCW(ev, ef);
-            rotCW(ef, ev);
-            transfer(ev, out);
-        }
-
-        public Send(IntVe in, IntVe out) {
-            IntEv ev = tmp(new IntEv(in.n));
-            IntEf ef = tmp(new IntEf(in.n));
-
-            transfer(in, ev);
-            rotCW(ev, ef);
-            rotCW(ef, ev);
-            transfer(ev, out);
+    private static class SendB extends Procedure<BoolVe> {
+        public SendB(BoolVe in) {
+            returnValue(transfer(rotCW(rotCW(transfer(in)))));
         }
     }
-    public static Procedure send(BoolVe in, BoolVe out) { return new Send(in, out); }
-    public static Procedure send(IntVe in, IntVe out) { return new Send(in, out); }
-
-    private static class Grow extends Procedure {
-        public Grow(BlobV in, BlobV out) {
-            BoolVe ve = tmp(new BoolVe());
-            BoolEv ev = tmp(new BoolEv());
-            BoolE middle = tmp(new BoolE());
-
-            broadcast(in, ve);
-            transfer(ve, ev);
-            redOr(ev, middle);
-            broadcast(middle, ev);
-            transfer(ev, ve);
-            redOr(ve, out);
+    private static class SendI extends Procedure<IntVe> {
+        public SendI(IntVe in) {
+            returnValue(transfer(rotCW(rotCW(transfer(in)))));
         }
     }
-    public static Procedure grow(BlobV in, BlobV out) { return new Grow(in, out); }
-    public Procedure grow(BlobV out) {return grow(this, out); }
-    public Procedure grow() { return grow(this, this); }
+    public static Procedure<BoolVe> send(BoolVe in) { return new SendB(in); }
+    public static Procedure<IntVe>  send(IntVe in)  { return new SendI(in); }
 
-    private static class GrowDebug extends Procedure {
-        public GrowDebug(BoolV in, BoolV out) {
+    private static class ApexToEdgeB extends Procedure<BoolEf> {
+        public ApexToEdgeB(BoolVf in) {
+            returnValue(transfer(rotCW(rotCW(rotCW(transfer(in))))));
+        }
+    }
+    private static class ApexToEdgeI extends Procedure<IntEf> {
+        public ApexToEdgeI(IntVf in) {
+            returnValue(transfer(rotCW(rotCW(rotCW(transfer(in))))));
+        }
+    }
+    private static class EdgeToApexB extends Procedure<BoolVf> {
+        public EdgeToApexB(BoolEf in) {
+            returnValue(transfer(rotCW(rotCW(rotCW(transfer(in))))));
+        }
+    }
+    private static class EdgeToApexI extends Procedure<IntVf> {
+        public EdgeToApexI(IntEf in) {
+            returnValue(transfer(rotCW(rotCW(rotCW(transfer(in))))));
+        }
+    }
+    public static Procedure<BoolEf> apexToEdge(BoolVf in) { return new ApexToEdgeB(in); }
+    public static Procedure<IntEf>  apexToEdge(IntVf in)  { return new ApexToEdgeI(in); }
+    public static Procedure<BoolVf> edgeToApex(BoolEf in) { return new EdgeToApexB(in); }
+    public static Procedure<IntVf>  edgeToApex(IntEf in)  { return new EdgeToApexI(in); }
+
+    private static class Grow extends Procedure<BlobV> {
+        public Grow(BlobV in) {
+            BoolE middle = redOr(transfer(broadcastVe(in)));
+
+            BlobV grow = tmp(new BlobV());
+            set(redOr(transfer(broadcastEv(middle))), grow);
+
+            returnValue(grow);
+        }
+    }
+    public static Procedure<BlobV> grow(BlobV in) { return new Grow(in); }
+    public Procedure<BlobV> grow() {return grow(this); }
+
+    private static class GrowDebug extends Procedure<BoolV> {
+        public GrowDebug(BoolV in) {
             BoolV start = new BoolV();
             set(in, start);
             show("BlobV", start);
 
-            BoolVe veIn = new BoolVe();
-            BoolEv evIn = new BoolEv();
-            BoolE middle = new BoolE();
-            BoolEv evOut = new BoolEv();
-            BoolVe veOut = new BoolVe();
-
-            broadcast(in, veIn);
+            BoolVe veIn = broadcastVe(in);
             show("veIn", veIn);
 
-            transfer(veIn, evIn);
+            BoolEv evIn = transfer(veIn);
             show("evIn", evIn);
 
-            redOr(evIn, middle);
+            BoolE middle = redOr(evIn);
             show("middle", middle);
 
-            broadcast(middle, evOut);
+            BoolEv evOut = broadcastEv(middle);
             show("evOut", evOut);
 
-            transfer(evOut, veOut);
+            BoolVe veOut = transfer(evOut);
             show("veOut", veOut);
 
-            redOr(veOut, out);
+            returnValue(redOr(veOut));
         }
     }
-    public static Procedure growDebug(BoolV in, BoolV out) { return new GrowDebug(in, out); }
+    public static Procedure<BoolV> growDebug(BoolV in) { return new GrowDebug(in); }
 
-    private static class FrontierE extends Procedure {
-        public FrontierE(BlobV in, BoolE frontier) {
-            BoolVe ve = tmp(new BoolVe());
-            BoolEv ev = tmp(new BoolEv());
-
-            broadcast(in, ve);
-            transfer(ve, ev);
-            redXor(ev, frontier);
+    private static class FrontierE extends Procedure<BoolE> {
+        public FrontierE(BlobV in) {
+            returnValue(redXor(transfer(broadcastVe(in))));
         }
     }
-    public static Procedure frontierE(BlobV in, BoolE frontier) { return new FrontierE(in, frontier); }
-    public Procedure frontierE(BoolE frontier) { return frontierE(this, frontier); }
+    public static Procedure<BoolE> frontierE(BlobV in) { return new FrontierE(in); }
+    public Procedure<BoolE> frontierE() { return frontierE(this); }
 
-    private static class FrontierV extends Procedure {
-        public FrontierV(BlobV in, BoolV frontier) {
-            BoolV notIn = tmp(new BoolV());
-            BlobV grow = tmp(new BlobV());
-
-            not(in, notIn);
-            call(in.grow(grow));
-            and(grow, notIn, frontier);
+    private static class FrontierV extends Procedure<BlobV> {
+        public FrontierV(BlobV in) {
+            BlobV res = tmp(new BlobV());
+            set(and(call(in.grow()), not(in)), res);
+            returnValue(res);
         }
     }
-    public static Procedure frontierV(BlobV in, BoolV frontier) { return new FrontierV(in, frontier); }
-    public Procedure frontierV(BoolV frontier) { return frontierV(this, frontier); }
+    public static Procedure<BlobV> frontierV(BlobV in) { return new FrontierV(in); }
+    public Procedure<BlobV> frontierV() { return frontierV(this); }
 
-    private static class OutVe extends Procedure {
-        public OutVe(BlobV in, BoolVe out) {
-            BoolE frontierE = tmp(new BoolE());
-            BoolEv ev = tmp(new BoolEv());
-            BoolVe frontierVe = tmp(new BoolVe());
-
-            call(in.frontierE(frontierE));
-            broadcast(frontierE, ev);
-            transfer(ev, frontierVe);
-
-            BoolVe ve = tmp(new BoolVe());
-            broadcast(in, ve);
-
-            and(ve, frontierVe, out);
+    private static class OutVe extends Procedure<BoolVe> {
+        public OutVe(BlobV in) {
+            BoolVe frontierVe = transfer(broadcastEv(call(in.frontierE())));
+            BoolVe ve = broadcastVe(in);
+            returnValue(and(ve, frontierVe));
         }
     }
-    public static Procedure outVe(BlobV in, BoolVe out) { return new OutVe(in, out); }
-    public Procedure outVe(BoolVe out) { return outVe(this, out); }
+    public static Procedure<BoolVe> outVe(BlobV in) { return new OutVe(in); }
+    public Procedure<BoolVe> outVe() { return outVe(this); }
 
-    private static class BorderVe extends Procedure {
-        public BorderVe(BlobV in, BoolVe out) {
-            BoolE frontierE = tmp(new BoolE());
-            BoolEv ev = tmp(new BoolEv());
-            BoolVe ve = tmp(new BoolVe());
-
-            call(in.frontierE(frontierE));
-            broadcast(frontierE, ev);
-            transfer(ev, ve);
-
-            BoolV borderV = tmp(new BoolV());
-            redOr(ve, borderV);
-            and(borderV, in, borderV);
-
-            BoolEf ef = tmp(new BoolEf());
-            broadcast(borderV, ve);
-            transfer(ve, ev);
-            rotCW(ev, ef);
-            rotCW(ef, ev);
-            transfer(ev, ve);
-
-            BoolVe inVe = tmp(new BoolVe());
-            broadcast(in, inVe);
-            and(inVe, ve, out);
+    private static class BorderVe extends Procedure<BoolVe> {
+        public BorderVe(BlobV in) {
+            BoolV borderV = and(in, redOr(transfer(broadcastEv(call(in.frontierE())))));
+            BoolVe borderVe = call(send(broadcastVe(borderV)));
+            BoolVe inVe = broadcastVe(in);
+            returnValue(and(inVe, borderVe));
         }
     }
-    public static Procedure borderVe(BlobV in, BoolVe out) { return new BorderVe(in, out); }
-    public Procedure borderVe(BoolVe out) { return borderVe(this, out); }
+    public static Procedure<BoolVe> borderVe(BlobV in) { return new BorderVe(in); }
+    public Procedure<BoolVe> borderVe() { return borderVe(this); }
 
-    private static class MeetE extends Procedure {
-        public MeetE(BlobV in, BoolE out) {
+    private static class MeetE extends Procedure<BoolE> {
+        public MeetE(BlobV in) {
             // Select edges that are between two frontier vertices
-            BoolV frontierV = tmp(new BoolV());
-            BoolVe ve = tmp(new BoolVe());
-            BoolEv ev = tmp(new BoolEv());
-
-            call(in.frontierV(frontierV));
-            broadcast(frontierV, ve);
-            transfer(ve, ev);
-            redAnd(ev, out);
+            BoolE candidates = redAnd(transfer(broadcastVe(call(in.frontierV()))));
 
             // Filter out edges between vertices belonging to the same frontier
-            BoolVf vf = tmp(new BoolVf());
-            BoolFv fv = tmp(new BoolFv());
-            BoolF f = tmp(new BoolF());
-            BoolFe fe = tmp(new BoolFe());
-            BoolEf ef = tmp(new BoolEf());
+            BoolF inFaces = redOr(transfer(broadcastVf(in)));
+            BoolE inEdges = redOr(transfer(broadcastFe(inFaces)));
 
-            BoolE frontierInteriorE = tmp(new BoolE());
-            BoolE frontierInteriorEInv = tmp(new BoolE());
-
-            broadcast(in, vf);
-            transfer(vf, fv);
-            redOr(fv, f);
-            broadcast(f, fe);
-            transfer(fe, ef);
-            redOr(ef, frontierInteriorE);
-            not(frontierInteriorE, frontierInteriorEInv);
-
-            and(out, frontierInteriorEInv, out);
+            set(and(candidates, not(inEdges)), candidates);
 
             // Filter out edges that have an apex outside the blob
-            BlobV notIn = tmp(new BlobV());
-            BoolE hasNonBlobApexE = tmp(new BoolE());
+            BoolE hasNonBlobApexE = redOr(call(apexToEdge(broadcastVf(not(in)))));
 
-            not(in, notIn);
-            broadcast(notIn, vf);
-            transfer(vf, fv);
-            rotCW(fv, fe);
-            rotCW(fe, fv);
-            rotCW(fv, fe);
-            transfer(fe, ef);
-            redOr(ef, hasNonBlobApexE);
-
-            and(out, hasNonBlobApexE, out);
+            returnValue(and(candidates, hasNonBlobApexE));
         }
     }
-    public static Procedure meetE(BlobV in, BoolE out) { return new MeetE(in, out); }
-    public Procedure meetE(BoolE out) { return meetE(this, out); }
+    public static Procedure<BoolE> meetE(BlobV in) { return new MeetE(in); }
+    public Procedure<BoolE> meetE() { return meetE(this); }
 
-    private static class ConnectedComponents extends Procedure {
-        public ConnectedComponents(BoolVe in, IntV out) {
-            BoolVf cw = tmp(new BoolVf());
-            BoolVf ccw = tmp(new BoolVf());
-            BoolVf vf = tmp(new BoolVf());
-
-            rotCW(in, cw);
-            rotCCW(in, ccw);
-            xor(cw, ccw, vf);
-
-            redAdd(vf, out);
-            rShift(out, out, 1);
+    private static class ConnectedComponents extends Procedure<IntV> {
+        public ConnectedComponents(BoolVe in, int nbits) {
+            returnValue(rShift(redAdd(xor(rotCW(in), rotCCW(in)), nbits), 1));
         }
     }
-    public static Procedure connectedComponents(BoolVe in, IntV out) { return new ConnectedComponents(in, out); }
+    public static Procedure<IntV> connectedComponents(BoolVe in, int nbits) { return new ConnectedComponents(in, nbits); }
 
-    private static class MeetV extends Procedure {
-        public MeetV(BlobV in, BoolV out) {
-            BoolE frontierE = tmp(new BoolE());
-            BoolVe ve = tmp(new BoolVe());
-            BoolEv ev = tmp(new BoolEv());
-
-            call(in.frontierE(frontierE));
-            broadcast(frontierE, ev);
-            transfer(ev, ve);
-
-            IntV connectedComponents = tmp(new IntV(4));
-            call(connectedComponents(ve, connectedComponents));
-            gt(connectedComponents, IntV.of(2, 4), out);
-
-            BoolV notIn = tmp(new BoolV());
-            not(in, notIn);
-            and(out, notIn, out);
+    private static class MeetV extends Procedure<BoolV> {
+        public MeetV(BlobV in) {
+            BoolVe frontierVe = transfer(broadcastEv(call(in.frontierE())));
+            BoolV candidates = gt(call(connectedComponents(frontierVe, 4)), IntV.of(2, 4));
+            returnValue(and(candidates, not(in)));
         }
     }
-    public static Procedure meetV(BlobV in, BoolV out) { return new MeetV(in, out); }
-    public Procedure meetV(BoolV out) { return meetV(this, out); }
+    public static Procedure<BoolV> meetV(BlobV in) { return new MeetV(in); }
+    public Procedure<BoolV> meetV() { return meetV(this); }
 
-    private static class Meet extends Procedure {
-        public Meet(BlobV in, BoolV out) {
-            BoolE meetE = tmp(new BoolE());
-            BoolV meetV = tmp(new BoolV());
+    private static class Meet extends Procedure<BoolV> {
+        public Meet(BlobV in) {
+            BoolV meetV = call(in.meetV());
+            BoolV meetE = redOr(transfer(broadcastEv(call(in.meetE()))));
 
-            call(in.meetE(meetE));
-            call(in.meetV(meetV));
-
-            BoolVe ve = tmp(new BoolVe());
-            BoolEv ev = tmp(new BoolEv());
-
-            broadcast(meetE, ev);
-            transfer(ev, ve);
-            redOr(ve, out);
-
-            or(out, meetV, out);
+            returnValue(or(meetV, meetE));
         }
     }
-    public static Procedure meet(BlobV in, BoolV out) { return new Meet(in, out); }
-    public Procedure meet(BoolV out) { return meet(this, out); }
+    public static Procedure<BoolV> meet(BlobV in) { return new Meet(in); }
+    public Procedure<BoolV> meet() { return meet(this); }
 
-    private static class Voronoi extends Procedure {
-        public Voronoi(BlobV in, BlobV out) {
-            BoolV meet = tmp(new BoolV());
-            call(in.meet(meet));
-            not(meet, meet);
+    private static class Voronoi extends Procedure<BlobV> {
+        public Voronoi(BlobV in) {
+            BlobV res = tmp(new BlobV());
 
-            call(in.grow(out));
-            and(out, meet, out);
-            or(in, out, out);
+            BoolV newV = and(call(in.grow()), not(call(in.meet())));
+            set(or(in, newV), res);
+
+            returnValue(res);
         }
     }
-    public static Procedure voronoi(BlobV in, BlobV out) { return new Voronoi(in, out); }
-    public Procedure voronoi(BlobV out) { return voronoi(this, out); }
-    public Procedure voronoi() { return voronoi(this, this); }
+    public static Procedure<BlobV> voronoi(BlobV in) { return new Voronoi(in); }
+    public Procedure<BlobV> voronoi() { return voronoi(this); }
 }

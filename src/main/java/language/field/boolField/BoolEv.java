@@ -1,13 +1,9 @@
 package language.field.boolField;
 
-import language.field.BoolFieldLine;
-import language.field.BoolFieldManager;
-import language.field.Border;
-import language.field.Coord2D;
+import language.field.*;
 import medium.locusT.Ev;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 /** Represents a boolean transfer field from edge to vertex orientation. */
 public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
@@ -249,4 +245,10 @@ public non-sealed class BoolEv extends BoolFieldT<BoolEv> {
 
     @Override
     public BoolEv cache() { return copy(false); }
+
+    @Override
+    public void copyFrom(Field<?> other) {
+        if (!(other instanceof BoolEv o)) throw new IllegalArgumentException("Cannot copy from a non-BoolV field.");
+        set(o);
+    }
 }

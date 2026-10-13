@@ -3,6 +3,7 @@ package language.field.boolField;
 import language.field.BoolFieldLine;
 import language.field.BoolFieldManager;
 import language.field.Border;
+import language.field.Field;
 import medium.locusS.Vertex;
 
 import java.util.HashMap;
@@ -197,4 +198,10 @@ public non-sealed class BoolV extends BoolFieldS<BoolV> {
 
     @Override
     public BoolV cache() { return copy(false); }
+
+    @Override
+    public void copyFrom(Field<?> other) {
+        if (!(other instanceof BoolV o)) throw new IllegalArgumentException("Cannot copy from a non-BoolV field.");
+        set(o);
+    }
 }

@@ -11,6 +11,7 @@ import blobProgram.agent.common.forces.Repulse;
 import blobProgram.agent.common.constraints.SlowDown;
 import blobProgram.agent.common.forces.Unblock;
 import blobProgram.agent.voronoi.Voronoi;
+import language.field.VoidF;
 import language.field.intField.IntV;
 import language.field.intField.IntVe;
 import language.instruction.Procedure;
@@ -23,7 +24,7 @@ import validation.NotHomogenized;
 public class Homogenize extends Agent {
     private final Voronoi voronoi;
 
-    private static final int nbits = 3;
+    private static final int nbits = 6;
     private final DistanceField distToVoronoi;
     private final IntVe gradient;
 
@@ -44,6 +45,7 @@ public class Homogenize extends Agent {
                 .addForce(new Unblock(particles, gradient).setPriority(1))
 
                 .addConstraint(new SlowDown(2, 2))
+                //.addConstraint(new SlowDown(particles, gradient))
                 .addConstraint(new Exclude(voronoi.state))
                 .addConstraint(new MaintainQuasiParticle(particles))
                 .addConstraint(new MaintainBlob(particles))
@@ -52,22 +54,23 @@ public class Homogenize extends Agent {
         return new Homogenize(particles, flip, voronoi, distToVoronoi, gradient);
     }
 
-    private class Precompute extends Procedure {
+    private class Precompute extends Procedure<VoidF> {
         public Precompute() {
             call(voronoi.flip());
             show("Voronoi", voronoi.state, Styles.VORONOI);
             call(distToVoronoi.update());
-            call(distToVoronoi.getGradient(gradient));
+            set(call(distToVoronoi.getGradient()), gradient);
 
-            IntV distance = new IntV(nbits);
-            call(distToVoronoi.getDist(distance));
+            IntV distance = call(distToVoronoi.getDist());
             show("Distance from Voronoi", distance);
             show("Gradient from Voronoi", gradient);
 
-//            NotHomogenized validator = new NotHomogenized(state, distance);
-//            run(validator::validate);
+            NotHomogenized validator = new NotHomogenized(state, distance);
+            run(validator::validate);
+
+            returnValue(new VoidF());
         }
     }
     @Override
-    protected Procedure precompute() { return new Precompute(); }
+    protected Procedure<VoidF> precompute() { return new Precompute(); }
 }

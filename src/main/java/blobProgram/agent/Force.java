@@ -1,6 +1,7 @@
 package blobProgram.agent;
 
 import blobProgram.Rand;
+import language.field.VoidF;
 import language.field.boolField.BoolV;
 import language.field.intField.IntV;
 import language.instruction.Procedure;
@@ -17,7 +18,7 @@ import language.instruction.Procedure;
  */
 public abstract class Force {
     public static final int priorityBits = 2;
-    public static final int prioRandBits = 2;
+    public static final int prioRandBits = 4;
 
     public final IntV priority;
     public final IntV prioRand;
@@ -40,16 +41,29 @@ public abstract class Force {
     }
 
     /** Updates the random priority, and computes the yes and no components of the force. */
-    private class Apply extends Procedure {
+    private class Apply extends Procedure<VoidF> {
         public Apply(BoolV yes, BoolV no) {
+            // Update the random priority of the force.
             call(rand.next(prioRand));
+
+            // Compute the yes and no components of the force.
             call(compute(yes, no));
+
+            // Randomly cancel the force with a probability of 1/2.
+            Rand rand = new Rand();
+            BoolV randV = tmp(new BoolV());
+            call(rand.next(randV));
+            set(and(yes, randV), yes);
+            call(rand.next(randV));
+            set(and(no, randV), no);
+
+            returnValue(new VoidF());
         }
     }
-    public Procedure apply(BoolV yes, BoolV no) {
+    public Procedure<VoidF> apply(BoolV yes, BoolV no) {
         return new Apply(yes, no);
     }
 
     /** Computes the yes and no components of the force. */
-    protected abstract Procedure compute(BoolV yes, BoolV no);
+    protected abstract Procedure<VoidF> compute(BoolV yes, BoolV no);
 }

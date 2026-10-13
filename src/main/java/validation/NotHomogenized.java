@@ -17,9 +17,11 @@ public class NotHomogenized extends GlobalValidator {
         super(true);
     }
 
-    private final int iterations = 100;
-    int[] mins = new int[iterations];
-    int[] maxs = new int[iterations];
+    private final int maxIter = 1;
+    private int iter = 0;
+    private int index = 0;
+    private final int[] mins = new int[maxIter];
+    private final int[] maxs = new int[maxIter];
 
     @Override
     protected boolean _validate() {
@@ -36,11 +38,18 @@ public class NotHomogenized extends GlobalValidator {
             if (d < min) min = d;
             if (d > max) max = d;
         }
-        int diff = Math.abs(max - min);
-        if (diff >= 6) diff -= 4;
 
-        boolean result = diff > 2;
+        iter++;
+        mins[index] = min;
+        maxs[index] = max;
+        index = (index + 1) % maxIter;
 
-        return result;
+        for (int i = 0; i < maxIter; i++) {
+            if (mins[i] < min) min = mins[i];
+            if (maxs[i] > max) max = maxs[i];
+        }
+        int diff = (max>>1) - (min>>1);
+        System.out.println(diff);
+        return diff > 1 || iter < maxIter || iter < 100;
     }
 }

@@ -1,9 +1,6 @@
 package language.field.boolField;
 
-import language.field.BoolFieldLine;
-import language.field.BoolFieldManager;
-import language.field.Border;
-import language.field.Coord2D;
+import language.field.*;
 import medium.locusT.Ef;
 
 import java.util.HashMap;
@@ -286,4 +283,10 @@ public non-sealed class BoolEf extends BoolFieldT<BoolEf> {
 
     @Override
     public BoolEf cache() { return copy(false); }
+
+    @Override
+    public void copyFrom(Field<?> other) {
+        if (!(other instanceof BoolEf o)) throw new IllegalArgumentException("Cannot copy from a non-BoolV field.");
+        set(o);
+    }
 }

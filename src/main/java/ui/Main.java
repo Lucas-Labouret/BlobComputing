@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import language.field.VoidF;
 import language.field.boolField.BoolV;
 import language.field.intField.IntV;
 import language.field.intField.IntVe;
@@ -33,7 +34,7 @@ public class Main extends Application {
         blobStaging(stage);
     
         Medium medium;
-        try { medium = Medium.read("large"); }
+        try { medium = Medium.read("4096"); }
         catch (Exception e) { throw new RuntimeException(e); }
         BoolFieldManager.setup(medium);
 
@@ -68,52 +69,47 @@ public class Main extends Application {
  * This also reduces the memory footprint of the application, as only the necessary procedures are created.
  */
 class MainInstructions {
-    public final Lazy<Instruction> grow;
-    public final Lazy<Instruction> staticVoronoi;
-    public final Lazy<Instruction> random;
-    public final Lazy<Instruction> distance;
-    public final Lazy<Instruction> gabriel;
-    public final Lazy<Instruction> flies;
-    public final Lazy<Instruction> homogenize;
+    public final Lazy<Instruction<VoidF>> grow;
+    public final Lazy<Instruction<VoidF>> staticVoronoi;
+    public final Lazy<Instruction<VoidF>> distance;
+    public final Lazy<Instruction<VoidF>> gabriel;
+    public final Lazy<Instruction<VoidF>> flies;
+    public final Lazy<Instruction<VoidF>> homogenize;
     
     public MainInstructions(Medium medium) {
-        grow = new Lazy<>(() -> new Procedure() {{
+        grow = new Lazy<>(() -> new Procedure<>() {{
             BlobV blob = BlobV.random(6);
             show("Blob", blob);
-            call(blob.grow());
+            set(call(blob.grow()), blob);
         }});
 
-        staticVoronoi = new Lazy<>(() -> new Procedure() {{
+        staticVoronoi = new Lazy<>(() -> new Procedure<>() {{
             BlobV blob = BlobV.random(6);
             show("Blob", blob);
-            call(blob.voronoi());
+            set(call(blob.voronoi()), blob);
         }});
 
-        random = new Lazy<>(() -> new Procedure() {{
-            Rand.init();
-            call(new Rand().showRand());
-        }});
-
-        distance = new Lazy<>(() -> new Procedure() {{
+        distance = new Lazy<>(() -> new Procedure<>() {{
             Rand.init();
             QuasiParticle seed = new QuasiParticle(new BoolV().zeroes());
             seed.setBit(18, 5, true);
             seed.setBit(18, 14, true);
+
             Flies flies = new Flies(seed);
             show("Flies", seed);
             call(flies.flip());
 
-            IntV dist = new IntV(3);
-            IntVe gradient = new IntVe(3);
             DistanceField distField = new DistanceField(seed, 3);
-            call(distField.getDist(dist));
-            call(distField.getGradient(gradient));
+            IntV dist = call(distField.getDist());
+            IntVe gradient = call(distField.getGradient());
+
             show("DistField", dist);
             show("Gradient", gradient);
+
             call(distField.update());
         }});
 
-        gabriel = new Lazy<>(() -> new Procedure() {{
+        gabriel = new Lazy<>(() -> new Procedure<>() {{
             Rand.init();
             QuasiParticle seed = new QuasiParticle(new BoolV().zeroes());
             for (int i = 0; i < 5; i++){
@@ -125,24 +121,23 @@ class MainInstructions {
 //            seed.setBit(21, 21, true);
 //            seed.setBit(18, 5, true);
 //            seed.setBit(18, 14, true);
+
             Flies flies = new Flies(seed);
             call(flies.flip());
             show("Sources", flies.state);
 
             GabrielCenter gabrielCenter = new GabrielCenter(flies.state);
-            IntV dist = new IntV(3);
-            IntVe gradient = new IntVe(3);
-            BoolV center = new BoolV();
             call(gabrielCenter.update());
-            call(gabrielCenter.distField.getDist(dist));
-            call(gabrielCenter.distField.getGradient(gradient));
-            call(gabrielCenter.saddle(center));
+            IntV dist = call(gabrielCenter.distField.getDist());
+            IntVe gradient = call(gabrielCenter.distField.getGradient());
+            BoolV center = call(gabrielCenter.saddle());
+
             show("DistField", dist);
             show("Gradient", gradient);
             show("Saddle", center);
         }});
 
-        flies = new Lazy<>(() -> new Procedure() {{
+        flies = new Lazy<>(() -> new Procedure<>() {{
             Rand.init();
             QuasiParticle seed = new QuasiParticle(new BoolV().zeroes());
             for (int i = 0; i < 10; i++){
@@ -150,12 +145,13 @@ class MainInstructions {
                 Vertex v = (Vertex) medium.vertices.toArray()[rand];
                 seed.setBit(v, true);
             }
+
             Flies flies = new Flies(seed);
             show("Sources", flies.state, Styles.PARTICLE);
             call(flies.flip());
         }});
 
-        homogenize = new Lazy<>(() -> new Procedure() {{
+        homogenize = new Lazy<>(() -> new Procedure<>() {{
             Rand.init();
             QuasiParticle particle = new QuasiParticle(new BoolV().zeroes());
 //            for (int i = 0; i < 20; i++){
@@ -163,16 +159,16 @@ class MainInstructions {
 //                Vertex v = (Vertex) medium.vertices.toArray()[rand];
 //                particle.setBit(v, true);
 //            }
-            for (int y = 0; y < 6; y++) for (int x = 0; x < 6; x++) {
+            for (int y = 0; y < 1; y++) for (int x = 0; x < 2; x++) {
                 particle.setBit(3*y+1, 3*x+1, true);
             }
 //            particle.setBit(3, 2, true);
 //            particle.setBit(3, 5, true);
 //            particle.setBit(5, 2, true);
-            Homogenize homogenize = Homogenize.make(particle);
 
-            show("Particles", particle, Styles.PARTICLE);
+            Homogenize homogenize = Homogenize.make(particle);
             call(homogenize.flip());
+            show("Particles", particle, Styles.PARTICLE);
         }});
     }
 }

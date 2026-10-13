@@ -1,5 +1,6 @@
 package blobProgram;
 
+import language.field.VoidF;
 import language.field.boolField.*;
 import language.field.intField.IntE;
 import language.field.intField.IntEv;
@@ -12,8 +13,6 @@ public class GabrielCenter {
     public final DistanceField distField;
 
     private final BoolV center = new BoolV();
-    private class GetCenter extends Procedure { public GetCenter(BoolV out) { set(center, out); } }
-    public Procedure getCenter(BoolV out) { return new GetCenter(out); }
 
     public GabrielCenter(BoolV seeds) {
         this.nbits = 3;
@@ -25,157 +24,86 @@ public class GabrielCenter {
         this.distField = distField;
     }
 
-    private class Update extends Procedure { public Update() { call(distField.update()); } }
-    public Procedure update() { return new Update(); }
+    private class GetCenter extends Procedure<VoidF> { public GetCenter(BoolV out) { set(center, out); } }
+    public Procedure<VoidF> getCenter(BoolV out) { return new GetCenter(out); }
+
+    private class Update extends Procedure<VoidF> { public Update() { call(distField.update()); } }
+    public Procedure<VoidF> update() { return new Update(); }
 
     ///////////////////////////////////////
     /// Detection through saddle points ///
     ///////////////////////////////////////
 
-    private class SaddleV extends Procedure {
-        public SaddleV(BoolV saddleV) {
-            IntVe gradient = new IntVe(nbits);
-            call(distField.getGradient(gradient));
+    private class SaddleV extends Procedure<BoolV> {
+        public SaddleV() {
+            IntVe gradient = call(distField.getGradient());
 
             BoolVe negGrad = gradient.getBits()[0];
-            IntV components = new IntV(nbits);
-            call(BlobV.connectedComponents(negGrad, components));
+            IntV components = call(BlobV.connectedComponents(negGrad, 4));
 
-            gt(components, IntV.of(2, nbits), saddleV);
+            returnValue(gt(components, IntV.of(2, 4)));
         }
     }
-    public Procedure saddleV(BoolV saddleV) { return new SaddleV(saddleV); }
+    public Procedure<BoolV> saddleV() { return new SaddleV(); }
 
-    private class SaddleE extends Procedure {
-        public SaddleE(BoolE saddleE) {
-            IntVe gradient = new IntVe(nbits);
-            call(distField.getGradient(gradient));
-
-            BoolEv evB = tmp(new BoolEv());
-            BoolVe veB = tmp(new BoolVe());
-            BoolVf vfB = tmp(new BoolVf());
-            BoolEf efB = tmp(new BoolEf());
-            IntVe veI4 = tmp(new IntVe(4));
+    private class SaddleE extends Procedure<BoolE> {
+        public SaddleE() {
+            IntVe gradient = call(distField.getGradient());
 
             BoolVe negGrad = gradient.getBits()[0];
+            BoolVe nulGrad = eq(gradient, IntVe.of(0, nbits));
+            BoolVe posGrad = and(not(negGrad), not(nulGrad));
 
-            BoolVe nulGrad = tmp(new BoolVe());
-            eq(gradient, IntVe.of(0, nbits), nulGrad);
+            BoolE flatEdges = redAnd(transfer(nulGrad));
 
-            BoolVe posGrad = tmp(new BoolVe());
-            BoolVe notNeg = tmp(new BoolVe());
-            BoolVe notNul = tmp(new BoolVe());
-            not(negGrad, notNeg);
-            not(nulGrad, notNul);
-            and(notNeg, notNul, posGrad);
+            IntV negComponents = call(BlobV.connectedComponents(negGrad, 4));
+            IntV nulComponents = call(BlobV.connectedComponents(nulGrad, 4));
+            IntV posComponents = call(BlobV.connectedComponents(posGrad, 4));
 
-            BoolE flatEdges = tmp(new BoolE());
-            transfer(nulGrad, evB);
-            redAnd(evB, flatEdges);
+            IntEv partialComponents = transfer(broadcastVe(negComponents));
+            IntE componentSum = redAdd(partialComponents);
 
-            IntV negComponents = tmp(new IntV(4));
-            IntV nulComponents = tmp(new IntV(4));
-            IntV posComponents = tmp(new IntV(4));
-            call(BlobV.connectedComponents(negGrad, negComponents));
-            call(BlobV.connectedComponents(nulGrad, nulComponents));
-            call(BlobV.connectedComponents(posGrad, posComponents));
+            IntE apexCount = redAdd(transfer(rotCW(rotCW(negGrad))), 2);
 
-            IntEv partialComponents = tmp(new IntEv(4));
-            IntE componentSum = tmp(new IntE(4));
-            broadcast(negComponents, veI4);
-            transfer(veI4, partialComponents);
-            redAdd(partialComponents, componentSum);
+            BoolE oneApex = eq(apexCount, IntE.of(1, 2));
+            BoolE twoApex = eq(apexCount, IntE.of(2, 2));
 
-            IntE apexCount = tmp(new IntE(2));
-            rotCW(negGrad, vfB);
-            rotCW(vfB, veB);
-            transfer(veB, evB);
-            redAdd(evB, apexCount);
+            BoolEv onePartialComponent = and(eq(partialComponents, IntEv.of(1, 4)), broadcastEv(twoApex));
+            BoolE fullLoop = redAnd(onePartialComponent);
 
-            BoolE oneApex = tmp(new BoolE());
-            BoolE twoApex = tmp(new BoolE());
-            eq(apexCount, IntE.of(1, 2), oneApex);
-            eq(apexCount, IntE.of(2, 2), twoApex);
+            IntE componentsM1 = sub(componentSum, IntE.of(1, 4));
+            IntE componentsM2 = sub(componentSum, IntE.of(2, 4));
 
-            BoolE fullLoop = tmp(new BoolE());
-            BoolEv onePartialComponent = tmp(new BoolEv());
-            eq(partialComponents, IntEv.of(1, 4), onePartialComponent);
-            broadcast(twoApex, evB);
-            and(onePartialComponent, evB, onePartialComponent);
-            redAnd(onePartialComponent, fullLoop);
+            BoolV oneNeg = eq(negComponents, IntV.of(1, 4));
+            BoolV oneNul = eq(nulComponents, IntV.of(1, 4));
+            BoolV noPos = eq(posComponents, IntV.of(0, 4));
+            BoolV deadEnd = and(noPos, and(oneNeg, oneNul));
 
-            IntE componentsM1 = tmp(new IntE(4));
-            IntE componentsM2 = tmp(new IntE(4));
-            sub(componentSum, IntE.of(1, 4), componentsM1);
-            sub(componentSum, IntE.of(2, 4), componentsM2);
+            BoolEf apexDeadEnd = rotCW(transfer(rotCW(rotCW(call(BlobV.send(broadcastVe(deadEnd)))))));
+            set(and(apexDeadEnd, rotCCW(transfer(rotCCW(rotCCW(rotCCW(rotCCW(negGrad))))))), apexDeadEnd);
+            set(and(apexDeadEnd, rotCW (transfer(rotCW (rotCW (rotCW (rotCW (negGrad))))))), apexDeadEnd);
+            IntE apexDeadEndCount = redAdd(apexDeadEnd, 4);
 
-            BoolV deadEnd = tmp(new BoolV());
-            BoolV oneNeg = tmp(new BoolV());
-            BoolV oneNul = tmp(new BoolV());
-            BoolV noPos = tmp(new BoolV());
-            eq(negComponents, IntV.of(1, 4), oneNeg);
-            eq(nulComponents, IntV.of(1, 4), oneNul);
-            eq(posComponents, IntV.of(0, 4), noPos);
-            and(oneNeg, oneNul, deadEnd);
-            and(deadEnd, noPos, deadEnd);
+            IntE componentsE = fif(oneApex, componentsM1, componentSum);
+            set(fif(twoApex, componentsM2, componentsE), componentsE);
+            set(fif(fullLoop, componentsM1, componentsE), componentsE);
 
-            BoolEf apexDeadEnd = tmp(new BoolEf());
-            broadcast(deadEnd, veB);
-            call(BlobV.send(veB, veB));
-            rotCW(veB, vfB);
-            rotCW(vfB, veB);
-            transfer(veB, evB);
-            rotCW(evB, apexDeadEnd);
+            set(sub(componentsE, apexDeadEndCount), componentsE);
 
-            rotCCW(negGrad, vfB);
-            rotCCW(vfB, veB);
-            rotCCW(veB, vfB);
-            rotCCW(vfB, veB);
-            transfer(veB, evB);
-            rotCCW(evB, efB);
-            and(apexDeadEnd, efB, apexDeadEnd);
-
-            rotCW(negGrad, vfB);
-            rotCW(vfB, veB);
-            rotCW(veB, vfB);
-            rotCW(vfB, veB);
-            transfer(veB, evB);
-            rotCW(evB, efB);
-            and(apexDeadEnd, efB, apexDeadEnd);
-
-            IntE apexDeadEndCount = tmp(new IntE(4));
-            redAdd(apexDeadEnd, apexDeadEndCount);
-
-            IntE componentsE = tmp(new IntE(4));
-            fif(oneApex, componentsM1, componentSum, componentsE);
-            fif(twoApex, componentsM2, componentsE, componentsE);
-            fif(fullLoop, componentsM1, componentsE, componentsE);
-
-            sub(componentsE, apexDeadEndCount, componentsE);
-
-            gt(componentsE, IntE.of(2, 4), saddleE);
-            and(saddleE, flatEdges, saddleE);
+            returnValue(and(gt(componentsE, IntE.of(2, 4)), flatEdges));
         }
     }
-    public Procedure saddleE(BoolE saddleE) { return new SaddleE(saddleE); }
+    public Procedure<BoolE> saddleE() { return new SaddleE(); }
 
-    private class Saddle extends Procedure {
-        public Saddle(BoolV saddle) {
-            BoolE saddleE = tmp(new BoolE());
-            call(saddleV(saddle));
-            call(saddleE(saddleE));
+    private class Saddle extends Procedure<BoolV> {
+        public Saddle() {
+            BoolV saddleV = call(saddleV());
+            BoolE saddleE = call(saddleE());
 
-            BoolEv ev = tmp(new BoolEv());
-            BoolVe ve = tmp(new BoolVe());
-            BoolV saddleV = tmp(new BoolV());
-            broadcast(saddleE, ev);
-            transfer(ev, ve);
-            redOr(ve, saddleV);
-
-            or(saddle, saddleV, saddle);
+            returnValue(or(saddleV, redOr(transfer(broadcastEv(saddleE)))));
         }
     }
-    public Procedure saddle(BoolV saddle) { return new Saddle(saddle); }
+    public Procedure<BoolV> saddle() { return new Saddle(); }
 
 
 
@@ -183,87 +111,50 @@ public class GabrielCenter {
     /// Detection through flooding ///
     //////////////////////////////////
 
-    private class FloodOnce extends Procedure {
-        public FloodOnce(BoolV in, BoolV out) {
-            IntVe grad = tmp(new IntVe(nbits));
-            call(distField.getGradient(grad));
-
-            BoolVe gradOk = tmp(new BoolVe());
-            gt(grad, IntVe.of(0, nbits), gradOk);
-
-            BoolVe ve = tmp(new BoolVe());
-            broadcast(in, ve);
-            and(ve, gradOk, ve);
-            call(BlobV.send(ve, ve));
-            redOr(ve, out);
+    private class FloodOnce extends Procedure<BoolV> {
+        public FloodOnce(BoolV in) {
+            IntVe grad = call(distField.getGradient());
+            BoolVe gradOk = gt(grad, IntVe.of(0, nbits));
+            returnValue(redOr(call(BlobV.send(and(broadcastVe(in), gradOk)))));
         }
     }
-    private Procedure floodOnce(BoolV in, BoolV out) { return new FloodOnce(in, out); }
+    private Procedure<BoolV> floodOnce(BoolV in) { return new FloodOnce(in); }
 
-    private static class ForAll extends Procedure {
-        public ForAll(BoolV in, BoolVe ve, BoolV out) {
-            broadcast(in, ve);
-            call(BlobV.send(ve, ve));
-            redAnd(ve, out);
+    private static class ForAll extends Procedure<BoolV> {
+        public ForAll(BoolV in) {
+            returnValue(redAnd(call(BlobV.send(broadcastVe(in)))));
         }
     }
-    private Procedure forAll(BoolV in, BoolVe ve, BoolV out) { return new ForAll(in, ve, out); }
+    private Procedure<BoolV> forAll(BoolV in) { return new ForAll(in); }
 
-    private class Flood extends Procedure {
+    private class Flood extends Procedure<VoidF> {
         public Flood() {
             int mod = Math.powExact(2, nbits)-1;
             set(new BoolV().zeroes(), center);
 
-            IntV dist = new IntV(nbits);
-            call(distField.getDist(dist));
+            IntV dist = call(distField.getDist());
 
             BoolV flood = tmp(new BoolV());
-            BoolVe ve = tmp(new BoolVe());
-
             BoolE centerE = tmp(new BoolE());
-            BoolEv ev = tmp(new BoolEv());
-            BoolV v = tmp(new BoolV());
             
             for (int i=0; i<mod; i++) {
-                eq(dist, IntV.of(i, nbits), flood);
+                set(eq(dist, IntV.of(i, nbits)), flood);
 
-                if (i == 0) {
-                    BoolV flood0 = new BoolV();
-                    set(flood, flood0);
-                    show("Flood Start 0", flood0);
-                }
+                for (int j=0; j<mod-2; j++) set(call(floodOnce(flood)), flood);
+                for (int j=0; j<mod-3; j++) set(call(forAll(flood)), flood);
 
-                for (int j=0; j<mod-2; j++) call(floodOnce(flood, flood));
+                set(or(flood, center), center);
 
-                if (i == 0) {
-                    BoolV flood0 = new BoolV();
-                    set(flood, flood0);
-                    show("Flood 0", flood0);
-                }
+                set(call(forAll(flood)), flood);
+                set(redAnd(transfer(broadcastVe(flood))), centerE);
 
-                for (int j=0; j<mod-3; j++) call(forAll(flood, ve, flood));
-
-                if (i == 0) {
-                    BoolV flood0 = new BoolV();
-                    set(flood, flood0);
-                    show("Centers 0", flood0);
-                }
-
-                or(flood, center, center);
-
-                call(forAll(flood, ve, flood));
-                broadcast(flood, ve);
-                transfer(ve, ev);
-                redAnd(ev, centerE);
-
-                broadcast(centerE, ev);
-                transfer(ev, ve);
-                redOr(ve, v);
-                or(v, center, center);
+                set(or(redOr(transfer(broadcastEv(centerE))), center), center);
             }
+
+            returnValue(new VoidF());
         }
     }
-    public Procedure flood() { return new Flood(); }
+    public Procedure<VoidF> flood() { return new Flood(); }
 
 
 }

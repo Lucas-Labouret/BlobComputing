@@ -3,10 +3,10 @@ package language.field.boolField;
 import language.field.BoolFieldLine;
 import language.field.BoolFieldManager;
 import language.field.Border;
+import language.field.Field;
 import medium.locusS.Edge;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 /** Represents a boolean field over the edges. */
 public non-sealed class BoolE extends BoolFieldS<BoolE> {
@@ -185,4 +185,10 @@ public non-sealed class BoolE extends BoolFieldS<BoolE> {
 
     @Override
     public BoolE cache() { return copy(false); }
+
+    @Override
+    public void copyFrom(Field<?> other) {
+        if (!(other instanceof BoolE o)) throw new IllegalArgumentException("Cannot copy from a non-BoolV field.");
+        set(o);
+    }
 }

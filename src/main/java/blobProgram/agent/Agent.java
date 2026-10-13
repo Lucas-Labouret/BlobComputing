@@ -1,6 +1,7 @@
 package blobProgram.agent;
 
 import blobProgram.BlobV;
+import language.field.VoidF;
 import language.field.boolField.BoolV;
 import language.instruction.Procedure;
 
@@ -21,20 +22,18 @@ public abstract class Agent {
      * Does any computation needed before the forces and constraints are applied.
      * For example, compute a gradient once if it is needed by multiple forces.
      */
-    protected Procedure precompute() {
-        return new Procedure(){};
-    }
+    protected abstract Procedure<VoidF> precompute();
 
     /** Computes and applies the flip to the state of the agent. */
-    private class ApplyFlip extends Procedure {
+    private class ApplyFlip extends Procedure<VoidF> {
         public ApplyFlip() {
             call(precompute());
 
-            BoolV where = tmp(new BoolV());
-            call(flip.where(where));
+            BoolV where = call(flip.where());
+            set(xor(state, where), state);
 
-            xor(state, where, state);
+            returnValue(new VoidF());
         }
     }
-    public Procedure flip() { return new ApplyFlip(); }
+    public Procedure<VoidF> flip() { return new ApplyFlip(); }
 }

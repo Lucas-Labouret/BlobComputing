@@ -2,14 +2,13 @@ package blobProgram.agent.common.forces;
 
 import blobProgram.BlobV;
 import blobProgram.agent.Force;
+import language.field.VoidF;
 import language.field.boolField.BoolV;
 import language.field.boolField.BoolVe;
 import language.field.intField.IntVe;
 import language.instruction.Procedure;
 
-/**
- * Causes a movement of the blob in the neutral direction given by the gradient where dead ends are found.
- */
+/** Causes a movement of the blob in the neutral direction given by the gradient where dead ends are found. */
 public class Unblock extends Force {
     private final BlobV state;
     private final IntVe gradient;
@@ -19,50 +18,33 @@ public class Unblock extends Force {
         this.gradient = gradient;
     }
 
-    private class Compute extends Procedure {
+    private class Compute extends Procedure<VoidF> {
         public Compute(BoolV yes, BoolV no) {
-            BlobV notState = tmp(new BlobV());
-            not(state, notState);
+            BoolVe posGrad = gt(gradient, IntVe.of(1, gradient.n));
+            BoolVe nullGrad = eq(gradient, IntVe.of(0, gradient.n));
 
-            BoolVe posGrad = tmp(new BoolVe());
-            gt(gradient, IntVe.of(1, gradient.n), posGrad);
-
-            BoolVe nullGrad = tmp(new BoolVe());
-            eq(gradient, IntVe.of(0, gradient.n), nullGrad);
-
-            BoolVe ve = tmp(new BoolVe());
-
-            BoolV deadEnd = tmp(new BoolV());
-            redOr(posGrad, deadEnd);
-            not(deadEnd, deadEnd);
-            and(deadEnd, state, deadEnd);
+            BoolV deadEnd = and(not(redOr(posGrad)), state);
 
             show("deadEnd", deadEnd);
 
             // Allow dead ends to expand through null gradient
-            BoolV toAdd = tmp(new BoolV());
-            broadcast(deadEnd, ve);
-            and(nullGrad, ve, ve);
-            call(BlobV.send(ve, ve));
-            redOr(ve, toAdd);
-            and(toAdd, notState, toAdd);
+            BoolV expand = redOr(call(BlobV.send(and(nullGrad, broadcastVe(deadEnd)))));
+            BoolV toAdd = and(expand, not(state));
 
             // Allow dead ends to contract through null gradient
-            BoolV toRemove = tmp(new BoolV());
-            broadcast(state, ve);
-            and(nullGrad, ve, ve);
-            call(BlobV.send(ve, ve));
-            redOr(ve, toRemove);
-            and(toRemove, deadEnd, toRemove);
+            BoolV contract = redOr(call(BlobV.send(and(nullGrad, broadcastVe(state)))));
+            BoolV toRemove = and(contract, deadEnd);
 
             // Build the yes and no
-            or(toAdd, toRemove, yes);
+            set(or(toAdd, toRemove), yes);
             set(new BoolV().zeroes(), no);
+
+            returnValue(new VoidF());
         }
     }
 
     @Override
-    protected Procedure compute(BoolV yes, BoolV no) {
+    protected Procedure<VoidF> compute(BoolV yes, BoolV no) {
         return new Compute(yes, no);
     }
 }

@@ -1,14 +1,10 @@
 package language.field.boolField;
 
-import language.field.BoolFieldLine;
-import language.field.BoolFieldManager;
-import language.field.Border;
-import language.field.Coord2D;
+import language.field.*;
 import medium.locusT.Ve;
 import medium.locusT.Vf;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 /** Represents a boolean transfer field from vertex to face orientation. */
 public non-sealed class BoolVf extends BoolFieldT<BoolVf> {
@@ -271,4 +267,10 @@ public non-sealed class BoolVf extends BoolFieldT<BoolVf> {
 
     @Override
     public  BoolVf cache() { return copy(false); }
+
+    @Override
+    public void copyFrom(Field<?> other) {
+        if (!(other instanceof BoolVf o)) throw new IllegalArgumentException("Cannot copy from a non-BoolV field.");
+        set(o);
+    }
 }

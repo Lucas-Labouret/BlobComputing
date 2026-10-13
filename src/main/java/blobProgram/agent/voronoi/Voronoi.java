@@ -12,6 +12,7 @@ import blobProgram.agent.common.forces.IncludeGCenters;
 import blobProgram.agent.common.forces.Repulse;
 import blobProgram.agent.common.constraints.SlowDown;
 import blobProgram.agent.common.forces.Vote;
+import language.field.VoidF;
 import language.field.boolField.BoolV;
 import language.field.intField.IntV;
 import language.field.intField.IntVe;
@@ -41,6 +42,7 @@ public class Voronoi extends Agent {
                 .addForce(new Vote(state).setPriority(0))
 
                 .addConstraint(new SlowDown(3, 2))
+                //.addConstraint(new SlowDown(state, gradient))
                 .addConstraint(new Exclude(sources))
                 .addConstraint(new MaintainBlob(state))
             ;
@@ -48,16 +50,18 @@ public class Voronoi extends Agent {
         return new Voronoi(state, flip, distToSeeds, gradient);
     }
 
-    private class Precompute extends Procedure {
+    private class Precompute extends Procedure<VoidF> {
         public Precompute() {
             call(distToSeeds.update());
-            call(distToSeeds.getGradient(gradient));
-            IntV distance = new IntV(nbits);
-            call(distToSeeds.getDist(distance));
+            set(call(distToSeeds.getGradient()), gradient);
+
+            IntV distance = call(distToSeeds.getDist());
             show("Distance from Seeds", distance);
             show("Gradient from Seeds", gradient);
+
+            returnValue(new VoidF());
         }
     }
     @Override
-    protected Procedure precompute() { return new Precompute(); }
+    protected Procedure<VoidF> precompute() { return new Precompute(); }
 }

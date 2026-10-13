@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import language.field.VoidF;
 import language.instruction.Instruction;
 import medium.Medium;
 import ui.display.MediumDrawer;
@@ -38,12 +39,9 @@ public class MasterScene extends BorderPane {
     private final TBIntInput speedInput = new TBIntInput("Speed");
     private final InstructionPlayer player;
 
-    private final Medium medium;
     private final DisplayController displayController;
 
-    public MasterScene(Medium medium, Instruction main) {
-        this.medium = medium;
-
+    public MasterScene(Medium medium, Instruction<VoidF> main) {
         toolBar = new ToolBar();
         displays = new OrderableDisplayPanel();
         sidePanel = new ScrollPane(displays);

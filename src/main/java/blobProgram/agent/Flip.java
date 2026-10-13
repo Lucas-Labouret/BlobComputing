@@ -1,5 +1,6 @@
 package blobProgram.agent;
 
+import language.field.VoidF;
 import language.field.boolField.BoolV;
 import language.field.intField.IntV;
 import language.instruction.Procedure;
@@ -36,7 +37,7 @@ public class Flip {
      * <p>
      * The resulting flip is stored in the where parameter.
      */
-    private static class ApplyForce extends Procedure {
+    private static class ApplyForce extends Procedure<VoidF> {
         public ApplyForce(Force force,
                           IntV currentPrio, IntV currentPrioRand,
                           BoolV where) {
@@ -44,45 +45,36 @@ public class Flip {
             BoolV whereNo = tmp(new BoolV());
             call(force.apply(whereYes, whereNo));
 
-            BoolV priorityEq = tmp(new BoolV());
-            eq(force.priority, currentPrio, priorityEq);
+            BoolV priorityEq = eq(force.priority, currentPrio);
 
-            BoolV priorityNotEq = tmp(new BoolV());
-            not(priorityEq, priorityNotEq);
+            BoolV priorityGt = and(gt(force.priority, currentPrio), not(priorityEq));
+            BoolV prioRandGte = gt(force.prioRand, currentPrioRand);
 
-            BoolV priorityGt = tmp(new BoolV());
-            BoolV prioRandGte = tmp(new BoolV());
-            gt(force.priority, currentPrio, priorityGt);
-            and(priorityGt, priorityNotEq, priorityGt);
-            gt(force.prioRand, currentPrioRand, prioRandGte);
+            BoolV apply = or(priorityGt, and(priorityEq, prioRandGte));
 
-            BoolV apply = tmp(new BoolV());
-            and(priorityEq, prioRandGte, apply);
-            or(priorityGt, apply, apply);
+            BoolV applyYes = and(apply, whereYes);
+            BoolV applyNo = and(apply, whereNo);
 
-            BoolV applyYes = tmp(new BoolV());
-            and(apply, whereYes, applyYes);
-            BoolV applyNo = tmp(new BoolV());
-            and(apply, whereNo, applyNo);
+            set(fif(applyYes, one, where), where);
+            set(fif(applyNo, zero, where), where);
 
-            fif(applyYes, one, where, where);
-            fif(applyNo, zero, where, where);
+            BoolV affected = or(applyYes, applyNo);
+            set(fif(affected, force.priority, currentPrio), currentPrio);
+            set(fif(affected, force.prioRand, currentPrioRand), currentPrioRand);
 
-            BoolV affected = tmp(new BoolV());
-            or(applyYes, applyNo, affected);
-            fif(affected, force.priority, currentPrio, currentPrio);
-            fif(affected, force.prioRand, currentPrioRand, currentPrioRand);
+            returnValue(new VoidF());
         }
     }
-    private static Procedure applyForce(Force force,
-                                        IntV currentPriority, IntV currentPrioRand,
-                                        BoolV where) {
+    private static Procedure<VoidF> applyForce(Force force,
+                                               IntV currentPriority, IntV currentPrioRand,
+                                               BoolV where) {
         return new ApplyForce(force, currentPriority, currentPrioRand, where);
     }
 
     /** Applies all forces to the flip and verifies all constraints. */
-    private class Where extends Procedure {
-        public Where(BoolV flip) {
+    private class Where extends Procedure<BoolV> {
+        public Where() {
+            BoolV flip = tmp(new BoolV());
             set(zero, flip);
             
             IntV currentPriority = new IntV(Force.priorityBits);
@@ -96,7 +88,9 @@ public class Flip {
             show("prioRand", currentPrioRand);
 
             for (Constraint c : constraints) { call(c.verify(flip, currentPriority, currentPrioRand)); }
+
+            returnValue(flip);
         }
     }
-    public Procedure where(BoolV where) { return new Where(where); }
+    public Procedure<BoolV> where() { return new Where(); }
 }

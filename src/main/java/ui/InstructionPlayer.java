@@ -1,6 +1,7 @@
 package ui;
 
 import language.cache.Cache;
+import language.field.VoidF;
 import language.instruction.BasicInstruction;
 import language.instruction.Instruction;
 import language.instruction.Procedure;
@@ -18,7 +19,7 @@ import validation.GlobalValidator;
  * allowing for state saving and restoration.
  */
 public class InstructionPlayer {
-    private final Instruction instruction;
+    private final Instruction<VoidF> instruction;
     private final int leafCount;
     private final Cache autoCache = new Cache();
     private final Cache userCache = new Cache();
@@ -33,7 +34,7 @@ public class InstructionPlayer {
 
     private static final boolean printLeafCount = true;
     private static final boolean printInstructionTree = true;
-    public InstructionPlayer(Instruction instruction, DisplayController displayController) {
+    public InstructionPlayer(Instruction<VoidF> instruction, DisplayController displayController) {
         this.instruction = instruction;
         leafCount = instruction.leafCount();
         this.displayController = displayController;
@@ -42,8 +43,8 @@ public class InstructionPlayer {
 
         if (printLeafCount) System.out.println(leafCount + " leaves");
         if (printInstructionTree) System.out.println(switch (instruction) {
-            case Procedure p -> p.instructionTree();
-            case BasicInstruction i -> i.getClass().getSimpleName();
+            case Procedure<?> p -> p.instructionTree();
+            case BasicInstruction<?> i -> i.getClass().getSimpleName();
         });
     }
 
@@ -70,9 +71,9 @@ public class InstructionPlayer {
      * and automatically saves the state with logarithmic frequency.
      */
     private boolean exec() {
-        BasicInstruction current = switch (instruction) {
-            case Procedure p -> p.currentBasicInstruction();
-            case BasicInstruction bi -> bi;
+        BasicInstruction<?> current = switch (instruction) {
+            case Procedure<?> p -> p.currentBasicInstruction();
+            case BasicInstruction<?> bi -> bi;
         };
 
         boolean done = instruction.exec();
@@ -107,11 +108,11 @@ public class InstructionPlayer {
     }
 
     /** Request the display controller to update the display based on the current instruction. */
-    private void updateDisplay(BasicInstruction instruction) {
+    private void updateDisplay(BasicInstruction<?> instruction) {
         switch (instruction) {
             case Show<?> show -> displayController.bind(show);
             case Snapshot _ -> displayController.snapshot();
-            default -> {}
+            case null, default -> {}
         }
     }
 

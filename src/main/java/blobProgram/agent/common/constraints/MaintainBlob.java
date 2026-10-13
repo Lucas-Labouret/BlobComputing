@@ -2,10 +2,9 @@ package blobProgram.agent.common.constraints;
 
 import blobProgram.BlobV;
 import blobProgram.agent.Constraint;
+import language.field.VoidF;
 import language.field.boolField.BoolE;
-import language.field.boolField.BoolEv;
 import language.field.boolField.BoolV;
-import language.field.boolField.BoolVe;
 import language.field.intField.IntV;
 import language.instruction.Procedure;
 import ui.display.Styles;
@@ -23,128 +22,79 @@ public class MaintainBlob extends Constraint {
         this.state = state;
     }
 
-    private class Verify extends Procedure {
+    private class Verify extends Procedure<VoidF> {
         public Verify(BoolV flip, IntV priority, IntV prioRand) {
             show("Blob / flip before", flip, Styles.FLIP);
 
             BlobV notState = tmp(new BlobV());
-            not(state, notState);
+            set(not(state), notState);
 
-            BlobV emptying = tmp(new BlobV());
-            BlobV filling = tmp(new BlobV());
-            and(state, flip, emptying);
-            and(notState, flip, filling);
-
-            BoolVe ve = tmp(new BoolVe());
-            BoolEv ev = tmp(new BoolEv());
+            BoolV emptying = and(state, flip);
+            BoolV filling = and(notState, flip);
 
             // A blob can only evolve on its frontier and border
-            BlobV frontierOrBorder = tmp(new BlobV());
-            BoolE frontierE = tmp(new BoolE());
-            call(state.frontierE(frontierE));
-            broadcast(frontierE, ev);
-            transfer(ev, ve);
-            redOr(ve, frontierOrBorder);
+            BoolV frontierOrBorder = redOr(transfer(broadcastEv(call(state.frontierE()))));
 
-            and(frontierOrBorder, flip, flip);
-            and(state, flip, emptying);
-            and(notState, flip, filling);
+            set(and(frontierOrBorder, flip), flip);
+            set(and(state, flip), emptying);
+            set(and(notState, flip), filling);
 
             show("Blob / flip after frontierOrBorder", flip, Styles.FLIP);
 
             // Disallow merging and splitting blobs
-            BlobV mergeV = tmp(new BlobV());
-            BoolE mergeE = tmp(new BoolE());
-            BlobV splitV = tmp(new BlobV());
-            BoolE splitE = tmp(new BoolE());
-            call(state.meetV(mergeV));
-            call(state.meetE(mergeE));
-            call(notState.meetV(splitV));
-            call(notState.meetE(splitE));
+            BoolV mergeV = call(state.meetV());
+            BoolE mergeE = call(state.meetE());
+            BoolV splitV = call(notState.meetV());
+            BoolE splitE = call(notState.meetE());
 
-            BoolE bothFilling = tmp(new BoolE());
-            broadcast(filling, ve);
-            transfer(ve, ev);
-            redAnd(ev, bothFilling);
-            and(bothFilling, mergeE, bothFilling);
+            BoolE bothFilling = and(mergeE, redAnd(transfer(broadcastVe(filling))));
+            BoolE bothEmptying = and(splitE, redAnd(transfer(broadcastVe(emptying))));
 
-            BoolE bothEmptying = tmp(new BoolE());
-            broadcast(emptying, ve);
-            transfer(ve, ev);
-            redAnd(ev, bothEmptying);
-            and(bothEmptying, splitE, bothEmptying);
+            BoolV mutex = call(mutex(or(bothFilling, bothEmptying), priority, prioRand));
+            BoolV noMergeSplit = not(or(mutex, or(splitV, mergeV)));
 
-            BoolE toInspect = tmp(new BoolE());
-            or(bothFilling, bothEmptying, toInspect);
-
-            BoolV noMergeSplit = tmp(new BoolV());
-            call(mutex(toInspect, priority, prioRand, noMergeSplit));
-            or(noMergeSplit, splitV, noMergeSplit);
-            or(noMergeSplit, mergeV, noMergeSplit);
-            not(noMergeSplit, noMergeSplit);
-
-            and(noMergeSplit, flip, flip);
-            and(state, flip, emptying);
-            and(notState, flip, filling);
+            set(and(noMergeSplit, flip), flip);
+            set(and(state, flip), emptying);
+            set(and(notState, flip), filling);
 
             show("Blob / flip after wouldNotMergeOrSplit", flip, Styles.FLIP);
 
-            // Disallow filling next to an emptying vertex, which could create a hole in the blob
-            BlobV fillingNextToEmptying = tmp(new BlobV());
-            broadcast(emptying, ve);
-            call(BlobV.send(ve, ve));
-            redOr(ve, fillingNextToEmptying);
-            and(fillingNextToEmptying, filling, fillingNextToEmptying);
-            not(fillingNextToEmptying, fillingNextToEmptying);
+            // Disallow filling next to an emptying vertex, which could create blob
+            BoolV nextToEmptying = redOr(call(BlobV.send(broadcastVe(emptying))));
+            BoolV fillingNextToEmptying = and(filling, nextToEmptying);
 
-            and(fillingNextToEmptying, flip, flip);
-            and(state, flip, emptying);
-            and(notState, flip, filling);
+            set(and(not(fillingNextToEmptying), flip), flip);
+            set(and(state, flip), emptying);
+            set(and(notState, flip), filling);
 
             show("Blob / flip after fillingNextToEmptying", flip, Styles.FLIP);
 
             // Disallow blobs from disappearing entirely
-            BlobV wouldDisappearBlob = tmp(new BlobV());
-            fif(flip, state, notState, wouldDisappearBlob);
+            BoolV wouldBeEmpty = xor(flip, notState);
+            BoolV neighborsWouldBeEmpty = redAnd(call(BlobV.send(broadcastVe(wouldBeEmpty))));
+            BoolV wouldDisappear = and(and(wouldBeEmpty, neighborsWouldBeEmpty), emptying);
 
-            BlobV neighborsWouldBeEmpty = tmp(new BlobV());
-            broadcast(wouldDisappearBlob, ve);
-            call(BlobV.send(ve, ve));
-            redAnd(ve, neighborsWouldBeEmpty);
+            set(and(not(wouldDisappear), flip), flip);
+            set(and(state, flip), emptying);
+            set(and(notState, flip), filling);
 
-            BlobV wouldDisappear = tmp(new BlobV());
-            and(wouldDisappearBlob, neighborsWouldBeEmpty, wouldDisappear);
-            and(wouldDisappear, emptying, wouldDisappear);
-            not(wouldDisappear, wouldDisappear);
-
-            and(wouldDisappear, flip, flip);
-            and(state, flip, emptying);
-            and(notState, flip, filling);
-
-            show("Blob / flip after wouldDisappearBlob", flip, Styles.FLIP);
+            show("Blob / flip after wouldBeEmpty", flip, Styles.FLIP);
 
             // Disallow holes from disappearing entirely
-            BlobV wouldBeFilled = tmp(new BlobV());
-            fif(flip, notState, state, wouldBeFilled);
+            BoolV wouldBeFilled = xor(flip, state);
+            BoolV neighborsWouldBeFilled = redAnd(call(BlobV.send(broadcastVe(wouldBeFilled))));
+            BoolV wouldDisappearHole = and(and(wouldBeFilled, neighborsWouldBeFilled), filling);
 
-            BlobV neighborsWouldBeFilled = tmp(new BlobV());
-            broadcast(wouldBeFilled, ve);
-            call(BlobV.send(ve, ve));
-            redAnd(ve, neighborsWouldBeFilled);
-
-            BlobV wouldDisappearHole = tmp(new BlobV());
-            and(wouldBeFilled, neighborsWouldBeFilled, wouldDisappearHole);
-            and(wouldDisappearHole, filling, wouldDisappearHole);
-            not(wouldDisappearHole, wouldDisappearHole);
-
-            and(wouldDisappearHole, flip, flip);
+            set(and(not(wouldDisappearHole), flip), flip);
 
             show("Blob / flip after wouldDisappearHole", flip, Styles.FLIP);
+
+            returnValue(new VoidF());
         }
     }
 
     @Override
-    public Procedure verify(BoolV flip, IntV priority, IntV prioRand) {
+    public Procedure<VoidF> verify(BoolV flip, IntV priority, IntV prioRand) {
         return new Verify(flip, priority, prioRand);
     }
 }

@@ -21,49 +21,42 @@ public class QuasiParticle extends BlobV {
         return new QuasiParticle(cells);
     }
 
-    private static class OneParticle extends Procedure {
-        public OneParticle(QuasiParticle in, QuasiParticle out) {
-            BoolVe ve = tmp(new BoolVe());
-            broadcast(in, ve);
-            call(send(ve, ve));
+    private static class OneParticle extends Procedure<QuasiParticle> {
+        public OneParticle(QuasiParticle in) {
+            QuasiParticle res = tmp(new QuasiParticle());
 
-            redOr(ve, out);
-            not(out, out);
-            and(in, out, out);
+            BoolV noNeighbor = not(redOr(call(send(broadcastVe(in)))));
+            set(and(in, noNeighbor), res);
+
+            returnValue(res);
         }
     }
-    public static Procedure oneParticle(QuasiParticle in, QuasiParticle out) { return new OneParticle(in, out); }
-    public Procedure oneParticle(QuasiParticle out) { return oneParticle(this, out); }
+    public static Procedure<QuasiParticle> oneParticle(QuasiParticle in) { return new OneParticle(in); }
+    public Procedure<QuasiParticle> oneParticle() { return oneParticle(this); }
 
-    private static class TwoParticle extends Procedure {
-        public TwoParticle(QuasiParticle in, QuasiParticle out) {
-            BoolVe ve = tmp(new BoolVe());
-            broadcast(in, ve);
-            call(send(ve, ve));
+    private static class TwoParticle extends Procedure<QuasiParticle> {
+        public TwoParticle(QuasiParticle in) {
+            QuasiParticle res = tmp(new QuasiParticle());
 
-            IntV nbNeighbors = tmp(new IntV(2));
-            redAdd(ve, nbNeighbors);
-            eq(nbNeighbors, IntV.of(1, 2), out);
-            and(in, out, out);
+            IntV nbNeighbors = redAdd(call(send(broadcastVe(in))), 4);
+            set(and(in, eq(nbNeighbors, IntV.of(1, 4))), res);
+
+            returnValue(res);
         }
     }
-    public static Procedure twoParticle(QuasiParticle in, QuasiParticle out) { return new TwoParticle(in, out); }
-    public Procedure twoParticle(QuasiParticle out) { return twoParticle(this, out); }
+    public static Procedure<QuasiParticle> twoParticle(QuasiParticle in) { return new TwoParticle(in); }
+    public Procedure<QuasiParticle> twoParticle() { return twoParticle(this); }
 
-    public static class ThreeParticle extends Procedure {
-        public <I extends QuasiParticle, O extends QuasiParticle> ThreeParticle(QuasiParticle in, QuasiParticle out) {
-            BoolVf vf = tmp(new BoolVf());
-            BoolFv fv = tmp(new BoolFv());
-            BoolF f = tmp(new BoolF());
+    public static class ThreeParticle extends Procedure<QuasiParticle> {
+        public ThreeParticle(QuasiParticle in) {
+            QuasiParticle res = tmp(new QuasiParticle());
 
-            broadcast(in, vf);
-            transfer(vf, fv);
-            redAnd(fv, f);
-            broadcast(f, fv);
-            transfer(fv, vf);
-            redOr(vf, out);
+            BoolF centers = redAnd(transfer(broadcastVf(in)));
+            set(redOr(transfer(broadcastFv(centers))), res);
+
+            returnValue(res);
         }
     }
-    public static Procedure threeParticle(QuasiParticle in, QuasiParticle out) { return new ThreeParticle(in, out); }
-    public Procedure threeParticle(QuasiParticle out) { return threeParticle(this, out); }
+    public static Procedure<QuasiParticle> threeParticle(QuasiParticle in) { return new ThreeParticle(in); }
+    public Procedure<QuasiParticle> threeParticle() { return threeParticle(this); }
 }

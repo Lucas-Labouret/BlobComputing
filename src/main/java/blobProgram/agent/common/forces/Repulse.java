@@ -2,14 +2,13 @@ package blobProgram.agent.common.forces;
 
 import blobProgram.BlobV;
 import blobProgram.agent.Force;
+import language.field.VoidF;
 import language.field.boolField.BoolV;
 import language.field.boolField.BoolVe;
 import language.field.intField.IntVe;
 import language.instruction.Procedure;
 
-/**
- * Causes a movement of the blob in the positive direction given by the gradient.
- */
+/** Causes a movement of the blob in the positive direction given by the gradient. */
 public class Repulse extends Force {
     private final BlobV state;
     private final IntVe gradient;
@@ -19,45 +18,34 @@ public Repulse(BlobV state, IntVe gradient) {
         this.gradient = gradient;
     }
 
-    private class Compute extends Procedure {
+    private class Compute extends Procedure<VoidF> {
         public Compute(BoolV yes, BoolV no) {
-            BlobV notState = tmp(new BlobV());
-            not(state, notState);
-
-            BoolVe posGrad = tmp(new BoolVe());
-            gt(gradient, IntVe.of(1, gradient.n), posGrad);
+            BoolVe posGrad = gt(gradient, IntVe.of(1, gradient.n));
 
             BoolVe ve = tmp(new BoolVe());
 
             // Remove vertices in the blob that have a positive gradient inward
-            BoolV toRemove = tmp(new BoolV());
-            broadcast(state, ve);
-            call(BlobV.send(ve, ve));
-            and(posGrad, ve, ve);
-            redOr(ve, toRemove);
-            and(toRemove, state, toRemove);
+            BoolV hasPosGradInward = redOr(and(posGrad, call(BlobV.send(broadcastVe(state)))));
+            BoolV toRemove = and(hasPosGradInward, state);
 
             show("Repulse toRemove", toRemove);
 
             // Add vertices outside the blob that have a negative gradient inward
-            BoolV toAdd = tmp(new BoolV());
-            broadcast(state, ve);
-            and(posGrad, ve, ve);
-            call(BlobV.send(ve, ve));
-            redOr(ve, toAdd);
-
-            and(toAdd, notState, toAdd);
+            BoolV hasNegGradInward = redOr(call(BlobV.send(and(posGrad, broadcastVe(state)))));
+            BoolV toAdd = and(hasNegGradInward, not(state));
 
             show("Repulse toAdd", toAdd);
 
             // Build the yes and no
-            or(toAdd, toRemove, yes);
+            set(or(toAdd, toRemove), yes);
             set(new BoolV().zeroes(), no);
+
+            returnValue(new VoidF());
         }
     }
 
     @Override
-    protected Procedure compute(BoolV yes, BoolV no) {
+    protected Procedure<VoidF> compute(BoolV yes, BoolV no) {
         return new Compute(yes, no);
     }
 }

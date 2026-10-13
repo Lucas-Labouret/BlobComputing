@@ -2,7 +2,6 @@ package ui.display.displayable.boolFieldDisplay;
 
 import javafx.scene.paint.Color;
 import language.field.boolField.BoolE;
-import medium.Medium;
 import medium.locusS.Edge;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;

@@ -10,7 +10,7 @@ import medium.Medium;
  * For example, a BoolV field is a map from the vertices of the medium to the set {true, false}.
  * @param <F> the type of the field.
  */
-public abstract sealed class Field<F extends Field<F>> permits BoolField, IntField {
+public abstract sealed class Field<F extends Field<F>> permits VoidF, BoolField, IntField {
     protected static Medium medium;
     public static void setMedium(Medium medium) {
         if (Field.medium != null) throw new IllegalStateException("Medium has already been set.");
@@ -22,4 +22,10 @@ public abstract sealed class Field<F extends Field<F>> permits BoolField, IntFie
     public abstract void set(F other);
     /** Wipes the state of this field. */
     public abstract void clear();
+
+    /**
+     * Copies another field into this field.
+     * Implementations must reject incompatible field types.
+     */
+    public abstract void copyFrom(Field<?> other);
 }

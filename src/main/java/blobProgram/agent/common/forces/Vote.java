@@ -2,14 +2,13 @@ package blobProgram.agent.common.forces;
 
 import blobProgram.BlobV;
 import blobProgram.agent.Force;
+import language.field.VoidF;
 import language.field.boolField.BoolV;
 import language.field.boolField.BoolVe;
 import language.field.intField.IntV;
 import language.instruction.Procedure;
 
-/**
- * Fill a vertex if most of its neighbors are filled, or empty it if most of its neighbors are empty.
- */
+/** Fill a vertex if most of its neighbors are filled, or empty it if most of its neighbors are empty. */
 public class Vote extends Force {
     private final BlobV state;
 
@@ -17,36 +16,23 @@ public class Vote extends Force {
         this.state = state;
     }
 
-    private class Compute extends Procedure {
+    private class Compute extends Procedure<VoidF> {
         public Compute(BoolV yes, BoolV no) {
-            BlobV notState = tmp(new BlobV());
-            not(state, notState);
+            IntV halfNeighborCount = rShift(redAdd(new BoolVe().ones(), 4), 1);
+            IntV blobNeighborCount = redAdd(call(BlobV.send(broadcastVe(state))), 4);
 
-            BoolVe ve = tmp(new BoolVe());
+            BoolV blobVotes = and(gt(halfNeighborCount, blobNeighborCount), state);
+            BoolV noneBlobVotes = and(gt(blobNeighborCount, halfNeighborCount), not(state));
 
-            IntV halfNeighborCount = tmp(new IntV(4));
-            redAdd(new BoolVe().ones(), halfNeighborCount);
-            rShift(halfNeighborCount, halfNeighborCount, 1);
-
-            IntV blobNeighborCount = tmp(new IntV(4));
-            broadcast(state, ve);
-            call(BlobV.send(ve, ve));
-            redAdd(ve, blobNeighborCount);
-
-            BlobV blobVotes = tmp(new BlobV());
-            BlobV noneBlobVotes = tmp(new BlobV());
-            gt(halfNeighborCount, blobNeighborCount, blobVotes);
-            gt(blobNeighborCount, halfNeighborCount, noneBlobVotes);
-            and(blobVotes, state, blobVotes);
-            and(noneBlobVotes, notState, noneBlobVotes);
-
-            or(blobVotes, noneBlobVotes, yes);
+            set(or(blobVotes, noneBlobVotes), yes);
             set(new BoolV().zeroes(), no);
+
+            returnValue(new VoidF());
         }
     }
 
     @Override
-    protected Procedure compute(BoolV yes, BoolV no) {
+    protected Procedure<VoidF> compute(BoolV yes, BoolV no) {
         return new Compute(yes, no);
     }
 }

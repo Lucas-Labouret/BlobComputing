@@ -1,7 +1,7 @@
 package blobProgram;
 
+import language.field.VoidF;
 import language.field.boolField.BoolV;
-import language.field.boolField.BoolVe;
 import language.instruction.Procedure;
 
 public class BeepWave {
@@ -13,25 +13,20 @@ public class BeepWave {
         state_tm1 = new BoolV().zeroes();
     }
 
-    private class Propagate extends Procedure {
+    private class Propagate extends Procedure<VoidF> {
         public Propagate() {
             show("BeepWave", state_t);
 
-            BoolV notTm1 = tmp(new BoolV());
-            not(state_tm1, notTm1);
+            BoolV notTm1 = not(state_tm1);
+            BoolV notT = not(state_t);
+
             set(state_t, state_tm1);
+            set(redOr(call(BlobV.send(broadcastVe(state_t)))), state_t);
 
-            BoolV notT = tmp(new BoolV());
-            not(state_t, notT);
+            set(and(state_t, and(notT, notTm1)), state_t);
 
-            BoolVe ve = new BoolVe();
-            broadcast(state_t, ve);
-            call(BlobV.send(ve, ve));
-            show("ve", ve);
-            redOr(ve, state_t);
-            and(state_t, notTm1, state_t);
-            and(state_t, notT, state_t);
+            returnValue(new VoidF());
         }
     }
-    public Procedure propagate() { return new Propagate(); }
+    public Procedure<VoidF> propagate() { return new Propagate(); }
 }

@@ -2,7 +2,6 @@ package ui.display.displayable.boolFieldDisplay;
 
 import javafx.scene.paint.Color;
 import language.field.boolField.BoolV;
-import medium.Medium;
 import medium.locusS.Vertex;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;

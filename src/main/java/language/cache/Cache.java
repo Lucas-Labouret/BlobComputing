@@ -26,25 +26,25 @@ public class Cache {
         /** A mapping of registered fields to their cached values at this step count. */
         private final HashMap<BoolField<?>, BoolField<?>> valueCache;
         /** A mapping of registered procedures to their instruction pointers at this step count. */
-        private final HashMap<Procedure, Integer> instrPtrCache;
+        private final HashMap<Procedure<?>, Integer> procedureCache;
 
         private CacheEntry(
                 long stepCount,
                 CacheEntry next,
                 HashMap<BoolField<?>, BoolField<?>> valueCache,
-                HashMap<Procedure, Integer> instrPtrCache
+                HashMap<Procedure<?>, Integer> procedureCache
         ){
             this.stepCount = stepCount;
             this.next = next;
             this.valueCache = valueCache;
-            this.instrPtrCache = instrPtrCache;
+            this.procedureCache = procedureCache;
         }
     }
 
     /** A set of all registered fields to be cached. */
     private static final HashSet<BoolField<?>> fields = new HashSet<>();
     /** A set of all registered procedures to be cached. */
-    private static final HashSet<Procedure> instrPtrs = new HashSet<>();
+    private static final HashSet<Procedure<?>> procedures = new HashSet<>();
 
     /** @param field The field to register for caching. */
     public static void register(BoolField<?> field) {
@@ -52,7 +52,7 @@ public class Cache {
         fields.add(field);
     }
     /** @param procedure The procedure to register for caching. */
-    public static void register(Procedure procedure) { instrPtrs.add(procedure); }
+    public static void register(Procedure<?> procedure) { procedures.add(procedure); }
 
     /** The top of the cache linked list, representing the most recent cache entry. */
     private CacheEntry top = null;
@@ -69,8 +69,8 @@ public class Cache {
         HashMap<BoolField<?>, BoolField<?>> valueCache = new HashMap<>();
         for (BoolField<?> field : fields) valueCache.put(field, field.cache());
 
-        HashMap<Procedure, Integer> instrPtrCache = new HashMap<>();
-        for (Procedure procedure : instrPtrs) instrPtrCache.put(procedure, procedure.getInstrPtr());
+        HashMap<Procedure<?>, Integer> procedureCache = new HashMap<>();
+        for (Procedure<?> procedure : procedures) procedureCache.put(procedure, procedure.getInstrPtr());
 
         // Find the cache entries s.t. current.stepCount <= stepCount < previous.stepCount (if they exist)
         CacheEntry previous = null;
@@ -82,18 +82,18 @@ public class Cache {
 
         // There is already an entry for stepCount (we override) and it is at the top of the cache
         if (current != null && current.stepCount == stepCount && previous == null) {
-            top = new CacheEntry(stepCount, current.next, valueCache, instrPtrCache);
+            top = new CacheEntry(stepCount, current.next, valueCache, procedureCache);
             return top;
         }
 
         // There is already an entry for stepCount (we override) and it is in the middle of the cache
         if (current != null && current.stepCount == stepCount) {
-            previous.next = new CacheEntry(stepCount, current.next, valueCache, instrPtrCache);
+            previous.next = new CacheEntry(stepCount, current.next, valueCache, procedureCache);
             return previous.next;
         }
 
         // New stepCount entry, we insert it in the right place in the cache
-        CacheEntry newEntry = new CacheEntry(stepCount, current, valueCache, instrPtrCache);
+        CacheEntry newEntry = new CacheEntry(stepCount, current, valueCache, procedureCache);
         if (previous == null) top = newEntry;
         else previous.next = newEntry;
 
@@ -105,12 +105,12 @@ public class Cache {
      * @param entry The cache entry to restore from.
      */
     private void applyCacheEntry(CacheEntry entry) {
-        for (BoolField field : entry.valueCache.keySet()) {
-            field.set(entry.valueCache.get(field));
+        for (BoolField<?> field : entry.valueCache.keySet()) {
+            field.copyFrom(entry.valueCache.get(field));
         }
 
-        for (Procedure procedure : entry.instrPtrCache.keySet()) {
-            procedure.setInstrPtr(entry.instrPtrCache.get(procedure));
+        for (Procedure<?> procedure : entry.procedureCache.keySet()) {
+            procedure.setInstrPtr(entry.procedureCache.get(procedure));
         }
     }
 
@@ -122,7 +122,7 @@ public class Cache {
      * To avoid storing every single step, this method retrieves the closest cached state,
      * then executes the main instruction until the desired step count is reached.
      */
-    public void retrieve(long stepCount, Instruction main) {
+    public void retrieve(long stepCount, Instruction<?> main) {
         if (retrieving) { return; }
         retrieving = true;
 

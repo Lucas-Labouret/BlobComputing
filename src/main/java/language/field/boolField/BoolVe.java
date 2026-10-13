@@ -1,9 +1,6 @@
 package language.field.boolField;
 
-import language.field.BoolFieldLine;
-import language.field.BoolFieldManager;
-import language.field.Border;
-import language.field.Coord2D;
+import language.field.*;
 import medium.locusS.Vertex;
 import medium.locusT.Ve;
 
@@ -269,4 +266,10 @@ public non-sealed class BoolVe extends BoolFieldT<BoolVe> {
 
     @Override
     public BoolVe cache() { return copy(false); }
+
+    @Override
+    public void copyFrom(Field<?> other) {
+        if (!(other instanceof BoolVe o)) throw new IllegalArgumentException("Cannot copy from a non-BoolV field.");
+        set(o);
+    }
 }

@@ -6,7 +6,6 @@ import medium.Locus;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 

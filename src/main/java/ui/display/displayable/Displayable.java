@@ -1,7 +1,6 @@
 package ui.display.displayable;
 
 import javafx.scene.paint.Color;
-import medium.Medium;
 import medium.locusS.Edge;
 import medium.locusS.Face;
 import medium.locusS.Vertex;

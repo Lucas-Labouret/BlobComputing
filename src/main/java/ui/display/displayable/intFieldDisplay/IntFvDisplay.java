@@ -2,7 +2,6 @@ package ui.display.displayable.intFieldDisplay;
 
 import javafx.scene.paint.Color;
 import language.field.intField.IntFv;
-import medium.Medium;
 import medium.locusT.Fv;
 import ui.display.Styles;
 import ui.display.displayable.Displayable;

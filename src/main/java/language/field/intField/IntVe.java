@@ -1,7 +1,7 @@
 package language.field.intField;
 
+import language.field.Field;
 import language.field.boolField.BoolVe;
-import medium.Medium;
 import medium.locusT.Ve;
 
 import java.util.HashMap;
@@ -78,5 +78,11 @@ public non-sealed class IntVe extends IntField<BoolVe, IntVe> {
         IntVe copy = new IntVe(n);
         copy(this, copy);
         return copy;
+    }
+
+    @Override
+    public void copyFrom(Field<?> other) {
+        if (!(other instanceof IntVe o)) throw new IllegalArgumentException("Cannot copy from a non-BoolV field.");
+        set(o);
     }
 }
